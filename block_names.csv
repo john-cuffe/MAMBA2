@@ -1,5 +1,4 @@
 order,block_name,data1_test,data2_test
+1,zip5,ZipCode,ZipCode
 2,zip3,zip_3,zip_3
 3,state,state_abb,state
-4,full,full,full
-1,zip5,ZipCode,ZipCode

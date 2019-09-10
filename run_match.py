@@ -20,6 +20,7 @@ if __name__=='__main__':
         run_block(block)
         logger.info('### Completed Block {}'.format(block['block_name']))
     ###Once we are done, spit out the final information on the number of matches, and the .csv files
+    db=get_connection_sqlite(os.environ['db_name'])
     pd.DataFrame(get_table_noconn('''select * from matched_pairs''', db)).to_csv('output/all_matches_{}.csv'.format(os.environ['date']), index=False)
     pd.DataFrame(get_table_noconn('''select * from clerical_review_candidates''', db)).to_csv('output/clerical_review_candidates_{}.csv'.format(os.environ['date']), index=False)
     logger.info('Match Complete')

@@ -340,20 +340,14 @@ class Runner(object):
     ############
     ###Runner Step: define common traits across workers (referred to as self.trait   )
     ############
-    def __init__(self, numWorkers, lock, database, chunks, model, block, data1_varname, data2_varname):
-        self.date = date  ###initialization date, called from line 39
+    def __init__(self, numWorkers, lock, model, block, var_rec, blocklen):
         self.numWorkers = numWorkers  ###how many workers will we have?
         self.m = multiprocessing.Manager()  ###create the object "m" which is a multiprocessing manager
-        self.pool = multiprocessing.Pool()
-        self.sqldb = database  ##the sql database
-        self.conn = sqlite3.connect(self.sqldb)  ###The central connection for the runner
         self.outQueue = self.m.Queue()  ###out queue.  this queue will be filled with arrays to be predicted
         self.inQueue = self.m.Queue()  ###in queue.  This queue is the list of blocks to process
         self.writeQueue = self.m.Queue()  ###The write queue.  This queue is a single process, exclusively designed to write and avoid conention
         self.t0 = time.time()  ###initialization time
         self.lock = lock  ##the lock, that stores the counters that will run across workers
-        self.nchunks = len(chunks)  ###how many chunks of data do we have?
-        self.chunks = chunks  ##the unique chunks
         self.chunksPulled = multiprocessing.Value('i', 0)  ###running counter of the number of chunks loaded
         self.chunksMatched = multiprocessing.Value('i', 0)  ##runnign counter of chunks matched
         self.chunksProcessed = multiprocessing.Value('i', 0)  ###running counter of processed records
@@ -364,11 +358,7 @@ class Runner(object):
         self.block = block  ###The name of the block (e.g zip5)
         self.var_rec=var_rec ###the variables we are matching with
         ###Logging flag--if we are in debug mode, just log every 50 obs.  otherwise log every 10% of the chunks
-        if debug:
-            self.loggingflag = 50
-        else:
-            self.loggingflag = np.floor(
-                self.nchunks / 10)  ##The logging flag.  Logs every 10% (approximately) of chunks matched
+        self.loggingflag = np.floor(blocklen / 10)  ##The logging flag.  Logs every 10% (approximately) of chunks matched
 
     ############
     ###Define the Log time, which will give us the minutes since the initiation of the Runner
@@ -444,7 +434,7 @@ class Runner(object):
             ###If the above condition isn't met, we can convert the worker to a worker
             ####if the inqueue isn't empty and the outqueue is empty and the block isn't the all block, run a match for the geographic blocking
             else:
-                logger.info('Worker Breaking')
+                logger.info('####### Worker Breaking #######')
                 break
 
 
@@ -557,10 +547,7 @@ class Runner(object):
                 ###sleep for 60 seconds
                 time.sleep(60)
                 if self.inQueue.empty() and self.outQueue.empty():
-                    logger.info('################################')
-                    logger.info('Writer Breaking')
-                    logger.info('################################')
-                    self.logTime()
+                    logger.info('####### Writer Breaking #######')
                     break
                 else:
                     continue
@@ -571,125 +558,48 @@ class Runner(object):
         '''
         This function dumps the outQueue into the write Queue for any remaining blocks
         '''
-        ####first,
-        myconnt = sqlite3.connect(self.sqldb, timeout=600)
-        pred = self.outQueue.get(timeout=240)
-        ##Convert to pandas data frame.  the dictionary has an array of values and a list of columns that match up, so we don't have to futz around
-        ##setting the names correctly
-        ###getting the matchlist from the predictor columns
-        ###convert to dataframe
-        if isinstance(pred, dict):
-            pred = pd.DataFrame.from_records(pred, index=[0])
-        else:
-            pred = pd.DataFrame.from_records(pred)
-        #####
-        matchlist = [x for x in pred.columns if
-                     x not in ['stnnameinput', 'stnnamebr', 'stnaddressinput', 'stnstreetbr', 'inputid',
-                               self.matchinglevelvar, 'input_minyear', 'minyear', 'input_maxyear', 'maxyear', 'index']]
-        #######
-        ##Save the Match type (e.g. zip5, city etc.)
-        pred['MatchType'] = self.block
-        ###If we have more than 10 observations (candidate pairs), then generate a sample of 10% of them IF we want to do clerical review
-        if clericalreview and len(pred) > 10:
-            mydict = {}
-            mydict['destination'] = 'clerical_review_candidates'
-            mydict['cols'] = pred.columns
-            mydict['vals'] = pred.sample(frac=.1).values
-            # mydict['origin']=origin
-            self.writeQueue.put(mydict)
-        ###IF we want to do a prediction, generate the predictions
-        if prediction and len(pred) > 0:
-            ###Generate the prediction array of the independent variables
-            pred_X = pred[matchlist].values
-            ##generate the array of predictions (1/0) and save as a column called prediction
-            pred['prediction'] = predict(self.model, pred_X)
-            ##generate the array of predicted probabilites and save as a column called predicted prob
-            pred['predicted_probability'] = probsfunc(self.model.predict_proba(pred_X))
-            ###keep just predicted matches
-            pred = pred[pred.prediction == 1]
-            ##get the number of unique BR matches for each inputid
-            pred['unique_matches'] = pred.groupby(['inputid', 'stnnameinput', 'input_minyear', 'input_maxyear'])[
-                self.matchinglevelvar].transform('nunique')
-            ###calculate average score
-            # pred['average_score'] = pred[matchlist].mean(axis=1)
-            ####select the best match for each unique unique input record by the highest predicted probability
-            if matchingtype == 'NameAddress':
-                idx = pred.groupby(['inputid', 'stnnameinput', 'stnaddressinput', 'input_minyear', 'input_maxyear'])[
-                          'predicted_probability'].transform(max) == pred['predicted_probability']
-            elif matchingtype == 'NameOnly':
-                idx = pred.groupby(['inputid', 'stnnameinput', 'input_minyear', 'input_maxyear'])[
-                          'predicted_probability'].transform(max) == pred['predicted_probability']
-            elif matchingtype == 'AddressOnly':
-                idx = pred.groupby(['inputid', 'stnaddressinput', 'input_minyear', 'input_maxyear'])[
-                          'predicted_probability'].transform(max) == pred['predicted_probability']
-            ##write matches to the
-            mydict = {}
-            mydict['destination'] = 'allmatch'
-            mydict['cols'] = pred.columns
-            mydict['vals'] = pred.values
-            # mydict['origin']=origin
-            self.writeQueue.put(mydict)
-            pred = pred[idx]
-            ##If there is a tie, take the highest average score
-            if matchingtype == "NameAddress":
-                pred['average_score'] = pred[matchlist].mean(axis=1)
-                idx = pred.groupby(['inputid', 'stnnameinput', 'stnaddressinput', 'input_minyear', 'input_maxyear'])[
-                          'average_score'].transform(max) == pred['average_score']
-            elif matchingtype == 'NameOnly':
-                pred['average_score'] = pred[matchlist].mean(axis=1)
-                idx = pred.groupby(['inputid', 'stnnameinput', 'input_minyear', 'input_maxyear'])[
-                          'average_score'].transform(max) == pred['average_score']
-            elif matchingtype == 'AddressOnly':
-                pred['average_score'] = pred[matchlist].mean(axis=1)
-                idx = pred.groupby(['inputid', 'stnaddressinput', 'input_minyear', 'input_maxyear'])[
-                          'average_score'].transform(max) == pred['average_score']
-            ###Just take the observations in the index
-            pred = pred[idx]
-            pred.drop('average_score', axis=1, inplace=True)
-            ###Finally, just take a single observation for each input record if the above result in multiple observations
-            ###criteria: take the longest BR address
-            pred['brlen'] = pred['stnnamebr'].str.len()
-            if matchingtype == 'NameAddress':
-                pred.sort_values(
-                    ['inputid', 'stnnameinput', 'stnaddressinput', 'input_minyear', 'input_maxyear', 'brlen'],
-                    ascending=[True, True, True, True, True, False], inplace=True)
-            elif matchingtype == 'NameOnly':
-                pred.sort_values(['inputid', 'stnnameinput', 'input_minyear', 'input_maxyear', 'brlen'],
-                                 ascending=[True, True, True, True, False], inplace=True)
-            pred.drop('brlen', axis=1, inplace=True)
-            pred = pred.drop_duplicates()
-            ###Save to the bestmatch file.
-            mydict = {}
-            mydict['destination'] = 'bestmatch'
-            mydict['cols'] = pred.columns
-            mydict['vals'] = pred.values
-            # mydict['origin']=origin
-            # logger.info('data placed into writeQueue:')
-            # logger.info(mydict)
-            self.writeQueue.put(mydict)
+        mydict = self.writeQueue.get()
+        ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
+        clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
+            os.environ['data1_name'], os.environ['data2_name'])
+        match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
+            data1=os.environ['data1_name'], data2=os.environ['data2_name'])
+        if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
+            if len(mydict['output']) >= 10:
+                clerical_review_dict = dcpy(mydict['output'].sample(frac=.1))
+            else:
+                clerical_review_dict = dcpy(mydict['output'])
+            columns = clerical_review_dict[0].keys()
+            vals = [tuple(i[column] for column in columns) for i in clerical_review_dict]
+            cur.executemany(clerical_review_sql, vals)
+            myconnt.commit()
+            if ast.literal_eval(os.environ['chatty_logger']) == True:
+                logger.info('''{} clerical review candidates added in block {}'''.format(len(clerical_review_dict),
+                                                                                         mydict['block']))
+        ####Now add in any matches
+        matches = pd.DataFrame(
+            [i for i in mydict['output'] if i['predicted_probability'] >= float(os.environ['match_threshold'])])
+        ###ranks
+        matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
+            'predicted_probability'].rank('dense')
+        matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
+            'predicted_probability'].rank('dense')
+        ##convert back to dict
+        matches = matches.to_dict('record')
+        vals = [tuple(i[column] for column in columns) for i in matches]
+        cur.executemany(match_sql, vals)
+        myconnt.commit()
 
     ###main dumpQueue function
     def dumpQueues(self):
         '''
         This function dumps the queues at the end of the run to ensure we don't miss anything/avoid hung sessions
         '''
-        logger.info('Beginning outQueue dump: {0} blocks'.format(self.outQueue.qsize()))
-        self.logTime()
-        while self.outQueue.qsize() > 0:
-            self.dumpOutQueue()
-        logger.info('outQueue dump complete'.format(self.outQueue.qsize()))
-        self.logTime()
-        ####now the write queue dump
-        logger.info('Beginning writeQueue dump: {0} blocks'.format(self.writeQueue.qsize()))
-        connstr = dataPath + 'output_db.db'
-        outputconn = sqlite3.connect(connstr)
-        self.logTime()
+        logger.info('#### Beginning outQueue dump: {0} blocks ####'.format(self.writeQueue.qsize()))
         while self.writeQueue.qsize() > 0:
-            mydict = self.writeQueue.get()
-            pd.DataFrame.from_records(mydict['vals'], columns=mydict['cols']).to_sql(mydict['destination'], outputconn,
-                                                                                     if_exists='append', index=False)
-        logger.info('writeQueue dump completed'.format(self.outQueue.qsize()))
-        self.logTime()
+            self.dumpOutQueue()
+        logger.info('##### writeQueue dump complete ####'.format(self.writeQueue.qsize()))
+
 
 
 def intersection(lst1, lst2):
@@ -721,15 +631,15 @@ def run_block(block, rf_mod):
     ###get the list of variables we are trying to match
     var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
     ###Create and kick off the runner
-    runner = Runner(numWorkers,lock, sqldb,rf_mod, block, var_rec)
+    lock=multiprocessing.Lock()
+    runner = Runner(numWorkers,lock, rf_mod, block, var_rec, len(block_list))
     # Start the Input Queue, a Q of input blocks.  Put each one in there
     logger.info( 'FILLING BLOCK QUEUE FOR {}'.format(block['block_name']))
     for i in range(len(runner.chunks)):
         # if i % (len(runner.chunks))/float(10)==0:
         # logger.info('{} Chunks inserted into queue.  Queue size = {}'.format(i, sys.getsizeof(runner.inQueue)/float(1000000000)))
         runner.inQueue.put(runner.chunks[i])
-    logger.info(
-        'STARTING TO MATCH  FOR {}'.format(block['block_name']))
+    logger.info('STARTING TO MATCH  FOR {}'.format(block['block_name']))
     # Create and kick off workers
     processes = []
     ##set up the workers, where l is an indivudal worker in the range from 1:numWorkers
