@@ -1,0 +1,5 @@
+variable_name,data1_test,data2_test,match_type
+address,street_address,address,fuzzy
+name,name,name,fuzzy
+year,year,year,num_distance
+businesstype,BusinessType,BusinessType,exact
