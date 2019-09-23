@@ -643,7 +643,7 @@ def run_block(block, rf_mod):
     # Create and kick off workers
     processes = []
     ##set up the workers, where l is an indivudal worker in the range from 1:numWorkers
-    for l in range(numWorkers):
+    for l in range(int(os.environ['numWorkers'])):
         l = multiprocessing.Process(target=runner.worker)
         l.start()
         processes.append(l)
@@ -656,4 +656,5 @@ def run_block(block, rf_mod):
     for p in processes:
         p.join()
 
+    runner.dumpQueues()
 
