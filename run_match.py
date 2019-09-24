@@ -10,7 +10,7 @@ if __name__=='__main__':
     ####Create the Random Forest Model
     training_data=pd.read_csv('{}.csv'.format(os.environ['training_data_name']), engine='c', dtype={'{}_id'.format(os.environ['data1_name']):str,'{}_id'.format(os.environ['data2_name']):str})
     ###generate the rf_mod
-    mod=generate_rf_mod(training_data)
+    mod, names=generate_rf_mod(training_data)
     ###get the list of blocks
     blocks=pd.read_csv('block_names.csv').sort_values('order').to_dict('record')
     ###for block in blocks
