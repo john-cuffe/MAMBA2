@@ -5,6 +5,7 @@ from __future__ import division
 import os
 from programs.global_vars import *
 from copy import deepcopy as dcpy
+import copy
 from programs.logger_setup import *
 logger=logger_setup(os.environ['log_file_name'])
 
@@ -340,7 +341,7 @@ class Runner(object):
     ############
     ###Runner Step: define common traits across workers (referred to as self.trait   )
     ############
-    def __init__(self, numWorkers, lock, model, block, var_rec, blocklen):
+    def __init__(self, numWorkers, lock, model, block, var_rec, blocklen, db_name, data1_name, data2_name, logger):
         self.numWorkers = numWorkers  ###how many workers will we have?
         self.m = multiprocessing.Manager()  ###create the object "m" which is a multiprocessing manager
         self.outQueue = self.m.Queue()  ###out queue.  this queue will be filled with arrays to be predicted
@@ -354,11 +355,16 @@ class Runner(object):
         self.recordsPulled = multiprocessing.Value('i', 0)  ###running counter of records pulled from data
         self.chunksWritten = multiprocessing.Value('i', 0)  ###running counter of number of chunks written
         self.endOfStatementFile = multiprocessing.Value('i', False)  ###
-        self.model = model  ###Define the random forest model
-        self.block = block  ###The name of the block (e.g zip5)
-        self.var_rec=var_rec ###the variables we are matching with
+        self.model = model
+        self.block = copy.deepcopy(block)  ###The name of the block (e.g zip5)
+        self.environ=dict(os.environ)
+        self.var_rec=copy.deepcopy(var_rec) ###the variables we are matching with
+        self.db_name=db_name
+        self.data1_name=data1_name
+        self.data2_name=data2_name
         ###Logging flag--if we are in debug mode, just log every 50 obs.  otherwise log every 10% of the chunks
         self.loggingflag = np.floor(blocklen / 10)  ##The logging flag.  Logs every 10% (approximately) of chunks matched
+        self.logger = logger
 
     ############
     ###Define the Log time, which will give us the minutes since the initiation of the Runner
@@ -366,7 +372,8 @@ class Runner(object):
     # def logTime(self):  ###getting the log time functions, which compares the current time with the start time
     #     t = round((time.time() - self.t0) / 60, 2)
     #     logger.info('Block {0} Minutes lapsed: {1}'.format(self.block, t))
-
+    def __getstate__(self): return self.__dict__
+    def __setstate__(self, d): self.__dict__.update(d)
     ############
     ###CREATING THE 'worker'
     ############
@@ -376,7 +383,7 @@ class Runner(object):
         Inputs: Self (the runner object)
         Outputs (in the /output directory):
         '''
-        myconnt = get_connection_sqlite(os.environ['db_name'])
+        myconnt = get_connection_sqlite(self.db_name)
         churn = True
         # if matchingtype=="NameOnly":
         # tfidfdat=pd.read_sql_query('select '+self.matchinglevelvar+', stnnamebr, minyear, maxyear, tfidf_mean from br', myconnt)
@@ -389,45 +396,8 @@ class Runner(object):
                 except:
                     time.sleep(10)
                     continue
-                ###get the two dataframes
-                data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], block[os.environ['data1_name']], target_block), myconnt)
-                data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], block[os.environ['data2_name']], target_block), myconnt)
-                ###get the data
-                input_data=pd.DataFrame([{'{}_id'.format(os.environ['data1_name']):str(k['id']), '{}_id'.format(os.environ['data2_name']):str(y['id'])} for k in data1 for y in data2])
-                ####Now get the data organized, by creating an array of the different types of variables
-                # 1) Fuzzy: Create all the fuzzy values from febrl
-                fuzzy_vars = [i for i in self.var_rec if i['match_type'] == 'fuzzy']
-                if len(fuzzy_vars) > 0:
-                    fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
-                    X = fuzzy_values['output']
-                    X_hdrs = fuzzy_values['names']
-                # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-                numeric_dist_vars = [i for i in self.var_rec if i['match_type'] == 'num_distance']
-                if len(numeric_dist_vars) > 0:
-                    numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
-                    X = np.hstack((X, numeric_dist_values['output']))
-                    X_hdrs.extend(numeric_dist_values['names'])
-                # 3) exact: if they match, 1, else 0
-                exact_match_vars = [i for i in self.var_rec if i['match_type'] == 'exact']
-                if len(exact_match_vars) > 0:
-                    exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
-                    X = np.hstack((X, exact_match_values['output']))
-                    X_hdrs.extend(exact_match_values['names'])
-                ###Now predict
-                myprediction=probsfunc(self.rf_mod[0].predict_proba(X))
-                ####don't need the scores anymore
-                del X
-                input_data['predicted_probability']=myprediction
-                ###keep only the data above the certain thresholds
-                if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
-                    keep_thresh=float(os.environ['clerical_review_threshold'])
-                else:
-                    keep_thresh==float(os.environ['match_threshold'])
-                input_data=input_data.iloc[input_data['predicted_probability'] >= keep_thresh]
-                if len(input_data) > 0:
-                    outdict={'output':input_data.to_dict('record'), 'block':target_block}
-                    self.outQueue.put(outdict)
-
+                ###run the match
+                self.runner_match(target_block)
                 with self.lock:
                     self.chunksMatched.value += 1
                 continue
@@ -461,33 +431,8 @@ class Runner(object):
         while churn:
             #####If we haven't pulled all the chunks and the out queue has any chunks of matches waiting, run a prediction
             if not self.writeQueue.empty():
-                mydict = self.writeQueue.get()
-                ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
-                clerical_review_sql='''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(os.environ['data1_name'], os.environ['data2_name'])
-                match_sql='''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(data1=os.environ['data1_name'], data2=os.environ['data2_name'])
-                if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
-                    if len(mydict['output']) >= 10:
-                        clerical_review_dict=dcpy(mydict['output'].sample(frac=.1))
-                    else:
-                        clerical_review_dict=dcpy(mydict['output'])
-                    columns = clerical_review_dict[0].keys()
-                    vals = [tuple(i[column] for column in columns) for i in clerical_review_dict]
-                    cur.executemany(clerical_review_sql, vals)
-                    myconnt.commit()
-                    if ast.literal_eval(os.environ['chatty_logger'])==True:
-                        logger.info('''{} clerical review candidates added in block {}'''.format(len(clerical_review_dict), mydict['block']))
-                ####Now add in any matches
-                matches=pd.DataFrame([i for i in mydict['output'] if i['predicted_probability'] >= float(os.environ['match_threshold'])])
-                ###ranks
-                matches['{}_rank'.format(os.environ['data1_name'])]=matches.groupby('{}_id'.format(os.environ['data1_name']))['predicted_probability'].rank('dense')
-                matches['{}_rank'.format(os.environ['data2_name'])]=matches.groupby('{}_id'.format(os.environ['data2_name']))['predicted_probability'].rank('dense')
-                ##convert back to dict
-                matches=matches.to_dict('record')
-                vals = [tuple(i[column] for column in columns) for i in matches]
-                cur.executemany(match_sql, vals)
-                myconnt.commit()
-                if ast.literal_eval(os.environ['chatty_logger']) == True:
-                    logger.info('''{} matches added in block {}'''.format(len(matches), mydict['block']))
+                self.dumpOutQueue()
+                ###add chunk written value
                 with self.lock:
                     self.chunksWritten.value += 1
             ###If the above condition isn't met, we can convert the writer to a worker
@@ -498,49 +443,7 @@ class Runner(object):
                 except:
                     time.sleep(10)
                     continue
-                ###get the two dataframes
-                data1 = get_table_noconn(
-                    '''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'],self.block[os.environ['data1_name']],  self.target_block), myconnt)
-                data2 = get_table_noconn(
-                    '''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], self.block[os.environ['data2_name']], target_block), myconnt)
-                ###get the data
-                input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2])
-                ####Now get the data organized, by creating an array of the different types of variables
-                # 1) Fuzzy: Create all the fuzzy values from febrl
-                fuzzy_vars = [i for i in self.var_rec if i['match_type'] == 'fuzzy']
-                if len(fuzzy_vars) > 0:
-                    fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
-                    X = fuzzy_values['output']
-                    X_hdrs = fuzzy_values['names']
-                # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-                numeric_dist_vars = [i for i in self.var_rec if i['match_type'] == 'num_distance']
-                if len(numeric_dist_vars) > 0:
-                    numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
-                    X = np.hstack((X, numeric_dist_values['output']))
-                    X_hdrs.extend(numeric_dist_values['names'])
-                # 3) exact: if they match, 1, else 0
-                exact_match_vars = [i for i in self.var_rec if i['match_type'] == 'exact']
-                if len(exact_match_vars) > 0:
-                    exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
-                    X = np.hstack((X, exact_match_values['output']))
-                    X_hdrs.extend(exact_match_values['names'])
-                ###Now predict
-                myprediction = probsfunc(self.rf_mod[0].predict_proba(X))
-                ####don't need the scores anymore
-                del X
-                input_data['predicted_probability'] = myprediction
-                ###keep only the data above the certain thresholds
-                if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
-                    keep_thresh = float(os.environ['clerical_review_threshold'])
-                else:
-                    keep_thresh == float(os.environ['match_threshold'])
-                input_data = input_data.iloc[input_data['predicted_probability'] >= keep_thresh]
-                if len(input_data) > 0:
-                    outdict = {'output': input_data.to_dict('record'), 'block': target_block}
-                    self.outQueue.put(outdict)
-
-                with self.lock:
-                    self.chunksMatched.value += 1
+                self.runner_match(block)
                 continue
             ####if the inqueue isn't empty and the outqueue is empty and the block is all, run an allmatch (which has the loop for BR
             elif self.inQueue.empty() and self.outQueue.empty():
@@ -552,6 +455,51 @@ class Runner(object):
                 else:
                     continue
 
+    ####The actual match funciton
+    def runner_match(self, target_block):
+        '''
+        This function runs the match.  block is the target block
+        '''
+        ###get the two dataframes
+        data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], self.data1_name, target_block), myconnt)
+        data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], self.data2_name, target_block), myconnt)
+        ###get the data
+        input_data=pd.DataFrame([{'{}_id'.format(os.environ['data1_name']):str(k['id']), '{}_id'.format(os.environ['data2_name']):str(y['id'])} for k in data1 for y in data2])
+        ####Now get the data organized, by creating an array of the different types of variables
+        # 1) Fuzzy: Create all the fuzzy values from febrl
+        fuzzy_vars = [i for i in self.var_rec if i['match_type'] == 'fuzzy']
+        if len(fuzzy_vars) > 0:
+            fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
+            X = fuzzy_values['output']
+            X_hdrs = fuzzy_values['names']
+        # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+        numeric_dist_vars = [i for i in self.var_rec if i['match_type'] == 'num_distance']
+        if len(numeric_dist_vars) > 0:
+            numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
+            X = np.hstack((X, numeric_dist_values['output']))
+            X_hdrs.extend(numeric_dist_values['names'])
+        # 3) exact: if they match, 1, else 0
+        exact_match_vars = [i for i in self.var_rec if i['match_type'] == 'exact']
+        if len(exact_match_vars) > 0:
+            exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
+            X = np.hstack((X, exact_match_values['output']))
+            X_hdrs.extend(exact_match_values['names'])
+        ###Now predict
+        myprediction=probsfunc(self.model.predict_proba(X))
+        ####don't need the scores anymore
+        del X
+        del data1
+        del data2
+        input_data['predicted_probability']=myprediction
+        ###keep only the data above the certain thresholds
+        if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
+            keep_thresh=min(float(os.environ['clerical_review_threshold']),float(os.environ['match_threshold']))
+        else:
+            keep_thresh=float(os.environ['match_threshold'])
+        input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh]
+        if len(input_data) > 0:
+            outdict={'output':input_data.to_dict('record'), 'block':target_block}
+            self.writeQueue.put(outdict)
     ####DumpQueue functions
     ####Dump the outQueue to write Queue
     def dumpOutQueue(self):
@@ -589,6 +537,8 @@ class Runner(object):
         vals = [tuple(i[column] for column in columns) for i in matches]
         cur.executemany(match_sql, vals)
         myconnt.commit()
+        if ast.literal_eval(os.environ['chatty_logger']) == True:
+                    logger.info('''{} matches added in block {}'''.format(len(matches), mydict['block']))
 
     ###main dumpQueue function
     def dumpQueues(self):
@@ -632,13 +582,13 @@ def run_block(block, rf_mod):
     var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
     ###Create and kick off the runner
     lock=multiprocessing.Lock()
-    runner = Runner(numWorkers,lock, rf_mod, block, var_rec, len(block_list))
+    runner = Runner(numWorkers,lock, rf_mod, copy.deepcopy(block), copy.deepcopy(var_rec), len(block_list), os.environ['db_name'], os.environ['data1_name'], os.environ['data2_name'], logger)
     # Start the Input Queue, a Q of input blocks.  Put each one in there
     logger.info( 'FILLING BLOCK QUEUE FOR {}'.format(block['block_name']))
-    for i in range(len(runner.chunks)):
+    for i in range(len(block_list)):
         # if i % (len(runner.chunks))/float(10)==0:
         # logger.info('{} Chunks inserted into queue.  Queue size = {}'.format(i, sys.getsizeof(runner.inQueue)/float(1000000000)))
-        runner.inQueue.put(runner.chunks[i])
+        runner.inQueue.put(block_list[i])
     logger.info('STARTING TO MATCH  FOR {}'.format(block['block_name']))
     # Create and kick off workers
     processes = []
@@ -658,3 +608,8 @@ def run_block(block, rf_mod):
 
     runner.dumpQueues()
 
+if __name__=='__main__':
+    print('why did you do this?')
+    
+    
+    

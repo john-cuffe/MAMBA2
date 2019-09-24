@@ -42,7 +42,7 @@
 # See: http://datamining.anu.edu.au/linkage.html
 #
 # =============================================================================
-
+import __future__
 """Module mymath.py - Various mathematical routines.
 
    See doc strings of individual functions for detailed documentation.

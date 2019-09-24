@@ -51,7 +51,7 @@ def get_stem_data(dataname):
     if sys.platform == 'win32':
         csvname='{}\\{}.csv'.format(os.environ['inputPath'], dataname)
     else:
-        csvname='{}\\{}.csv'.format(os.environ['inputPath'], dataname)
+        csvname='{}/{}.csv'.format(os.environ['inputPath'], dataname)
     for data in pd.read_csv(csvname, chunksize=int(os.environ['create_db_chunksize']), engine='c',dtype=str_dict):
         ###for each chunk, loop through
         data[fuzzy_vars] = data[fuzzy_vars].replace(np.nan, 'NULL')

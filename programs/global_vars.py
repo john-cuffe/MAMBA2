@@ -91,6 +91,7 @@ methods = [feb.jaro, feb.winkler, feb.bagdist, feb.seqmatch, feb.qgram2, feb.qgr
 namelist = [i.__name__ for i in methods]
 ##date and time
 date = dt.datetime.now().date()
+numWorkers=int(os.environ['numWorkers'])
 # Open log file
 # logging.basicConfig(filename=outputPath + 'br_match_log{}.log'.format(date), level=logging.DEBUG)
 # ############
