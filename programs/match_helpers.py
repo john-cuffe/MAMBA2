@@ -319,239 +319,6 @@ def generate_rf_mod(truthdat):
     #     mamba_lite_feats = bestfeats
     #     return rf_mod, mamba_lite_feats
     #
-
-############
-###CHUNK: CREATE RUNNER OBJECT
-############
-class Runner(object):
-    '''
-    # Class to hold shared attributes shared across workers
-    #Description: For each geographic block, creates a container object with block-specific information for storage of local variables
-    ##Inputs
-      ###date--timestamp for logging purposes
-      ###numWorkers--number of workers who will match the data--2 fewer than CPUs with the single worker
-      ###lock--an object of the multiproccessing.lock() class that ensures queue safety
-      ###database--the database to connect
-      ###model--the random forest model to use for predictions
-      ###block--what is the geographic block we are matching on?
-    ###returns
-    #None, but spits out .csv files for the matches for each block into the allmatch and bestmatch .csv files created in the main() statement
-    '''
-
-    ############
-    ###Runner Step: define common traits across workers (referred to as self.trait   )
-    ############
-    def __init__(self, numWorkers, lock, model, block, var_rec, blocklen, db_name, data1_name, data2_name, logger):
-        self.numWorkers = numWorkers  ###how many workers will we have?
-        self.m = multiprocessing.Manager()  ###create the object "m" which is a multiprocessing manager
-        self.outQueue = self.m.Queue()  ###out queue.  this queue will be filled with arrays to be predicted
-        self.inQueue = self.m.Queue()  ###in queue.  This queue is the list of blocks to process
-        self.writeQueue = self.m.Queue()  ###The write queue.  This queue is a single process, exclusively designed to write and avoid conention
-        self.t0 = time.time()  ###initialization time
-        self.lock = lock  ##the lock, that stores the counters that will run across workers
-        self.chunksPulled = multiprocessing.Value('i', 0)  ###running counter of the number of chunks loaded
-        self.chunksMatched = multiprocessing.Value('i', 0)  ##runnign counter of chunks matched
-        self.chunksProcessed = multiprocessing.Value('i', 0)  ###running counter of processed records
-        self.recordsPulled = multiprocessing.Value('i', 0)  ###running counter of records pulled from data
-        self.chunksWritten = multiprocessing.Value('i', 0)  ###running counter of number of chunks written
-        self.endOfStatementFile = multiprocessing.Value('i', False)  ###
-        self.model = model
-        self.block = copy.deepcopy(block)  ###The name of the block (e.g zip5)
-        self.environ=dict(os.environ)
-        self.var_rec=copy.deepcopy(var_rec) ###the variables we are matching with
-        self.db_name=db_name
-        self.data1_name=data1_name
-        self.data2_name=data2_name
-        ###Logging flag--if we are in debug mode, just log every 50 obs.  otherwise log every 10% of the chunks
-        self.loggingflag = np.floor(blocklen / 10)  ##The logging flag.  Logs every 10% (approximately) of chunks matched
-        self.logger = logger
-
-    ############
-    ###Define the Log time, which will give us the minutes since the initiation of the Runner
-    ############
-    # def logTime(self):  ###getting the log time functions, which compares the current time with the start time
-    #     t = round((time.time() - self.t0) / 60, 2)
-    #     logger.info('Block {0} Minutes lapsed: {1}'.format(self.block, t))
-    def __getstate__(self): return self.__dict__
-    def __setstate__(self, d): self.__dict__.update(d)
-    ############
-    ###CREATING THE 'worker'
-    ############
-    def worker(self):
-        '''
-        Description: a worker is an object that runs the predictions.  It gets a
-        Inputs: Self (the runner object)
-        Outputs (in the /output directory):
-        '''
-        myconnt = get_connection_sqlite(self.db_name)
-        churn = True
-        # if matchingtype=="NameOnly":
-        # tfidfdat=pd.read_sql_query('select '+self.matchinglevelvar+', stnnamebr, minyear, maxyear, tfidf_mean from br', myconnt)
-        ###load the tfidf data once to save time
-        ###Add in the tfidf for the BR values
-        while churn:
-            if not self.inQueue.empty():
-                try:
-                    target_block = self.inQueue.get(timeout=240)
-                except:
-                    time.sleep(10)
-                    continue
-                ###run the match
-                self.runner_match(target_block)
-                with self.lock:
-                    self.chunksMatched.value += 1
-                continue
-            ###If the above condition isn't met, we can convert the worker to a worker
-            ####if the inqueue isn't empty and the outqueue is empty and the block isn't the all block, run a match for the geographic blocking
-            else:
-                logger.info('####### Worker Breaking #######')
-                break
-
-
-    ############
-    ###CREATING THE WRITER OBJECT
-    ##########
-    def writer(self):
-        '''
-        This object is a special process only decidated to grabbing items from the writeQueue and then pushing them to the DB.
-        If the writequeue is empty, it becomes a worker
-        '''
-        ##set up a db connection
-        ####conn string
-        myconnt = get_connection_sqlite(os.environ['db_name'])
-        cur=myconnt.cursor()
-        churn = True
-        ###sleep for two minutes to get things started
-        # logger.info('Writer Sleeping')
-        # time.sleep(10)
-        # if matchingtype=="NameOnly":
-        # tfidfdat=pd.read_sql_query('select '+self.matchinglevelvar+', stnnamebr, minyear, maxyear, tfidf_mean from br', myconnt)
-        ###load the tfidf data once to save time
-        ###Add in the tfidf for the BR values
-        while churn:
-            #####If we haven't pulled all the chunks and the out queue has any chunks of matches waiting, run a prediction
-            if not self.writeQueue.empty():
-                self.dumpOutQueue()
-                ###add chunk written value
-                with self.lock:
-                    self.chunksWritten.value += 1
-            ###If the above condition isn't met, we can convert the writer to a worker
-            ####if the inqueue isn't empty and the outqueue is empty and the block isn't the all block, run a match for the geographic blocking
-            elif not self.inQueue.empty() and self.writeQueue.empty():
-                try:
-                    target_block = self.inQueue.get(timeout=240)
-                except:
-                    time.sleep(10)
-                    continue
-                self.runner_match(block)
-                continue
-            ####if the inqueue isn't empty and the outqueue is empty and the block is all, run an allmatch (which has the loop for BR
-            elif self.inQueue.empty() and self.outQueue.empty():
-                ###sleep for 60 seconds
-                time.sleep(60)
-                if self.inQueue.empty() and self.outQueue.empty():
-                    logger.info('####### Writer Breaking #######')
-                    break
-                else:
-                    continue
-
-    ####The actual match funciton
-    def runner_match(self, target_block):
-        '''
-        This function runs the match.  block is the target block
-        '''
-        ###get the two dataframes
-        data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], self.data1_name, target_block), myconnt)
-        data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], self.data2_name, target_block), myconnt)
-        ###get the data
-        input_data=pd.DataFrame([{'{}_id'.format(os.environ['data1_name']):str(k['id']), '{}_id'.format(os.environ['data2_name']):str(y['id'])} for k in data1 for y in data2])
-        ####Now get the data organized, by creating an array of the different types of variables
-        # 1) Fuzzy: Create all the fuzzy values from febrl
-        fuzzy_vars = [i for i in self.var_rec if i['match_type'] == 'fuzzy']
-        if len(fuzzy_vars) > 0:
-            fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
-            X = fuzzy_values['output']
-            X_hdrs = fuzzy_values['names']
-        # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-        numeric_dist_vars = [i for i in self.var_rec if i['match_type'] == 'num_distance']
-        if len(numeric_dist_vars) > 0:
-            numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
-            X = np.hstack((X, numeric_dist_values['output']))
-            X_hdrs.extend(numeric_dist_values['names'])
-        # 3) exact: if they match, 1, else 0
-        exact_match_vars = [i for i in self.var_rec if i['match_type'] == 'exact']
-        if len(exact_match_vars) > 0:
-            exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
-            X = np.hstack((X, exact_match_values['output']))
-            X_hdrs.extend(exact_match_values['names'])
-        ###Now predict
-        myprediction=probsfunc(self.model.predict_proba(X))
-        ####don't need the scores anymore
-        del X
-        del data1
-        del data2
-        input_data['predicted_probability']=myprediction
-        ###keep only the data above the certain thresholds
-        if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
-            keep_thresh=min(float(os.environ['clerical_review_threshold']),float(os.environ['match_threshold']))
-        else:
-            keep_thresh=float(os.environ['match_threshold'])
-        input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh]
-        if len(input_data) > 0:
-            outdict={'output':input_data.to_dict('record'), 'block':target_block}
-            self.writeQueue.put(outdict)
-    ####DumpQueue functions
-    ####Dump the outQueue to write Queue
-    def dumpOutQueue(self):
-        '''
-        This function dumps the outQueue into the write Queue for any remaining blocks
-        '''
-        mydict = self.writeQueue.get()
-        ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
-        clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
-            os.environ['data1_name'], os.environ['data2_name'])
-        match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
-            data1=os.environ['data1_name'], data2=os.environ['data2_name'])
-        if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
-            if len(mydict['output']) >= 10:
-                clerical_review_dict = dcpy(mydict['output'].sample(frac=.1))
-            else:
-                clerical_review_dict = dcpy(mydict['output'])
-            columns = clerical_review_dict[0].keys()
-            vals = [tuple(i[column] for column in columns) for i in clerical_review_dict]
-            cur.executemany(clerical_review_sql, vals)
-            myconnt.commit()
-            if ast.literal_eval(os.environ['chatty_logger']) == True:
-                logger.info('''{} clerical review candidates added in block {}'''.format(len(clerical_review_dict),
-                                                                                         mydict['block']))
-        ####Now add in any matches
-        matches = pd.DataFrame(
-            [i for i in mydict['output'] if i['predicted_probability'] >= float(os.environ['match_threshold'])])
-        ###ranks
-        matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
-            'predicted_probability'].rank('dense')
-        matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
-            'predicted_probability'].rank('dense')
-        ##convert back to dict
-        matches = matches.to_dict('record')
-        vals = [tuple(i[column] for column in columns) for i in matches]
-        cur.executemany(match_sql, vals)
-        myconnt.commit()
-        if ast.literal_eval(os.environ['chatty_logger']) == True:
-                    logger.info('''{} matches added in block {}'''.format(len(matches), mydict['block']))
-
-    ###main dumpQueue function
-    def dumpQueues(self):
-        '''
-        This function dumps the queues at the end of the run to ensure we don't miss anything/avoid hung sessions
-        '''
-        logger.info('#### Beginning outQueue dump: {0} blocks ####'.format(self.writeQueue.qsize()))
-        while self.writeQueue.qsize() > 0:
-            self.dumpOutQueue()
-        logger.info('##### writeQueue dump complete ####'.format(self.writeQueue.qsize()))
-
-
-
 def intersection(lst1, lst2):
     '''
     Intersection method from https://www.geeksforgeeks.org/python-intersection-two-lists/
@@ -561,6 +328,110 @@ def intersection(lst1, lst2):
     '''
     lst3 = [value for value in lst1 if value in lst2]
     return lst3
+
+
+
+####The actual match funciton
+def match_fun(arg):
+    '''
+    This function runs the match.  
+    arg is a dictionary.  
+    target: the block we are targeting  
+    var_rec: the variable records, showing what type of match to perform on each variable
+    '''
+    ###Sometimes, the arg will have a logging flag if we are 10% of the way through
+    if arg['logging_flag']:
+        logger.info('{}% complete with block'.format(arg['logging_flag']))
+    db=get_connection_sqlite(os.environ['db_name'], timeout=1)
+    ###get the two dataframes
+    data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
+    data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
+    ###get the data
+    input_data=pd.DataFrame([{'{}_id'.format(os.environ['data1_name']):str(k['id']), '{}_id'.format(os.environ['data2_name']):str(y['id'])} for k in data1 for y in data2])
+    ####Now get the data organized, by creating an array of the different types of variables
+    # 1) Fuzzy: Create all the fuzzy values from febrl
+    fuzzy_vars = [i for i in arg['var_rec'] if i['match_type'] == 'fuzzy']
+    if len(fuzzy_vars) > 0:
+        fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
+        X = fuzzy_values['output']
+        X_hdrs = fuzzy_values['names']
+    # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+    numeric_dist_vars = [i for i in arg['var_rec'] if i['match_type'] == 'num_distance']
+    if len(numeric_dist_vars) > 0:
+        numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
+        X = np.hstack((X, numeric_dist_values['output']))
+        X_hdrs.extend(numeric_dist_values['names'])
+    # 3) exact: if they match, 1, else 0
+    exact_match_vars = [i for i in arg['var_rec'] if i['match_type'] == 'exact']
+    if len(exact_match_vars) > 0:
+        exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
+        X = np.hstack((X, exact_match_values['output']))
+        X_hdrs.extend(exact_match_values['names'])
+    ###Now predict
+    myprediction=probsfunc(arg['model'].predict_proba(X))
+    ####don't need the scores anymore
+    del X
+    del data1
+    del data2
+    input_data['predicted_probability']=myprediction
+    ###keep only the data above the certain thresholds
+    if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
+        keep_thresh=min(float(os.environ['clerical_review_threshold']),float(os.environ['match_threshold']))
+    else:
+        keep_thresh=float(os.environ['match_threshold'])
+    input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh].to_dict('record')
+    if len(input_data) > 0:
+        ###try to write to db, if not return and then we will dump later
+        cur=db.cursor()
+         ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
+        clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
+            os.environ['data1_name'], os.environ['data2_name'])
+        match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
+            data1=os.environ['data1_name'], data2=os.environ['data2_name'])
+        ###setup the to_return
+        to_return={}
+        if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
+            if len(input_data) >= 10:
+                clerical_review_dict = dcpy(input_data.sample(frac=.1))
+            else:
+                clerical_review_dict = dcpy(input_data)
+            columns = clerical_review_dict[0].keys()
+            vals = [tuple(i[column] for column in columns) for i in clerical_review_dict]
+            try:
+                cur.executemany(clerical_review_sql, vals)
+                db.commit()
+            except Exception:
+                cur.close()
+                cur=db.cursor()
+                to_return['clerical_review_candidates']=vals
+            ###if it's a chatty logger, log.
+            if ast.literal_eval(os.environ['chatty_logger']) == True:
+                logger.info('''{} clerical review candidates added'''.format(len(clerical_review_dict)))
+        ####Now add in any matches
+        matches = pd.DataFrame(
+            [i for i in input_data if i['predicted_probability'] >= float(os.environ['match_threshold'])])
+        ###ranks
+        matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
+            'predicted_probability'].rank('dense')
+        matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
+            'predicted_probability'].rank('dense')
+        ##convert back to dict
+        matches = matches.to_dict('record')
+        columns=matches[0].keys()
+        vals = [tuple(i[column] for column in columns) for i in matches]
+        try:
+            cur.executemany(match_sql, vals)
+            db.commit()
+        except Exception:
+            to_return['matches']=vals
+        cur.close()
+        db.close()
+        if ast.literal_eval(os.environ['chatty_logger']) == True:
+                    logger.info('''{} matches added in block'''.format(len(matches)))
+        if 'clerical_review_candidates'in to_return.keys() or 'matches' in to_return.keys():
+            return to_return
+        else:
+            return None
 
 ####The block function
 def run_block(block, rf_mod):
@@ -581,32 +452,22 @@ def run_block(block, rf_mod):
     ###get the list of variables we are trying to match
     var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
     ###Create and kick off the runner
-    lock=multiprocessing.Lock()
-    runner = Runner(numWorkers,lock, rf_mod, copy.deepcopy(block), copy.deepcopy(var_rec), len(block_list), os.environ['db_name'], os.environ['data1_name'], os.environ['data2_name'], logger)
-    # Start the Input Queue, a Q of input blocks.  Put each one in there
-    logger.info( 'FILLING BLOCK QUEUE FOR {}'.format(block['block_name']))
-    for i in range(len(block_list)):
-        # if i % (len(runner.chunks))/float(10)==0:
-        # logger.info('{} Chunks inserted into queue.  Queue size = {}'.format(i, sys.getsizeof(runner.inQueue)/float(1000000000)))
-        runner.inQueue.put(block_list[i])
+    arg_list=[]
+    for k in range(len(block_list)):
+        my_arg={}
+        my_arg['var_rec']=var_rec
+        my_arg['model']=rf_mod
+        my_arg['target']=block_list[k]
+        my_arg['block_info']=block
+        if k % (len(block_list)/10)==0:
+            my_arg['logging_flag']=int(np.round(100*(k/len(block_list)),0))
+        arg_list.append(my_arg)
     logger.info('STARTING TO MATCH  FOR {}'.format(block['block_name']))
-    # Create and kick off workers
-    processes = []
-    ##set up the workers, where l is an indivudal worker in the range from 1:numWorkers
-    for l in range(int(os.environ['numWorkers'])):
-        l = multiprocessing.Process(target=runner.worker)
-        l.start()
-        processes.append(l)
-
-    ###set up the writer
-    w = multiprocessing.Process(target=runner.writer)
-    w.start()
-    processes.append(w)
-    ###Now kick off the workers
-    for p in processes:
-        p.join()
-
-    runner.dumpQueues()
+    pool=Pool(numWorkers)
+    out=pool.map(match_fun, arg_list)
+    ###Once that is done, need to
+    ##push the remaining items in out to the db
+    ##then change the matched flags on the data tables to 1 where it's been matched
 
 if __name__=='__main__':
     print('why did you do this?')

@@ -3,9 +3,9 @@
 import sqlite3
 import time
 
-def get_connection_sqlite(db_name):
+def get_connection_sqlite(db_name, timeout=1):
 
-    db = sqlite3.connect(db_name)
+    db = sqlite3.connect(db_name, timeout=timeout)
     return db
 
 

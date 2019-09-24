@@ -30,5 +30,3 @@ if __name__=='__main__':
     logger.info('{} Total matched pairs').format(summstats['total_pairs'])
     db.close()
     os._exit(0)
-
-
