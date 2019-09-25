@@ -44,3 +44,25 @@
  Max Features=log2
  Max Depth=9
 2019-09-10 16:09:39,115 - root - INFO - We have 10 blocks to run for zip5
+2019-09-18 18:19:24,001 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-18 18:19:33,607 - root - INFO - 
+
+######0.31 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-18 18:19:33,607 - root - INFO - 1 trees, sqrt features per tree
+2019-09-18 18:19:33,607 - root - INFO - and attains a accuracy score of 1.0
+2019-09-18 18:19:33,607 - root - INFO - 
+
+######0.31 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-18 18:19:33,607 - root - INFO - ##########0.31 Minutes: Run Random Forest##########
+2019-09-18 18:19:33,607 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=sqrt
+ Max Depth=10

@@ -403,7 +403,7 @@ def match_fun(arg):
             except Exception:
                 cur.close()
                 cur=db.cursor()
-                to_return['clerical_review_candidates']=vals
+                to_return['clerical_review_candidates']=input_data
             ###if it's a chatty logger, log.
             if ast.literal_eval(os.environ['chatty_logger']) == True:
                 logger.info('''{} clerical review candidates added'''.format(len(clerical_review_dict)))
@@ -423,7 +423,7 @@ def match_fun(arg):
             cur.executemany(match_sql, vals)
             db.commit()
         except Exception:
-            to_return['matches']=vals
+            to_return['matches']=matches
         cur.close()
         db.close()
         if ast.literal_eval(os.environ['chatty_logger']) == True:
@@ -467,7 +467,31 @@ def run_block(block, rf_mod):
     out=pool.map(match_fun, arg_list)
     ###Once that is done, need to
     ##push the remaining items in out to the db
+    db=get_connection_sqlite(os.environ['dbname'])
+    cur=db.cursor()
+    logger.info('Dumping remaining matches to DB')
+    clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
+        os.environ['data1_name'], os.environ['data2_name'])
+    match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
+        data1=os.environ['data1_name'], data2=os.environ['data2_name'])
+    for i in out:
+        if i!=None:
+            if 'clerical_review_candidates' in i.keys():
+                columns = k['clerical_review_candidates'][0].keys()
+                vals = [tuple(i[column] for column in columns) for i in k['clerical_review_candidates']]
+                cur.executemany(clerical_review_sql, vals)
+            if 'matches' in i.keys():
+                columns = k['matches'][0].keys()
+                vals = [tuple(i[column] for column in columns) for i in k['matches']]
+                cur.executemany(match_sql, vals)
+    db.commit()
     ##then change the matched flags on the data tables to 1 where it's been matched
+    ###updating the matched flags
+    cur.execute('''update {data1_name} set matched=1 where id in (select distinct {data1_name}_id from matched_pairs)'''.format(data1_name=os.environ['data1_name']))
+    cur.execute('''update {data2_name} set matched=1 where id in (select distinct {data2_name}_id from matched_pairs)'''.format(data2_name=os.environ['data2_name']))
+    db.commit()
+    db.close()
+    logger.info('Block {} Complete'.format(block['block_name']))
 
 if __name__=='__main__':
     print('why did you do this?')
