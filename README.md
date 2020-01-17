@@ -15,12 +15,12 @@ Second Generation of the MAMBA Software
 * Run log--?
 * Match file--?
 
-# Program InventoryC
+# Program Inventory
 
 * run_Match.bash--Holds parameters for execution and launches match program run_match.py. 
 * run_match.py--Manages execution of the match, iterating over and running blocking variables and stores output. 
-** global_vars.py--
-** create_db_helpers.py--Functions to process data on the db.
-** match_helpers.py--Functions to generate scores and run random forest models. Contains run_block() function that runs each block variable in run_match.py.
-** logger_setup.py--Manages logger.
+* global_vars.py--
+* create_db_helpers.py--Functions to process data on the db.
+* match_helpers.py--Functions to generate scores and run random forest models. Contains run_block() function that runs each block variable in run_match.py.
+* logger_setup.py--Manages logger.
 * febrl_methods.py--Contains string comparator methods.
