@@ -12,6 +12,7 @@ Second Generation of the MAMBA Software
 
 ## Outputs:
 
-* ?
+* Run log--?
+* Match file--?
 
 
