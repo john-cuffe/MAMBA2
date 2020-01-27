@@ -103,8 +103,8 @@ def create_scores(input_data, score_type, varlist):
     '''
     db=get_connection_sqlite(os.environ['db_name'])
     if score_type=='fuzzy':
-        data1_ids=','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().to_list())
-        data2_ids=','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().to_list())
+        data1_ids=','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
+        data2_ids=','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
         ###create an indexed list of the id pairs to serve as the core of our dictionary
         input_data=dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
@@ -262,63 +262,63 @@ def generate_rf_mod(truthdat):
     ###No obvious need for MAMBALITE here
     ##In future could just remove the worst performaning variable using a relimp measure then run the full model
     #if mambalite == False:
-    logger.info('\n\n######{0} MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######\n\n'.format(
-        str(round((time.time() - start) / 60, 2))))
-    logger.info('{0} trees, {1} features per tree'.format(str(trees), str(features_per_tree)))
-    logger.info('and attains a {0} score of {1}'.format(scoringcriteria, str(round(score, 3))))
-    logger.info('\n\n######{0} MINUTES: FIT BEST RANDOM FOREST MODEL ######\n\n'.format(
-        str(round((time.time() - start) / 60, 2))))
+    logger.info('Random Forest Completed.  Score {}'.format(score))
     rf_mod = runRFClassifier(y, X, trees, features_per_tree, max_depth)
-    return rf_mod, X_hdrs
-    ###Otherwise, take the best 25%, or 4, features, whichever is greater
-    # else:
-    #     if len(X_hdrs) < 16:
-    #         mambalite_len=4
-    #     else:
-    #         mambalite_len=int(np.round(len(X_hdrs)/4))
-    #     outls = featSelRFImpurity(y, X, X_hdrs, mambalite_len, cv_rfc.best_params_['n_estimators'], cv_rfc.best_params_['max_features'],cv_rfc.best_params_['max_depth'])
-    #     bestfeats = [i[0] for i in outls]
-    #     logger.info('\n\n######{} MINUTES: FOR MAMBA LITE, WE WILL USE: {}######\n\n'.format(
-    #         str(round((time.time() - start) / 60, 2)), str(", ".join(bestfeats))))
-    #     ####Now let's re-run the model
-    #     ###first we need the adequate features
-    #     lite_X = np.zeros(shape=(len(truthdat), 0))
-    #     for i in [fuzzy_values, numeric_dist_values, exact_match_values]:
-    #         keeplist=[]
-    #         for k in range(len(i['names'])):
-    #             if i['names'][k] in bestfeats:
-    #                 keeplist.append(k)
-    #         if len(keeplist) > 0:
-    #             lite_X=np.hstack((lite_X,i['output'][:,keeplist]))
-    #     features_per_tree = ['sqrt', 'log2', 5, 8]
-    #     ###setting the parameters
-    #     myparams = {
-    #         'n_estimators': sp_randint(10, 100),
-    #         'max_features': features_per_tree,
-    #         'max_depth': sp_randint(5, 16)}
-    #     rf = RandomForestClassifier(n_jobs=int(os.environ['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
-    #     if debug:
-    #         niter = 5
-    #     else:
-    #         niter = 200
-    #     cv_rfc = RandomizedSearchCV(estimator=rf, param_distributions=myparams, cv=10, scoring=scoringcriteria,
-    #                                 n_iter=niter)
-    #     cv_rfc.fit(lite_X, y)
-    #     ##Save the parameters
-    #     trees = cv_rfc.best_params_['n_estimators']
-    #     features_per_tree = cv_rfc.best_params_['max_features']
-    #     score = cv_rfc.best_score_
-    #     max_depth = cv_rfc.best_params_['max_depth']
-    #     logger.info('\n\n######{0} MINUTES: THE BEST FITTING LITE MODEL FOR YOUR DATA HAS: ######\n\n'.format(
-    #         str(round((time.time() - start) / 60, 2))))
-    #     logger.info('{0} trees, {1} features per tree'.format(str(trees), str(features_per_tree)))
-    #     logger.info('and attains a {0} score of {1}'.format(scoringcriteria, str(round(score, 3))))
-    #     logger.info('\n\n######{0} MINUTES: FIT BEST RANDOM FOREST MODEL ######\n\n'.format(
-    #         str(round((time.time() - start) / 60, 2))))
-    #     rf_mod = runRFClassifier(y, lite_X, trees, features_per_tree, max_depth)
-    #     mamba_lite_feats = bestfeats
-    #     return rf_mod, mamba_lite_feats
-    #
+    return {'type':'rf', 'score':'score', 'model':rf_mod}
+
+def generate_svn_mod(truthdat):
+    '''
+    Generate the SVM model we are going to use for the matching
+    inputs: truthdat: the truth data.  Just 3 columns--data1 id, data2 id, and if they match
+    '''
+    logger.info('\n\n######CREATE RANDOM FOREST MODEL ######\n\n')
+    ###get the varible types
+    var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
+    ###We have three types of variables.
+    #1) Fuzzy: Create all the fuzzy values from febrl
+    fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
+    if len(fuzzy_vars) > 0:
+        fuzzy_values=create_scores(truthdat, 'fuzzy', fuzzy_vars)
+        X=fuzzy_values['output']
+        X_hdrs=fuzzy_values['names']
+    #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+    numeric_dist_vars=[i for i in var_rec if i['match_type']=='num_distance']
+    if len(numeric_dist_vars) > 0:
+        numeric_dist_values=create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
+        X=np.hstack((X, numeric_dist_values['output']))
+        X_hdrs.extend(numeric_dist_values['names'])
+    #3) exact: if they match, 1, else 0
+    exact_match_vars=[i for i in var_rec if i['match_type']=='exact']
+    if len(exact_match_vars) > 0:
+        exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
+        X=np.hstack((X, exact_match_values['output']))
+        X_hdrs.extend(exact_match_values['names'])
+    ###making the dependent variable array
+    y = truthdat['match'].values
+    ###Generate the Grid Search to find the ideal values
+    from sklearn import svm
+    ##setup the SVM
+    svc = svm.SVC(class_weight='balanced', gamma='scale')
+    if debug:
+        niter = 5
+    else:
+        niter = 200
+    from sklearn.model_selection import cross_val_score, cross_val_predict
+    ##First, get the scores
+    scores=cross_val_score(svc, X, y, scoring=scoringcriteria, cv=niter)
+    cv_rfc = cross_val_predict(svc, X, y, scoring=scoringcriteria,cv=niter)
+    logger.info('SVM Complete.  Max Score={}'.format(max(scores)))
+    ###Note for when you return--you need to change the predict function to do cross_val_predict
+    return {'type':'svm', 'score':max(scores), 'model':svc}
+
+
+def select_model(truthdat):
+    '''
+    This function will return the best fitting model for our data
+    :param truthdat:
+    :return:
+    '''
+
 def intersection(lst1, lst2):
     '''
     Intersection method from https://www.geeksforgeeks.org/python-intersection-two-lists/

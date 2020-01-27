@@ -1,0 +1,399 @@
+2019-09-23 15:40:43,979 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 15:42:50,565 - root - INFO - Scoring Criteria: accuracy
+2019-09-23 15:42:50,565 - root - INFO - Debug Mode? False
+2019-09-23 15:48:02,673 - root - INFO - Scoring Criteria: accuracy
+2019-09-23 15:48:02,673 - root - INFO - Debug Mode? False
+2019-09-23 15:48:02,706 - root - INFO - Scoring Criteria: accuracy
+2019-09-23 15:48:02,707 - root - INFO - Debug Mode? False
+2019-09-23 15:53:18,962 - root - INFO - Scoring Criteria: accuracy
+2019-09-23 15:53:18,962 - root - INFO - Debug Mode? False
+2019-09-23 15:53:33,827 - root - INFO - Scoring Criteria: accuracy
+2019-09-23 15:53:33,829 - root - INFO - Debug Mode? False
+2019-09-23 15:53:54,236 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 15:54:05,329 - root - INFO - 
+
+######0.52 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-23 15:54:05,329 - root - INFO - 3 trees, 10 features per tree
+2019-09-23 15:54:05,330 - root - INFO - and attains a accuracy score of 0.99
+2019-09-23 15:54:05,330 - root - INFO - 
+
+######0.52 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-23 15:54:05,330 - root - INFO - ##########0.52 Minutes: Run Random Forest##########
+2019-09-23 15:54:05,330 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=10
+ Max Depth=14
+2019-09-23 12:48:18,633 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 12:48:28,644 - root - INFO - 
+
+######1.39 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-23 12:48:28,645 - root - INFO - 3 trees, 10 features per tree
+2019-09-23 12:48:28,646 - root - INFO - and attains a accuracy score of 1.0
+2019-09-23 12:48:28,647 - root - INFO - 
+
+######1.39 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-23 12:48:28,648 - root - INFO - ##########1.39 Minutes: Run Random Forest##########
+2019-09-23 12:48:28,649 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=10
+ Max Depth=21
+2019-09-23 12:49:28,345 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 12:49:48,111 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 12:57:01,891 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 12:59:37,624 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 12:59:37,630 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 13:04:37,390 - root - INFO - ####### Worker Breaking #######
+2019-09-23 13:05:56,594 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 13:08:07,354 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 13:25:05,446 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 13:32:46,889 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 13:32:47,191 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 14:42:40,278 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 14:42:40,282 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 14:43:16,837 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 14:43:16,841 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 14:45:22,189 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:04:11,242 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:04:11,245 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 15:11:33,327 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:11:33,331 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 15:16:06,074 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:16:06,077 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 15:16:56,438 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 15:17:06,057 - root - INFO - 
+
+######150.01 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-23 15:17:06,058 - root - INFO - 5 trees, log2 features per tree
+2019-09-23 15:17:06,059 - root - INFO - and attains a accuracy score of 1.0
+2019-09-23 15:17:06,060 - root - INFO - 
+
+######150.01 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-23 15:17:06,061 - root - INFO - ##########150.01 Minutes: Run Random Forest##########
+2019-09-23 15:17:06,061 - root - INFO - Random Forest Params:
+ Number of Trees=5
+ Max Features=log2
+ Max Depth=16
+2019-09-23 15:17:32,921 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 15:17:33,216 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:17:33,219 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 15:29:17,950 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:29:17,954 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 15:48:41,164 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 15:48:41,500 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:48:41,504 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 15:56:05,668 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 15:56:05,672 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 16:04:02,177 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 16:04:12,269 - root - INFO - 
+
+######0.21 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-23 16:04:12,270 - root - INFO - 1 trees, 10 features per tree
+2019-09-23 16:04:12,271 - root - INFO - and attains a accuracy score of 1.0
+2019-09-23 16:04:12,272 - root - INFO - 
+
+######0.21 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-23 16:04:12,273 - root - INFO - ##########0.21 Minutes: Run Random Forest##########
+2019-09-23 16:04:12,274 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=10
+ Max Depth=18
+2019-09-23 16:07:42,543 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:08:05,802 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:08:12,618 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:10:41,528 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 16:10:41,531 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 16:23:00,468 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 16:23:09,877 - root - INFO - 
+
+######0.98 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-23 16:23:09,878 - root - INFO - 1 trees, sqrt features per tree
+2019-09-23 16:23:09,879 - root - INFO - and attains a accuracy score of 1.0
+2019-09-23 16:23:09,879 - root - INFO - 
+
+######0.98 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-23 16:23:09,880 - root - INFO - ##########0.98 Minutes: Run Random Forest##########
+2019-09-23 16:23:09,881 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=sqrt
+ Max Depth=20
+2019-09-23 16:23:37,382 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:23:55,016 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:24:11,759 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:24:19,328 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:24:59,266 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 16:24:59,269 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 16:25:59,225 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 16:25:59,228 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-23 16:32:42,299 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-23 16:32:53,056 - root - INFO - 
+
+######0.23 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-23 16:32:53,058 - root - INFO - 5 trees, sqrt features per tree
+2019-09-23 16:32:53,059 - root - INFO - and attains a accuracy score of 1.0
+2019-09-23 16:32:53,060 - root - INFO - 
+
+######0.23 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-23 16:32:53,060 - root - INFO - ##########0.23 Minutes: Run Random Forest##########
+2019-09-23 16:32:53,061 - root - INFO - Random Forest Params:
+ Number of Trees=5
+ Max Features=sqrt
+ Max Depth=22
+2019-09-23 16:33:46,133 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:33:54,859 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:35:32,186 - root - INFO - We have 10 blocks to run for zip5
+2019-09-23 16:35:32,503 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-23 16:35:32,507 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-24 10:45:58,345 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-24 10:46:12,462 - root - INFO - 
+
+######0.26 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-24 10:46:12,463 - root - INFO - 5 trees, sqrt features per tree
+2019-09-24 10:46:12,464 - root - INFO - and attains a accuracy score of 1.0
+2019-09-24 10:46:12,465 - root - INFO - 
+
+######0.26 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-24 10:46:12,466 - root - INFO - ##########0.26 Minutes: Run Random Forest##########
+2019-09-24 10:46:12,467 - root - INFO - Random Forest Params:
+ Number of Trees=5
+ Max Features=sqrt
+ Max Depth=24
+2019-09-24 10:46:57,662 - root - INFO - We have 10 blocks to run for zip5
+2019-09-24 10:46:58,108 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-24 10:46:58,112 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-24 10:50:21,348 - root - INFO - We have 10 blocks to run for zip5
+2019-09-24 10:50:21,735 - root - INFO - FILLING BLOCK QUEUE FOR zip5
+2019-09-24 10:50:21,739 - root - INFO - STARTING TO MATCH  FOR zip5
+2019-09-24 13:32:36,603 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-24 13:32:50,681 - root - INFO - 
+
+######0.27 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-24 13:32:50,682 - root - INFO - 3 trees, sqrt features per tree
+2019-09-24 13:32:50,683 - root - INFO - and attains a accuracy score of 1.0
+2019-09-24 13:32:50,685 - root - INFO - 
+
+######0.27 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-24 13:32:50,686 - root - INFO - ##########0.27 Minutes: Run Random Forest##########
+2019-09-24 13:32:50,688 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=sqrt
+ Max Depth=21
+2019-09-24 13:35:37,062 - root - INFO - We have 10 blocks to run for zip5
+2019-09-24 13:35:47,300 - root - INFO - We have 10 blocks to run for zip5
+2019-09-24 13:55:17,342 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-24 13:55:30,343 - root - INFO - 
+
+######0.89 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-24 13:55:30,344 - root - INFO - 1 trees, 15 features per tree
+2019-09-24 13:55:30,345 - root - INFO - and attains a accuracy score of 1.0
+2019-09-24 13:55:30,347 - root - INFO - 
+
+######0.89 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-24 13:55:30,348 - root - INFO - ##########0.89 Minutes: Run Random Forest##########
+2019-09-24 13:55:30,349 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=15
+ Max Depth=22
+2019-09-24 13:55:52,238 - root - INFO - We have 10 blocks to run for zip5
+2019-09-24 13:56:20,436 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,443 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,461 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,461 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,464 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,474 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,477 - root - INFO - {}% complete with block
+2019-09-24 13:56:20,486 - root - INFO - {}% complete with block
+2019-09-24 14:01:43,663 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-24 14:02:02,041 - root - INFO - 
+
+######0.33 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-24 14:02:02,043 - root - INFO - 1 trees, 15 features per tree
+2019-09-24 14:02:02,045 - root - INFO - and attains a accuracy score of 1.0
+2019-09-24 14:02:02,046 - root - INFO - 
+
+######0.33 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-24 14:02:02,048 - root - INFO - ##########0.33 Minutes: Run Random Forest##########
+2019-09-24 14:02:02,049 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=15
+ Max Depth=6
+2019-09-24 14:03:02,736 - root - INFO - We have 10 blocks to run for zip5
+2019-09-24 14:04:53,159 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:04:53,217 - root - INFO - 1 matches added in block
+2019-09-24 14:05:38,899 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:38,950 - root - INFO - 1 matches added in block
+2019-09-24 14:05:38,952 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,056 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:39,100 - root - INFO - 1 matches added in block
+2019-09-24 14:05:39,102 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,189 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:39,230 - root - INFO - 1 matches added in block
+2019-09-24 14:05:39,232 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,316 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:39,354 - root - INFO - 1 matches added in block
+2019-09-24 14:05:39,355 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,444 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:39,486 - root - INFO - 1 matches added in block
+2019-09-24 14:05:39,488 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,575 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:39,618 - root - INFO - 1 matches added in block
+2019-09-24 14:05:39,619 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,708 - root - INFO - 1 clerical review candidates added
+2019-09-24 14:05:39,745 - root - INFO - 1 matches added in block
+2019-09-24 14:05:39,747 - root - INFO - {}% complete with block
+2019-09-24 14:05:39,825 - root - INFO - {}% complete with block
+2019-09-24 14:05:40,161 - root - INFO - 4 clerical review candidates added
+2019-09-24 14:05:40,205 - root - INFO - 4 matches added in block
+2019-09-24 14:05:40,207 - root - INFO - {}% complete with block
+2019-09-24 14:05:40,770 - root - INFO - 7 clerical review candidates added
+2019-09-24 14:05:40,806 - root - INFO - 7 matches added in block
+2019-09-24 19:42:11,599 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-24 19:42:30,830 - root - INFO - 
+
+######0.61 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-24 19:42:30,831 - root - INFO - 2 trees, log2 features per tree
+2019-09-24 19:42:30,832 - root - INFO - and attains a accuracy score of 0.99
+2019-09-24 19:42:30,832 - root - INFO - 
+
+######0.61 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-24 19:42:30,833 - root - INFO - ##########0.61 Minutes: Run Random Forest##########
+2019-09-24 19:42:30,833 - root - INFO - Random Forest Params:
+ Number of Trees=2
+ Max Features=log2
+ Max Depth=23
+2019-09-24 19:45:27,720 - root - INFO - We have 10 blocks to run for zip5
+2019-09-25 17:53:41,512 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2019-09-25 17:54:11,118 - root - INFO - 
+
+######0.69 MINUTES: THE BEST FITTING MODEL FOR YOUR DATA HAS: ######
+
+
+2019-09-25 17:54:11,119 - root - INFO - 1 trees, 15 features per tree
+2019-09-25 17:54:11,119 - root - INFO - and attains a accuracy score of 1.0
+2019-09-25 17:54:11,119 - root - INFO - 
+
+######0.69 MINUTES: FIT BEST RANDOM FOREST MODEL ######
+
+
+2019-09-25 17:54:11,119 - root - INFO - ##########0.69 Minutes: Run Random Forest##########
+2019-09-25 17:54:11,121 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=15
+ Max Depth=19
+2019-09-25 17:55:25,594 - root - INFO - We have 10 blocks to run for zip5
+2019-09-25 17:55:41,086 - root - INFO - We have 10 blocks to run for zip5
+2019-09-25 17:58:16,334 - root - INFO - 1 clerical review candidates added
+2019-09-25 17:58:16,367 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,434 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,460 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,516 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,543 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,598 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,625 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,677 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,703 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,759 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,783 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,839 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,862 - root - INFO - 1 matches added in block
+2019-09-25 18:14:40,914 - root - INFO - 1 clerical review candidates added
+2019-09-25 18:14:40,938 - root - INFO - 1 matches added in block
+2019-09-25 18:14:41,127 - root - INFO - 4 clerical review candidates added
+2019-09-25 18:14:41,153 - root - INFO - 4 matches added in block
+2019-09-25 18:14:41,427 - root - INFO - 7 clerical review candidates added
+2019-09-25 18:14:41,454 - root - INFO - 7 matches added in block

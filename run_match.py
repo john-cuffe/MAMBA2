@@ -17,7 +17,7 @@ if __name__=='__main__':
     ##run
     for block in blocks:
         logger.info('### Starting Block {}'.format(block['block_name']))
-        run_block(block)
+        run_block(block, mod)
         logger.info('### Completed Block {}'.format(block['block_name']))
     ###Once we are done, spit out the final information on the number of matches, and the .csv files
     db=get_connection_sqlite(os.environ['db_name'])
