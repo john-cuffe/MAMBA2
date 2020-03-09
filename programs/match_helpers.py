@@ -249,8 +249,8 @@ def create_scores(input_data, score_type, varlist):
         out_arr = np.zeros(shape=(len(core_dict), 1))
         null_count=0
         for i in range(len(core_dict)):
-            data1_target=[k for k in data1_values if int(k['id'])==int(core_dict[i]['{}_id'.format(os.environ['data1_name'])])][0]
-            data2_target=[k for k in data2_values if int(k['id'])==int(core_dict[i]['{}_id'.format(os.environ['data2_name'])])][0]
+            data1_target=[k for k in data1_values if str(k['id'])==str(core_dict[i]['{}_id'.format(os.environ['data1_name'])])][0]
+            data2_target=[k for k in data2_values if str(k['id'])==str(core_dict[i]['{}_id'.format(os.environ['data2_name'])])][0]
             if data1_target['latitude'] is not None and data1_target['longitude'] is not None and data2_target['latitude'] is not None and data2_target['longitude'] is not None:
                     out_arr[i]=haversine(tuple([data1_target['latitude'],data1_target['longitude']]),
                                   tuple([data2_target['latitude'], data2_target['longitude']]))
@@ -305,7 +305,7 @@ def generate_rf_mod(truthdat):
     features_per_tree = ['sqrt', 'log2', 10, 15]
     rf = RandomForestClassifier(n_jobs=int(os.environ['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
     myparams = {
-        'n_estimators': sp_randint(1, 10),
+        'n_estimators': sp_randint(1, 25),
         'max_features': features_per_tree,
         'max_depth': sp_randint(5, 25)}
     ##Run the Grid Search
