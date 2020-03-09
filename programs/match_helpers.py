@@ -89,6 +89,32 @@ def probsfunc(x):
     return ith
 
 
+####The Haversine distinace between two points
+import math
+
+
+def haversine(coord1, coord2):
+    '''
+    Lots of research went into this
+    lol jk https://janakiev.com/blog/gps-points-distance-python/
+    :param coord1: tuple of coordinates (lat,lon)
+    :param coord2: tuple of coordinates
+    :return:
+    '''
+    R = 6372  # Earth radius in km
+    lat1, lon1 = coord1
+    lat2, lon2 = coord2
+
+    phi1, phi2 = math.radians(lat1), math.radians(lat2)
+    dphi = math.radians(lat2 - lat1)
+    dlambda = math.radians(lon2 - lon1)
+
+    a = math.sin(dphi / 2) ** 2 + \
+        math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
+
+    return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
 
 def create_scores(input_data, score_type, varlist):
     '''
@@ -100,6 +126,7 @@ def create_scores(input_data, score_type, varlist):
     :param model_training: Are we training a model or running an acutal match (False)
     NOTE FOR FUTURE SELF: IN NORMAL FUNCTIONS (MODEL_TRAINING=FALSE) THIS WILL ALREADY BE RUN IN A SUB-PROCESS
     SO YOU HAVE TO SINGLE-THREAD THE CALCULATIONS, SO THE WHOLE THING IS SINGLE-THREADED
+    return: an array of values for each pair to match/variable and a list of headers
     '''
     db=get_connection_sqlite(os.environ['db_name'])
     if score_type=='fuzzy':
@@ -138,7 +165,6 @@ def create_scores(input_data, score_type, varlist):
         ####Now return a dictionary of the input array and the names
         return {'output':out_arr, 'names':['{}_{}'.format(i,j.__name__) for i in fuzzy_var_list for j in methods]}
     elif score_type=='numeric_dist':
-
         ###numeric distance variables
         data1_ids = ','.join(
             str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().to_list())
@@ -210,6 +236,35 @@ def create_scores(input_data, score_type, varlist):
             out_arr[i,] = i_scores
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': exact_vars}
+    elif score_type=='geo_distance':
+        data1_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().to_list())
+        data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().to_list())
+        ###now get the values from the database
+        ###get the values
+        data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=os.environ['data1_name'], id_list=data1_ids), db)
+        data2_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=os.environ['data2_name'],id_list=data2_ids), db)
+        input_data = dcpy(input_data)
+        input_data.reset_index(inplace=True, drop=False)
+        core_dict = input_data[['index', '{}_id'.format(os.environ['data1_name']), '{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        out_arr = np.zeros(shape=(len(core_dict), 1))
+        null_count=0
+        for i in range(len(core_dict)):
+            data1_target=[k for k in data1_values if int(k['id'])==int(core_dict[i]['{}_id'.format(os.environ['data1_name'])])][0]
+            data2_target=[k for k in data2_values if int(k['id'])==int(core_dict[i]['{}_id'.format(os.environ['data2_name'])])][0]
+            if data1_target['latitude'] is not None and data1_target['longitude'] is not None and data2_target['latitude'] is not None and data2_target['longitude'] is not None:
+                    out_arr[i]=haversine(tuple([data1_target['latitude'],data1_target['longitude']]),
+                                  tuple([data2_target['latitude'], data2_target['longitude']]))
+            else:
+                null_count+=1
+        if null_count==0:
+            return {'output': out_arr, 'names': 'geo_distance'}
+        else:
+            logger.info('MAMBA detected missing lat/long coordinates.  Lat/Long distances will not be used')
+            return {'output':'fail', 'names':'fail'}
+
+
+
+
 
 def generate_rf_mod(truthdat):
     '''
@@ -238,6 +293,12 @@ def generate_rf_mod(truthdat):
         exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
         X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
+    geo_distance = [i for i in var_rec if i['match_type'] == 'geo_distance']
+    if len(geo_distance) > 0:
+        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
+        if geo_distance_values['output']!='fail':
+            X = np.hstack((X, geo_distance_values['output']))
+            X_hdrs.extend(geo_distance_values['names'])
     ###making the dependent variable array
     y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values

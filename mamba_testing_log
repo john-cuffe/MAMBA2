@@ -66,3 +66,10 @@
  Number of Trees=1
  Max Features=sqrt
  Max Depth=10
+2019-09-26 15:35:55,805 - root - INFO - Scoring Criteria: accuracy
+2019-09-26 15:35:55,807 - root - INFO - Debug Mode? False
+2020-03-09 11:06:47,493 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
