@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3707c47-ab65-43c7-ad1d-4707fc594255" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MAMBA2 User Guide.docx" beforeDir="false" afterPath="$PROJECT_DIR$/MAMBA2 User Guide.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mamba_db" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mamba_db-journal" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mamba_test_log" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_test_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/programs/match_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/match_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_match.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_match.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/~$MBA2 User Guide.docx" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +22,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/programs/create_db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
+            <state relative-caret-position="357">
               <caret line="39" column="12" selection-start-line="39" selection-end-line="40" />
               <folding>
                 <element signature="e#301#310#0" expanded="true" />
@@ -27,8 +34,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+            <state>
+              <caret selection-end-line="22" />
             </state>
           </provider>
         </entry>
@@ -36,8 +43,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run_match.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-end-line="11" />
+            <state relative-caret-position="306">
+              <caret line="18" column="72" lean-forward="true" selection-start-line="18" selection-start-column="72" selection-end-line="18" selection-end-column="72" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -57,23 +64,18 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="52">
-              <caret line="248" column="53" lean-forward="true" selection-start-line="248" selection-start-column="53" selection-end-line="248" selection-end-column="53" />
+            <state relative-caret-position="296">
+              <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
               <folding>
                 <element signature="e#63#94#0" expanded="true" />
                 <element signature="e#336#1221#0" />
                 <element signature="e#1271#2548#0" />
                 <element signature="e#2600#2940#0" />
                 <element signature="e#3062#3342#0" />
-                <element signature="e#4170#6877#0" />
-                <element signature="e#6004#6693#0" />
-                <element signature="e#6924#9610#0" />
-                <element signature="e#9649#12278#0" />
-                <element signature="e#15029#17203#0" />
-                <element signature="e#17238#17349#0" />
-                <element signature="e#17385#17603#0" />
-                <element signature="e#17661#23322#0" />
-                <element signature="e#23381#26651#0" />
+                <element signature="e#3441#4085#0" />
+                <element signature="e#4145#15149#0" />
+                <element signature="e#15190#18218#0" />
+                <element signature="e#18244#21219#0" />
               </folding>
             </state>
           </provider>
@@ -82,8 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="99" column="24" lean-forward="true" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+            <state relative-caret-position="884">
+              <caret line="99" column="24" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
               <folding>
                 <element signature="e#91#125#0" expanded="true" />
                 <element signature="e#769#2642#0" />
@@ -159,10 +161,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1860" />
-    <option name="y" value="-13" />
-    <option name="width" value="1382" />
-    <option name="height" value="810" />
+    <option name="x" value="1912" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1096" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -170,7 +172,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -187,6 +188,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -314,18 +316,19 @@
       <workItem from="1571681118240" duration="614000" />
       <workItem from="1571837301312" duration="42000" />
       <workItem from="1580141201386" duration="904000" />
-      <workItem from="1583759790373" duration="9253000" />
+      <workItem from="1583759790373" duration="13262000" />
+      <workItem from="1583843318682" duration="7932000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="140717000" />
+    <option name="totallyTimeSpent" value="152658000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20628998" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20842217" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -339,8 +342,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4992928" weight="0.32931727" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5010661" side_tool="true" weight="0.48182762" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.29264393" side_tool="true" visible="true" weight="0.27622014" />
-      <window_info active="true" anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.7073561" visible="true" weight="0.27622014" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.8742004" side_tool="true" weight="0.27622014" />
+      <window_info active="true" anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.12579957" visible="true" weight="0.27622014" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -521,16 +524,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/run_Match.bash">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/programs/create_db.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
+        <state relative-caret-position="357">
           <caret line="39" column="12" selection-start-line="39" selection-end-line="40" />
           <folding>
             <element signature="e#301#310#0" expanded="true" />
@@ -540,8 +536,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="99" column="24" lean-forward="true" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
+        <state relative-caret-position="884">
+          <caret line="99" column="24" selection-start-line="99" selection-start-column="24" selection-end-line="99" selection-end-column="24" />
           <folding>
             <element signature="e#91#125#0" expanded="true" />
             <element signature="e#769#2642#0" />
@@ -549,42 +545,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_Match.bash">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/run_match.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-end-line="11" />
+        <state relative-caret-position="306">
+          <caret line="18" column="72" lean-forward="true" selection-start-line="18" selection-start-column="72" selection-end-line="18" selection-end-column="72" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="52">
-          <caret line="248" column="53" lean-forward="true" selection-start-line="248" selection-start-column="53" selection-end-line="248" selection-end-column="53" />
+        <state relative-caret-position="296">
+          <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
           <folding>
             <element signature="e#63#94#0" expanded="true" />
             <element signature="e#336#1221#0" />
             <element signature="e#1271#2548#0" />
             <element signature="e#2600#2940#0" />
             <element signature="e#3062#3342#0" />
-            <element signature="e#4170#6877#0" />
-            <element signature="e#6004#6693#0" />
-            <element signature="e#6924#9610#0" />
-            <element signature="e#9649#12278#0" />
-            <element signature="e#15029#17203#0" />
-            <element signature="e#17238#17349#0" />
-            <element signature="e#17385#17603#0" />
-            <element signature="e#17661#23322#0" />
-            <element signature="e#23381#26651#0" />
+            <element signature="e#3441#4085#0" />
+            <element signature="e#4145#15149#0" />
+            <element signature="e#15190#18218#0" />
+            <element signature="e#18244#21219#0" />
           </folding>
         </state>
       </provider>

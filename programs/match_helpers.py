@@ -97,6 +97,7 @@ def haversine(coord1, coord2):
     '''
     Lots of research went into this
     lol jk https://janakiev.com/blog/gps-points-distance-python/
+    Adapted to give distance in kilometers
     :param coord1: tuple of coordinates (lat,lon)
     :param coord2: tuple of coordinates
     :return:
@@ -113,7 +114,6 @@ def haversine(coord1, coord2):
         math.cos(phi1) * math.cos(phi2) * math.sin(dlambda / 2) ** 2
 
     return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-
 
 
 def create_scores(input_data, score_type, varlist):
@@ -263,9 +263,6 @@ def create_scores(input_data, score_type, varlist):
             return {'output':'fail', 'names':'fail'}
 
 
-
-
-
 def generate_rf_mod(truthdat):
     '''
     Generate the random forest model we are going to use for the matching
@@ -325,14 +322,72 @@ def generate_rf_mod(truthdat):
     #if mambalite == False:
     logger.info('Random Forest Completed.  Score {}'.format(score))
     rf_mod = runRFClassifier(y, X, trees, features_per_tree, max_depth)
-    return {'type':'rf', 'score':'score', 'model':rf_mod}
+    return {'type':'Random Forest', 'score':score, 'model':rf_mod}
+
+def generate_ada_boost(truthdat):
+    '''
+    This function generates the adaboosted model
+    '''
+    logger.info('\n\n######CREATE ADABoost MODEL ######\n\n')
+    from sklearn.ensemble import AdaBoostClassifier
+    ###get the varible types
+    var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
+    ###We have three types of variables.
+    # 1) Fuzzy: Create all the fuzzy values from febrl
+    fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy']
+    if len(fuzzy_vars) > 0:
+        fuzzy_values = create_scores(truthdat, 'fuzzy', fuzzy_vars)
+        X = fuzzy_values['output']
+        X_hdrs = fuzzy_values['names']
+    # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+    numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance']
+    if len(numeric_dist_vars) > 0:
+        numeric_dist_values = create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
+        X = np.hstack((X, numeric_dist_values['output']))
+        X_hdrs.extend(numeric_dist_values['names'])
+    # 3) exact: if they match, 1, else 0
+    exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
+    if len(exact_match_vars) > 0:
+        exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
+        X = np.hstack((X, exact_match_values['output']))
+        X_hdrs.extend(exact_match_values['names'])
+    ###making the dependent variable array
+    y = truthdat['match'].values
+    ###Generate the Grid Search to find the ideal values
+    ##setup the SVM
+    ada = AdaBoostClassifier(
+                         algorithm="SAMME",
+                         n_estimators=200)
+    if debug:
+        niter = 5
+    else:
+        niter = int(np.round(len(X)/float(2),0))
+    features_per_tree = ['sqrt', 'log2', 10, 15]
+    myparams = {
+        'n_estimators': sp_randint(1, 25),
+        'algorithm':['SAMME','SAMME.R']}
+    ##First, get the scores
+    cv_rfc = RandomizedSearchCV(estimator=ada, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                n_iter=niter)
+    cv_rfc.fit(X, y)
+    ##Save the parameters
+    trees = cv_rfc.best_params_['n_estimators']
+    algo = cv_rfc.best_params_['algorithm']
+    score = cv_rfc.best_score_
+    ###No obvious need for MAMBALITE here
+    ##In future could just remove the worst performaning variable using a relimp measure then run the full model
+    # if mambalite == False:
+    ada_mod = AdaBoostClassifier(algorithm=algo, n_estimators=trees)
+    logger.info('AdaBoost Complete.  Score={}'.format(score))
+    ###Note for when you return--you need to change the predict function to do cross_val_predict
+    return {'type': 'AdaBoost', 'score': score, 'model': ada_mod}
 
 def generate_svn_mod(truthdat):
     '''
     Generate the SVM model we are going to use for the matching
     inputs: truthdat: the truth data.  Just 3 columns--data1 id, data2 id, and if they match
     '''
-    logger.info('\n\n######CREATE RANDOM FOREST MODEL ######\n\n')
+    logger.info('\n\n######CREATE SVN MODEL ######\n\n')
     ###get the varible types
     var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
     ###We have three types of variables.
@@ -363,22 +418,44 @@ def generate_svn_mod(truthdat):
     if debug:
         niter = 5
     else:
-        niter = 200
+        niter = int(np.round(len(X)/float(2),0))
     from sklearn.model_selection import cross_val_score, cross_val_predict
+    myparams={
+        'kernel':['linear','poly','rbf'],
+        'degree':[1,3,5],
+        'gamma':['scale','auto']
+    }
     ##First, get the scores
-    scores=cross_val_score(svc, X, y, scoring=scoringcriteria, cv=niter)
-    cv_rfc = cross_val_predict(svc, X, y, scoring=scoringcriteria,cv=niter)
-    logger.info('SVM Complete.  Max Score={}'.format(max(scores)))
+    svn_rfc = RandomizedSearchCV(estimator=svc, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                n_iter=niter)
+    svn_rfc.fit(X, y)
+    ##Save the parameters
+    kernel = svn_rfc.best_params_['kernel']
+    degree = svn_rfc.best_params_['degree']
+    gamma = svn_rfc.best_params_['gamma']
+    score = svn_rfc.best_score_
+    logger.info('SVM Complete.  Max Score={}'.format(score))
+    svc=svm.SVC(gamma=gamma, degree=degree, kernel=kernel)
     ###Note for when you return--you need to change the predict function to do cross_val_predict
-    return {'type':'svm', 'score':max(scores), 'model':svc}
+    return {'type':'SVM', 'score':score, 'model':svc}
 
 
-def select_model(truthdat):
+def choose_model(truthdat):
     '''
-    This function will return the best fitting model for our data
+    This function generates a random forest, svn, and adaboost classifier for the training data, then returns the
     :param truthdat:
     :return:
     '''
+    rf=generate_rf_mod(truthdat)
+    svn=generate_svn_mod(truthdat)
+    ada=generate_ada_boost(truthdat)
+    ###find the max score
+    best_score=max([i['score'] for i in [rf, svn, ada]])
+    best_model=[i for i in [rf, svn,ada] if i['score']==i]
+    logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
+    return best_model
+
+
 
 def intersection(lst1, lst2):
     '''
