@@ -486,7 +486,7 @@ def match_fun(arg):
     data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
     ###get the data
     ###If we are running in deduplication mode, take only the input records that the IDs don't match
-    if ast.literal_eval(os.environ['deduplication_check'])==True:
+    if ast.literal_eval(os.environ['ignore_duplicate_ids'])==True:
         input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(data1['id'])!=str(data2['id'])])
     else:
         input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2])

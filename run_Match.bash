@@ -19,6 +19,6 @@ export log_file_name=mamba_test_log ##the anme of your log file
 export numWorkers=3 ##number of workers in the Runner object
 export prediction=True ##are we generating match predictions?
 export scoringcriteria=accuracy
-export deduplication_check=True ###are we trying to depulicate the same dataset? This assumes the IDs are the same on each set (so a record in A has the same record in B)
+export ignore_duplicate_ids=True ###are we trying to depulicate the same dataset? This assumes the IDs are the same on each set (so a record in A has the same record in B)
 
 /cygdrive/c/python3/python run_match.py
