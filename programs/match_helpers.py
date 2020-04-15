@@ -451,9 +451,9 @@ def choose_model(truthdat):
     ada=generate_ada_boost(truthdat)
     ###find the max score
     best_score=max([i['score'] for i in [rf, svn, ada]])
-    best_model=[i for i in [rf, svn,ada] if i['score']==i]
+    best_model=[i for i in [rf, svn,ada] if i['score']==best_score]
     logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
-    return best_model
+    return best_model['model']
 
 
 
@@ -485,7 +485,11 @@ def match_fun(arg):
     data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
     data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
     ###get the data
-    input_data=pd.DataFrame([{'{}_id'.format(os.environ['data1_name']):str(k['id']), '{}_id'.format(os.environ['data2_name']):str(y['id'])} for k in data1 for y in data2])
+    ###If we are running in deduplication mode, take only the input records that the IDs don't match
+    if ast.literal_eval(os.environ['deduplication_check'])==True:
+        input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(data1['id'])!=str(data2['id'])])
+    else:
+        input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2])
     ####Now get the data organized, by creating an array of the different types of variables
     # 1) Fuzzy: Create all the fuzzy values from febrl
     fuzzy_vars = [i for i in arg['var_rec'] if i['match_type'] == 'fuzzy']

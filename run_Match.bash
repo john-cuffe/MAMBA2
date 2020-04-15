@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 cd /cygdrive/c/users/cuffe002/desktop/projects/mamba2 ###fill in your mamba directory here
 export data1_name=data1_test  ###First dataset name
-export data2_name=data2_test  ###Second dataset name
+export data2_name=data2_test  ###Second dataset name.
 export db_name=mamba_db ###database name
 export outputPath=C:\\users\\cuffe002\\desktop\\projects\\mamba2\\output ##the path for our output files
 export debugmode=False ###run in debug mode?
@@ -19,4 +19,6 @@ export log_file_name=mamba_test_log ##the anme of your log file
 export numWorkers=3 ##number of workers in the Runner object
 export prediction=True ##are we generating match predictions?
 export scoringcriteria=accuracy
+export deduplication_check=True ###are we trying to depulicate the same dataset? This assumes the IDs are the same on each set (so a record in A has the same record in B)
+
 /cygdrive/c/python3/python run_match.py
