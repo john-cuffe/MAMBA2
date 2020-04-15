@@ -115,7 +115,6 @@ def haversine(coord1, coord2):
 
     return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
-
 def create_scores(input_data, score_type, varlist):
     '''
     this function produces the list of dictionaries for all of the scores for the fuzzy variables.
@@ -262,7 +261,6 @@ def create_scores(input_data, score_type, varlist):
             logger.info('MAMBA detected missing lat/long coordinates.  Lat/Long distances will not be used')
             return {'output':'fail', 'names':'fail'}
 
-
 def generate_rf_mod(truthdat):
     '''
     Generate the random forest model we are going to use for the matching
@@ -299,7 +297,7 @@ def generate_rf_mod(truthdat):
     ###making the dependent variable array
     y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
-    features_per_tree = ['sqrt', 'log2', 10, 15]
+    features_per_tree = ['sqrt', 'log2']
     rf = RandomForestClassifier(n_jobs=int(os.environ['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
     myparams = {
         'n_estimators': sp_randint(1, 25),
@@ -451,7 +449,7 @@ def choose_model(truthdat):
     ada=generate_ada_boost(truthdat)
     ###find the max score
     best_score=max([i['score'] for i in [rf, svn, ada]])
-    best_model=[i for i in [rf, svn,ada] if i['score']==best_score]
+    best_model=[i for i in [rf, svn,ada] if i['score']==best_score][0]
     logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
     return best_model['model']
 
