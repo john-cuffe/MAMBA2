@@ -30,6 +30,7 @@ def stem_fuzzy(x):
     else:
         return stemmer.stem(x)
 
+
 def get_stem_data(dataname):
     '''
     This function loads and then stems the data
@@ -64,18 +65,19 @@ def get_stem_data(dataname):
 
         # 2) Standardized via stemming any fuzzy matching variables
         # pool=Pool(2)
-        for var in fuzzy_vars:
-            ###first convert to all upper case
-            ###get the list of the entries
-            to_stem = [j[var] for j in data]
-            ###to get through our stemmer, we need to convert nulls to
-            out = []
-            for k in to_stem:
-                out.append(stem_fuzzy(k))
-            # out=pool.map(stem_fuzzy, to_stem)
-            ###now we have it, replace the original value
-            for i in range(len(data)):
-                data[i][var] = out[i]
+        if ast.literal_eval(os.environ['stem_phrase'])==True:
+            for var in fuzzy_vars:
+                ###first convert to all upper case
+                ###get the list of the entries
+                to_stem = [j[var] for j in data]
+                ###to get through our stemmer, we need to convert nulls to
+                out = []
+                for k in to_stem:
+                    out.append(stem_fuzzy(k))
+                # out=pool.map(stem_fuzzy, to_stem)
+                ###now we have it, replace the original value
+                for i in range(len(data)):
+                    data[i][var] = out[i]
         output.extend(data)
     return output
 
