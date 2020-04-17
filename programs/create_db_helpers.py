@@ -90,10 +90,10 @@ def createDatabase(databaseName):
     for data_source in [os.environ['data1_name'],os.environ['data2_name']]:
         out=get_stem_data(data_source)
         # 3) Push to DB
-        if prediction==True:
+        if ast.literal_eval(os.environ['prediction'])==True:
             pd.DataFrame(out).to_sql(data_source, diskEngine, if_exists='replace',index=False)
 
-        if not prediction and clericalreview:
+        if ast.literal_eval(os.environ['prediction'])==False and ast.literal_eval(os.environ['clerical_review_candidates'])==True:
             pd.DataFrame(out).sample(frac=.05).to_sql(data_source, diskEngine,if_exists='replace', index=False)
         ####now index the tables
         db=get_connection_sqlite(databaseName)

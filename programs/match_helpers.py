@@ -476,7 +476,7 @@ def match_fun(arg):
     var_rec: the variable records, showing what type of match to perform on each variable
     '''
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
-    if arg['logging_flag']:
+    if arg['logging_flag']!=-1:
         logger.info('{}% complete with block'.format(arg['logging_flag']))
     db=get_connection_sqlite(os.environ['db_name'], timeout=1)
     ###get the two dataframes
@@ -485,7 +485,7 @@ def match_fun(arg):
     ###get the data
     ###If we are running in deduplication mode, take only the input records that the IDs don't match
     if ast.literal_eval(os.environ['ignore_duplicate_ids'])==True:
-        input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(data1['id'])!=str(data2['id'])])
+        input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
     else:
         input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2])
     ####Now get the data organized, by creating an array of the different types of variables
@@ -599,8 +599,13 @@ def run_block(block, rf_mod):
         my_arg['model']=rf_mod
         my_arg['target']=block_list[k]
         my_arg['block_info']=block
-        if k % (len(block_list)/10)==0:
-            my_arg['logging_flag']=int(np.round(100*(k/len(block_list)),0))
+        if len(block_list) > 10:
+            if k % (len(block_list)/10)==0:
+                my_arg['logging_flag']=int(np.round(100*(k/len(block_list)),0))
+            else:
+                my_arg['logging_flag'] = -1
+        else:
+            my_arg['logging_flag']=int(k)
         arg_list.append(my_arg)
     logger.info('STARTING TO MATCH  FOR {}'.format(block['block_name']))
     pool=Pool(numWorkers)
