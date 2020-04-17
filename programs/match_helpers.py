@@ -550,20 +550,21 @@ def match_fun(arg):
         ####Now add in any matches
         matches = pd.DataFrame(
             [i for i in input_data if i['predicted_probability'] >= float(os.environ['match_threshold'])])
-        ###ranks
-        matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
-            'predicted_probability'].rank('dense')
-        matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
-            'predicted_probability'].rank('dense')
-        ##convert back to dict
-        matches = matches.to_dict('record')
-        columns=matches[0].keys()
-        vals = [tuple(i[column] for column in columns) for i in matches]
-        try:
-            cur.executemany(match_sql, vals)
-            db.commit()
-        except Exception:
-            to_return['matches']=matches
+        if len(matches) > 0:
+            ###ranks
+            matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
+                'predicted_probability'].rank('dense')
+            matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
+                'predicted_probability'].rank('dense')
+            ##convert back to dict
+            matches = matches.to_dict('record')
+            columns=matches[0].keys()
+            vals = [tuple(i[column] for column in columns) for i in matches]
+            try:
+                cur.executemany(match_sql, vals)
+                db.commit()
+            except Exception:
+                to_return['matches']=matches
         cur.close()
         db.close()
         if ast.literal_eval(os.environ['chatty_logger']) == True:
