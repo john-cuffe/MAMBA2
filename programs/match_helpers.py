@@ -532,7 +532,7 @@ def match_fun(arg):
         to_return={}
         if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
             if len(input_data) >= 10:
-                clerical_review_dict = dcpy(input_data.sample(frac=.1))
+                clerical_review_dict = dcpy(random.sample(input_data,int(np.round(.3*len(input_data),0))))
             else:
                 clerical_review_dict = dcpy(input_data)
             columns = clerical_review_dict[0].keys()
