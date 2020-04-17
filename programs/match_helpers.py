@@ -613,7 +613,7 @@ def run_block(block, rf_mod):
     out=pool.map(match_fun, arg_list)
     ###Once that is done, need to
     ##push the remaining items in out to the db
-    db=get_connection_sqlite(os.environ['dbname'])
+    db=get_connection_sqlite(os.environ['db_name'])
     cur=db.cursor()
     logger.info('Dumping remaining matches to DB')
     clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
