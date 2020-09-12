@@ -445,7 +445,8 @@ def choose_model(truthdat):
     :return:
     '''
     rf=generate_rf_mod(truthdat)
-    svn=generate_svn_mod(truthdat)
+    #svn=generate_svn_mod(truthdat)
+    svn={'score':0}
     ada=generate_ada_boost(truthdat)
     ###find the max score
     best_score=max([i['score'] for i in [rf, svn, ada]])
