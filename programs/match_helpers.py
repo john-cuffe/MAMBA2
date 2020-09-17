@@ -490,90 +490,95 @@ def match_fun(arg):
     else:
         input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2])
     ####Now get the data organized, by creating an array of the different types of variables
-    # 1) Fuzzy: Create all the fuzzy values from febrl
-    fuzzy_vars = [i for i in arg['var_rec'] if i['match_type'] == 'fuzzy']
-    if len(fuzzy_vars) > 0:
-        fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
-        X = fuzzy_values['output']
-        X_hdrs = fuzzy_values['names']
-    # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-    numeric_dist_vars = [i for i in arg['var_rec'] if i['match_type'] == 'num_distance']
-    if len(numeric_dist_vars) > 0:
-        numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
-        X = np.hstack((X, numeric_dist_values['output']))
-        X_hdrs.extend(numeric_dist_values['names'])
-    # 3) exact: if they match, 1, else 0
-    exact_match_vars = [i for i in arg['var_rec'] if i['match_type'] == 'exact']
-    if len(exact_match_vars) > 0:
-        exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
-        X = np.hstack((X, exact_match_values['output']))
-        X_hdrs.extend(exact_match_values['names'])
-    ###Now predict
-    myprediction=probsfunc(arg['model'].predict_proba(X))
-    ####don't need the scores anymore
-    del X
-    del data1
-    del data2
-    input_data['predicted_probability']=myprediction
-    ###keep only the data above the certain thresholds
-    if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
-        keep_thresh=min(float(os.environ['clerical_review_threshold']),float(os.environ['match_threshold']))
+    if len(input_data)==0:
+        logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
+        return None
     else:
-        keep_thresh=float(os.environ['match_threshold'])
-    input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh].to_dict('record')
-    if len(input_data) > 0:
-        ###try to write to db, if not return and then we will dump later
-        cur=db.cursor()
-         ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
-        clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
-            os.environ['data1_name'], os.environ['data2_name'])
-        match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
-            data1=os.environ['data1_name'], data2=os.environ['data2_name'])
-        ###setup the to_return
-        to_return={}
-        if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
-            if len(input_data) >= 10:
-                clerical_review_dict = dcpy(random.sample(input_data,int(np.round(.3*len(input_data),0))))
-            else:
-                clerical_review_dict = dcpy(input_data)
-            columns = clerical_review_dict[0].keys()
-            vals = [tuple(i[column] for column in columns) for i in clerical_review_dict]
-            try:
-                cur.executemany(clerical_review_sql, vals)
-                db.commit()
-            except Exception:
-                cur.close()
-                cur=db.cursor()
-                to_return['clerical_review_candidates']=input_data
-            ###if it's a chatty logger, log.
-            if ast.literal_eval(os.environ['chatty_logger']) == True:
-                logger.info('''{} clerical review candidates added'''.format(len(clerical_review_dict)))
-        ####Now add in any matches
-        matches = pd.DataFrame(
-            [i for i in input_data if i['predicted_probability'] >= float(os.environ['match_threshold'])])
-        if len(matches) > 0:
-            ###ranks
-            matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
-                'predicted_probability'].rank('dense')
-            matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
-                'predicted_probability'].rank('dense')
-            ##convert back to dict
-            matches = matches.to_dict('record')
-            columns=matches[0].keys()
-            vals = [tuple(i[column] for column in columns) for i in matches]
-            try:
-                cur.executemany(match_sql, vals)
-                db.commit()
-            except Exception:
-                to_return['matches']=matches
-        cur.close()
-        db.close()
-        if ast.literal_eval(os.environ['chatty_logger']) == True:
-                    logger.info('''{} matches added in block'''.format(len(matches)))
-        if 'clerical_review_candidates'in to_return.keys() or 'matches' in to_return.keys():
-            return to_return
+        # 1) Fuzzy: Create all the fuzzy values from febrl
+        fuzzy_vars = [i for i in arg['var_rec'] if i['match_type'] == 'fuzzy']
+        if len(fuzzy_vars) > 0:
+            fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
+            X = fuzzy_values['output']
+            X_hdrs = fuzzy_values['names']
+        # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+        numeric_dist_vars = [i for i in arg['var_rec'] if i['match_type'] == 'num_distance']
+        if len(numeric_dist_vars) > 0:
+            numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
+            X = np.hstack((X, numeric_dist_values['output']))
+            X_hdrs.extend(numeric_dist_values['names'])
+        # 3) exact: if they match, 1, else 0
+        exact_match_vars = [i for i in arg['var_rec'] if i['match_type'] == 'exact']
+        if len(exact_match_vars) > 0:
+            exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
+            X = np.hstack((X, exact_match_values['output']))
+            X_hdrs.extend(exact_match_values['names'])
+        ###Now predict
+        myprediction=probsfunc(arg['model'].predict_proba(X))
+        ####don't need the scores anymore
+        del X
+        del data1
+        del data2
+        input_data['predicted_probability']=myprediction
+        ###keep only the data above the certain thresholds
+        if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
+            keep_thresh=min(float(os.environ['clerical_review_threshold']),float(os.environ['match_threshold']))
         else:
-            return None
+            keep_thresh=float(os.environ['match_threshold'])
+        input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh].to_dict('record')
+        if len(input_data) > 0:
+            ###try to write to db, if not return and then we will dump later
+            cur=db.cursor()
+             ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
+            clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
+                os.environ['data1_name'], os.environ['data2_name'])
+            match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
+                data1=os.environ['data1_name'], data2=os.environ['data2_name'])
+            ###setup the to_return
+            to_return={}
+            if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
+                if len(input_data) >= 10:
+                    clerical_review_dict = dcpy(random.sample(input_data,int(np.round(.3*len(input_data),0))))
+                else:
+                    clerical_review_dict = dcpy(input_data)
+                columns = clerical_review_dict[0].keys()
+                vals = [tuple(i[column] for column in columns) for i in clerical_review_dict]
+                try:
+                    cur.executemany(clerical_review_sql, vals)
+                    db.commit()
+                except Exception:
+                    cur.close()
+                    cur=db.cursor()
+                    to_return['clerical_review_candidates']=input_data
+                ###if it's a chatty logger, log.
+                if ast.literal_eval(os.environ['chatty_logger']) == True:
+                    logger.info('''{} clerical review candidates added'''.format(len(clerical_review_dict)))
+            ####Now add in any matches
+            matches = pd.DataFrame(
+                [i for i in input_data if i['predicted_probability'] >= float(os.environ['match_threshold'])])
+            if len(matches) > 0:
+                ###ranks
+                matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
+                    'predicted_probability'].rank('dense')
+                matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
+                    'predicted_probability'].rank('dense')
+                ##convert back to dict
+                matches = matches.to_dict('record')
+                columns=matches[0].keys()
+                vals = [tuple(i[column] for column in columns) for i in matches]
+                try:
+                    cur.executemany(match_sql, vals)
+                    db.commit()
+                except Exception:
+                    to_return['matches']=matches
+            cur.close()
+            db.close()
+            if ast.literal_eval(os.environ['chatty_logger']) == True:
+                        logger.info('''{} matches added in block'''.format(len(matches)))
+            if 'clerical_review_candidates'in to_return.keys() or 'matches' in to_return.keys():
+                return to_return
+            else:
+                return None
+
 
 ####The block function
 def run_block(block, rf_mod):
