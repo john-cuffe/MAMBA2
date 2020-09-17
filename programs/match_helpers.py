@@ -482,7 +482,7 @@ def match_fun(arg):
     db=get_connection_sqlite(os.environ['db_name'], timeout=1)
     ###get the two dataframes
     data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
-    data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
+    data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], arg['block_info'][os.environ['data2_name']], arg['target']), db)
     ###get the data
     ###If we are running in deduplication mode, take only the input records that the IDs don't match
     if ast.literal_eval(os.environ['ignore_duplicate_ids'])==True:
