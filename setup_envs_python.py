@@ -20,3 +20,5 @@ os.environ['log_file_name']='mamba_test_log' ##the anme of your log file
 os.environ['numWorkers']='3' ##number of workers in the Runner object
 os.environ['prediction']='True' ##are we generating match predictions?
 os.environ['scoringcriteria']='accuracy'
+os.environ['stem_phrase']='False'
+os.environ['ignore_duplicate_ids']='False'

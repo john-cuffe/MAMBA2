@@ -1,2 +1,4 @@
 venv/
 *.db
+/data/harness_data.csv
+/data/harness_data.csv.gz

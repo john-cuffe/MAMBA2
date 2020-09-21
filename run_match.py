@@ -30,6 +30,6 @@ if __name__=='__main__':
         summstats=get_table_noconn('''select count(distinct {}_id) data1_matched, count(distinct {}_id) data2_matched, count(*) total_pairs from matched_pairs'''.format(os.environ['data1_name'], os.environ['data2_name']), db)[0]
         logger.info('Matched {} records for {}'.format(summstats['data1_matched'], os.environ['data1_name']))
         logger.info('Matched {} records for {}'.format(summstats['data2_matched'], os.environ['data2_name']))
-        logger.info('{} Total matched pairs').format(summstats['total_pairs'])
+        logger.info('{} Total matched pairs'.format(summstats['total_pairs']))
     db.close()
     os._exit(0)
