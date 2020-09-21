@@ -26,7 +26,7 @@ if __name__=='__main__':
     pd.DataFrame(get_table_noconn('''select * from matched_pairs''', db)).to_csv('output/all_matches_{}.csv'.format(os.environ['date']), index=False)
     pd.DataFrame(get_table_noconn('''select * from clerical_review_candidates''', db)).to_csv('output/clerical_review_candidates_{}.csv'.format(os.environ['date']), index=False)
     logger.info('Match Complete')
-    if ast.literal_eval('prediction')==True:
+    if ast.literal_eval(os.environ['prediction'])==True:
         summstats=get_table_noconn('''select count(distinct {}_id) data1_matched, count(distinct {}_id) data2_matched, count(*) total_pairs from matched_pairs'''.format(os.environ['data1_name'], os.environ['data2_name']), db)
         logger.info('Matched {} records for {}'.format(summstats['data1_matched'], os.environ['data1_name']))
         logger.info('Matched {} records for {}'.format(summstats['data2_matched'], os.environ['data2_name']))
