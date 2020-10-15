@@ -61,6 +61,15 @@ def get_stem_data(dataname):
             data['full']=1
         for p in fuzzy_vars:
             data[p] = data[p].str.upper()
+            if 'zip' in p.lower():
+                ###find the max length
+                out=data[p].astype(str).tolist()
+                ###get the max length
+                maxlen=max([len(k) for k in out])
+                ###log
+                logger.info('''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(p, dataname))
+                data[p]=data[p].astype(str).str.zfill(maxlen)
+        ####If Zipcode
         data = data.to_dict('record')
 
         # 2) Standardized via stemming any fuzzy matching variables
@@ -104,8 +113,12 @@ def createDatabase(databaseName):
         ###additional index on id
         cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
         ###clerical_review_candidates and the two matched pairs table
-        cur.execute('''drop table if exists clerical_review_candidates;''')
-        cur.execute('''drop table if exists matched_pairs''')
+        ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+        for table in ['clerical_review_candidates','matched_pairs']:
+            ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+            if len(ret) > 0:
+                cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
+                db.commit()
         cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(os.environ['data1_name'], os.environ['data2_name']))
         cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=os.environ['data1_name'], data2=os.environ['data2_name']))
         db.commit()
