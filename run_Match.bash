@@ -20,5 +20,5 @@ export numWorkers=3 ##number of workers in the Runner object
 export prediction=True ##are we generating match predictions?
 export scoringcriteria=accuracy
 export ignore_duplicate_ids=False ###are we trying to depulicate the same dataset? This assumes the IDs are the same on each set (so a record in A has the same record in B)
-
+export use_logit=True ####Use the logit.  If you do this, scoring will be converted to accuracy (only built-in feature)
 /cygdrive/c/python3/python run_match.py

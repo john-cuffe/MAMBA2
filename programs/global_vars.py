@@ -47,7 +47,12 @@ stemmer = PorterStemmer()
 prediction = ast.literal_eval(str(os.environ['prediction']))
 #trainingdata = str(os.environ['trainingdata'])
 #clericalreview = ast.literal_eval(str(os.environ['clericalreview']))
-scoringcriteria = str(os.environ['scoringcriteria'])
+if ast.literal_eval(os.environ['use_logit'])==True:
+    scoringcriteria='accuracy'
+else:
+    scoringcriteria = str(os.environ['scoringcriteria'])
+
+
 debug = ast.literal_eval(str(os.environ['debugmode']))
 logging.info('Scoring Criteria: {0}'.format(scoringcriteria))
 logging.info('Debug Mode? {0}'.format(debug))

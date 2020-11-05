@@ -75,6 +75,16 @@ def predict(model, X):
     predicted = model.predict(X)
     return predicted
 
+####VIF score
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+
+def calc_vif(X, headers):
+
+    # Calculating VIF
+    vif = pd.DataFrame()
+    vif["VIF"] = [variance_inflation_factor(X, i) for i in range(X.shape[1])]
+    vif['name'] = headers
+    return(vif)
 
 ###Function to grab the predicted probabilities that are retruened from predict_proba as a tuple
 def probsfunc(x):
@@ -261,6 +271,54 @@ def create_scores(input_data, score_type, varlist):
             logger.info('MAMBA detected missing lat/long coordinates.  Lat/Long distances will not be used')
             return {'output':'fail', 'names':'fail'}
 
+def generate_logit(truthdat):
+    '''
+    Generates a linear logistic regression model
+    :param truthdat: the truth data.
+    :return: None.  Note we have a warning for high multicollinearity, AND ONLY USED
+    WHEN USING ACCURACY AS THE SCORE (ONLY REAL COMPARABLE OPTION OUT OF THE BOX)
+    '''
+    logger.info('\n\n######CREATE LOGISTIC REGRESSION MODEL ######\n\n')
+    ###get the varible types
+    var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
+    ###We have three types of variables.
+    # 1) Fuzzy: Create all the fuzzy values from febrl
+    fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy']
+    if len(fuzzy_vars) > 0:
+        fuzzy_values = create_scores(truthdat, 'fuzzy', fuzzy_vars)
+        X = fuzzy_values['output']
+        X_hdrs = fuzzy_values['names']
+    # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+    numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance']
+    if len(numeric_dist_vars) > 0:
+        numeric_dist_values = create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
+        X = np.hstack((X, numeric_dist_values['output']))
+        X_hdrs.extend(numeric_dist_values['names'])
+    # 3) exact: if they match, 1, else 0
+    exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
+    if len(exact_match_vars) > 0:
+        exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
+        X = np.hstack((X, exact_match_values['output']))
+        X_hdrs.extend(exact_match_values['names'])
+    geo_distance = [i for i in var_rec if i['match_type'] == 'geo_distance']
+    if len(geo_distance) > 0:
+        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
+        if geo_distance_values['output'] != 'fail':
+            X = np.hstack((X, geo_distance_values['output']))
+            X_hdrs.extend(geo_distance_values['names'])
+    ###making the dependent variable array
+    y = truthdat['match'].values
+    mod=LogisticRegression(random_state=0).fit(X,y)
+    preds=mod.predict(X)
+    score=mod.score(X,y)
+    vif=calc_vif(X, X_hdrs)
+    if max(vif['VIF']) > 5:
+        logger.info('WARNING, SOME VARIABLES HAVE HIGH COLINEARITY.  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
+        for i in vif.to_dict('record'):
+            if i['VIF'] > 5:
+                logger.info('{}: VIF = {}'.format(i['name'], i['VIF'].round(2)))
+    return {'type':'Logistic Regression', 'score':score, 'model':mod}
+
 def generate_rf_mod(truthdat):
     '''
     Generate the random forest model we are going to use for the matching
@@ -444,13 +502,17 @@ def choose_model(truthdat):
     :param truthdat:
     :return:
     '''
+    if ast.literal_eval(os.environ['use_logit'])==True:
+        logit=generate_logit(truthdat)
+    else:
+        logit={'score':0}
     rf=generate_rf_mod(truthdat)
     #svn=generate_svn_mod(truthdat)
     svn={'score':0}
     ada=generate_ada_boost(truthdat)
     ###find the max score
     best_score=max([i['score'] for i in [rf, svn, ada]])
-    best_model=[i for i in [rf, svn,ada] if i['score']==best_score][0]
+    best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
     logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
     return best_model['model']
 
