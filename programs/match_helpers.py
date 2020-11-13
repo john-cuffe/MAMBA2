@@ -125,6 +125,9 @@ def haversine(coord1, coord2):
 
     return 2 * R * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
+from sklearn.experimental import enable_iterative_imputer
+from sklearn.impute import IterativeImputer
+
 def create_scores(input_data, score_type, varlist):
     '''
     this function produces the list of dictionaries for all of the scores for the fuzzy variables.
@@ -167,8 +170,7 @@ def create_scores(input_data, score_type, varlist):
                     try:
                         i_scores.append(k(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][fuzzy_var_list[j]], data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][fuzzy_var_list[j]]))
                     except:
-                        if os.environ['null_match_method']=='zero':
-                            i_scores.append(0)
+                        i_scores.append(np.nan)
                         ###other method can go here if we think of one
             out_arr[i,]=i_scores
         ####Now return a dictionary of the input array and the names
@@ -205,7 +207,7 @@ def create_scores(input_data, score_type, varlist):
                 if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][numeric_distance_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][numeric_distance_vars[j]]:
                     i_scores.append(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][numeric_distance_vars[j]]-data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][numeric_distance_vars[j]])
                 else:
-                    i_scores.append(-99999)
+                    i_scores.append(np.nan)
             out_arr[i,] = i_scores
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': numeric_distance_vars}
@@ -264,12 +266,8 @@ def create_scores(input_data, score_type, varlist):
                     out_arr[i]=haversine(tuple([data1_target['latitude'],data1_target['longitude']]),
                                   tuple([data2_target['latitude'], data2_target['longitude']]))
             else:
-                null_count+=1
-        if null_count==0:
-            return {'output': out_arr, 'names': 'geo_distance'}
-        else:
-            logger.info('MAMBA detected missing lat/long coordinates.  Lat/Long distances will not be used')
-            return {'output':'fail', 'names':'fail'}
+                out_arr[i]=np.nan
+
 
 def generate_logit(truthdat):
     '''
@@ -307,17 +305,28 @@ def generate_logit(truthdat):
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
     ###making the dependent variable array
+    ##Mean-Center
+    X=pd.DataFrame(X)
+    ##Save the means
+    X.columns=X_hdrs
+    X_means=X.mean().to_dict()
+    X=X-X.mean()
+    ##Impute the missing data
+    imp = IterativeImputer(max_iter=10, random_state=0)
+    ###fit the imputation
+    imp.fit(X)
+    X_imputed=imp.transform(X)
     y = truthdat['match'].values
-    mod=LogisticRegression(random_state=0).fit(X,y)
-    preds=mod.predict(X)
-    score=mod.score(X,y)
-    vif=calc_vif(X, X_hdrs)
+    mod=LogisticRegression(random_state=0).fit(X_imputed,y)
+    preds=mod.predict(X_imputed)
+    score=mod.score(X_imputed,y)
+    vif=calc_vif(X_imputed, X_hdrs)
     if max(vif['VIF']) > 5:
-        logger.info('WARNING, SOME VARIABLES HAVE HIGH COLINEARITY.  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
+        logger.info('WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
         for i in vif.to_dict('record'):
             if i['VIF'] > 5:
                 logger.info('{}: VIF = {}'.format(i['name'], i['VIF'].round(2)))
-    return {'type':'Logistic Regression', 'score':score, 'model':mod}
+    return {'type':'Logistic Regression', 'score':score, 'model':mod, 'means':X_means, 'imputer':imp}
 
 def generate_rf_mod(truthdat):
     '''
@@ -352,6 +361,11 @@ def generate_rf_mod(truthdat):
         if geo_distance_values['output']!='fail':
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
+    ##Impute the missing data
+    imp = IterativeImputer(max_iter=10, random_state=0)
+    ###fit the imputation
+    imp.fit(X)
+    X_imputed = imp.transform(X)
     ###making the dependent variable array
     y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
@@ -367,7 +381,7 @@ def generate_rf_mod(truthdat):
     else:
         niter = 200
     cv_rfc = RandomizedSearchCV(estimator=rf, param_distributions=myparams, cv=10, scoring=scoringcriteria,n_iter=niter)
-    cv_rfc.fit(X, y)
+    cv_rfc.fit(X_imputed, y)
     ##Save the parameters
     trees = cv_rfc.best_params_['n_estimators']
     features_per_tree = cv_rfc.best_params_['max_features']
@@ -377,8 +391,8 @@ def generate_rf_mod(truthdat):
     ##In future could just remove the worst performaning variable using a relimp measure then run the full model
     #if mambalite == False:
     logger.info('Random Forest Completed.  Score {}'.format(score))
-    rf_mod = runRFClassifier(y, X, trees, features_per_tree, max_depth)
-    return {'type':'Random Forest', 'score':score, 'model':rf_mod}
+    rf_mod = runRFClassifier(y, X_imputed, trees, features_per_tree, max_depth)
+    return {'type':'Random Forest', 'score':score, 'model':rf_mod, 'imputer':imp}
 
 def generate_ada_boost(truthdat):
     '''
@@ -407,6 +421,11 @@ def generate_ada_boost(truthdat):
         exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
         X = np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
+    ##Impute the missing data
+    imp = IterativeImputer(max_iter=10, random_state=0)
+    ###fit the imputation
+    imp.fit(X)
+    X_imputed = imp.transform(X)
     ###making the dependent variable array
     y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
@@ -425,7 +444,7 @@ def generate_ada_boost(truthdat):
     ##First, get the scores
     cv_rfc = RandomizedSearchCV(estimator=ada, param_distributions=myparams, cv=10, scoring=scoringcriteria,
                                 n_iter=niter)
-    cv_rfc.fit(X, y)
+    cv_rfc.fit(X_imputed, y)
     ##Save the parameters
     trees = cv_rfc.best_params_['n_estimators']
     algo = cv_rfc.best_params_['algorithm']
@@ -436,7 +455,7 @@ def generate_ada_boost(truthdat):
     ada_mod = AdaBoostClassifier(algorithm=algo, n_estimators=trees)
     logger.info('AdaBoost Complete.  Score={}'.format(score))
     ###Note for when you return--you need to change the predict function to do cross_val_predict
-    return {'type': 'AdaBoost', 'score': score, 'model': ada_mod}
+    return {'type': 'AdaBoost', 'score': score, 'model': ada_mod, 'imputer':imp}
 
 def generate_svn_mod(truthdat):
     '''
@@ -465,6 +484,10 @@ def generate_svn_mod(truthdat):
         exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
         X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
+    imp = IterativeImputer(max_iter=10, random_state=0)
+    ###fit the imputation
+    imp.fit(X)
+    X_imputed = imp.transform(X)
     ###making the dependent variable array
     y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
@@ -478,13 +501,10 @@ def generate_svn_mod(truthdat):
     from sklearn.model_selection import cross_val_score, cross_val_predict
     myparams={
         'kernel':['linear','poly','rbf'],
-        'degree':[1,3,5],
-        'gamma':['scale','auto']
     }
     ##First, get the scores
-    svn_rfc = RandomizedSearchCV(estimator=svc, param_distributions=myparams, cv=10, scoring=scoringcriteria,
-                                n_iter=niter)
-    svn_rfc.fit(X, y)
+    svn_rfc = RandomizedSearchCV(estimator=svc, param_distributions=myparams, cv=5, scoring=scoringcriteria)
+    svn_rfc.fit(X_imputed, y)
     ##Save the parameters
     kernel = svn_rfc.best_params_['kernel']
     degree = svn_rfc.best_params_['degree']
@@ -493,7 +513,7 @@ def generate_svn_mod(truthdat):
     logger.info('SVM Complete.  Max Score={}'.format(score))
     svc=svm.SVC(gamma=gamma, degree=degree, kernel=kernel)
     ###Note for when you return--you need to change the predict function to do cross_val_predict
-    return {'type':'SVM', 'score':score, 'model':svc}
+    return {'type':'SVM', 'score':score, 'model':svc, 'imputer':imp}
 
 
 def choose_model(truthdat):
@@ -511,10 +531,10 @@ def choose_model(truthdat):
     svn={'score':0}
     ada=generate_ada_boost(truthdat)
     ###find the max score
-    best_score=max([i['score'] for i in [rf, svn, ada]])
+    best_score=max([i['score'] for i in [rf, svn, ada, logit]])
     best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
     logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
-    return best_model['model']
+    return best_model
 
 
 
@@ -574,10 +594,16 @@ def match_fun(arg):
             exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
             X = np.hstack((X, exact_match_values['output']))
             X_hdrs.extend(exact_match_values['names'])
-        ###Now predict
-        myprediction=probsfunc(arg['model'].predict_proba(X))
+        ###Imput the X values
+        X_imputed=arg['model']['imputer'].transform(X)
+        ###Mean Center
+        if arg['model']['type']=='Logistic Regression':
+            X_imputed=pd.DataFrame(X_imputed, columns=X_hdrs)-arg['model']['means']
+            X_imputed=np.array(X_imputed)
+        myprediction=probsfunc(arg['model'].predict_proba(X_imputed))
         ####don't need the scores anymore
         del X
+        del X_imputed
         del data1
         del data2
         input_data['predicted_probability']=myprediction
@@ -630,12 +656,12 @@ def match_fun(arg):
                 try:
                     cur.executemany(match_sql, vals)
                     db.commit()
+                    if ast.literal_eval(os.environ['chatty_logger']) == True:
+                        logger.info('''{} matches added in block'''.format(len(matches)))
                 except Exception:
                     to_return['matches']=matches
             cur.close()
             db.close()
-            if ast.literal_eval(os.environ['chatty_logger']) == True:
-                        logger.info('''{} matches added in block'''.format(len(matches)))
             if 'clerical_review_candidates'in to_return.keys() or 'matches' in to_return.keys():
                 return to_return
             else:
