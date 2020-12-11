@@ -158,10 +158,26 @@ def winklermod(string1, string2, in_weight):
 def winkler(string1, string2, min_threshold = None):
   """For backwards compatibility, call Jaro followed by Winkler modification.
   """
-  
-  jaro_weight = jaro(string1, string2, min_threshold)
-  
-  return winklermod(string1, string2, jaro_weight)
+
+  def winkler(string1, string2, min_threshold=None):
+    """Changed this to direct jellyfish import
+    """
+    conc = pandas.Series(list(zip(s1, s2)))
+
+    from jellyfish import jaro_winkler
+
+    def jaro_winkler_apply(x):
+
+      try:
+        return jaro_winkler_similarity(x[0], x[1])
+      except Exception as err:
+        if pandas.isnull(x[0]) or pandas.isnull(x[1]):
+          return np.nan
+        else:
+          raise err
+
+    return conc.apply(jaro_winkler_apply)
+
 
 # =============================================================================
 

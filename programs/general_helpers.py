@@ -19,3 +19,4 @@ def get_block_variable_list(filename):
 
 if __name__=='__main__':
     print('boo')
+
