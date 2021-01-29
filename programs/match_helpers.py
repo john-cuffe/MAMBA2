@@ -178,9 +178,9 @@ def create_scores(input_data, score_type, varlist):
     elif score_type=='numeric_dist':
         ###numeric distance variables
         data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().to_list())
+            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
         data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().to_list())
+            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
         data1_names = ','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
         data2_names = ','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
@@ -214,9 +214,9 @@ def create_scores(input_data, score_type, varlist):
     elif score_type=='exact':
         ###If we are running a training data model
         data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().to_list())
+            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
         data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().to_list())
+            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
         data1_names = ','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
         data2_names = ','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
@@ -240,6 +240,8 @@ def create_scores(input_data, score_type, varlist):
         for i in range(len(core_dict)):
             i_scores = []
             for j in range(len(exact_vars)):
+                print('data 1, var {}: {}'.format(exact_vars[j],data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]]))
+                print('data 2, var {}: {}'.format(exact_vars[j],data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]]))
                 if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]] and data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]].upper()==data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]].upper():
                     i_scores.append(1)
                 else:
@@ -248,8 +250,8 @@ def create_scores(input_data, score_type, varlist):
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': exact_vars}
     elif score_type=='geo_distance':
-        data1_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().to_list())
-        data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().to_list())
+        data1_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
+        data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
         ###get the values
         data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=os.environ['data1_name'], id_list=data1_ids), db)

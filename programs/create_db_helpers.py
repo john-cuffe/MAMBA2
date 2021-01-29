@@ -114,14 +114,14 @@ def createDatabase(databaseName):
         cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
         ###clerical_review_candidates and the two matched pairs table
         ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
-        for table in ['clerical_review_candidates','matched_pairs']:
-            ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
-            if len(ret) > 0:
-                cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
-                db.commit()
-        cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(os.environ['data1_name'], os.environ['data2_name']))
-        cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=os.environ['data1_name'], data2=os.environ['data2_name']))
-        db.commit()
+    for table in ['clerical_review_candidates','matched_pairs']:
+        ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+        if len(ret) > 0:
+            cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
+            db.commit()
+    cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(os.environ['data1_name'], os.environ['data2_name']))
+    cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=os.environ['data1_name'], data2=os.environ['data2_name']))
+    db.commit()
 
 
 if __name__=='__main__':
