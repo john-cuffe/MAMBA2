@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3707c47-ab65-43c7-ad1d-4707fc594255" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MAMBA2 User Guide.docx" beforeDir="false" afterPath="$PROJECT_DIR$/MAMBA2 User Guide.docx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mamba_db" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mamba_db-journal" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mamba_test_log" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_test_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mamba_variable_types.csv" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_variable_types.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/run_match.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_match.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup_envs_python.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup_envs_python.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/programs/connect_sqlite.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/connect_sqlite.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,46 +18,52 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/programs/logger_setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
+              <folding>
+                <element signature="e#0#29#0" expanded="true" />
+                <element signature="e#1479#2136#1" />
+                <element signature="e#2174#2512#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/programs/create_db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="39" column="12" selection-start-line="39" selection-end-line="40" />
-              <folding>
-                <element signature="e#301#310#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="289">
+              <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/run_match.py">
+        <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="32" column="78" selection-start-line="32" selection-start-column="78" selection-end-line="32" selection-end-column="78" />
+            <state relative-caret-position="157">
+              <caret line="234" column="129" selection-start-line="234" selection-start-column="129" selection-end-line="234" selection-end-column="129" />
               <folding>
-                <element signature="e#0#34#0" expanded="true" />
+                <element signature="e#63#94#0" expanded="true" />
+                <element signature="e#1271#2548#0" />
+                <element signature="e#2600#2940#0" />
+                <element signature="e#3063#3225#0" />
+                <element signature="e#3346#3626#0" />
+                <element signature="e#3725#4369#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/general_helpers.py">
+        <entry file="file://$PROJECT_DIR$/programs/connect_sqlite.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="13" column="31" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="697">
-              <caret line="89" column="42" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="42" />
+            <state relative-caret-position="209">
+              <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
               <folding>
-                <element signature="e#91#125#0" expanded="true" />
-                <element signature="e#770#2753#0" />
+                <element signature="e#25#39#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,42 +72,32 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" column="42" selection-start-line="23" selection-end-line="23" selection-end-column="42" />
+            <state>
+              <caret selection-end-line="23" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/run_Match.bash">
+        <entry file="file://$PROJECT_DIR$/run_match.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="684">
-              <caret line="490" column="59" selection-start-line="490" selection-start-column="59" selection-end-line="490" selection-end-column="59" />
+            <state relative-caret-position="153">
+              <caret line="12" column="191" selection-start-line="12" selection-start-column="191" selection-end-line="12" selection-end-column="191" />
               <folding>
-                <element signature="e#63#94#0" expanded="true" />
-                <element signature="e#336#1221#0" />
-                <element signature="e#1271#2548#0" />
-                <element signature="e#2600#2940#0" />
-                <element signature="e#3062#3342#0" />
-                <element signature="e#3441#4085#0" />
-                <element signature="e#4996#7703#0" />
-                <element signature="e#7749#10435#0" />
-                <element signature="e#10474#13103#0" />
-                <element signature="e#13149#15147#0" />
-                <element signature="e#15184#18213#0" />
-                <element signature="e#18253#20962#0" />
-                <element signature="e#21000#23579#0" />
-                <element signature="e#23614#24195#0" />
-                <element signature="e#24233#24451#0" />
+                <element signature="e#0#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1870">
+              <caret line="114" column="16" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="16" />
+              <folding>
+                <element signature="e#91#125#0" expanded="true" />
+                <element signature="e#660#734#0" />
               </folding>
             </state>
           </provider>
@@ -137,11 +130,20 @@
       <find>logging_</find>
       <find>data1_te</find>
       <find>data1_id</find>
+      <find>get_</find>
+      <find>ignore_dup</find>
+      <find>ignore_duplic</find>
+      <find>Sc</find>
+      <find>Scoring Criteria</find>
+      <find>-9999</find>
+      <find>,</find>
+      <find>index</find>
     </findStrings>
     <replaceStrings>
       <replace>int(1)</replace>
       <replace>int(0)</replace>
       <replace>logger.</replace>
+      <replace>','</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -153,15 +155,12 @@
         <option value="$PROJECT_DIR$/programs/__init__.py" />
         <option value="$PROJECT_DIR$/../../Backend/connect_sqlite.py" />
         <option value="$PROJECT_DIR$/programs/create_db.py" />
-        <option value="$PROJECT_DIR$/programs/general_helpers.py" />
         <option value="$PROJECT_DIR$/programs/archive/MatchFunction.py" />
         <option value="$PROJECT_DIR$/programs/archive/febrl_methods_cython.pyx" />
         <option value="$PROJECT_DIR$/programs/febrl_helpers/__init__.py" />
         <option value="$PROJECT_DIR$/programs/mymath.pyx" />
         <option value="$PROJECT_DIR$/programs/encode.pyx" />
-        <option value="$PROJECT_DIR$/programs/febrl_methods.py" />
         <option value="$PROJECT_DIR$/programs/archive/global_vars.py" />
-        <option value="$PROJECT_DIR$/programs/connect_sqlite.py" />
         <option value="$PROJECT_DIR$/programs/archive/run_match.py" />
         <option value="$PROJECT_DIR$/programs/run_Match.bash" />
         <option value="$PROJECT_DIR$/programs/archive/runner_block.pyx" />
@@ -172,19 +171,26 @@
         <option value="C:/Python3/Lib/runpy.py" />
         <option value="$PROJECT_DIR$/programs/mymath.py" />
         <option value="$PROJECT_DIR$/programs/global_vars.py" />
-        <option value="$PROJECT_DIR$/run_Match.bash" />
-        <option value="$PROJECT_DIR$/programs/create_db_helpers.py" />
         <option value="$PROJECT_DIR$/setup_envs_python.py" />
-        <option value="$PROJECT_DIR$/programs/match_helpers.py" />
+        <option value="$PROJECT_DIR$/run_Match.bash" />
+        <option value="H:/Projects/DRPS/code/febrl_methods.py" />
+        <option value="H:/Projects/DRPS/code/deduplication_helpers.py" />
+        <option value="$PROJECT_DIR$/programs/deduplication_reproduction.py" />
+        <option value="H:/Projects/DRPS/code/deduplication_reproduction.py" />
+        <option value="$PROJECT_DIR$/programs/general_helpers.py" />
+        <option value="$PROJECT_DIR$/programs/febrl_methods.py" />
         <option value="$PROJECT_DIR$/run_match.py" />
+        <option value="$PROJECT_DIR$/programs/create_db_helpers.py" />
+        <option value="$PROJECT_DIR$/programs/match_helpers.py" />
+        <option value="$PROJECT_DIR$/programs/connect_sqlite.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-8" />
-    <option name="y" value="-1088" />
-    <option name="width" value="1936" />
-    <option name="height" value="1096" />
+    <option name="x" value="88" />
+    <option name="y" value="-9" />
+    <option name="width" value="1840" />
+    <option name="height" value="1098" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -192,7 +198,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -209,15 +214,16 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/programs" />
+    <property name="last_opened_file_path" value="H:/Projects/DRPS/code/deduplication_reproduction.py" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="PyConsoleConfigurable.Python Console" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -270,6 +276,7 @@
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\Projects\DRPS\code" />
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs" />
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs\" />
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2.0\programs" />
@@ -351,22 +358,60 @@
       <workItem from="1600088520394" duration="1138000" />
       <workItem from="1600368922695" duration="1425000" />
       <workItem from="1600370754782" duration="1879000" />
-      <workItem from="1600700213269" duration="1153000" />
+      <workItem from="1600700213269" duration="1753000" />
+      <workItem from="1600714307274" duration="367000" />
+      <workItem from="1602263262516" duration="1088000" />
+      <workItem from="1602692208876" duration="666000" />
+      <workItem from="1602779249823" duration="5553000" />
+      <workItem from="1602841989920" duration="595000" />
+      <workItem from="1603896832925" duration="1234000" />
+      <workItem from="1603975531949" duration="2913000" />
+      <workItem from="1604073577391" duration="690000" />
+      <workItem from="1604324670407" duration="2520000" />
+      <workItem from="1604583807893" duration="10779000" />
+      <workItem from="1604610770085" duration="1380000" />
+      <workItem from="1604670415022" duration="12461000" />
+      <workItem from="1605026063965" duration="22000" />
+      <workItem from="1605196892276" duration="19234000" />
+      <workItem from="1605282713501" duration="7722000" />
+      <workItem from="1605649807684" duration="133000" />
+      <workItem from="1605707640782" duration="1959000" />
+      <workItem from="1607009380158" duration="611000" />
+      <workItem from="1607113146569" duration="686000" />
+      <workItem from="1607354470052" duration="13734000" />
+      <workItem from="1607435193671" duration="36215000" />
+      <workItem from="1607607712434" duration="9705000" />
+      <workItem from="1607693774048" duration="177000" />
+      <workItem from="1607698507199" duration="198000" />
+      <workItem from="1607698804355" duration="508000" />
+      <workItem from="1607699351113" duration="1447000" />
+      <workItem from="1607960915187" duration="721000" />
+      <workItem from="1608044890977" duration="6295000" />
+      <workItem from="1608131555642" duration="11453000" />
+      <workItem from="1608213842553" duration="3663000" />
+      <workItem from="1608668882016" duration="914000" />
+      <workItem from="1608730624909" duration="584000" />
+      <workItem from="1609172999251" duration="4006000" />
+      <workItem from="1611260461660" duration="598000" />
+      <workItem from="1611866647562" duration="701000" />
+      <workItem from="1612028545118" duration="988000" />
+      <workItem from="1612186663198" duration="3415000" />
+      <workItem from="1612541900595" duration="626000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="180966000" />
+    <option name="totallyTimeSpent" value="348127000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-1088" width="1936" height="1096" extended-state="6" />
+    <frame x="89" y="-9" width="1472" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16151386" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25671852" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49946696" weight="0.32917964" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49858558" weight="0.32797858" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -376,8 +421,8 @@
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4992928" weight="0.32931727" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5010661" side_tool="true" weight="0.48182762" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.8742004" side_tool="true" weight="0.27622014" />
-      <window_info active="true" anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.12579957" visible="true" weight="0.31048805" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.59688824" side_tool="true" visible="true" weight="0.26238286" />
+      <window_info active="true" anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.40311173" visible="true" weight="0.26238286" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -410,17 +455,6 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/programs/match_helpers.py</url>
-          <line>238</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../Backend/connect_sqlite.py">
@@ -472,13 +506,6 @@
     <entry file="file://$PROJECT_DIR$/programs/archive/MatchFunction_20180301.py" />
     <entry file="file://$PROJECT_DIR$/programs/run_Match.bash" />
     <entry file="file://$PROJECT_DIR$/programs/archive/MatchFunction.py" />
-    <entry file="file://$PROJECT_DIR$/programs/febrl_methods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="10" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/programs/archive/match_helpers.py" />
     <entry file="file://$PROJECT_DIR$/programs/archive/runner_block.pyx" />
     <entry file="file://$PROJECT_DIR$/programs/archive/nameaddress_blocks.py" />
@@ -494,16 +521,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/archive/addressonly_blocks.pyx" />
-    <entry file="file://$PROJECT_DIR$/programs/connect_sqlite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="7" column="25" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Documents/multiprocessing-2.6.2.1/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="121">
@@ -525,16 +542,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/logger_setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="446">
-          <caret line="51" column="3" selection-start-line="51" selection-start-column="3" selection-end-line="51" selection-end-column="3" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Python3/Lib/multiprocessing/process.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="265">
@@ -542,9 +549,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/programs/global_vars.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="52" column="56" selection-start-line="52" selection-start-column="56" selection-end-line="52" selection-end-column="56" />
+          <folding>
+            <element signature="e#25#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/run_Match.bash">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://H:/Projects/DRPS/code/mymath.py" />
     <entry file="file://$PROJECT_DIR$/programs/mymath.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-13023">
+        <state relative-caret-position="17">
           <caret line="52" selection-start-line="52" selection-end-line="52" />
           <folding>
             <element signature="n#!!doc" />
@@ -552,88 +577,106 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/global_vars.py">
+    <entry file="file://H:/Projects/DRPS/code/febrl_methods.py" />
+    <entry file="file://H:/Projects/DRPS/code/deduplication_helpers.py" />
+    <entry file="file://H:/Projects/DRPS/code/deduplication_reproduction.py" />
+    <entry file="file://$PROJECT_DIR$/programs/deduplication_reproduction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="73" column="26" selection-start-line="73" selection-start-column="26" selection-end-line="73" selection-end-column="26" />
+        <state relative-caret-position="316">
+          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
           <folding>
-            <element signature="e#25#34#0" expanded="true" />
+            <element signature="e#147#166#0" expanded="true" />
+            <element signature="e#972#3311#0" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/create_db.py">
+    <entry file="file://$PROJECT_DIR$/programs/febrl_methods.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="39" column="12" selection-start-line="39" selection-end-line="40" />
+        <state relative-caret-position="221">
+          <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
           <folding>
-            <element signature="e#301#310#0" expanded="true" />
+            <element signature="e#783#3109#0" />
+            <element signature="e#3159#4552#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/general_helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="31" selection-start-line="13" selection-start-column="31" selection-end-line="13" selection-end-column="31" />
+        <state relative-caret-position="289">
+          <caret line="17" column="50" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
+    <entry file="file://$PROJECT_DIR$/programs/logger_setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="89" column="42" selection-start-line="89" selection-start-column="42" selection-end-line="89" selection-end-column="42" />
+        <state relative-caret-position="561">
+          <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
           <folding>
-            <element signature="e#91#125#0" expanded="true" />
-            <element signature="e#770#2753#0" />
+            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#1479#2136#1" />
+            <element signature="e#2174#2512#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/create_db.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="23" column="42" selection-start-line="23" selection-end-line="23" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_Match.bash">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="40" selection-start-line="15" selection-start-column="40" selection-end-line="15" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="684">
-          <caret line="490" column="59" selection-start-line="490" selection-start-column="59" selection-end-line="490" selection-end-column="59" />
-          <folding>
-            <element signature="e#63#94#0" expanded="true" />
-            <element signature="e#336#1221#0" />
-            <element signature="e#1271#2548#0" />
-            <element signature="e#2600#2940#0" />
-            <element signature="e#3062#3342#0" />
-            <element signature="e#3441#4085#0" />
-            <element signature="e#4996#7703#0" />
-            <element signature="e#7749#10435#0" />
-            <element signature="e#10474#13103#0" />
-            <element signature="e#13149#15147#0" />
-            <element signature="e#15184#18213#0" />
-            <element signature="e#18253#20962#0" />
-            <element signature="e#21000#23579#0" />
-            <element signature="e#23614#24195#0" />
-            <element signature="e#24233#24451#0" />
-          </folding>
+        <state>
+          <caret selection-end-line="23" selection-end-column="30" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/run_match.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="544">
-          <caret line="32" column="78" selection-start-line="32" selection-start-column="78" selection-end-line="32" selection-end-column="78" />
+        <state relative-caret-position="153">
+          <caret line="12" column="191" selection-start-line="12" selection-start-column="191" selection-end-line="12" selection-end-column="191" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1870">
+          <caret line="114" column="16" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="16" />
+          <folding>
+            <element signature="e#91#125#0" expanded="true" />
+            <element signature="e#660#734#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/connect_sqlite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="157">
+          <caret line="234" column="129" selection-start-line="234" selection-start-column="129" selection-end-line="234" selection-end-column="129" />
+          <folding>
+            <element signature="e#63#94#0" expanded="true" />
+            <element signature="e#1271#2548#0" />
+            <element signature="e#2600#2940#0" />
+            <element signature="e#3063#3225#0" />
+            <element signature="e#3346#3626#0" />
+            <element signature="e#3725#4369#0" />
           </folding>
         </state>
       </provider>

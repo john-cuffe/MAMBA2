@@ -14,9 +14,7 @@ def get_table(qry, db_name):
     #logger.info('Query: ' + search_path + ', ' + qry)
     db = get_connection_sqlite(db_name)
     cur = db.cursor()
-
     cur.execute(qry)
-
     columns = [i[0] for i in cur.description]
     results = [dict(zip(columns, row)) for row in cur]
     cur.close()
