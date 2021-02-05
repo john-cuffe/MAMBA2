@@ -202,6 +202,7 @@ def create_scores(input_data, score_type, varlist):
         ###now create the dictionary with the list of names and the array
         out_arr = np.zeros(shape=(len(core_dict), len(numeric_distance_vars)))
         for i in range(len(core_dict)):
+            ###
             i_scores = []
             for j in range(len(numeric_distance_vars)):
                 if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][numeric_distance_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][numeric_distance_vars[j]]:
