@@ -54,6 +54,11 @@ def get_stem_data(dataname):
     else:
         csvname='{}/{}.csv'.format(os.environ['inputPath'], dataname)
     for data in pd.read_csv(csvname, chunksize=int(os.environ['create_db_chunksize']), engine='c',dtype=str_dict):
+        ###If we have a date variable, find it and convert to a date
+        date_columns=[i[dataname] for i in var_types if i['match_type']=='date']
+        if len(date_columns) > 0:
+            for date_col in date_columns:
+                data[date_col]=pd.to_datetime(data[date_col], format=os.environ['date_format']).dt.strftime('%Y-%m-%d')
         ###for each chunk, loop through
         data[fuzzy_vars] = data[fuzzy_vars].replace(np.nan, 'NULL')
         data['matched'] = 0
@@ -71,7 +76,6 @@ def get_stem_data(dataname):
                 data[p]=data[p].astype(str).str.zfill(maxlen)
         ####If Zipcode
         data = data.to_dict('record')
-
         # 2) Standardized via stemming any fuzzy matching variables
         # pool=Pool(2)
         if ast.literal_eval(os.environ['stem_phrase'])==True:

@@ -132,7 +132,6 @@ def create_scores(input_data, score_type, varlist):
     '''
     this function produces the list of dictionaries for all of the scores for the fuzzy variables.
     each dict will have two arguments: the array and a list of names
-    :param: db : the database connection
     :param input_data: Either a block to query the database with OR a dataframe of variable types
     :param fuzzy_vars: a list of dictionaries of fuzzy variables to target
     :param model_training: Are we training a model or running an acutal match (False)
@@ -241,8 +240,6 @@ def create_scores(input_data, score_type, varlist):
         for i in range(len(core_dict)):
             i_scores = []
             for j in range(len(exact_vars)):
-                print('data 1, var {}: {}'.format(exact_vars[j],data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]]))
-                print('data 2, var {}: {}'.format(exact_vars[j],data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]]))
                 if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]] and data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]].upper()==data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]].upper():
                     i_scores.append(1)
                 else:
@@ -270,6 +267,47 @@ def create_scores(input_data, score_type, varlist):
                                   tuple([data2_target['latitude'], data2_target['longitude']]))
             else:
                 out_arr[i]=np.nan
+        ####Now return a dictionary of the input array and the names
+        return {'output': out_arr, 'names': ['geo_distance']}
+    elif score_type=='date':
+        ###If we are running a training data model
+        data1_ids = ','.join(
+            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
+        data2_ids = ','.join(
+            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
+        ###now get the values from the database
+        data1_names = ','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
+        ###get the values
+        data1_values = get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=os.environ['data1_name'],id_list=data1_ids), db)
+        data2_values = get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=os.environ['data2_name'],id_list=data2_ids), db)
+        ###give the data values the name for each searching
+        data1_values = {str(item['id']): item for item in data1_values}
+        data2_values = {str(item['id']): item for item in data2_values}
+        ####now for each pair, get the value for each variable
+        ###create an indexed list of the id pairs to serve as the core of our dictionary
+        input_data = dcpy(input_data)
+        input_data.reset_index(inplace=True, drop=False)
+        core_dict = input_data[['index', '{}_id'.format(os.environ['data1_name']), '{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        date_vars = [i['variable_name'] for i in varlist]
+        ##convert fuzzy vars to a list
+        ###now create the dictionary with the list of names and the array
+        out_arr = np.zeros(shape=(len(core_dict), len(date_vars)))
+        for i in range(len(core_dict)):
+            i_scores = []
+            for j in range(len(date_vars)):
+                if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][date_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][date_vars[j]] :
+                    i_scores.append(
+                        feb.editdist(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][date_vars[j]],
+                          data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][date_vars[j]]))
+                else:
+                    i_scores.append(0)
+            out_arr[i,] = i_scores
+        ####Now return a dictionary of the input array and the names
+        return {'output': out_arr, 'names': date_vars}
+
 
 
 def generate_logit(truthdat):
@@ -364,6 +402,11 @@ def generate_rf_mod(truthdat):
         if geo_distance_values['output']!='fail':
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
+    date_vars=[i for i in var_rec if i['match_type']=='date']
+    if len(date_vars) > 0:
+        date_values=create_scores(truthdat, 'date', date_vars)
+        X=np.hstack((X, exact_match_values['output']))
+        X_hdrs.extend(exact_match_values['names'])
     ##Impute the missing data
     imp = IterativeImputer(max_iter=10, random_state=0)
     ###fit the imputation

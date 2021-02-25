@@ -1,21 +1,21 @@
-id,address,City,state,ZipCode,zip_3,name,year,BusinessType,latitude,longitude
-1,2125 Stark Hollow Road,Mountain View,CO,82939,829,Buehler Food,2019,Food,39.77568,-105.056127
-2,1909 Freshour Circle,Mountain View,CO,82939,829,Thriftway Food,,Services,39.775686,-105.056127
-3,3413 Don Jackson Lane,Mountain View,CO,82939,829,Starship Records,2019,Food,39.775692,-105.056127
-4,3860 Junior Avenue,Mountain View,CO,82939,829,Dun Rite Maintenance,2019,Services,39.775698,-105.056127
-5,,Los Angeles,CA,78205,782,Buena Vista Realty Service,2018,Food,29.425,-98.493889
-6,1164 Locust Court,Los Angeles,CA,90017,900,"10,000 Auto Parts",2017,Services,34.052236,-118.243683
-7,299 Feathers Hooves Drive,Los Angeles,CA,90017,900,Avant Garde Interior Designs,2016,Food,34.052235,-118.243683
-8,2554 Jones Avenue,Los Angeles,CA,90017,900,Isaly's,2015,Services,34.052234,-118.243683
-9,2000 Orchard Street,Los Angeles,CA,90017,900,ABC Markets,2019,Food,34.052233,-118.243683
-10,4791 Cimmaron Road,Los Angeles,CA,90017,900,Coffey's Market,2019,Services,34.052232,-118.243686
-11,3898 Karen Lane,Los Angeles,CA,90017,900,Sky High Financial Advice,2019,Food,34.052231,-118.243686
-12,3139 Marion Drive,Los Angeles,CA,90017,900,Planet Pizza,2019,Services,34.05223,-118.243686
-13,1489 Drummond Street,Providence,RI,12908,129,,2019,Food,41.824,-71.4128
-14,4827 Diamond Cove,Providence,RI,2908,29,Netcom Business Services,2019,Services,41.824,-71.4128
-15,3489 Smith Road,Providence,RI,2909,29,Hse Of Denmark,2019,Food,41.824,-71.4128
-16,873 Gladwell Street,Providence,RI,2910,29,Williams Bros.,2019,Services,41.824,-71.4128
-17,925 George Avenue,Providence,RI,2911,29,Century House,2019,Food,41.825,-71.4125
-18,1391 Elk Creek Road,Providence,RI,2912,29,Gamma Grays,2019,Services,41.825,-71.4125
-19,993 Granville Lane,Providence,RI,2913,29,Express Merchant Service,2019,Food,41.825,-71.4125
-20,3860 Mcwhorter Road,Providence,RI,2914,29,Steinberg's,2019,Services,41.825,-71.4125
+id,address,City,state,ZipCode,zip_3,name,year,BusinessType,latitude,longitude,founding_date
+1,2125 Stark Hollow Road,Mountain View,CO,82939,829,Buehler Food,2019,Food,39.77568,-105.056127,2014-08-04
+2,1909 Freshour Circle,Mountain View,CO,82939,829,Thriftway Food,,Services,39.775686,-105.056127,2018-11-01
+3,3413 Don Jackson Lane,Mountain View,CO,82939,829,Starship Records,2019,Food,39.775692,-105.056127,2011-01-13
+4,3860 Junior Avenue,Mountain View,CO,82939,829,Dun Rite Maintenance,2019,Services,39.775698,-105.056127,2016-01-19
+5,,Los Angeles,CA,78205,782,Buena Vista Realty Service,2018,Food,29.425,-98.493889,2012-12-09
+6,1164 Locust Court,Los Angeles,CA,90017,900,"10,000 Auto Parts",2017,Services,34.052236,-118.243683,2010-01-20
+7,299 Feathers Hooves Drive,Los Angeles,CA,90017,900,Avant Garde Interior Designs,2016,Food,34.052235,-118.243683,2013-11-09
+8,2554 Jones Avenue,Los Angeles,CA,90017,900,Isaly's,2015,Services,34.052234,-118.243683,2014-12-31
+9,2000 Orchard Street,Los Angeles,CA,90017,900,ABC Markets,2019,Food,34.052233,-118.243683,2013-07-15
+10,4791 Cimmaron Road,Los Angeles,CA,90017,900,Coffey's Market,2019,Services,34.052232,-118.243686,2010-11-09
+11,3898 Karen Lane,Los Angeles,CA,90017,900,Sky High Financial Advice,2019,Food,34.052231,-118.243686,2018-05-13
+12,3139 Marion Drive,Los Angeles,CA,90017,900,Planet Pizza,2019,Services,34.05223,-118.243686,2015-02-07
+13,1489 Drummond Street,Providence,RI,12908,129,,2019,Food,41.824,-71.4128,2019-01-31
+14,4827 Diamond Cove,Providence,RI,2908,29,Netcom Business Services,2019,Services,41.824,-71.4128,2019-08-30
+15,3489 Smith Road,Providence,RI,2909,29,Hse Of Denmark,2019,Food,41.824,-71.4128,2018-09-10
+16,873 Gladwell Street,Providence,RI,2910,29,Williams Bros.,2019,Services,41.824,-71.4128,2013-12-24
+17,925 George Avenue,Providence,RI,2911,29,Century House,2019,Food,41.825,-71.4125,2013-02-16
+18,1391 Elk Creek Road,Providence,RI,2912,29,Gamma Grays,2019,Services,41.825,-71.4125,2017-01-01
+19,993 Granville Lane,Providence,RI,2913,29,Express Merchant Service,2019,Food,41.825,-71.4125,2014-06-21
+20,3860 Mcwhorter Road,Providence,RI,2914,29,Steinberg's,2019,Services,41.825,-71.4125,2010-09-12
