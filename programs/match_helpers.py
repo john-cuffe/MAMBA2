@@ -339,12 +339,18 @@ def generate_logit(truthdat):
         exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
         X = np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
-    geo_distance = [i for i in var_rec if i['match_type'] == 'geo_distance']
+    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
     if len(geo_distance) > 0:
         geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
-        if geo_distance_values['output'] != 'fail':
+        if type(geo_distance_values['output']) != string:
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
+    date_vars = [i for i in var_rec if i['match_type']=='date']
+    if len(date_vars) > 0:
+        date_values = create_scores(truthdat,'date',date_vars)
+        if type(date_values['output']) != string:
+            X = np.hstack((X, date_values['output']))
+            X_hdrs.extend(date_values['names'])
     ###making the dependent variable array
     ##Mean-Center
     X=pd.DataFrame(X)
@@ -358,7 +364,7 @@ def generate_logit(truthdat):
     imp.fit(X)
     X_imputed=imp.transform(X)
     y = truthdat['match'].values
-    mod=LogisticRegression(random_state=0).fit(X_imputed,y)
+    mod=LogisticRegression(random_state=0, solver='liblinear').fit(X_imputed,y)
     preds=mod.predict(X_imputed)
     score=mod.score(X_imputed,y)
     vif=calc_vif(X_imputed, X_hdrs)
@@ -366,7 +372,7 @@ def generate_logit(truthdat):
         logger.info('WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
         for i in vif.to_dict('record'):
             if i['VIF'] > 5:
-                logger.info('{}: VIF = {}'.format(i['name'], i['VIF'].round(2)))
+                logger.info('{}: VIF = {}'.format(i['name'], round(i['VIF'],2)))
     return {'type':'Logistic Regression', 'score':score, 'model':mod, 'means':X_means, 'imputer':imp}
 
 def generate_rf_mod(truthdat):
@@ -396,18 +402,18 @@ def generate_rf_mod(truthdat):
         exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
         X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
-    geo_distance = [i for i in var_rec if i['match_type'] == 'geo_distance']
+    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
     if len(geo_distance) > 0:
         geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
-        if geo_distance_values['output']!='fail':
+        if type(geo_distance_values['output']) != string:
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
-    date_vars=[i for i in var_rec if i['match_type']=='date']
+    date_vars = [i for i in var_rec if i['match_type']=='date']
     if len(date_vars) > 0:
-        date_values=create_scores(truthdat, 'date', date_vars)
-        X=np.hstack((X, exact_match_values['output']))
-        X_hdrs.extend(exact_match_values['names'])
-    ##Impute the missing data
+        date_values = create_scores(truthdat,'date',date_vars)
+        if type(date_values['output']) != string:
+            X = np.hstack((X, date_values['output']))
+            X_hdrs.extend(date_values['names'])    ##Impute the missing data
     imp = IterativeImputer(max_iter=10, random_state=0)
     ###fit the imputation
     imp.fit(X)
@@ -467,6 +473,18 @@ def generate_ada_boost(truthdat):
         exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
         X = np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
+    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
+    if len(geo_distance) > 0:
+        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
+        if type(geo_distance_values['output']) != string:
+            X = np.hstack((X, geo_distance_values['output']))
+            X_hdrs.extend(geo_distance_values['names'])
+    date_vars = [i for i in var_rec if i['match_type']=='date']
+    if len(date_vars) > 0:
+        date_values = create_scores(truthdat,'date',date_vars)
+        if type(date_values['output']) != string:
+            X = np.hstack((X, date_values['output']))
+            X_hdrs.extend(date_values['names'])
     ##Impute the missing data
     imp = IterativeImputer(max_iter=10, random_state=0)
     ###fit the imputation
@@ -530,6 +548,18 @@ def generate_svn_mod(truthdat):
         exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
         X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
+    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
+    if len(geo_distance) > 0:
+        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
+        if type(geo_distance_values['output']) != string:
+            X = np.hstack((X, geo_distance_values['output']))
+            X_hdrs.extend(geo_distance_values['names'])
+    date_vars = [i for i in var_rec if i['match_type']=='date']
+    if len(date_vars) > 0:
+        date_values = create_scores(truthdat,'date',date_vars)
+        if type(date_values['output']) != string:
+            X = np.hstack((X, date_values['output']))
+            X_hdrs.extend(date_values['names'])
     imp = IterativeImputer(max_iter=10, random_state=0)
     ###fit the imputation
     imp.fit(X)
@@ -640,13 +670,25 @@ def match_fun(arg):
             exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
             X = np.hstack((X, exact_match_values['output']))
             X_hdrs.extend(exact_match_values['names'])
+        #4) Geo distance
+        geo_distance = [i for i in arg['var_rec'] if i['match_type'] == 'geom_distance']
+        if len(geo_distance) > 0:
+            geo_distance_values = create_scores(input_data, 'geo_distance', 'lat')
+            X = np.hstack((X, geo_distance_values['output']))
+            X_hdrs.extend(geo_distance_values['names'])
+        #5) Date
+        date_vars = [i for i in arg['var_rec'] if i['match_type'] == 'date']
+        if len(date_vars) > 0:
+            date_values = create_scores(input_data, 'date', date_vars)
+            X = np.hstack((X, date_values['output']))
+            X_hdrs.extend(date_values['names'])
         ###Imput the X values
         X_imputed=arg['model']['imputer'].transform(X)
         ###Mean Center
         if arg['model']['type']=='Logistic Regression':
             X_imputed=pd.DataFrame(X_imputed, columns=X_hdrs)-arg['model']['means']
             X_imputed=np.array(X_imputed)
-        myprediction=probsfunc(arg['model'].predict_proba(X_imputed))
+        myprediction=probsfunc(arg['model']['model'].predict_proba(X_imputed))
         ####don't need the scores anymore
         del X
         del X_imputed
