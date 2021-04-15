@@ -397,3 +397,835 @@
 2019-09-25 18:14:41,153 - root - INFO - 4 matches added in block
 2019-09-25 18:14:41,427 - root - INFO - 7 clerical review candidates added
 2019-09-25 18:14:41,454 - root - INFO - 7 matches added in block
+2020-03-10 13:44:52,184 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-03-10 13:45:06,987 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-03-10 14:05:43,955 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-03-10 14:06:07,507 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2020-03-10 14:06:20,336 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-03-10 14:06:41,843 - root - INFO - Random Forest Completed.  Score 1.0
+2020-03-10 14:06:41,843 - root - INFO - ##########30.47 Minutes: Run Random Forest##########
+2020-03-10 14:06:41,843 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=10
+ Max Depth=19
+2020-03-10 14:06:41,844 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-03-10 14:07:23,597 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-03-10 14:07:31,441 - root - INFO - Random Forest Completed.  Score 0.9795918367346939
+2020-03-10 14:07:31,441 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2020-03-10 14:08:07,167 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-03-10 14:09:59,374 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-03-10 14:20:50,947 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-06-30 10:27:26,513 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-06-30 10:28:00,244 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2020-06-30 10:28:00,244 - root - INFO - ##########1.1 Minutes: Run Random Forest##########
+2020-06-30 10:28:00,244 - root - INFO - Random Forest Params:
+ Number of Trees=11
+ Max Features=log2
+ Max Depth=9
+2020-06-30 10:28:00,259 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-09-12 13:03:27,173 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-09-12 13:03:48,411 - root - INFO - Random Forest Completed.  Score 1.0
+2020-09-12 13:03:48,412 - root - INFO - ##########0.46 Minutes: Run Random Forest##########
+2020-09-12 13:03:48,412 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=log2
+ Max Depth=21
+2020-09-12 13:03:48,414 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-09-12 13:10:21,772 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-09-12 13:10:45,403 - root - INFO - Random Forest Completed.  Score 1.0
+2020-09-12 13:10:45,403 - root - INFO - ##########0.43 Minutes: Run Random Forest##########
+2020-09-12 13:10:45,403 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=log2
+ Max Depth=23
+2020-09-12 13:10:45,406 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-09-12 13:10:51,695 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2020-09-12 13:10:51,695 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2020-09-12 13:17:36,531 - root - INFO - ### Starting Block zip5
+2020-09-12 13:17:36,533 - root - INFO - We have 10 blocks to run for zip5
+2020-09-12 13:17:36,542 - root - INFO - STARTING TO MATCH  FOR zip5
+2020-09-14 09:04:12,667 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-09-14 09:04:34,307 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2020-09-14 09:04:34,307 - root - INFO - ##########0.38 Minutes: Run Random Forest##########
+2020-09-14 09:04:34,308 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=log2
+ Max Depth=20
+2020-09-14 09:04:34,310 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-09-14 09:04:41,123 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2020-09-14 09:04:41,123 - root - INFO - Selected the Random Forest Model, with the score of 0.9897959183673469
+2020-09-17 14:57:33,671 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-09-17 14:57:57,118 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2020-09-17 14:57:57,118 - root - INFO - ##########0.41 Minutes: Run Random Forest##########
+2020-09-17 14:57:57,118 - root - INFO - Random Forest Params:
+ Number of Trees=19
+ Max Features=log2
+ Max Depth=9
+2020-09-17 14:57:57,137 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-09-17 14:58:04,326 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2020-09-17 14:58:04,326 - root - INFO - Selected the Random Forest Model, with the score of 0.9897959183673469
+2020-09-17 14:58:09,719 - root - INFO - We have 10 blocks to run for zip5
+2020-09-17 14:58:09,738 - root - INFO - STARTING TO MATCH  FOR zip5
+2020-09-17 14:59:52,438 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-09-17 15:00:17,595 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2020-09-17 15:00:17,595 - root - INFO - ##########0.53 Minutes: Run Random Forest##########
+2020-09-17 15:00:17,595 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=sqrt
+ Max Depth=7
+2020-09-17 15:00:17,597 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-09-17 15:00:24,521 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2020-09-17 15:00:24,522 - root - INFO - Selected the Random Forest Model, with the score of 0.9897959183673469
+2020-09-17 15:01:43,885 - root - INFO - We have 10 blocks to run for zip5
+2020-09-17 15:02:06,802 - root - INFO - 0% complete with block
+2020-09-17 15:02:26,416 - root - INFO - 0% complete with block
+2020-09-17 15:05:04,699 - root - INFO - 0% complete with block
+2020-09-17 15:05:04,750 - root - INFO - 1 clerical review candidates added
+2020-09-17 15:05:04,776 - root - INFO - 1 matches added in block
+2020-09-17 15:38:55,604 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-09-17 15:39:21,005 - root - INFO - Random Forest Completed.  Score 1.0
+2020-09-17 15:39:21,005 - root - INFO - ##########0.8 Minutes: Run Random Forest##########
+2020-09-17 15:39:21,005 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=log2
+ Max Depth=21
+2020-09-17 15:39:21,006 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2020-09-17 15:39:27,369 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2020-09-17 15:39:27,369 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2020-09-17 15:48:07,073 - root - INFO - We have 3 blocks to run for state
+2020-11-05 14:19:42,539 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2020-11-05 15:07:04,745 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-11-06 08:57:10,700 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-11-12 11:39:27,493 - root - INFO - 
+
+######CREATE SVN MODEL ######
+
+
+2020-11-13 08:53:26,184 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-11-13 09:54:47,127 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-11-13 09:55:06,768 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-11-13 10:00:05,774 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-11-13 10:00:24,785 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2020-12-28 12:46:56,347 - root - INFO - Variable data1_test_id for training data is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' 
+2020-12-28 12:46:56,347 - root - INFO - Variable data2_test_id for training data is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' 
+2020-12-28 12:46:56,347 - root - INFO - Variable match for training data is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' 
+2021-02-18 10:47:46,600 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 08:26:09,322 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 08:27:19,529 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 08:53:03,536 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:08:40,365 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:08:42,410 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 09:09:23,830 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:11:44,127 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:12:55,852 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 09:12:55,852 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 09:12:55,852 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 09:12:55,852 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 09:12:55,852 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 09:12:55,852 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 09:12:55,852 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 09:12:55,852 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 09:12:55,852 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 09:12:55,852 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 09:12:55,852 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 09:12:55,852 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 09:12:55,852 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 09:12:55,852 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 09:12:55,852 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 09:12:55,852 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 09:12:55,852 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 09:12:55,852 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 09:12:55,852 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 09:12:55,852 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 09:12:55,852 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 09:12:55,857 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 09:12:55,857 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 09:12:55,857 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 09:12:55,857 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 09:12:55,857 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 09:13:27,121 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:13:28,858 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 09:13:28,858 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 09:13:28,858 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 09:13:28,858 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 09:13:28,858 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 09:13:28,858 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 09:13:28,858 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 09:13:28,858 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 09:13:28,858 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 09:13:28,858 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 09:13:28,858 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 09:13:28,858 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 09:13:28,858 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 09:13:28,858 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 09:13:28,858 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 09:13:28,858 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 09:13:28,858 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 09:13:28,858 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 09:13:28,858 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 09:13:28,858 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 09:13:28,858 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 09:13:28,863 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 09:13:28,863 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 09:13:28,863 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 09:13:28,863 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 09:13:28,863 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 09:13:28,863 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 09:13:28,863 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 09:13:54,023 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2021-04-15 09:13:54,023 - root - INFO - ##########0.48 Minutes: Run Random Forest##########
+2021-04-15 09:13:54,023 - root - INFO - Random Forest Params:
+ Number of Trees=7
+ Max Features=log2
+ Max Depth=11
+2021-04-15 09:13:54,030 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 09:14:00,048 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 09:14:00,048 - root - INFO - Selected the Logistic Regression Model, with the score of 1.0
+2021-04-15 09:21:00,210 - root - INFO - ### Starting Block zip5
+2021-04-15 09:21:00,215 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 09:21:00,220 - root - INFO - STARTING TO MATCH  FOR zip5
+2021-04-15 14:22:05,041 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 14:22:07,563 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 14:22:07,568 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 14:22:07,570 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 14:22:07,572 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 14:22:07,573 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 14:22:07,573 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 14:22:07,573 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 14:22:07,573 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 14:22:07,578 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 14:22:07,578 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 14:22:07,578 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 14:22:07,580 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 14:22:07,582 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 14:22:07,583 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 14:22:07,588 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 14:22:07,593 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 14:22:07,601 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 14:22:07,603 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 14:22:07,611 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 14:22:07,613 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 14:22:07,623 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 14:22:07,623 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 14:22:07,628 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 14:22:07,628 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 14:22:07,631 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 14:22:07,648 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 14:22:07,668 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 14:22:07,668 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 14:23:06,247 - root - INFO - Random Forest Completed.  Score 1.0
+2021-04-15 14:23:06,267 - root - INFO - ##########1.04 Minutes: Run Random Forest##########
+2021-04-15 14:23:06,298 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=sqrt
+ Max Depth=5
+2021-04-15 14:23:06,330 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 14:23:24,227 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 14:23:24,231 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2021-04-15 14:23:24,263 - root - INFO - ### Starting Block zip5
+2021-04-15 14:23:24,267 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 14:23:24,284 - root - INFO - STARTING TO MATCH  FOR zip5
+2021-04-15 14:23:32,360 - root - INFO - 0% complete with block
+2021-04-15 14:23:32,499 - root - INFO - 1% complete with block
+2021-04-15 14:23:32,562 - root - INFO - 2% complete with block
+2021-04-15 14:23:32,612 - root - INFO - 3% complete with block
+2021-04-15 14:23:32,662 - root - INFO - 4% complete with block
+2021-04-15 14:23:32,692 - root - INFO - 5% complete with block
+2021-04-15 14:23:32,697 - root - INFO - 6% complete with block
+2021-04-15 14:23:32,777 - root - INFO - 7% complete with block
+2021-04-15 14:23:32,783 - root - INFO - 8% complete with block
+2021-04-15 14:23:32,837 - root - INFO - 9% complete with block
+2021-04-15 09:25:00,499 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:25:01,824 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 09:25:01,824 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 09:25:01,824 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 09:25:01,824 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 09:25:01,824 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 09:25:01,824 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 09:25:01,824 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 09:25:01,824 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 09:25:01,824 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 09:25:01,824 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 09:25:01,824 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 09:25:01,824 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 09:25:01,824 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 09:25:01,824 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 09:25:01,824 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 09:25:01,824 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 09:25:01,824 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 09:25:01,824 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 09:25:01,824 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 09:25:01,824 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 09:25:01,824 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 09:25:01,824 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 09:25:01,824 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 09:25:01,824 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 09:25:01,824 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 09:25:01,824 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 09:25:01,824 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 09:25:01,824 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 09:25:25,409 - root - INFO - Random Forest Completed.  Score 0.9897959183673469
+2021-04-15 09:25:25,409 - root - INFO - ##########0.43 Minutes: Run Random Forest##########
+2021-04-15 09:25:25,409 - root - INFO - Random Forest Params:
+ Number of Trees=4
+ Max Features=sqrt
+ Max Depth=22
+2021-04-15 09:25:25,409 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 09:25:32,620 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 09:25:32,620 - root - INFO - Selected the Logistic Regression Model, with the score of 1.0
+2021-04-15 09:27:46,767 - root - INFO - 0% complete with block
+2021-04-15 09:32:38,116 - root - INFO - 0% complete with block
+2021-04-15 09:33:54,221 - root - INFO - 0% complete with block
+2021-04-15 09:33:54,311 - root - INFO - 1 clerical review candidates added
+2021-04-15 09:33:54,326 - root - INFO - 1 matches added in block
+2021-04-15 14:34:05,931 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 14:34:08,506 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 14:34:08,511 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 14:34:08,515 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 14:34:08,515 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 14:34:08,516 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 14:34:08,516 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 14:34:08,516 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 14:34:08,516 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 14:34:08,516 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 14:34:08,516 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 14:34:08,516 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 14:34:08,516 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 14:34:08,516 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 14:34:08,516 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 14:34:08,533 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 14:34:08,556 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 14:34:08,556 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 14:34:08,556 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 14:34:08,556 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 14:34:08,556 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 14:34:08,571 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 14:34:08,571 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 14:34:08,573 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 14:34:08,573 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 14:34:08,573 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 14:34:08,575 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 14:34:08,576 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 14:34:08,576 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 14:34:31,161 - root - INFO - Random Forest Completed.  Score 1.0
+2021-04-15 14:34:31,161 - root - INFO - ##########0.46 Minutes: Run Random Forest##########
+2021-04-15 14:34:31,161 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=sqrt
+ Max Depth=14
+2021-04-15 14:34:31,166 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 14:34:37,011 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 14:34:37,011 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2021-04-15 14:34:37,016 - root - INFO - ### Starting Block zip5
+2021-04-15 14:34:37,021 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 14:34:37,026 - root - INFO - STARTING TO MATCH  FOR zip5
+2021-04-15 14:34:40,691 - root - INFO - 0% complete with block
+2021-04-15 14:34:40,736 - root - INFO - 1% complete with block
+2021-04-15 14:34:40,741 - root - INFO - 2% complete with block
+2021-04-15 14:34:40,791 - root - INFO - 3% complete with block
+2021-04-15 14:34:40,801 - root - INFO - 4% complete with block
+2021-04-15 14:34:40,826 - root - INFO - 5% complete with block
+2021-04-15 14:34:40,831 - root - INFO - 6% complete with block
+2021-04-15 14:34:40,871 - root - INFO - 7% complete with block
+2021-04-15 14:34:40,873 - root - INFO - 8% complete with block
+2021-04-15 14:34:40,876 - root - INFO - 9% complete with block
+2021-04-15 14:37:13,850 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 14:37:15,454 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 14:37:15,454 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 14:37:15,454 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 14:37:15,454 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 14:37:15,454 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 14:37:15,454 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 14:37:15,454 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 14:37:15,454 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 14:37:15,454 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 14:37:15,454 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 14:37:15,454 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 14:37:15,454 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 14:37:15,454 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 14:37:15,454 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 14:37:15,454 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 14:37:15,460 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 14:37:15,460 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 14:37:15,460 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 14:37:15,460 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 14:37:15,460 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 14:37:15,460 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 14:37:15,460 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 14:37:15,460 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 14:37:15,464 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 14:37:15,464 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 14:37:15,464 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 14:37:15,464 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 14:37:15,464 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 14:37:42,172 - root - INFO - Random Forest Completed.  Score 1.0
+2021-04-15 14:37:42,172 - root - INFO - ##########0.48 Minutes: Run Random Forest##########
+2021-04-15 14:37:42,172 - root - INFO - Random Forest Params:
+ Number of Trees=3
+ Max Features=log2
+ Max Depth=9
+2021-04-15 14:37:42,176 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 14:37:49,162 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 14:37:49,167 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2021-04-15 14:37:49,171 - root - INFO - ### Starting Block zip5
+2021-04-15 14:37:49,171 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 14:37:49,171 - root - INFO - STARTING TO MATCH  FOR zip5
+2021-04-15 14:37:54,382 - root - INFO - 0% complete with block
+2021-04-15 14:37:54,437 - root - INFO - 1% complete with block
+2021-04-15 14:37:54,442 - root - INFO - 2% complete with block
+2021-04-15 14:37:54,492 - root - INFO - 3% complete with block
+2021-04-15 14:37:54,502 - root - INFO - 4% complete with block
+2021-04-15 14:37:54,512 - root - INFO - 5% complete with block
+2021-04-15 14:37:54,547 - root - INFO - 6% complete with block
+2021-04-15 14:37:54,567 - root - INFO - 7% complete with block
+2021-04-15 14:37:54,572 - root - INFO - 8% complete with block
+2021-04-15 14:37:54,602 - root - INFO - 9% complete with block
+2021-04-15 09:39:03,315 - root - INFO - 9% complete with block
+2021-04-15 09:39:03,720 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:39:03,735 - root - INFO - 7 matches added in block
+2021-04-15 09:40:22,478 - root - INFO - 9% complete with block
+2021-04-15 09:40:22,879 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:22,894 - root - INFO - 7 matches added in block
+2021-04-15 09:40:22,894 - root - INFO - 9% complete with block
+2021-04-15 09:40:23,464 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:23,474 - root - INFO - 7 matches added in block
+2021-04-15 09:40:23,474 - root - INFO - 9% complete with block
+2021-04-15 09:40:24,044 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:24,054 - root - INFO - 7 matches added in block
+2021-04-15 09:40:24,054 - root - INFO - 9% complete with block
+2021-04-15 09:40:24,649 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:24,664 - root - INFO - 7 matches added in block
+2021-04-15 09:40:24,664 - root - INFO - 9% complete with block
+2021-04-15 09:40:25,224 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:25,234 - root - INFO - 7 matches added in block
+2021-04-15 09:40:25,239 - root - INFO - 9% complete with block
+2021-04-15 09:40:25,774 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:25,789 - root - INFO - 7 matches added in block
+2021-04-15 09:40:25,789 - root - INFO - 9% complete with block
+2021-04-15 09:40:26,354 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:26,369 - root - INFO - 7 matches added in block
+2021-04-15 09:40:26,369 - root - INFO - 9% complete with block
+2021-04-15 09:40:26,924 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:26,944 - root - INFO - 7 matches added in block
+2021-04-15 09:40:26,944 - root - INFO - 9% complete with block
+2021-04-15 09:40:27,559 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:27,569 - root - INFO - 7 matches added in block
+2021-04-15 09:40:27,569 - root - INFO - 9% complete with block
+2021-04-15 09:40:28,079 - root - INFO - 7 clerical review candidates added
+2021-04-15 09:40:28,089 - root - INFO - 7 matches added in block
+2021-04-15 09:41:34,161 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 09:41:35,617 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 09:41:35,617 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 09:41:35,617 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 09:41:35,617 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 09:41:35,617 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 09:41:35,617 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 09:41:35,617 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 09:41:35,617 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 09:41:35,617 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 09:41:35,617 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 09:41:35,617 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 09:41:35,617 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 09:41:35,617 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 09:41:35,617 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 09:41:35,617 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 09:41:35,617 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 09:41:35,617 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 09:41:35,617 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 09:41:35,617 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 09:41:35,617 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 09:41:35,617 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 09:41:35,617 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 09:41:35,617 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 09:41:35,617 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 09:41:35,617 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 09:41:35,617 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 09:41:35,617 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 09:41:35,617 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 09:41:56,567 - root - INFO - Random Forest Completed.  Score 1.0
+2021-04-15 09:41:56,567 - root - INFO - ##########0.4 Minutes: Run Random Forest##########
+2021-04-15 09:41:56,567 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=log2
+ Max Depth=7
+2021-04-15 09:41:56,567 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 09:42:03,252 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 09:42:03,257 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2021-04-15 09:43:13,878 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 09:43:19,168 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 09:43:31,908 - root - INFO - 0% complete with block
+2021-04-15 10:03:09,009 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 10:03:10,683 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 10:03:10,684 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 10:03:10,684 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 10:03:10,684 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 10:03:10,684 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 10:03:10,684 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 10:03:10,684 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 10:03:10,684 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 10:03:10,684 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 10:03:10,684 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 10:03:10,684 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 10:03:10,684 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 10:03:10,685 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 10:03:10,685 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 10:03:10,685 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 10:03:10,685 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 10:03:10,685 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 10:03:10,685 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 10:03:10,685 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 10:03:10,685 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 10:03:10,685 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 10:03:10,685 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 10:03:10,685 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 10:03:10,685 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 10:03:10,686 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 10:03:10,686 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 10:03:10,686 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 10:03:10,686 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 15:03:20,409 - root - INFO - 
+
+######CREATE LOGISTIC REGRESSION MODEL ######
+
+
+2021-04-15 15:03:21,707 - root - INFO - WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:
+2021-04-15 15:03:21,708 - root - INFO - address_jaro: VIF = 46.09
+2021-04-15 15:03:21,708 - root - INFO - address_winkler: VIF = 25.27
+2021-04-15 15:03:21,708 - root - INFO - address_bagdist: VIF = 54.99
+2021-04-15 15:03:21,708 - root - INFO - address_seqmatch: VIF = 57.14
+2021-04-15 15:03:21,709 - root - INFO - address_qgram2: VIF = 409.59
+2021-04-15 15:03:21,709 - root - INFO - address_qgram3: VIF = 415.48
+2021-04-15 15:03:21,709 - root - INFO - address_posqgram3: VIF = 121.76
+2021-04-15 15:03:21,709 - root - INFO - address_editdist: VIF = 101.27
+2021-04-15 15:03:21,710 - root - INFO - address_lcs2: VIF = 171.34
+2021-04-15 15:03:21,710 - root - INFO - address_lcs3: VIF = 13867.13
+2021-04-15 15:03:21,710 - root - INFO - address_charhistogram: VIF = 20.24
+2021-04-15 15:03:21,711 - root - INFO - address_swdist: VIF = 13229.06
+2021-04-15 15:03:21,711 - root - INFO - address_sortwinkler: VIF = 48.47
+2021-04-15 15:03:21,711 - root - INFO - name_jaro: VIF = 52.78
+2021-04-15 15:03:21,712 - root - INFO - name_winkler: VIF = 51.85
+2021-04-15 15:03:21,712 - root - INFO - name_bagdist: VIF = 18.47
+2021-04-15 15:03:21,712 - root - INFO - name_seqmatch: VIF = 90.31
+2021-04-15 15:03:21,713 - root - INFO - name_qgram2: VIF = 495.61
+2021-04-15 15:03:21,713 - root - INFO - name_qgram3: VIF = 346.84
+2021-04-15 15:03:21,713 - root - INFO - name_posqgram3: VIF = 98.32
+2021-04-15 15:03:21,713 - root - INFO - name_editdist: VIF = 107.68
+2021-04-15 15:03:21,714 - root - INFO - name_lcs2: VIF = 184.76
+2021-04-15 15:03:21,714 - root - INFO - name_lcs3: VIF = 638.07
+2021-04-15 15:03:21,714 - root - INFO - name_charhistogram: VIF = 14.84
+2021-04-15 15:03:21,714 - root - INFO - name_swdist: VIF = 748.02
+2021-04-15 15:03:21,715 - root - INFO - name_sortwinkler: VIF = 32.42
+2021-04-15 15:03:21,715 - root - INFO - 
+
+######CREATE RANDOM FOREST MODEL ######
+
+
+2021-04-15 15:03:45,063 - root - INFO - Random Forest Completed.  Score 1.0
+2021-04-15 15:03:45,064 - root - INFO - ##########0.42 Minutes: Run Random Forest##########
+2021-04-15 15:03:45,064 - root - INFO - Random Forest Params:
+ Number of Trees=1
+ Max Features=sqrt
+ Max Depth=23
+2021-04-15 15:03:45,067 - root - INFO - 
+
+######CREATE ADABoost MODEL ######
+
+
+2021-04-15 15:03:46,864 - root - INFO - AdaBoost Complete.  Score=0.9795918367346939
+2021-04-15 15:03:46,865 - root - INFO - Selected the Random Forest Model, with the score of 1.0
+2021-04-15 15:03:46,869 - root - INFO - ### Starting Block zip5
+2021-04-15 15:03:46,870 - root - INFO - We have 10 blocks to run for zip5
+2021-04-15 15:03:46,874 - root - INFO - STARTING TO MATCH  FOR zip5
+2021-04-15 15:03:50,797 - root - INFO - 0% complete with block
+2021-04-15 15:03:50,816 - root - INFO - 1% complete with block
+2021-04-15 15:03:50,823 - root - INFO - 2% complete with block
+2021-04-15 15:03:50,887 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:50,907 - root - INFO - 1 matches added in block
+2021-04-15 15:03:50,914 - root - INFO - 3% complete with block
+2021-04-15 15:03:50,926 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:50,964 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:51,000 - root - INFO - 1 matches added in block
+2021-04-15 15:03:51,002 - root - INFO - 4% complete with block
+2021-04-15 15:03:51,033 - root - INFO - 1 matches added in block
+2021-04-15 15:03:51,035 - root - INFO - 5% complete with block
+2021-04-15 15:03:51,086 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:51,111 - root - INFO - 1 matches added in block
+2021-04-15 15:03:51,112 - root - INFO - 6% complete with block
+2021-04-15 15:03:51,157 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:51,178 - root - INFO - 1 matches added in block
+2021-04-15 15:03:51,180 - root - INFO - 7% complete with block
+2021-04-15 15:03:51,195 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:51,224 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:03:51,243 - root - INFO - 1 matches added in block
+2021-04-15 15:03:51,285 - root - INFO - 1 matches added in block
+2021-04-15 15:03:51,282 - root - INFO - 8% complete with block
+2021-04-15 15:03:51,293 - root - INFO - 9% complete with block
+2021-04-15 15:03:51,681 - root - INFO - 4 clerical review candidates added
+2021-04-15 15:03:51,704 - root - INFO - 4 matches added in block
+2021-04-15 15:03:52,242 - root - INFO - 7 clerical review candidates added
+2021-04-15 15:03:52,259 - root - INFO - 7 matches added in block
+2021-04-15 15:03:52,270 - root - INFO - Dumping remaining matches to DB
+2021-04-15 15:03:52,277 - root - INFO - Block zip5 Complete
+2021-04-15 15:03:52,278 - root - INFO - ### Completed Block zip5
+2021-04-15 15:03:52,278 - root - INFO - ### Starting Block zip3
+2021-04-15 15:03:52,289 - root - INFO - We have 4 blocks to run for zip3
+2021-04-15 15:03:52,295 - root - INFO - STARTING TO MATCH  FOR zip3
+2021-04-15 15:03:56,405 - root - INFO - 0% complete with block
+2021-04-15 15:03:56,411 - root - INFO - There were no valid matches to attempt for block 29
+2021-04-15 15:03:56,413 - root - INFO - 1% complete with block
+2021-04-15 15:03:56,415 - root - INFO - 2% complete with block
+2021-04-15 15:03:56,421 - root - INFO - There were no valid matches to attempt for block 829
+2021-04-15 15:03:56,424 - root - INFO - 3% complete with block
+2021-04-15 15:03:56,426 - root - INFO - There were no valid matches to attempt for block 900
+2021-04-15 15:03:56,466 - root - INFO - Dumping remaining matches to DB
+2021-04-15 15:03:56,474 - root - INFO - Block zip3 Complete
+2021-04-15 15:03:56,475 - root - INFO - ### Completed Block zip3
+2021-04-15 15:03:56,475 - root - INFO - ### Starting Block state
+2021-04-15 15:03:56,486 - root - INFO - We have 3 blocks to run for state
+2021-04-15 15:03:56,491 - root - INFO - STARTING TO MATCH  FOR state
+2021-04-15 15:04:01,034 - root - INFO - 0% complete with block
+2021-04-15 15:04:01,037 - root - INFO - There were no valid matches to attempt for block CA
+2021-04-15 15:04:01,039 - root - INFO - 1% complete with block
+2021-04-15 15:04:01,042 - root - INFO - There were no valid matches to attempt for block CO
+2021-04-15 15:04:01,044 - root - INFO - 2% complete with block
+2021-04-15 15:04:01,123 - root - INFO - 1 clerical review candidates added
+2021-04-15 15:04:01,139 - root - INFO - 1 matches added in block
+2021-04-15 15:04:01,172 - root - INFO - Dumping remaining matches to DB
+2021-04-15 15:04:01,180 - root - INFO - Block state Complete
+2021-04-15 15:04:01,180 - root - INFO - ### Completed Block state
+2021-04-15 15:04:01,202 - root - INFO - Match Complete
+2021-04-15 15:04:01,203 - root - INFO - Matched 19 records for data1_test
+2021-04-15 15:04:01,204 - root - INFO - Matched 19 records for data2_test
+2021-04-15 15:04:01,205 - root - INFO - 19 Total matched pairs
