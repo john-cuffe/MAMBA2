@@ -203,7 +203,7 @@ pytz=2018.9=py27_0
 pywavelets=1.0.2=py27hc997a72_0
 pywin32=223=py27h0c8e037_1
 pywinpty=0.5.5=py27_1000
-pyyaml=5.1=py27h0c8e037_0
+pyyaml>=5.4
 pyzmq=18.0.0=py27hc56fc5f_0
 qt=5.6.2=vc9hc26998b_12
 qtawesome=0.5.7=py27_1
