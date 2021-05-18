@@ -240,7 +240,7 @@ def create_scores(input_data, score_type, varlist):
         for i in range(len(core_dict)):
             i_scores = []
             for j in range(len(exact_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]] and data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]].upper()==data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]].upper():
+                if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]] and str(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]]).upper()==str(data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]]).upper():
                     i_scores.append(1)
                 else:
                     i_scores.append(0)
