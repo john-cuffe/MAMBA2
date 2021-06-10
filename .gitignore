@@ -3,3 +3,15 @@ venv/
 /data/harness_data.csv
 /data/harness_data.csv.gz
 programs/deduplication_reproduction.py
+MAMBA_2_Pres.pptx
+MAMBA pres outline.docx
+mamba_db-journal
+mamba_db
+mamba_test_log
+*.pyc
+*.gz
+*.pyc
+setup_envs_python.py
+*.csv
+setup_envs_python.py
+mamba_test_log
