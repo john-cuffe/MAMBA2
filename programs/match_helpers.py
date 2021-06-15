@@ -805,12 +805,12 @@ def run_block(block, rf_mod):
     for i in out:
         if i!=None:
             if 'clerical_review_candidates' in i.keys():
-                columns = k['clerical_review_candidates'][0].keys()
-                vals = [tuple(i[column] for column in columns) for i in k['clerical_review_candidates']]
+                columns = i['clerical_review_candidates'][0].keys()
+                vals = [tuple(j[column] for column in columns) for j in i['clerical_review_candidates']]
                 cur.executemany(clerical_review_sql, vals)
             if 'matches' in i.keys():
-                columns = k['matches'][0].keys()
-                vals = [tuple(i[column] for column in columns) for i in k['matches']]
+                columns = i['matches'][0].keys()
+                vals = [tuple(j[column] for column in columns) for j in i['matches']]
                 cur.executemany(match_sql, vals)
     db.commit()
     ##then change the matched flags on the data tables to 1 where it's been matched
