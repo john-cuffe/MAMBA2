@@ -165,12 +165,15 @@ def create_scores(input_data, score_type, varlist):
             i_scores=[]
             for j in range(len(fuzzy_var_list)):
                 for k in methods:
-                    ####Two null match methods: either they get a 0 or the median value for the chunk
-                    try:
-                        i_scores.append(k(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][fuzzy_var_list[j]], data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][fuzzy_var_list[j]]))
-                    except:
-                        i_scores.append(np.nan)
+                    if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][fuzzy_var_list[j]]!='NULL' and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][fuzzy_var_list[j]]!='NULL':
+                        ####Two null match methods: either they get a 0 or the median value for the chunk
+                        try:
+                            i_scores.append(k(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][fuzzy_var_list[j]], data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][fuzzy_var_list[j]]))
+                        except:
+                            i_scores.append(np.nan)
                         ###other method can go here if we think of one
+                    else:
+                        i_scores.append(np.nan)
             out_arr[i,]=i_scores
         ####Now return a dictionary of the input array and the names
         return {'output':out_arr, 'names':['{}_{}'.format(i,j.__name__) for i in fuzzy_var_list for j in methods]}

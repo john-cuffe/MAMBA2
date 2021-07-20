@@ -5,6 +5,7 @@ This is a list of helper functions to create our database
 '''
 from programs.global_vars import *
 from programs.logger_setup import *
+import usaddress as usadd
 logger=logger_setup(os.environ['log_file_name'])
 def intersect(x0, x1, y0, y1):
     '''
@@ -41,13 +42,14 @@ def get_stem_data(dataname):
     # 1) Load
     output=[]
     # the the fuzzy matches
-    var_types=pd.read_csv('mamba_variable_types.csv').to_dict('record')
-    blocks = pd.read_csv('block_names.csv').to_dict('record')
     ###dictionary to read all blocks as strings
     str_dict={item[dataname]:str for item in blocks}
-    blocks=[i['block_name'] for i in blocks]
     ###Get list of the fuzzy variables
     fuzzy_vars = [i[dataname] for i in var_types if i['match_type'].lower() == 'fuzzy']
+    ###add address1 if we are using the remaining parsed addresses
+    if ast.literal_eval(os.environ['use_remaining_parsed_address']) == True:
+        ###append the address 1 to the fuzzy vars
+        fuzzy_vars.append('address1')
     ##chunk data so we don't blow up memory
     if sys.platform == 'win32':
         csvname='{}\\{}.csv'.format(os.environ['inputPath'], dataname)
@@ -59,23 +61,41 @@ def get_stem_data(dataname):
         if len(date_columns) > 0:
             for date_col in date_columns:
                 data[date_col]=pd.to_datetime(data[date_col], format=os.environ['date_format']).dt.strftime('%Y-%m-%d')
-        ###for each chunk, loop through
-        data[fuzzy_vars] = data[fuzzy_vars].replace(np.nan, 'NULL')
         data['matched'] = 0
-        if 'full' in blocks:
+        if 'full' in [b['block_name'] for b in blocks]:
             data['full']=1
-        for p in fuzzy_vars:
-            data[p] = data[p].str.upper()
-            if 'zip' in p.lower():
-                ###find the max length
-                out=data[p].astype(str).tolist()
-                ###get the max length
-                maxlen=max([len(k) for k in out])
-                ###log
-                logger.info('''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(p, dataname))
-                data[p]=data[p].astype(str).str.zfill(maxlen)
-        ####If Zipcode
+        ###convert to dictionary
         data = data.to_dict('record')
+        ########
+        ##Are we using the parsed address feature? if so, add those variables into the row
+        ########
+        if ast.literal_eval(os.environ['parse_address'])==True:
+            ###For each row, parse the address
+            for row in data:
+                parsed_address = usadd.tag(row[os.environ['address_column_{}'.format(dataname)]], tag_mapping=address_component_mapping)
+                for parsed_block in [v for v in blocks if v['parsed_block']==1]:
+                    if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
+                        row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][0:int(parsed_block['block_name'][-1])]
+                    else:
+                        row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
+                for variable in [var for var in var_types if var['parsed_variable']==1]:
+                    row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
+                if ast.literal_eval(os.environ['use_remaining_parsed_address'])==True:
+                    row['address1'] = parsed_address[0]['address1']
+        for p in fuzzy_vars:
+            for r in range(len(data)):
+                ###fill in NULL for the fuzzy vars
+                if pd.isna(data[r][p]):
+                    data[r][p] = 'NULL'
+                data[r][p] = str(data[r][p]).upper()
+                if 'zip' in p.lower():
+                    ###find the max length
+                    out=data[r][p].astype(str).tolist()
+                    ###get the max length
+                    maxlen=max([len(k) for k in out])
+                    ###log
+                    logger.info('''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(p, dataname))
+                    data[r][p]=data[r][p].astype(str).str.zfill(maxlen)
         # 2) Standardized via stemming any fuzzy matching variables
         # pool=Pool(2)
         if ast.literal_eval(os.environ['stem_phrase'])==True:

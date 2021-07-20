@@ -1,4 +1,6 @@
-order,block_name,data1_test,data2_test
-1,zip5,ZipCode,ZipCode
-2,zip3,zip_3,zip_3
-3,state,state_abb,state
+order,block_name,data1_test,data2_test,parsed_block
+1,ZipCode,ZipCode,ZipCode,1
+2,ZipCode3,ZipCode3,ZipCode3,1
+3,PlaceName,PlaceName,PlaceName,
+4,StateName,StateName,StateName,1
+5,BusinessType,BusinessType,BusinessType,0
