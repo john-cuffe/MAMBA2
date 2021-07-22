@@ -1,21 +1,21 @@
-id,street_address,City,state_abb,ZipCode,zip_3,name,year,BusinessType,latitude,longitude,date_founded
-1,2125 Stark Hollow Road,Mountain View,CO,82939,829,Buehler Foods,2019,Food,39.77568,-105.056127,2014-08-01
-2,1909 Freshour Circle,Mountain View,CO,82939,829,Thriftway Food Mart,2019,Services,39.775686,-105.056127,2018-08-28
-3,3413 Don Jackson Lane,Mountain View,CO,82939,829,Starship Tapes & Records,2019,Food,39.775692,-105.056127,2010-10-17
-4,3860 Junior Avenue,Mountain View,CO,82939,829,Dun Rite Lawn Maintenance,2019,Services,39.775698,-105.056127,2016-01-12
-5,4260 Farland Avenue,San Antonio,TX,78205,782,Buena Vista Realty Service,2019,Services,29.425,-98.493889,2012-09-23
-6,1164 Locust Court,Los Angeles,CA,90017,900,"10,000 Auto Parts",2019,Services,34.052236,-118.243683,2010-01-15
-7,299 Feathers Hooves Drive,Los Angeles,CA,90017,900,Avant Garde Interior Designs,2019,Services,34.052235,-118.243683,2013-11-02
-8,2554 Jones Avenue,Los Angeles,CA,90017,900,Isaly's,2019,Services,34.052234,-118.243683,2014-10-03
-9,2000 Orchard Street,Los Angeles,CA,90017,900,ABC Markets,2019,Food,34.052233,-118.243683,2013-05-04
-10,4791 Cimmaron Road,Los Angeles,CA,90017,900,Coffey's Market,2019,Services,34.052232,-118.243686,2010-09-01
-11,3898 Karen Lane,Los Angeles,CA,90017,900,Sky High Financial Advice,2019,Food,34.052231,-118.243686,2018-05-03
-12,3139 Marion Drive,Los Angeles,CA,90017,900,Planet Pizza,2019,,34.05223,-118.243686,2014-11-17
-13,1489 Drummond Street,Providence,RI,298,29,Sherman's,2019,,41.824,-71.4128,2019-01-25
-14,4827 Diamond Cove,Providence,RI,2908,29,Netcom Business Services,2019,,41.824,-71.4128,2019-07-29
-15,3489 Smith Road,Providence,RI,2909,29,House Of Denmark,2019,,41.824,-71.4128,2018-08-14
-16,873 Gladwell Street,Providence,RI,2910,29,Williams Bros.,2019,Services,41.824,-71.4128,2013-11-15
-17,925 George Avenue,Providence,RI,2911,29,Century House,2019,Food,41.825,-71.4125,2012-12-23
-18,1391 Elk Creek Road,Providence,RI,2912,29,Gamma Grays,2019,Services,41.825,-71.4125,2016-11-24
-19,993 Granville Lane,Providence,RI,2913,29,Express Merchant Service,2019,Food,41.825,-71.4125,2014-03-18
-20,3860 Mcwhorter Road,Providence,RI,2914,29,Steinberg's,2019,Services,41.825,-71.4125,2010-08-21
+id,street_address,City,state_abb,ZipCode,zip_3,name,year,BusinessType,latitude,longitude,date_founded,address_unparsed
+1,2125 Stark Hollow Road,Mountain View,CO,82939,829,,2019,Food,39.77568,-105.056127,8/1/2014,"2125 Stark Hollow Road, Mountain View, CO 82939"
+2,1909 Freshour Circle,Mountain View,CO,82939,829,Thriftway Food Mart,2019,Services,39.775686,-105.056127,8/28/2018,"1909 Freshour Circle, Mountain View, CO 82939"
+3,3413 Don Jackson Lane,Mountain View,CO,82939,829,Starship Tapes & Records,2019,Food,39.775692,-105.056127,10/17/2010,"3413 Don Jackson Lane, Mountain View, CO 82939"
+4,3860 Junior Avenue,Mountain View,CO,82939,829,Dun Rite Lawn Maintenance,2019,Services,39.775698,-105.056127,1/12/2016,"3860 Junior Avenue, Mountain View, CO 82939"
+5,4260 Farland Avenue,San Antonio,TX,78205,782,Buena Vista Realty Service,2019,Services,29.425,-98.493889,9/23/2012,"4260 Farland Avenue, San Antonio, TEX 78205"
+6,1164 Locust Court,Los Angeles,CA,90017,900,"10,000 Auto Parts",2019,Services,34.052236,-118.243683,1/15/2010,"1164 Locust Court, Los Angeles, CA 90017"
+7,299 Feathers Hooves Drive,Los Angeles,CA,90017,900,Avant Garde Interior Designs,2019,Services,34.052235,-118.243683,11/2/2013,"299 Feathers Hooves Drive, Los Angeles, CA 90017"
+8,2554 Jones Avenue,Los Angeles,CA,90017,900,Isaly's,2019,Services,34.052234,-118.243683,10/3/2014,"2554 Jones Avenue, Los Angeles, CA 90017"
+9,2000 Orchard Street,Los Angeles,CA,90017,900,ABC Markets,2019,Food,34.052233,-118.243683,5/4/2013,"2000 Orchard Street, Los Angeles, CA 90017"
+10,4791 Cimmaron Road,Los Angeles,CA,90017,900,Coffey's Market,2019,Services,34.052232,-118.243686,9/1/2010,"4791 Cimmaron Road, Los Angeles, CA 90017"
+11,3898 Karen Lane,Los Angeles,CA,90017,900,Sky High Financial Advice,2019,Food,34.052231,-118.243686,5/3/2018,"3898 Karen Lane, Los Angeles, CA 90017"
+12,3139 Marion Drive,Los Angeles,CA,90017,900,Planet Pizza,2019,,34.05223,-118.243686,11/17/2014,"3139 Marion Drive, Los Angeles, CA 90017"
+13,1489 Drummond Street,Providence,RI,298,29,Sherman's,2019,,41.824,-71.4128,1/25/2019,"1489 Drummond Street, Providence, RI 02980"
+14,4827 Diamond Cove,Providence,RI,2908,29,Netcom Business Services,2019,,41.824,-71.4128,7/29/2019,"4827 Diamond Cove, Providence, RI 02908"
+15,3489 Smith Road,Providence,RI,2909,29,House Of Denmark,2019,,41.824,-71.4128,8/14/2018,"3489 Smith Road, Providence, RI 02909"
+16,873 Gladwell Street,Providence,RI,2910,29,Williams Bros.,2019,Services,41.824,-71.4128,11/15/2013,"873 Gladwell Street, Providence, RI 02910"
+17,925 George Avenue,Providence,RI,2911,29,Century House,2019,Food,41.825,-71.4125,12/23/2012,"925 George Avenue, Providence, RI 02911"
+18,1391 Elk Creek Road,Providence,RI,2912,29,Gamma Grays,2019,Services,41.825,-71.4125,11/24/2016,"1391 Elk Creek Road, Providence, RI 02912"
+19,993 Granville Lane,Providence,RI,2913,29,Express Merchant Service,2019,Food,41.825,-71.4125,3/18/2014,"993 Granville Lane, Providence, RI 02913"
+20,3860 Mcwhorter Road,Providence,RI,2914,29,Steinberg's,2019,Services,41.825,-71.4125,8/21/2010,"3860 Mcwhorter Road, Providence, RI 02914"

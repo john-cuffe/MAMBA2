@@ -97,7 +97,6 @@ def get_stem_data(dataname):
                     logger.info('''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(p, dataname))
                     data[r][p]=data[r][p].astype(str).str.zfill(maxlen)
         # 2) Standardized via stemming any fuzzy matching variables
-        # pool=Pool(2)
         if ast.literal_eval(os.environ['stem_phrase'])==True:
             for var in fuzzy_vars:
                 ###first convert to all upper case
