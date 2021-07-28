@@ -42,7 +42,7 @@ from nltk.tokenize import RegexpTokenizer, sent_tokenize, word_tokenize
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 stemmer = PorterStemmer()
-
+import re
 
 prediction = ast.literal_eval(str(os.environ['prediction']))
 #trainingdata = str(os.environ['trainingdata'])
@@ -119,6 +119,19 @@ numWorkers=int(os.environ['numWorkers'])
 # logging.info('Blocks Used:')
 # for i in blocks:
 #     logging.info('{}'.format(i['block_name']))
+###import the blocks and variable types
+var_types = pd.read_csv('mamba_variable_types.csv').to_dict('record')
+blocks = pd.read_csv('block_names.csv').to_dict('record')
+###create the address_component_tag_mapping
+address_components = pd.read_csv('address_component_mapping.csv').to_dict('record')
+###makte the address component mapping.
+address_component_mapping={}
+for component in [add['address_component'] for add in address_components]:
+    if component in [block['block_name'] for block in blocks] or component in [var['variable_name'] for var in var_types]:
+        address_component_mapping[component] = component
+    else:
+        address_component_mapping[component] = 'address1'
+
 
 if __name__=='__main__':
     print('why did you do this?')
