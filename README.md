@@ -2,23 +2,23 @@ MAMBA2 User Guide
 
 # Table of Contents
 
-[Introduction 2](#_Toc77843885)
+[Introduction](#_Toc77843885)
 
-[Getting started 2](#_Toc77843886)
+[Getting started](#_Toc77843886)
 
-[System requirements 2](#_Toc77843887)
+[System requirements](#_Toc77843887)
 
-[Getting MAMBA 2](#_Toc77843888)
+[Getting MAMBA](#_Toc77843888)
 
-[What Does MAMBA do? 2](#_Toc77843889)
+[What Does MAMBA do?](#_Toc77843889)
 
-[MAMBA Files 2](#_Toc77843890)
+[MAMBA Files](#_Toc77843890)
 
-[/data/\*data1_name\*.csv 2](#_Toc77843891)
+[/data/\*data1_name\*.csv](#_Toc77843891)
 
-[/data/\*data2_name\*.csv 2](#_Toc77843892)
+[/data/\*data2_name\*.csv](#_Toc77843892)
 
-[Block_names.csv 2](#_Toc77843893)
+[Block_names.csv](#_Toc77843893)
 
 # Introduction
 
@@ -38,7 +38,7 @@ Download from our GitHub repo, [https://github.com/john-cuffe/MAMBA2](https://gi
 
 MAMBA is going to match two datafiles. You can call them whatever you want, and save the names of the .csv files (without the .csv ending) in the run_Match.bash file as data1_name and data2_name respectively. This .bash file will then feed these names through all of the subsequent programs.
 
-MAMBA Files
+##MAMBA Files (#_Toc77843890)
 
 ### /data/\*data1_name\*.csv
 
