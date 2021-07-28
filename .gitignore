@@ -15,3 +15,9 @@ setup_envs_python.py
 *.csv
 setup_envs_python.py
 mamba_test_log
+programs/address_standardizer/comparator.py
+programs/address_standardizer/basicMatch.py
+programs/address_standardizer/basicMatch.py
+programs/address_standardizer/amgScore.py
+programs/address_standardizer/test.py
+programs/address_standardizer/standardizer_copy.py
