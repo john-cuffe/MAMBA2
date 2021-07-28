@@ -2,23 +2,18 @@ MAMBA2 User Guide
 
 # Table of Contents
 
-[Introduction](#_Toc77843885)
+[Introduction]Introduction
 
-[Getting started](#_Toc77843886)
+[Getting started]Getting started
 
-[System requirements](#_Toc77843887)
+[System requirements]System requirements
 
-[Getting MAMBA](#_Toc77843888)
+[Getting MAMBA]Getting MAMBA
 
-[What Does MAMBA do?](#_Toc77843889)
+[What Does MAMBA do?]What Does MAMBA do?
 
-[MAMBA Files](#_Toc77843890)
+[MAMBA Files]MAMBA Files
 
-[/data/\*data1_name\*.csv](#_Toc77843891)
-
-[/data/\*data2_name\*.csv](#_Toc77843892)
-
-[Block_names.csv](#_Toc77843893)
 
 # Introduction
 
