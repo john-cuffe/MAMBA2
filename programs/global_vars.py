@@ -49,6 +49,9 @@ from programs.config import *
 CONFIG = {}
 read_properties('mamba.properties', CONFIG)
 
+import datetime as dt
+CONFIG['date']=dt.datetime.now().date().strftime("%Y_%m_%d")
+
 
 prediction = ast.literal_eval(str(CONFIG['prediction']))
 #trainingdata = str(CONFIG['trainingdata'])

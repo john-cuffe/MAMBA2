@@ -4,7 +4,6 @@ from programs.match_helpers import *
 from programs.logger_setup import *
 logger=logger_setup(CONFIG['log_file_name'])
 import datetime as dt
-CONFIG['date']=dt.datetime.now().date().strftime("%Y_%m_%d")
 ###actuaion function
 if __name__=='__main__':
     ###create the database

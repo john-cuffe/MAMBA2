@@ -6,6 +6,7 @@ This is a list of helper functions to create our database
 from programs.global_vars import *
 from programs.logger_setup import *
 import usaddress as usadd
+from programs.address_standardizer.standardizer import *
 logger=logger_setup(CONFIG['log_file_name'])
 def intersect(x0, x1, y0, y1):
     '''
@@ -61,6 +62,13 @@ def get_stem_data(dataname):
         if len(date_columns) > 0:
             for date_col in date_columns:
                 data[date_col]=pd.to_datetime(data[date_col], format=CONFIG['date_format']).dt.strftime('%Y-%m-%d')
+        ####If we have addresses to standardize, do so
+        ###ID from config
+        ####If we have addresses to standardize for the data source
+        if dataname in CONFIG['address_to_standardize'].keys():
+            cols = CONFIG['address_to_standardize'][dataname].split(',')
+            for col in cols:
+                data[col] = data[col].apply(lambda x: standardize(x, 'n'))
         data['matched'] = 0
         if 'full' in [b['block_name'] for b in blocks]:
             data['full']=1

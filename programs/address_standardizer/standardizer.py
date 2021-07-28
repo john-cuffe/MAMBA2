@@ -232,7 +232,7 @@ def standardize(address, code = "a"):
             substituted["WS"] = substituted["WSDESC1"]
         else:
             substituted["WS"] =" ".join([substituted["WSDESC1"], substituted["WSID1"]])
-    return ' '.join([substituted[key] for key in substituted.keys()])
+    return ' '.join([str(substituted[key]) for key in substituted.keys()])
 
 # if __name__== '__main__':
 #     """

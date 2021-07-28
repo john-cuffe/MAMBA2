@@ -17,17 +17,6 @@ def logger_setup(log_file):
     #if write_log_to_db==False:
     logging.basicConfig(filename=log_file, format=LOGGING_FORMAT, filemode='a')
     # # Handler for outputing to db
-    # if write_log_to_db:
-    #     # The handler decrpyts now
-    #     # if USE_AES:
-    #     #     aesc = AESCipher(os.environ['MOJO_KEY'])
-    #     #     password = aesc.decrypt(CONFIG['password'])
-    #     # else:
-    #     #     password = CONFIG['password']
-    #     ####ALWAYS LOG TO HERMES_CENTRAL
-    #     psqlLoggingHandler = postgresqlLoggingHandler({'host':CONFIG['host'], 'user': CONFIG['user'], 'password': CONFIG['password'], 'database':CONFIG['dbname'],'search_path':'hermes_central','batch_id':batch_id})
-    #     root.addHandler(psqlLoggingHandler)
-    #     #logging._addHandlerRef(psqlLoggingHandler)
 
     root.setLevel(logging.INFO)
 
