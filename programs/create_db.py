@@ -27,15 +27,15 @@ from programs.create_db_helpers import *
 from programs.general_helpers import *
 from programs.connect_sqlite import *
 ###Set data and program paths
-outputPath=os.environ['outputPath']
+outputPath=CONFIG['outputPath']
 
 ##debugmode will run on a 1% sample of each side of the data
-debugmode = ast.literal_eval(str(os.environ['debugmode']))
+debugmode = ast.literal_eval(str(CONFIG['debugmode']))
 
 ###get the list of blocks we are looking for
-blocks=get_block_variable_list(os.environ['block_file_name'])
+blocks=get_block_variable_list(CONFIG['block_file_name'])
 
 if __name__ == '__main__':
     logging.info('Date Time: {0}'.format(date))
-    createDatabase(os.environ['db_name'])
+    createDatabase(CONFIG['db_name'])
 

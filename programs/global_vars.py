@@ -27,7 +27,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_selection import chi2, SelectKBest, RFECV
-from sklearn.preprocessing import Imputer
+#from sklearn.preprocessing import Imputer
 from sklearn.feature_selection import VarianceThreshold
 from sklearn.metrics import roc_curve
 from sklearn import metrics as metrics
@@ -43,17 +43,23 @@ from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 stemmer = PorterStemmer()
 import re
+####Load the CONFIG
+##get properties
+from programs.config import *
+CONFIG = {}
+read_properties('mamba.properties', CONFIG)
 
-prediction = ast.literal_eval(str(os.environ['prediction']))
-#trainingdata = str(os.environ['trainingdata'])
-#clericalreview = ast.literal_eval(str(os.environ['clericalreview']))
-if ast.literal_eval(os.environ['use_logit'])==True:
+
+prediction = ast.literal_eval(str(CONFIG['prediction']))
+#trainingdata = str(CONFIG['trainingdata'])
+#clericalreview = ast.literal_eval(str(CONFIG['clericalreview']))
+if ast.literal_eval(CONFIG['use_logit'])==True:
     scoringcriteria='accuracy'
 else:
-    scoringcriteria = str(os.environ['scoringcriteria'])
+    scoringcriteria = str(CONFIG['scoringcriteria'])
 
 
-debug = ast.literal_eval(str(os.environ['debugmode']))
+debug = ast.literal_eval(str(CONFIG['debugmode']))
 logging.info('Scoring Criteria: {0}'.format(scoringcriteria))
 logging.info('Debug Mode? {0}'.format(debug))
 
@@ -67,8 +73,8 @@ from inspect import getmembers, isfunction
 ############
 ###CHUNK: SET DATA AND PROGRAM PATH, TIME, AND IMPORT FEBRL
 ############
-inputPath = os.environ['inputPath']
-outputPath=os.environ['outputPath']
+inputPath = CONFIG['inputPath']
+outputPath=CONFIG['outputPath']
 ##Check if it ends in a /, if it does, leave it, otherwise add a /
 if inputPath[-1:] == '/':
     inputPath = inputPath
@@ -96,7 +102,7 @@ methods = [feb.jaro, feb.winkler, feb.bagdist, feb.seqmatch, feb.qgram2, feb.qgr
 namelist = [i.__name__ for i in methods]
 ##date and time
 date = dt.datetime.now().date()
-numWorkers=int(os.environ['numWorkers'])
+numWorkers=int(CONFIG['numWorkers'])
 # Open log file
 # logging.basicConfig(filename=outputPath + 'br_match_log{}.log'.format(date), level=logging.DEBUG)
 # ############
@@ -109,13 +115,13 @@ numWorkers=int(os.environ['numWorkers'])
 # logging.info('############################')
 #
 # logging.info('\n\n###### PARAMS ######\n\n')
-# #logging.info('Number of workers: {0}'.format(os.environ['numWorkers']))
-# #logging.info('Number of CPUs: {0}'.format(os.environ['numcpus']))
-# #logging.info('Memory Usage: {0}'.format(os.environ['memusage']))
+# #logging.info('Number of workers: {0}'.format(CONFIG['numWorkers']))
+# #logging.info('Number of CPUs: {0}'.format(CONFIG['numcpus']))
+# #logging.info('Memory Usage: {0}'.format(CONFIG['memusage']))
 #
 #
 # ###get the list of blocks we are looking for
-# blocks=get_block_variable_list(os.environ['block_file_name'])
+# blocks=get_block_variable_list(CONFIG['block_file_name'])
 # logging.info('Blocks Used:')
 # for i in blocks:
 #     logging.info('{}'.format(i['block_name']))
