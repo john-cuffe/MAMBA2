@@ -7,7 +7,7 @@ from programs.global_vars import *
 from copy import deepcopy as dcpy
 import copy
 from programs.logger_setup import *
-logger=logger_setup(os.environ['log_file_name'])
+logger=logger_setup(CONFIG['log_file_name'])
 
 ##Run the Classifier
 def runRFClassifier(y, X, nT, nE, mD):
@@ -139,20 +139,20 @@ def create_scores(input_data, score_type, varlist):
     SO YOU HAVE TO SINGLE-THREAD THE CALCULATIONS, SO THE WHOLE THING IS SINGLE-THREADED
     return: an array of values for each pair to match/variable and a list of headers
     '''
-    db=get_connection_sqlite(os.environ['db_name'])
+    db=get_connection_sqlite(CONFIG['db_name'])
     if score_type=='fuzzy':
-        data1_ids=','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
-        data2_ids=','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
+        data1_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+        data2_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###create an indexed list of the id pairs to serve as the core of our dictionary
         input_data=dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
-        core_dict=input_data[['index','{}_id'.format(os.environ['data1_name']),'{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        core_dict=input_data[['index','{}_id'.format(CONFIG['data1_name']),'{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
         ###now get the values from the database
-        data1_names=','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
-        data2_names=','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
+        data1_names=','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names=','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
-        data1_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names, table_name=os.environ['data1_name'], id_list=data1_ids), db)
-        data2_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names, table_name=os.environ['data2_name'], id_list=data2_ids), db)
+        data1_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names, table_name=CONFIG['data1_name'], id_list=data1_ids), db)
+        data2_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names, table_name=CONFIG['data2_name'], id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']):item for item in data1_values}
         data2_values = {str(item['id']):item for item in data2_values}
@@ -165,10 +165,10 @@ def create_scores(input_data, score_type, varlist):
             i_scores=[]
             for j in range(len(fuzzy_var_list)):
                 for k in methods:
-                    if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][fuzzy_var_list[j]]!='NULL' and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][fuzzy_var_list[j]]!='NULL':
+                    if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][fuzzy_var_list[j]]!='NULL' and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][fuzzy_var_list[j]]!='NULL':
                         ####Two null match methods: either they get a 0 or the median value for the chunk
                         try:
-                            i_scores.append(k(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][fuzzy_var_list[j]], data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][fuzzy_var_list[j]]))
+                            i_scores.append(k(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][fuzzy_var_list[j]], data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][fuzzy_var_list[j]]))
                         except:
                             i_scores.append(np.nan)
                         ###other method can go here if we think of one
@@ -180,17 +180,17 @@ def create_scores(input_data, score_type, varlist):
     elif score_type=='numeric_dist':
         ###numeric distance variables
         data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
+            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
+            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
+        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=os.environ['data1_name'],id_list=data1_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=CONFIG['data1_name'],id_list=data1_ids), db)
         data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=os.environ['data2_name'],id_list=data2_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=CONFIG['data2_name'],id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
@@ -198,7 +198,7 @@ def create_scores(input_data, score_type, varlist):
         ###create an indexed list of the id pairs to serve as the core of our dictionary
         input_data = dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(os.environ['data1_name']), '{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
         numeric_distance_vars = [i['variable_name'] for i in varlist]
         ##convert fuzzy vars to a list
         ###now create the dictionary with the list of names and the array
@@ -207,8 +207,8 @@ def create_scores(input_data, score_type, varlist):
             ###
             i_scores = []
             for j in range(len(numeric_distance_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][numeric_distance_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][numeric_distance_vars[j]]:
-                    i_scores.append(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][numeric_distance_vars[j]]-data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][numeric_distance_vars[j]])
+                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][numeric_distance_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][numeric_distance_vars[j]]:
+                    i_scores.append(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][numeric_distance_vars[j]]-data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][numeric_distance_vars[j]])
                 else:
                     i_scores.append(np.nan)
             out_arr[i,] = i_scores
@@ -217,17 +217,17 @@ def create_scores(input_data, score_type, varlist):
     elif score_type=='exact':
         ###If we are running a training data model
         data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
+            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
+            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
+        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=os.environ['data1_name'],id_list=data1_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=CONFIG['data1_name'],id_list=data1_ids), db)
         data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=os.environ['data2_name'],id_list=data2_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=CONFIG['data2_name'],id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
@@ -235,7 +235,7 @@ def create_scores(input_data, score_type, varlist):
         ###create an indexed list of the id pairs to serve as the core of our dictionary
         input_data = dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(os.environ['data1_name']), '{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
         exact_vars = [i['variable_name'] for i in varlist]
         ##convert fuzzy vars to a list
         ###now create the dictionary with the list of names and the array
@@ -243,7 +243,7 @@ def create_scores(input_data, score_type, varlist):
         for i in range(len(core_dict)):
             i_scores = []
             for j in range(len(exact_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]] and str(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][exact_vars[j]]).upper()==str(data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][exact_vars[j]]).upper():
+                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]] and str(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]]).upper()==str(data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]]).upper():
                     i_scores.append(1)
                 else:
                     i_scores.append(0)
@@ -251,20 +251,20 @@ def create_scores(input_data, score_type, varlist):
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': exact_vars}
     elif score_type=='geo_distance':
-        data1_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
+        data1_ids = ','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+        data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
         ###get the values
-        data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=os.environ['data1_name'], id_list=data1_ids), db)
-        data2_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=os.environ['data2_name'],id_list=data2_ids), db)
+        data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data1_name'], id_list=data1_ids), db)
+        data2_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data2_name'],id_list=data2_ids), db)
         input_data = dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(os.environ['data1_name']), '{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
         out_arr = np.zeros(shape=(len(core_dict), 1))
         null_count=0
         for i in range(len(core_dict)):
-            data1_target=[k for k in data1_values if str(k['id'])==str(core_dict[i]['{}_id'.format(os.environ['data1_name'])])][0]
-            data2_target=[k for k in data2_values if str(k['id'])==str(core_dict[i]['{}_id'.format(os.environ['data2_name'])])][0]
+            data1_target=[k for k in data1_values if str(k['id'])==str(core_dict[i]['{}_id'.format(CONFIG['data1_name'])])][0]
+            data2_target=[k for k in data2_values if str(k['id'])==str(core_dict[i]['{}_id'.format(CONFIG['data2_name'])])][0]
             if data1_target['latitude'] is not None and data1_target['longitude'] is not None and data2_target['latitude'] is not None and data2_target['longitude'] is not None:
                     out_arr[i]=haversine(tuple([data1_target['latitude'],data1_target['longitude']]),
                                   tuple([data2_target['latitude'], data2_target['longitude']]))
@@ -275,17 +275,17 @@ def create_scores(input_data, score_type, varlist):
     elif score_type=='date':
         ###If we are running a training data model
         data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data1_name'])].drop_duplicates().tolist())
+            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(os.environ['data2_name'])].drop_duplicates().tolist())
+            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[os.environ['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[os.environ['data2_name']], i['variable_name']) for i in varlist])
+        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=os.environ['data1_name'],id_list=data1_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=CONFIG['data1_name'],id_list=data1_ids), db)
         data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=os.environ['data2_name'],id_list=data2_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=CONFIG['data2_name'],id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
@@ -293,7 +293,7 @@ def create_scores(input_data, score_type, varlist):
         ###create an indexed list of the id pairs to serve as the core of our dictionary
         input_data = dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(os.environ['data1_name']), '{}_id'.format(os.environ['data2_name'])]].to_dict('record')
+        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
         date_vars = [i['variable_name'] for i in varlist]
         ##convert fuzzy vars to a list
         ###now create the dictionary with the list of names and the array
@@ -301,10 +301,10 @@ def create_scores(input_data, score_type, varlist):
         for i in range(len(core_dict)):
             i_scores = []
             for j in range(len(date_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][date_vars[j]] and data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][date_vars[j]] :
+                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][date_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][date_vars[j]] :
                     i_scores.append(
-                        feb.editdist(data1_values[core_dict[i]['{}_id'.format(os.environ['data1_name'])]][date_vars[j]],
-                          data2_values[core_dict[i]['{}_id'.format(os.environ['data2_name'])]][date_vars[j]]))
+                        feb.editdist(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][date_vars[j]],
+                          data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][date_vars[j]]))
                 else:
                     i_scores.append(0)
             out_arr[i,] = i_scores
@@ -425,7 +425,7 @@ def generate_rf_mod(truthdat):
     y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
     features_per_tree = ['sqrt', 'log2']
-    rf = RandomForestClassifier(n_jobs=int(os.environ['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
+    rf = RandomForestClassifier(n_jobs=int(CONFIG['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
     myparams = {
         'n_estimators': sp_randint(1, 25),
         'max_features': features_per_tree,
@@ -601,7 +601,7 @@ def choose_model(truthdat):
     :param truthdat:
     :return:
     '''
-    if ast.literal_eval(os.environ['use_logit'])==True:
+    if ast.literal_eval(CONFIG['use_logit'])==True:
         logit=generate_logit(truthdat)
     else:
         logit={'score':0}
@@ -640,16 +640,16 @@ def match_fun(arg):
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
     if arg['logging_flag']!=-1:
         logger.info('{}% complete with block'.format(arg['logging_flag']))
-    db=get_connection_sqlite(os.environ['db_name'], timeout=1)
+    db=get_connection_sqlite(CONFIG['db_name'], timeout=1)
     ###get the two dataframes
-    data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data1_name'], arg['block_info'][os.environ['data1_name']], arg['target']), db)
-    data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(os.environ['data2_name'], arg['block_info'][os.environ['data2_name']], arg['target']), db)
+    data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
+    data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
     ###get the data
     ###If we are running in deduplication mode, take only the input records that the IDs don't match
-    if ast.literal_eval(os.environ['ignore_duplicate_ids'])==True:
-        input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
+    if ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True:
+        input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
     else:
-        input_data = pd.DataFrame([{'{}_id'.format(os.environ['data1_name']): str(k['id']),'{}_id'.format(os.environ['data2_name']): str(y['id'])} for k in data1 for y in data2])
+        input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2])
     ####Now get the data organized, by creating an array of the different types of variables
     if len(input_data)==0:
         logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
@@ -699,22 +699,22 @@ def match_fun(arg):
         del data2
         input_data['predicted_probability']=myprediction
         ###keep only the data above the certain thresholds
-        if ast.literal_eval(os.environ['clerical_review_candidates'])==True:
-            keep_thresh=min(float(os.environ['clerical_review_threshold']),float(os.environ['match_threshold']))
+        if ast.literal_eval(CONFIG['clerical_review_candidates'])==True:
+            keep_thresh=min(float(CONFIG['clerical_review_threshold']),float(CONFIG['match_threshold']))
         else:
-            keep_thresh=float(os.environ['match_threshold'])
+            keep_thresh=float(CONFIG['match_threshold'])
         input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh].to_dict('record')
         if len(input_data) > 0:
             ###try to write to db, if not return and then we will dump later
             cur=db.cursor()
              ####if we are looking for clerical review candidates, push either all the records OR a 10% sample, depending on which is larger
             clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
-                os.environ['data1_name'], os.environ['data2_name'])
+                CONFIG['data1_name'], CONFIG['data2_name'])
             match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
-                data1=os.environ['data1_name'], data2=os.environ['data2_name'])
+                data1=CONFIG['data1_name'], data2=CONFIG['data2_name'])
             ###setup the to_return
             to_return={}
-            if ast.literal_eval(os.environ['clerical_review_candidates']) == True:
+            if ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
                 if len(input_data) >= 10:
                     clerical_review_dict = dcpy(random.sample(input_data,int(np.round(.3*len(input_data),0))))
                 else:
@@ -729,16 +729,16 @@ def match_fun(arg):
                     cur=db.cursor()
                     to_return['clerical_review_candidates']=input_data
                 ###if it's a chatty logger, log.
-                if ast.literal_eval(os.environ['chatty_logger']) == True:
+                if ast.literal_eval(CONFIG['chatty_logger']) == True:
                     logger.info('''{} clerical review candidates added'''.format(len(clerical_review_dict)))
             ####Now add in any matches
             matches = pd.DataFrame(
-                [i for i in input_data if i['predicted_probability'] >= float(os.environ['match_threshold'])])
+                [i for i in input_data if i['predicted_probability'] >= float(CONFIG['match_threshold'])])
             if len(matches) > 0:
                 ###ranks
-                matches['{}_rank'.format(os.environ['data1_name'])] = matches.groupby('{}_id'.format(os.environ['data1_name']))[
+                matches['{}_rank'.format(CONFIG['data1_name'])] = matches.groupby('{}_id'.format(CONFIG['data1_name']))[
                     'predicted_probability'].rank('dense')
-                matches['{}_rank'.format(os.environ['data2_name'])] = matches.groupby('{}_id'.format(os.environ['data2_name']))[
+                matches['{}_rank'.format(CONFIG['data2_name'])] = matches.groupby('{}_id'.format(CONFIG['data2_name']))[
                     'predicted_probability'].rank('dense')
                 ##convert back to dict
                 matches = matches.to_dict('record')
@@ -747,7 +747,7 @@ def match_fun(arg):
                 try:
                     cur.executemany(match_sql, vals)
                     db.commit()
-                    if ast.literal_eval(os.environ['chatty_logger']) == True:
+                    if ast.literal_eval(CONFIG['chatty_logger']) == True:
                         logger.info('''{} matches added in block'''.format(len(matches)))
                 except Exception:
                     to_return['matches']=matches
@@ -768,10 +768,10 @@ def run_block(block, rf_mod):
     :return:
     '''
     ####First get the blocks that appear in both
-    db=get_connection_sqlite(os.environ['db_name'])
-    data1_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[os.environ['data1_name']], os.environ['data1_name']), db)
+    db=get_connection_sqlite(CONFIG['db_name'])
+    data1_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data1_name']], CONFIG['data1_name']), db)
     data1_blocks=[i['block'] for i in data1_blocks]
-    data2_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[os.environ['data2_name']], os.environ['data2_name']), db)
+    data2_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data2_name']], CONFIG['data2_name']), db)
     data2_blocks=[i['block'] for i in data2_blocks]
     block_list=intersection(data1_blocks, data2_blocks)
     logger.info('We have {} blocks to run for {}'.format(len(block_list), block['block_name']))
@@ -798,13 +798,13 @@ def run_block(block, rf_mod):
     out=pool.map(match_fun, arg_list)
     ###Once that is done, need to
     ##push the remaining items in out to the db
-    db=get_connection_sqlite(os.environ['db_name'])
+    db=get_connection_sqlite(CONFIG['db_name'])
     cur=db.cursor()
     logger.info('Dumping remaining matches to DB')
     clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
-        os.environ['data1_name'], os.environ['data2_name'])
+        CONFIG['data1_name'], CONFIG['data2_name'])
     match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
-        data1=os.environ['data1_name'], data2=os.environ['data2_name'])
+        data1=CONFIG['data1_name'], data2=CONFIG['data2_name'])
     for i in out:
         if i!=None:
             if 'clerical_review_candidates' in i.keys():
@@ -818,8 +818,8 @@ def run_block(block, rf_mod):
     db.commit()
     ##then change the matched flags on the data tables to 1 where it's been matched
     ###updating the matched flags
-    cur.execute('''update {data1_name} set matched=1 where id in (select distinct {data1_name}_id from matched_pairs)'''.format(data1_name=os.environ['data1_name']))
-    cur.execute('''update {data2_name} set matched=1 where id in (select distinct {data2_name}_id from matched_pairs)'''.format(data2_name=os.environ['data2_name']))
+    cur.execute('''update {data1_name} set matched=1 where id in (select distinct {data1_name}_id from matched_pairs)'''.format(data1_name=CONFIG['data1_name']))
+    cur.execute('''update {data2_name} set matched=1 where id in (select distinct {data2_name}_id from matched_pairs)'''.format(data2_name=CONFIG['data2_name']))
     db.commit()
     db.close()
     logger.info('Block {} Complete'.format(block['block_name']))
