@@ -132,7 +132,7 @@ numWorkers=int(CONFIG['numWorkers'])
 var_types = pd.read_csv('mamba_variable_types.csv').to_dict('record')
 blocks = pd.read_csv('block_names.csv').to_dict('record')
 ###create the address_component_tag_mapping
-address_components = pd.read_csv('address_component_mapping.csv').to_dict('record')
+address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('record')
 ###makte the address component mapping.
 address_component_mapping={}
 for component in [add['address_component'] for add in address_components]:
