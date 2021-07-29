@@ -2,25 +2,22 @@ MAMBA2 User Guide
 
 # Table of Contents
 
-[Introduction]Introduction
+[Introduction](#Introduction)
 
-[Getting started]Getting started
+[Getting started](#Getting-started)
 
-[System requirements]System requirements
+[What Does MAMBA do?](#WhatDoesMAMBAdo)
 
-[Getting MAMBA]Getting MAMBA
-
-[What Does MAMBA do?]What Does MAMBA do?
-
-[MAMBA Files]MAMBA Files
+[MAMBA Files](#MAMBAFiles)
 
 
 # Introduction
 
-MAMBA 2 represents a substantial improvement in the flexibility and scalability of the original MAMBA, enabling the use on datasets beyond the Census&#39; Business Register, using Natural Language Processing techniques to stem and clean textual data, and allow for comparisons of different match metrics in the same model. It also selects the best performing model from a list of Machine Learning algorithms.
+MAMBA2 represents a substantial improvement in the flexibility and scalability of the original MAMBA, enabling the use on datasets beyond the Census&#39; Business Register, using Natural Language Processing techniques to stem and clean textual data, and allow for comparisons of different match metrics in the same model. It also selects the best performing model from a list of Machine Learning algorithms.
 
 ## Getting started
-
+ <a name="Getting-started"/>
+ 
 System requirements:
 
 Python 3.7
@@ -30,10 +27,13 @@ Getting MAMBA:
 Download from our GitHub repo, [https://github.com/john-cuffe/MAMBA2](https://github.com/john-cuffe/MAMBA2)
 
 ### What Does MAMBA do?
+ <a name="#WhatDoesMAMBAdo"/>
 
 MAMBA is going to match two datafiles. You can call them whatever you want, and save the names of the .csv files (without the .csv ending) in the run_Match.bash file as data1_name and data2_name respectively. This .bash file will then feed these names through all of the subsequent programs.
 
-##MAMBA Files (#_Toc77843890)
+##MAMBA Files
+ <a name="#MAMBAFiles"/>
+
 
 ### /data/\*data1_name\*.csv
 
