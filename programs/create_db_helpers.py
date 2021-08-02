@@ -3,7 +3,7 @@
 '''
 This is a list of helper functions to create our database
 '''
-from programs.global_vars import *
+import programs.global_vars as global_vars
 from programs.logger_setup import *
 import usaddress as usadd
 from programs.address_standardizer.standardizer import *
@@ -44,9 +44,9 @@ def get_stem_data(dataname):
     output=[]
     # the the fuzzy matches
     ###dictionary to read all blocks as strings
-    str_dict={item[dataname]:str for item in blocks}
+    str_dict={item[dataname]:str for item in global_vars.blocks}
     ###Get list of the fuzzy variables
-    fuzzy_vars = [i[dataname] for i in var_types if i['match_type'].lower() == 'fuzzy']
+    fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']
     ###add address1 if we are using the remaining parsed addresses
     if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
         ###append the address 1 to the fuzzy vars
@@ -58,7 +58,7 @@ def get_stem_data(dataname):
         csvname='{}/{}.csv'.format(CONFIG['inputPath'], dataname)
     for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c',dtype=str_dict):
         ###If we have a date variable, find it and convert to a date
-        date_columns=[i[dataname] for i in var_types if i['match_type']=='date']
+        date_columns=[i[dataname] for i in global_vars.var_types if i['match_type']=='date']
         if len(date_columns) > 0:
             for date_col in date_columns:
                 data[date_col]=pd.to_datetime(data[date_col], format=CONFIG['date_format']).dt.strftime('%Y-%m-%d')
@@ -70,7 +70,7 @@ def get_stem_data(dataname):
             for col in cols:
                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
         data['matched'] = 0
-        if 'full' in [b['block_name'] for b in blocks]:
+        if 'full' in [b['block_name'] for b in global_vars.blocks]:
             data['full']=1
         ###convert to dictionary
         data = data.to_dict('record')
@@ -80,20 +80,26 @@ def get_stem_data(dataname):
         if ast.literal_eval(CONFIG['parse_address'])==True:
             ###For each row, parse the address
             for row in data:
-                parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]], tag_mapping=address_component_mapping)
-                for parsed_block in [v for v in blocks if v['parsed_block']==1]:
+                parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]], tag_mapping=global_vars.address_component_mapping)
+                for parsed_block in [v for v in global_vars.blocks if v['parsed_block']==1]:
                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
                         row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][0:int(parsed_block['block_name'][-1])]
                     else:
                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
-                for variable in [var for var in var_types if var['parsed_variable']==1]:
-                    row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
+                for variable in [var for var in global_vars.var_types if var['parsed_variable']==1]:
+                    if variable['variable_name'] in parsed_address[0].keys():
+                        row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
+                    else:
+                        row[variable['variable_name']] = None
                 if ast.literal_eval(CONFIG['use_remaining_parsed_address'])==True:
-                    row['address1'] = parsed_address[0]['address1']
+                    if 'address1' in parsed_address[0].keys():
+                        row['address1'] = parsed_address[0]['address1']
+                    else:
+                        row['address1'] = None
         for p in fuzzy_vars:
             for r in range(len(data)):
                 ###fill in NULL for the fuzzy vars
-                if pd.isna(data[r][p]):
+                if pd.isna(data[r][p]) or data[r][p] is None:
                     data[r][p] = 'NULL'
                 data[r][p] = str(data[r][p]).upper()
                 if 'zip' in p.lower():
@@ -138,8 +144,7 @@ def createDatabase(databaseName):
         ####now index the tables
         db=get_connection_sqlite(databaseName)
         cur=db.cursor()
-        blocks=pd.read_csv('block_names.csv').to_dict('record')
-        for i in blocks:
+        for i in global_vars.blocks:
             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source], source=data_source))
         ###additional index on id
         cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))

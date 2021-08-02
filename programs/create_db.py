@@ -23,6 +23,7 @@ from sqlalchemy import create_engine
 import nltk
 import sklearn.feature_extraction.text as txt
 import itertools as it
+from programs.global_vars import *
 from programs.create_db_helpers import *
 from programs.general_helpers import *
 from programs.connect_sqlite import *

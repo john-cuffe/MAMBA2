@@ -204,7 +204,7 @@ def standardize(address, code = "a"):
     if code not in ["a", "r", "n"]:
         raise InputError("code must be a (append), r (replace), or n (none)")
     # make case insensitive, apply usaddress parsing
-    tagged = usaddress.tag(address.upper(), label_mappings)
+    tagged = usaddress.tag(str(address).upper(), label_mappings)
     tagged = tagged[0]
     # remove punctuation from results (not removed beforehand, as punctuation can affect parsing)
     stripped = {label: words if label == 'HN' else \
