@@ -49,7 +49,7 @@ This file is going to tell MAMBA which variables in your dataset serve as &#39;b
 
 #### Variables:
 
-    - rder: which order (1 being the lowest level) you want the blocks run in. If a record on a dataset is matched in a block, it is not examined in any subsequent blocks.
+    - order: which order (1 being the lowest level) you want the blocks run in. If a record on a dataset is matched in a block, it is not examined in any subsequent blocks.
     - block_name: A naming convention for the block.
     - \*data1_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the block in the first dataset you wish to match
     - \*data2_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the block in the second dataset you wish to match.
@@ -86,7 +86,7 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
 
 ![plot](./Documentation/figure_2_variable_names.png)
 
-_NOTE ON PARSED VARIABLES:_
+#### NOTE ON PARSED VARIABLES:
 
 - Ensure that variable_name, \*data1_name\* and \*data2_name\* are all filled out with the exact address_component from _address_component_matching.csv_ or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/)
 
@@ -102,13 +102,18 @@ This is the actual .bash file you need to edit to run MAMBA. Edit the following 
 
 #### Variables:
 
+    - batch_id
+      - This is a unique identifier for the batch.
     - Data1_name
       - The name of the first dataset. Exclude the &#39;.csv&#39; ending.
     - data2_name
       - The name of the second dataset. Exclude the &#39;.csv&#39; ending.
+    - db_flavor
+      - The 'flavor' of sql database.  Current options: sqlite, postgres.
+        - NOTE: if using postgres, ensure you have the correct db_host, db_port, db_user, and db_password in the mamba.properties file
     - db_name
       - The name you want to give your database. Exclude the &#39;.db. ending
-    - utputPath:
+    - outputPath:
       - The output directory you want to use
     - Debugmode
       - True/False that skips the majority of matches if used. Set to False
@@ -153,6 +158,10 @@ This is the actual .bash file you need to edit to run MAMBA. Edit the following 
       - The name of the address column to parse in the \*data2_name\* csv file
     - Use_remaining_parsed_address:
       - Do you want to use any remaining address information beyond what is specified as a variable or a block.
+    - Use_custom_model:
+      - Do you have a custom matching model you want to run? See Custom Models for details
+    - Imputation_method:
+      - Either 'Nominal' or 'Imputer'.  See Imputation Methods below for details
 
 ## Parsing Addresses
 
@@ -165,7 +174,30 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
       - In your mamba_variable_types file, enter in any variables you want and the type of match, using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the variable_name and the columns with the corresponding name for your datasets (Columns B and C). Indicate any parsed variables with a 1 in the parsed_variable column.
       - In your _block_names.csv_ file, indicate any parsed blocks and their order you want to use using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the block_name and the columns with the corresponding name for your datasets (Columns C and D). Indicate any parsed variables with a 1 in the parsed_block column.
 
-_Using the use_remaining_parsed_address feature_.
+#### Using the use_remaining_parsed_address feature
 
   - While parsing addresses, users may not want to compare multiple strings, but rather only identify some components of a parsed address to use as blocks or strings. This function allows any remainder to be used as a fuzzy variable.
   - For example, imagine parsing the address &#39;123 Main Street SW Apartment 1, Anytown, AS, 12345&#39;. If we wanted to match using city, state, and zip as blocks and include the address number as its own variable, MAMBA would remove those features from the string but leave &quot;Main Street SW Apartment 1&quot; as a string, which itself contains valuable information. Leaving the _use_remaining_parsed_address_ feature as &#39;True&#39; tells MAMBA to create a new fuzzy variable to use in the model based on all of the address components _not otherwise used as a block or a separate variable_.
+ 
+#### Custom Matching Models
+ <a name="custom_models"/>
+ 
+  - Users may wish to user their own custom matching model in addition to those available in MAMBA.  
+  - If so, user must enter a fully self-contained function in _custom_matching_function.py_ to run, as well as set the custom_matching function in _mamba.properties_ to True.
+  - Currently, this model will be compared to the standard suite of matching models available to MAMBA, but future iterations will allow users to replace the MAMBA models completely.
+
+#### Imputation Methods
+ <a name="imputation_methods"/>
+  - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of _mamba.properties_.
+    - Imputer:
+      - With this option, any missing values for 'fuzzy' or 'numeric distance' variables are replaced iterative imputer.  See the [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) for futher details.
+        - While this option is easy to implement, it may result in non-sensical outcomes or potentially be subject to existing missing biases in the data.
+    - Nominal:
+      - This option follows a more traditional approach of converting the continuous fuzzy and numeric variables to nominal variables, and then assigning cases with missing data a particular value.
+        - In the case of 'fuzzy' variables, the nominal variable created is divided evenly between every .1 value (so 0, .1, .2...1.0).  In a case where _either_ value is missing, the score is -1.
+        - In the case of numeric variables, any case with missing data is filled with ten times the maximum possible value for the comparison across the entire dataset.  I should probabaly research if this was a good idea.
+    
+  - Additional Imputation Notes:
+    - Distance variables are imputed with a value, in kilometers, of 4 times the diameter of the earth.  Future iterations will impute based on any possible geographic information, e.g. taking mean difference between all cases in a certain zip code.
+    - Exact matching variables are coded as 0 (non-match), 1 (match), and -1 (either case is missing).
+      

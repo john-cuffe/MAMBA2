@@ -5,9 +5,40 @@ This is a list of helper functions to create our database
 '''
 import programs.global_vars as global_vars
 from programs.logger_setup import *
+from programs.connect_db import *
 import usaddress as usadd
 from programs.address_standardizer.standardizer import *
+from psycopg2.extras import execute_values
 logger=logger_setup(CONFIG['log_file_name'])
+
+###a query to create the batch_summary and batch_statistics tables
+batch_info_qry='''
+
+create table batch_summary
+(
+batch_id text,
+batch_started timestamp,
+batch_completed timestamp,
+batch_status text,
+batch_config text);
+
+create index batch_summary_batch_idx on batch_summary(batch_id);
+
+create table batch_statistics(
+batch_id text,
+block_level text,
+block_time float,
+failure_message text,
+block_size bigint,
+block_matches bigint,
+block_matches_avg_score float,
+block_non_matches bigint,
+block_non_matches_avg_score bigint);
+
+create index batch_stat_idx on batch_statistics(batch_id)
+'''
+
+
 def intersect(x0, x1, y0, y1):
     '''
     This function generates  a true or false flag for the intersection
@@ -129,29 +160,58 @@ def get_stem_data(dataname):
 
 
 def createDatabase(databaseName):
-
-    # Initializes database
-    diskEngine = create_engine('sqlite:///'+databaseName)
-    ###for each input dataset, need to
+    # create individual data tables
+    # ###for each input dataset, need to
     for data_source in [CONFIG['data1_name'],CONFIG['data2_name']]:
+        #print(data_source)
         out=get_stem_data(data_source)
         # 3) Push to DB
         if ast.literal_eval(CONFIG['prediction'])==True:
-            pd.DataFrame(out).to_sql(data_source, diskEngine, if_exists='replace',index=False)
-
+            if CONFIG['sql_flavor']=='sqlite':
+                diskEngine = create_engine('sqlite:///' + databaseName)
+                pd.DataFrame(out).to_sql(data_source, diskEngine, if_exists='replace',index=False)
+            elif CONFIG['sql_flavor']=='postgres':
+                db=get_db_connection(CONFIG)
+                out = out.to_dict('record')
+                columns = out[0].keys()
+                values = [tuple(i[column] for column in columns) for i in out]
+                # logger.info('Reports Written')
+                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
+                cur = db.cursor()
+                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
+                                                                                    collist=columns_list)
+                execute_values(cur, insert_statement, values)
+                db.commit()
         if ast.literal_eval(CONFIG['prediction'])==False and ast.literal_eval(CONFIG['clerical_review_candidates'])==True:
-            pd.DataFrame(out).sample(frac=.05).to_sql(data_source, diskEngine,if_exists='replace', index=False)
+            if CONFIG['sql_flavor']=='sqlite':
+                pd.DataFrame(out).sample(frac=.05).to_sql(data_source, diskEngine,if_exists='replace', index=False)
+            elif CONFIG['sql_flavor'] == 'postgres':
+                out = out.sample(frac=.05).to_dict('record')
+                columns = out[0].keys()
+                values = [tuple(i[column] for column in columns) for i in out]
+                # logger.info('Reports Written')
+                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
+                cur = db.cursor()
+                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
+                                                                                    collist=columns_list)
+                execute_values(cur, insert_statement, values)
+                db.commit()
         ####now index the tables
-        db=get_connection_sqlite(databaseName)
+        db=get_db_connection(CONFIG)
         cur=db.cursor()
         for i in global_vars.blocks:
             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source], source=data_source))
         ###additional index on id
         cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
         ###clerical_review_candidates and the two matched pairs table
+        db.commit()
         ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
     for table in ['clerical_review_candidates','matched_pairs']:
-        ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+        if CONFIG['sql_flavor']=='sqlite':
+            ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+        elif CONFIG['sql_flavor']=='postgres':
+            ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
+
         if len(ret) > 0:
             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
             db.commit()
@@ -159,6 +219,56 @@ def createDatabase(databaseName):
     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
     db.commit()
 
+def update_batch_summary(batch_summary):
+    '''
+    This function will update the batch summary as we go for each value in batch_summary
+    :param batch_summary: the dictionary we are using
+    :return:
+    '''
+    db=get_db_connection(CONFIG)
+    cur=db.cursor()
+    ###two cases...this is a new batch (so batch id doesn't exist) or the batch already exists
+    batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)
+    if CONFIG['sql_flavor']=='sqlite':
+        if len(batch_exists)==0:
+            # create individual data tables
+            diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
+            ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
+            pd.DataFrame(batch_summary, index=[0]).to_sql('batch_summary', diskEngine, if_exists='append', index=False)
+            db.commit()
+        else:
+            ##First check for any json and do a json.dumps
+            for key in batch_summary:
+                if batch_summary[key].__class__==dict:
+                    batch_summary[key]=json.dumps(batch_summary[key])
+                if batch_summary[key]!=batch_exists[0][key]:
+                    update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
+                    cur.execute(update_statement, batch_summary[key])
+                    db.commit()
+    elif CONFIG['sql_flavor']=='postgres':
+        if len(batch_exists) == 0:
+            ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
+            columns = batch_summary.keys()
+            columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
+            values = [tuple(batch_summary[key] for key in batch_summary)]
+            insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',
+                                                                                collist=columns_list)
+            execute_values(cur, insert_statement, values, page_size=len(values))
+            db.commit()
+        else:
+            ##First check for any json and do a json.dumps
+            for key in batch_summary:
+                if batch_summary[key].__class__ == dict:
+                    batch_summary[key] = json.dumps(batch_summary[key])
+            columns = [i for i in batch_summary.keys() if i != 'batch_id']
+            columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
+            values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]
+            update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+                columns_statement, batch_summary['batch_id'])
+            cur.execute(update_statement, values[0])
+            db.commit()
+    cur.close()
+    db.close()
 
 if __name__=='__main__':
     print('why did you do this?')

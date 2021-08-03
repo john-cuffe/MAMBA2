@@ -128,6 +128,30 @@ def haversine(coord1, coord2):
 from sklearn.experimental import enable_iterative_imputer
 from sklearn.impute import IterativeImputer
 
+def nominal_impute(values, header_names, header_types, nominal_info):
+    '''
+    This function will impute the fuzzy and numeric distance variables for the missing data.
+    It gets vectorized so only need to focus on one row
+    :param values: the values
+    :param header_names: the names of the headers
+    :param header_types: the types of match for each score.
+    :param nominal_info: A dictionary with the format {variable:{'min':xxx,'max':yyy}} for each of the datatypes
+    :return:
+    '''
+    for i in range(len(values)):
+        if header_types[i]=='fuzzy':
+            if np.isnan(values[i]).all()==True:
+                values[i] = -1
+            else:
+                values[i] = np.round(values[i],1)
+        elif header_types[i]=='numeric':
+            if np.isnan(values[i]).all()==True:
+                my_dims = nominal_info[header_names[i]]
+                ##sub with 10 times the largest possible difference for the variable
+                values[i] = 10 * (my_dims['max'] - my_dims['min'])
+    return values
+
+
 def create_scores(input_data, score_type, varlist):
     '''
     this function produces the list of dictionaries for all of the scores for the fuzzy variables.
@@ -139,7 +163,7 @@ def create_scores(input_data, score_type, varlist):
     SO YOU HAVE TO SINGLE-THREAD THE CALCULATIONS, SO THE WHOLE THING IS SINGLE-THREADED
     return: an array of values for each pair to match/variable and a list of headers
     '''
-    db=get_connection_sqlite(CONFIG['db_name'])
+    db=get_db_connection(CONFIG)
     if score_type=='fuzzy':
         data1_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
@@ -243,10 +267,13 @@ def create_scores(input_data, score_type, varlist):
         for i in range(len(core_dict)):
             i_scores = []
             for j in range(len(exact_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]] and str(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]]).upper()==str(data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]]).upper():
-                    i_scores.append(1)
+                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]]:
+                    if str(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]]).upper()==str(data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]]).upper():
+                        i_scores.append(1)
+                    else:
+                        i_scores.append(0)
                 else:
-                    i_scores.append(0)
+                    i_scores.append(-1)
             out_arr[i,] = i_scores
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': exact_vars}
@@ -261,7 +288,6 @@ def create_scores(input_data, score_type, varlist):
         input_data.reset_index(inplace=True, drop=False)
         core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
         out_arr = np.zeros(shape=(len(core_dict), 1))
-        null_count=0
         for i in range(len(core_dict)):
             data1_target=[k for k in data1_values if str(k['id'])==str(core_dict[i]['{}_id'.format(CONFIG['data1_name'])])][0]
             data2_target=[k for k in data2_values if str(k['id'])==str(core_dict[i]['{}_id'.format(CONFIG['data2_name'])])][0]
@@ -269,7 +295,8 @@ def create_scores(input_data, score_type, varlist):
                     out_arr[i]=haversine(tuple([data1_target['latitude'],data1_target['longitude']]),
                                   tuple([data2_target['latitude'], data2_target['longitude']]))
             else:
-                out_arr[i]=np.nan
+                ####if it's missing, make it the entire diameter of the earth away (but negative to ensure the model can differentiate)
+                out_arr[i]= - 12742
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': ['geo_distance']}
     elif score_type=='date':
@@ -311,50 +338,100 @@ def create_scores(input_data, score_type, varlist):
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': date_vars}
 
-
-
-def generate_logit(truthdat):
+def create_all_scores(input_data, method):
     '''
-    Generates a linear logistic regression model
-    :param truthdat: the truth data.
-    :return: None.  Note we have a warning for high multicollinearity, AND ONLY USED
-    WHEN USING ACCURACY AS THE SCORE (ONLY REAL COMPARABLE OPTION OUT OF THE BOX)
+    This function takes input data and creates all the scores needed
+    :param input_data: the data we want to generate scores for
+    :param method: either "prediction" or "truth".  If prediction, just return an array of X values.  If "Truth" return y, X, and X_hdrs
+    :return: y, X_imputed, and X_hdrs
     '''
-    logger.info('\n\n######CREATE LOGISTIC REGRESSION MODEL ######\n\n')
     ###get the varible types
-    var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
+    var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
     ###We have three types of variables.
-    # 1) Fuzzy: Create all the fuzzy values from febrl
-    fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy']
+    #1) Fuzzy: Create all the fuzzy values from febrl
+    fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
     if len(fuzzy_vars) > 0:
-        fuzzy_values = create_scores(truthdat, 'fuzzy', fuzzy_vars)
-        X = fuzzy_values['output']
-        X_hdrs = fuzzy_values['names']
-    # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-    numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance']
+        fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars)
+        X=fuzzy_values['output']
+        X_hdrs=copy.deepcopy(fuzzy_values['names'])
+    #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+    numeric_dist_vars=[i for i in var_rec if i['match_type']=='num_distance']
     if len(numeric_dist_vars) > 0:
-        numeric_dist_values = create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
-        X = np.hstack((X, numeric_dist_values['output']))
+        numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars)
+        X=np.hstack((X, numeric_dist_values['output']))
         X_hdrs.extend(numeric_dist_values['names'])
-    # 3) exact: if they match, 1, else 0
-    exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
+    #3) exact: if they match, 1, else 0
+    exact_match_vars=[i for i in var_rec if i['match_type']=='exact']
     if len(exact_match_vars) > 0:
-        exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
-        X = np.hstack((X, exact_match_values['output']))
+        exact_match_values=create_scores(input_data, 'exact', exact_match_vars)
+        X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
     geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
     if len(geo_distance) > 0:
-        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
+        geo_distance_values = create_scores(input_data, 'geo_distance', 'lat')
         if type(geo_distance_values['output']) != string:
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
     date_vars = [i for i in var_rec if i['match_type']=='date']
     if len(date_vars) > 0:
-        date_values = create_scores(truthdat,'date',date_vars)
+        date_values = create_scores(input_data,'date',date_vars)
         if type(date_values['output']) != string:
             X = np.hstack((X, date_values['output']))
             X_hdrs.extend(date_values['names'])
+    ##Impute the missing data
+    ####Options for missing data: Impute, or Interval:
+    ##Imputation: Just impute the scores based on an iterative imputer
+    if CONFIG['imputation_method'] == 'Imputer':
+        imp = IterativeImputer(max_iter=10, random_state=0)
+        ###fit the imputation
+        imp.fit(X)
+        X = imp.transform(X)
+    elif CONFIG['imputation_method'] == 'Nominal':
+        ###for the fuzzy values, we will cut to each .1, and make any missing -1
+        db = get_db_connection(CONFIG)
+        nominal_boundaries={}
+        for var in numeric_dist_vars:
+            ###get the values from the database
+            my_values = get_table_noconn('''select min(min_1, min_2) min, max(max_1, max_2) max
+                                             from 
+                                             (select '0' id, min({data1_var}) min_1, max({data1_var}) max_1 from {table1_name})
+                                             left outer join 
+                                             (select '0' id, min({data2_var}) min_2, max({data2_var}) max_2 from {table2_name})'''.format(table1_name=CONFIG['data1_name'],
+                                                                                                                                          table2_name=CONFIG['data2_name'],
+                                                                                                                                          data1_var=var[CONFIG['data1_name']],
+                                                                                                                                          data2_var=var[CONFIG['data2_name']]),db)
+            ###save as a dictionary entry
+            nominal_boundaries[var['variable_name']] = my_values[0]
+        ###first, get the min and max values for the possible nominal variables
+        header_types=[]
+        for k in range(len(X_hdrs)):
+            if X_hdrs[k] in fuzzy_values['names']:
+                header_types.append('fuzzy')
+            elif X_hdrs[k] in numeric_dist_values['names']:
+                header_types.append('numeric')
+            else:
+                header_types.append('other')
+        ###Apply the nominal imputation function to each row
+        X=np.apply_along_axis(nominal_impute, 1, X, header_names=X_hdrs, header_types=header_types, nominal_info=nominal_boundaries)
+    else:
+        pass
     ###making the dependent variable array
+    if method=='truth':
+        y = input_data['match'].values
+        return y, X, X_hdrs
+    else:
+        return X, X_hdrs
+
+def generate_logit(y, X, X_hdrs):
+    '''
+    Generates a linear logistic regression model
+    :param y: the truth data column showing the real values.
+    :param X: the indepdent variables for the model
+    :param X_hdrs: the headers of X
+    :return: Dictionay with type, score, model, and means if applicable.  Note we have a warning for high multicollinearity, AND ONLY USED
+    WHEN USING ACCURACY AS THE SCORE (ONLY REAL COMPARABLE OPTION OUT OF THE BOX)
+    '''
+    logger.info('\n\n######CREATE LOGISTIC REGRESSION MODEL ######\n\n')
     ##Mean-Center
     X=pd.DataFrame(X)
     ##Save the means
@@ -366,7 +443,6 @@ def generate_logit(truthdat):
     ###fit the imputation
     imp.fit(X)
     X_imputed=imp.transform(X)
-    y = truthdat['match'].values
     mod=LogisticRegression(random_state=0, solver='liblinear').fit(X_imputed,y)
     preds=mod.predict(X_imputed)
     score=mod.score(X_imputed,y)
@@ -378,51 +454,13 @@ def generate_logit(truthdat):
                 logger.info('{}: VIF = {}'.format(i['name'], round(i['VIF'],2)))
     return {'type':'Logistic Regression', 'score':score, 'model':mod, 'means':X_means, 'imputer':imp}
 
-def generate_rf_mod(truthdat):
+def generate_rf_mod(y, X, X_hdrs):
     '''
     Generate the random forest model we are going to use for the matching
-    inputs: truthdat: the truth data.  Just 3 columns--data1 id, data2 id, and if they match
-    '''
+    :param y: the truth data column showing the real values.
+    :param X: the indepdent variables for the model
+    :param X_hdrs: the headers of X    '''
     logger.info('\n\n######CREATE RANDOM FOREST MODEL ######\n\n')
-    ###get the varible types
-    var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
-    ###We have three types of variables.
-    #1) Fuzzy: Create all the fuzzy values from febrl
-    fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
-    if len(fuzzy_vars) > 0:
-        fuzzy_values=create_scores(truthdat, 'fuzzy', fuzzy_vars)
-        X=fuzzy_values['output']
-        X_hdrs=fuzzy_values['names']
-    #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-    numeric_dist_vars=[i for i in var_rec if i['match_type']=='num_distance']
-    if len(numeric_dist_vars) > 0:
-        numeric_dist_values=create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
-        X=np.hstack((X, numeric_dist_values['output']))
-        X_hdrs.extend(numeric_dist_values['names'])
-    #3) exact: if they match, 1, else 0
-    exact_match_vars=[i for i in var_rec if i['match_type']=='exact']
-    if len(exact_match_vars) > 0:
-        exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
-        X=np.hstack((X, exact_match_values['output']))
-        X_hdrs.extend(exact_match_values['names'])
-    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
-    if len(geo_distance) > 0:
-        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
-        if type(geo_distance_values['output']) != string:
-            X = np.hstack((X, geo_distance_values['output']))
-            X_hdrs.extend(geo_distance_values['names'])
-    date_vars = [i for i in var_rec if i['match_type']=='date']
-    if len(date_vars) > 0:
-        date_values = create_scores(truthdat,'date',date_vars)
-        if type(date_values['output']) != string:
-            X = np.hstack((X, date_values['output']))
-            X_hdrs.extend(date_values['names'])    ##Impute the missing data
-    imp = IterativeImputer(max_iter=10, random_state=0)
-    ###fit the imputation
-    imp.fit(X)
-    X_imputed = imp.transform(X)
-    ###making the dependent variable array
-    y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
     features_per_tree = ['sqrt', 'log2']
     rf = RandomForestClassifier(n_jobs=int(CONFIG['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
@@ -436,7 +474,7 @@ def generate_rf_mod(truthdat):
     else:
         niter = 200
     cv_rfc = RandomizedSearchCV(estimator=rf, param_distributions=myparams, cv=10, scoring=scoringcriteria,n_iter=niter)
-    cv_rfc.fit(X_imputed, y)
+    cv_rfc.fit(X, y)
     ##Save the parameters
     trees = cv_rfc.best_params_['n_estimators']
     features_per_tree = cv_rfc.best_params_['max_features']
@@ -446,55 +484,18 @@ def generate_rf_mod(truthdat):
     ##In future could just remove the worst performaning variable using a relimp measure then run the full model
     #if mambalite == False:
     logger.info('Random Forest Completed.  Score {}'.format(score))
-    rf_mod = runRFClassifier(y, X_imputed, trees, features_per_tree, max_depth)
+    rf_mod = runRFClassifier(y, X, trees, features_per_tree, max_depth)
     return {'type':'Random Forest', 'score':score, 'model':rf_mod, 'imputer':imp}
 
-def generate_ada_boost(truthdat):
+def generate_ada_boost(y, X, X_hdrs):
     '''
     This function generates the adaboosted model
+    :param y: the truth data column showing the real values.
+    :param X: the indepdent variables for the model
+    :param X_hdrs: the headers of X
     '''
     logger.info('\n\n######CREATE ADABoost MODEL ######\n\n')
     from sklearn.ensemble import AdaBoostClassifier
-    ###get the varible types
-    var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('record')
-    ###We have three types of variables.
-    # 1) Fuzzy: Create all the fuzzy values from febrl
-    fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy']
-    if len(fuzzy_vars) > 0:
-        fuzzy_values = create_scores(truthdat, 'fuzzy', fuzzy_vars)
-        X = fuzzy_values['output']
-        X_hdrs = fuzzy_values['names']
-    # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-    numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance']
-    if len(numeric_dist_vars) > 0:
-        numeric_dist_values = create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
-        X = np.hstack((X, numeric_dist_values['output']))
-        X_hdrs.extend(numeric_dist_values['names'])
-    # 3) exact: if they match, 1, else 0
-    exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
-    if len(exact_match_vars) > 0:
-        exact_match_values = create_scores(truthdat, 'exact', exact_match_vars)
-        X = np.hstack((X, exact_match_values['output']))
-        X_hdrs.extend(exact_match_values['names'])
-    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
-    if len(geo_distance) > 0:
-        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
-        if type(geo_distance_values['output']) != string:
-            X = np.hstack((X, geo_distance_values['output']))
-            X_hdrs.extend(geo_distance_values['names'])
-    date_vars = [i for i in var_rec if i['match_type']=='date']
-    if len(date_vars) > 0:
-        date_values = create_scores(truthdat,'date',date_vars)
-        if type(date_values['output']) != string:
-            X = np.hstack((X, date_values['output']))
-            X_hdrs.extend(date_values['names'])
-    ##Impute the missing data
-    imp = IterativeImputer(max_iter=10, random_state=0)
-    ###fit the imputation
-    imp.fit(X)
-    X_imputed = imp.transform(X)
-    ###making the dependent variable array
-    y = truthdat['match'].values
     ###Generate the Grid Search to find the ideal values
     ##setup the SVM
     ada = AdaBoostClassifier(
@@ -511,7 +512,7 @@ def generate_ada_boost(truthdat):
     ##First, get the scores
     cv_rfc = RandomizedSearchCV(estimator=ada, param_distributions=myparams, cv=10, scoring=scoringcriteria,
                                 n_iter=niter)
-    cv_rfc.fit(X_imputed, y)
+    cv_rfc.fit(X, y)
     ##Save the parameters
     trees = cv_rfc.best_params_['n_estimators']
     algo = cv_rfc.best_params_['algorithm']
@@ -524,51 +525,14 @@ def generate_ada_boost(truthdat):
     ###Note for when you return--you need to change the predict function to do cross_val_predict
     return {'type': 'AdaBoost', 'score': score, 'model': ada_mod, 'imputer':imp}
 
-def generate_svn_mod(truthdat):
+def generate_svn_mod(y, X, X_Hdrs):
     '''
     Generate the SVM model we are going to use for the matching
-    inputs: truthdat: the truth data.  Just 3 columns--data1 id, data2 id, and if they match
-    '''
+    :param y: the truth data column showing the real values.
+    :param X: the indepdent variables for the model
+    :param X_hdrs: the headers of X    '''
     logger.info('\n\n######CREATE SVN MODEL ######\n\n')
-    ###get the varible types
-    var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
-    ###We have three types of variables.
-    #1) Fuzzy: Create all the fuzzy values from febrl
-    fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
-    if len(fuzzy_vars) > 0:
-        fuzzy_values=create_scores(truthdat, 'fuzzy', fuzzy_vars)
-        X=fuzzy_values['output']
-        X_hdrs=fuzzy_values['names']
-    #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-    numeric_dist_vars=[i for i in var_rec if i['match_type']=='num_distance']
-    if len(numeric_dist_vars) > 0:
-        numeric_dist_values=create_scores(truthdat, 'numeric_dist', numeric_dist_vars)
-        X=np.hstack((X, numeric_dist_values['output']))
-        X_hdrs.extend(numeric_dist_values['names'])
-    #3) exact: if they match, 1, else 0
-    exact_match_vars=[i for i in var_rec if i['match_type']=='exact']
-    if len(exact_match_vars) > 0:
-        exact_match_values=create_scores(truthdat, 'exact', exact_match_vars)
-        X=np.hstack((X, exact_match_values['output']))
-        X_hdrs.extend(exact_match_values['names'])
-    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
-    if len(geo_distance) > 0:
-        geo_distance_values = create_scores(truthdat, 'geo_distance', 'lat')
-        if type(geo_distance_values['output']) != string:
-            X = np.hstack((X, geo_distance_values['output']))
-            X_hdrs.extend(geo_distance_values['names'])
-    date_vars = [i for i in var_rec if i['match_type']=='date']
-    if len(date_vars) > 0:
-        date_values = create_scores(truthdat,'date',date_vars)
-        if type(date_values['output']) != string:
-            X = np.hstack((X, date_values['output']))
-            X_hdrs.extend(date_values['names'])
-    imp = IterativeImputer(max_iter=10, random_state=0)
-    ###fit the imputation
-    imp.fit(X)
-    X_imputed = imp.transform(X)
-    ###making the dependent variable array
-    y = truthdat['match'].values
+
     ###Generate the Grid Search to find the ideal values
     from sklearn import svm
     ##setup the SVM
@@ -583,7 +547,7 @@ def generate_svn_mod(truthdat):
     }
     ##First, get the scores
     svn_rfc = RandomizedSearchCV(estimator=svc, param_distributions=myparams, cv=5, scoring=scoringcriteria)
-    svn_rfc.fit(X_imputed, y)
+    svn_rfc.fit(X, y)
     ##Save the parameters
     kernel = svn_rfc.best_params_['kernel']
     degree = svn_rfc.best_params_['degree']
@@ -601,17 +565,26 @@ def choose_model(truthdat):
     :param truthdat:
     :return:
     '''
+    y, X, X_hdrs = create_all_scores(truthdat, method='truth')
     if ast.literal_eval(CONFIG['use_logit'])==True:
-        logit=generate_logit(truthdat)
+        logit=generate_logit(y, X, X_hdrs)
     else:
         logit={'score':0}
-    rf=generate_rf_mod(truthdat)
+    rf=generate_rf_mod(y, X, X_hdrs)
     #svn=generate_svn_mod(truthdat)
     svn={'score':0}
-    ada=generate_ada_boost(truthdat)
-    ###find the max score
-    best_score=max([i['score'] for i in [rf, svn, ada, logit]])
-    best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
+    ada=generate_ada_boost(y, X, X_hdrs)
+    ###Are we using the custom model?
+    if ast.literal_eval(CONFIG['use_custom_model'])==True:
+        import programs.custom_model as cust
+        logger.info('\n\n######CREATE CUSTOM MODEL {}######\n\n'.format(cust.my_model_name))
+        custom_model = cust.my_custom_model(y, X, X_hdrs)
+        ###find the max score
+        best_score=max([i['score'] for i in [rf, svn, ada, logit, custom_model]])
+        best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
+    else:
+        best_score=max([i['score'] for i in [rf, svn, ada, logit]])
+        best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
     logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
     return best_model
 
@@ -640,7 +613,7 @@ def match_fun(arg):
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
     if arg['logging_flag']!=-1:
         logger.info('{}% complete with block'.format(arg['logging_flag']))
-    db=get_connection_sqlite(CONFIG['db_name'], timeout=1)
+    db=get_db_connection(CONFIG, timeout=1)
     ###get the two dataframes
     data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
     data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
@@ -655,46 +628,14 @@ def match_fun(arg):
         logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
         return None
     else:
-        # 1) Fuzzy: Create all the fuzzy values from febrl
-        fuzzy_vars = [i for i in arg['var_rec'] if i['match_type'] == 'fuzzy']
-        if len(fuzzy_vars) > 0:
-            fuzzy_values = create_scores(input_data, 'fuzzy', fuzzy_vars)
-            X = fuzzy_values['output']
-            X_hdrs = fuzzy_values['names']
-        # 2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-        numeric_dist_vars = [i for i in arg['var_rec'] if i['match_type'] == 'num_distance']
-        if len(numeric_dist_vars) > 0:
-            numeric_dist_values = create_scores(input_data, 'numeric_dist', numeric_dist_vars)
-            X = np.hstack((X, numeric_dist_values['output']))
-            X_hdrs.extend(numeric_dist_values['names'])
-        # 3) exact: if they match, 1, else 0
-        exact_match_vars = [i for i in arg['var_rec'] if i['match_type'] == 'exact']
-        if len(exact_match_vars) > 0:
-            exact_match_values = create_scores(input_data, 'exact', exact_match_vars)
-            X = np.hstack((X, exact_match_values['output']))
-            X_hdrs.extend(exact_match_values['names'])
-        #4) Geo distance
-        geo_distance = [i for i in arg['var_rec'] if i['match_type'] == 'geom_distance']
-        if len(geo_distance) > 0:
-            geo_distance_values = create_scores(input_data, 'geo_distance', 'lat')
-            X = np.hstack((X, geo_distance_values['output']))
-            X_hdrs.extend(geo_distance_values['names'])
-        #5) Date
-        date_vars = [i for i in arg['var_rec'] if i['match_type'] == 'date']
-        if len(date_vars) > 0:
-            date_values = create_scores(input_data, 'date', date_vars)
-            X = np.hstack((X, date_values['output']))
-            X_hdrs.extend(date_values['names'])
-        ###Imput the X values
-        X_imputed=arg['model']['imputer'].transform(X)
+        X, X_hdrs = create_all_scores(input_data, 'prediction')
         ###Mean Center
         if arg['model']['type']=='Logistic Regression':
-            X_imputed=pd.DataFrame(X_imputed, columns=X_hdrs)-arg['model']['means']
-            X_imputed=np.array(X_imputed)
-        myprediction=probsfunc(arg['model']['model'].predict_proba(X_imputed))
+            X=pd.DataFrame(X, columns=X_hdrs)-arg['model']['means']
+            X=np.array(X)
+        myprediction=probsfunc(arg['model']['model'].predict_proba(X))
         ####don't need the scores anymore
         del X
-        del X_imputed
         del data1
         del data2
         input_data['predicted_probability']=myprediction
@@ -768,7 +709,7 @@ def run_block(block, rf_mod):
     :return:
     '''
     ####First get the blocks that appear in both
-    db=get_connection_sqlite(CONFIG['db_name'])
+    db=get_db_connection(CONFIG)
     data1_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data1_name']], CONFIG['data1_name']), db)
     data1_blocks=[i['block'] for i in data1_blocks]
     data2_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data2_name']], CONFIG['data2_name']), db)
@@ -798,9 +739,9 @@ def run_block(block, rf_mod):
     out=pool.map(match_fun, arg_list)
     ###Once that is done, need to
     ##push the remaining items in out to the db
-    db=get_connection_sqlite(CONFIG['db_name'])
+    db=get_db_connection(CONFIG)
     cur=db.cursor()
-    logger.info('Dumping remaining matches to DB')
+    logger.info('Dumping remaining matches to DB for block {}'.format(block['block_name']))
     clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
         CONFIG['data1_name'], CONFIG['data2_name'])
     match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(

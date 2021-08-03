@@ -2,12 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3707c47-ab65-43c7-ad1d-4707fc594255" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamba_db" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamba_db-journal" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamba_test_log" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_test_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mamba_variable_types.csv" beforeDir="false" afterPath="$PROJECT_DIR$/mamba_variable_types.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/programs/connect_sqlite.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/connect_sqlite.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/block_names.csv" beforeDir="false" afterPath="$PROJECT_DIR$/block_names.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mamba.properties" beforeDir="false" afterPath="$PROJECT_DIR$/mamba.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/programs/create_db_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/create_db_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/programs/global_vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/global_vars.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/programs/match_helpers.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/match_helpers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run_match.py" beforeDir="false" afterPath="$PROJECT_DIR$/run_match.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,63 +21,64 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/logger_setup.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
-              <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
-              <folding>
-                <element signature="e#0#29#0" expanded="true" />
-                <element signature="e#1479#2136#1" />
-                <element signature="e#2174#2512#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/create_db.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="157">
-              <caret line="234" column="129" selection-start-line="234" selection-start-column="129" selection-end-line="234" selection-end-column="129" />
+            <state relative-caret-position="255">
+              <caret line="275" column="39" lean-forward="true" selection-start-line="275" selection-start-column="39" selection-end-line="275" selection-end-column="39" />
               <folding>
                 <element signature="e#63#94#0" expanded="true" />
-                <element signature="e#1271#2548#0" />
-                <element signature="e#2600#2940#0" />
-                <element signature="e#3063#3225#0" />
-                <element signature="e#3346#3626#0" />
-                <element signature="e#3725#4369#0" />
+                <element signature="e#332#1217#0" />
+                <element signature="e#1267#2544#0" />
+                <element signature="e#2596#2936#0" />
+                <element signature="e#3059#3221#0" />
+                <element signature="e#3342#3622#0" />
+                <element signature="e#3721#4365#0" />
+                <element signature="e#4544#5478#0" />
+                <element signature="e#16607#19222#0" />
+                <element signature="e#22057#23237#0" />
+                <element signature="e#23391#23644#0" />
+                <element signature="e#23945#25351#0" />
+                <element signature="e#25392#26897#0" />
+                <element signature="e#26941#28545#0" />
+                <element signature="e#28587#29893#0" />
+                <element signature="e#29928#31193#0" />
+                <element signature="e#31231#31449#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/connect_sqlite.py">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_42.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
+            <state relative-caret-position="340">
+              <caret line="20" column="15" selection-start-line="20" selection-end-line="20" selection-end-column="15" />
               <folding>
-                <element signature="e#25#39#0" expanded="true" />
+                <element signature="e#91#133#0" expanded="true" />
+                <element signature="e#333#721#0" />
+                <element signature="e#747#821#0" />
+                <element signature="e#857#5858#0" />
+                <element signature="e#6548#9340#0" />
+                <element signature="e#10173#11556#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
+        <entry file="file://$PROJECT_DIR$/programs/global_vars.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret selection-end-line="23" selection-end-column="30" />
+            <state relative-caret-position="740">
+              <caret line="68" column="14" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="14" />
+              <folding>
+                <element signature="e#25#34#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/run_match.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="12" column="191" selection-start-line="12" selection-start-column="191" selection-end-line="12" selection-end-column="191" />
+            <state relative-caret-position="238">
+              <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
               <folding>
                 <element signature="e#0#34#0" expanded="true" />
               </folding>
@@ -91,14 +96,34 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
+        <entry file="file://$PROJECT_DIR$/programs/connect_db.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1870">
-              <caret line="114" column="16" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="16" />
+            <state relative-caret-position="306">
+              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
               <folding>
-                <element signature="e#91#125#0" expanded="true" />
-                <element signature="e#660#734#0" />
+                <element signature="e#25#39#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="334">
+                <caret line="201" column="102" selection-start-line="201" selection-start-column="102" selection-end-line="201" selection-end-column="102" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mamba.properties">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="359">
+              <caret line="33" column="27" lean-forward="true" selection-start-line="33" selection-start-column="27" selection-end-line="33" selection-end-column="27" />
             </state>
           </provider>
         </entry>
@@ -114,17 +139,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>1L</find>
-      <find>0L</find>
-      <find>encode</find>
-      <find>np.zeros(shape=(len(x), 1))</find>
-      <find>np.zeros</find>
-      <find>mambalite</find>
-      <find>dcpy</find>
-      <find>rf_jo</find>
-      <find>logging.</find>
-      <find>probsfun</find>
-      <find>nullmatch</find>
       <find>self.chunks</find>
       <find>list</find>
       <find>logging_</find>
@@ -138,12 +152,35 @@
       <find>-9999</find>
       <find>,</find>
       <find>index</find>
+      <find>processing_dict</find>
+      <find>=</find>
+      <find>os.en</find>
+      <find>os.environ</find>
+      <find>address_co</find>
+      <find>SNSTC</find>
+      <find>a</find>
+      <find>SNPTC</find>
+      <find>s2</find>
+      <find>sufType2</find>
+      <find>SN</find>
+      <find>address_com</find>
+      <find>connect_sqlite</find>
+      <find>get_connection_sqlite</find>
+      <find>get_db_</find>
+      <find>get_db_connection</find>
+      <find>get_table(</find>
     </findStrings>
     <replaceStrings>
       <replace>int(1)</replace>
       <replace>int(0)</replace>
       <replace>logger.</replace>
       <replace>','</replace>
+      <replace>=</replace>
+      <replace>StreetNamePostDirectional2</replace>
+      <replace>CONFIG</replace>
+      <replace>StreetNamePostType2</replace>
+      <replace>connect_db</replace>
+      <replace>get_db_connection</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -154,7 +191,6 @@
       <list>
         <option value="$PROJECT_DIR$/programs/__init__.py" />
         <option value="$PROJECT_DIR$/../../Backend/connect_sqlite.py" />
-        <option value="$PROJECT_DIR$/programs/create_db.py" />
         <option value="$PROJECT_DIR$/programs/archive/MatchFunction.py" />
         <option value="$PROJECT_DIR$/programs/archive/febrl_methods_cython.pyx" />
         <option value="$PROJECT_DIR$/programs/febrl_helpers/__init__.py" />
@@ -166,23 +202,35 @@
         <option value="$PROJECT_DIR$/programs/archive/runner_block.pyx" />
         <option value="$PROJECT_DIR$/programs/archive/match_helpers.py" />
         <option value="$PROJECT_DIR$/programs/psql_logging_handler.py" />
-        <option value="$PROJECT_DIR$/programs/logger_setup.py" />
         <option value="C:/Python3/Lib/multiprocessing/spawn.py" />
         <option value="C:/Python3/Lib/runpy.py" />
         <option value="$PROJECT_DIR$/programs/mymath.py" />
-        <option value="$PROJECT_DIR$/programs/global_vars.py" />
         <option value="$PROJECT_DIR$/setup_envs_python.py" />
-        <option value="$PROJECT_DIR$/run_Match.bash" />
         <option value="H:/Projects/DRPS/code/febrl_methods.py" />
         <option value="H:/Projects/DRPS/code/deduplication_helpers.py" />
         <option value="$PROJECT_DIR$/programs/deduplication_reproduction.py" />
         <option value="H:/Projects/DRPS/code/deduplication_reproduction.py" />
         <option value="$PROJECT_DIR$/programs/general_helpers.py" />
         <option value="$PROJECT_DIR$/programs/febrl_methods.py" />
-        <option value="$PROJECT_DIR$/run_match.py" />
-        <option value="$PROJECT_DIR$/programs/create_db_helpers.py" />
-        <option value="$PROJECT_DIR$/programs/match_helpers.py" />
         <option value="$PROJECT_DIR$/programs/connect_sqlite.py" />
+        <option value="$PROJECT_DIR$/run_Match.bash" />
+        <option value="$PROJECT_DIR$/hermes.properties" />
+        <option value="$PROJECT_DIR$/programs/logger_setup.py" />
+        <option value="$PROJECT_DIR$/programs/config.py" />
+        <option value="$PROJECT_DIR$/programs/address_standardizer/amgScore.py" />
+        <option value="$PROJECT_DIR$/programs/create_db.py" />
+        <option value="$PROJECT_DIR$/programs/address_standardizer/standardizer.py" />
+        <option value="$PROJECT_DIR$/programs/custom_matching_models/custom_models.py" />
+        <option value="$PROJECT_DIR$/programs/custom_matching_models/custom_regression.py" />
+        <option value="$PROJECT_DIR$/programs/custom_model.py" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_42.py" />
+        <option value="$PROJECT_DIR$/mamba.properties" />
+        <option value="$PROJECT_DIR$/programs/connect_db.py" />
+        <option value="$PROJECT_DIR$/programs/global_vars.py" />
+        <option value="$PROJECT_DIR$/programs/create_db_helpers.py" />
+        <option value="$PROJECT_DIR$/run_match.py" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/programs/match_helpers.py" />
       </list>
     </option>
   </component>
@@ -192,12 +240,15 @@
     <option name="width" value="1840" />
     <option name="height" value="1098" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -208,19 +259,38 @@
             <path>
               <item name="MAMBA2" type="b2602c69:ProjectViewProjectNode" />
               <item name="MAMBA2" type="462c0819:PsiDirectoryNode" />
+              <item name="Documentation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MAMBA2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MAMBA2" type="462c0819:PsiDirectoryNode" />
+              <item name="output" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MAMBA2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MAMBA2" type="462c0819:PsiDirectoryNode" />
               <item name="programs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MAMBA2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+            </path>
+            <path>
+              <item name="MAMBA2" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+              <item name="Scratches" type="d62648e6:ScratchProjectViewPane$MyRootNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="H:/Projects/DRPS/code/deduplication_reproduction.py" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/programs" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -276,11 +346,11 @@
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="H:\Projects\DRPS\code" />
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs" />
+      <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs\custom_matching_models" />
+      <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2" />
+      <recent name="H:\Projects\DRPS\code" />
       <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2\programs\" />
-      <recent name="C:\Users\cuffe002\Desktop\Projects\MAMBA2.0\programs" />
-      <recent name="C:\Users\cuffe002\Desktop\Backend" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -397,17 +467,18 @@
       <workItem from="1612028545118" duration="988000" />
       <workItem from="1612186663198" duration="3415000" />
       <workItem from="1612541900595" duration="626000" />
+      <workItem from="1627995130071" duration="23180000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="348127000" />
+    <option name="totallyTimeSpent" value="428332000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="89" y="-9" width="1472" height="878" extended-state="6" />
+    <frame x="71" y="-7" width="1472" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25671852" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1989026" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -420,9 +491,9 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4992928" weight="0.32931727" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5010661" side_tool="true" weight="0.48182762" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.59688824" side_tool="true" visible="true" weight="0.26238286" />
-      <window_info active="true" anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.40311173" visible="true" weight="0.26238286" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.425" side_tool="true" weight="0.35634518" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.42455417" side_tool="true" weight="0.45643693" />
+      <window_info anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.575" visible="true" weight="0.45643693" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -430,22 +501,22 @@
       <window_info anchor="right" id="Database" order="4" />
     </layout>
     <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15405117" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15104167" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49858558" weight="0.32797858" />
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32917964" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" sideWeight="0.4992928" weight="0.32931727" />
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5010661" side_tool="true" weight="0.48182762" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.5010661" side_tool="true" visible="true" weight="0.48182762" />
-      <window_info anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.4989339" visible="true" weight="0.48182762" />
+      <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.425" side_tool="true" weight="0.35634518" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.42455417" side_tool="true" weight="0.45643693" />
+      <window_info active="true" anchor="bottom" x="1945" y="384" width="1870" height="311" id="Python Console" order="12" sideWeight="0.575" visible="true" weight="0.35634518" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -456,53 +527,18 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/programs/connect_db.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../Backend/connect_sqlite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="33" column="28" lean-forward="true" selection-start-line="33" selection-start-column="28" selection-end-line="33" selection-end-column="28" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../Backend/connect_postgres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/archive/febrl_methods_cython.pyx" />
-    <entry file="file://$PROJECT_DIR$/programs/febrl_helpers/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/programs/encode.pyx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="587">
-          <caret line="1968" column="32" lean-forward="true" selection-start-line="1968" selection-start-column="32" selection-end-line="1968" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/encode.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/mymath.pyx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="845" lean-forward="true" selection-start-line="845" selection-end-line="845" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/archive/create_db.py" />
-    <entry file="file://$PROJECT_DIR$/programs/archive/run_match.py" />
-    <entry file="file://$PROJECT_DIR$/programs/archive/nameonly_functions.pyx" />
-    <entry file="file://$PROJECT_DIR$/programs/archive/nameaddress_blocks.pyx" />
     <entry file="file://$PROJECT_DIR$/programs/archive/MatchFunction_20180301.py" />
     <entry file="file://$PROJECT_DIR$/programs/run_Match.bash" />
     <entry file="file://$PROJECT_DIR$/programs/archive/MatchFunction.py" />
@@ -549,23 +585,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/global_vars.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="850">
-          <caret line="52" column="56" selection-start-line="52" selection-start-column="56" selection-end-line="52" selection-end-column="56" />
-          <folding>
-            <element signature="e#25#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/run_Match.bash">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="22" column="39" selection-start-line="22" selection-start-column="39" selection-end-line="22" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://H:/Projects/DRPS/code/mymath.py" />
     <entry file="file://$PROJECT_DIR$/programs/mymath.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -580,39 +599,26 @@
     <entry file="file://H:/Projects/DRPS/code/febrl_methods.py" />
     <entry file="file://H:/Projects/DRPS/code/deduplication_helpers.py" />
     <entry file="file://H:/Projects/DRPS/code/deduplication_reproduction.py" />
-    <entry file="file://$PROJECT_DIR$/programs/deduplication_reproduction.py">
+    <entry file="file://$PROJECT_DIR$/programs/deduplication_reproduction.py" />
+    <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="316">
-          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
-          <folding>
-            <element signature="e#147#166#0" expanded="true" />
-            <element signature="e#972#3311#0" />
-          </folding>
+        <state>
+          <caret selection-end-line="23" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/febrl_methods.py">
+    <entry file="file://$PROJECT_DIR$/hermes.properties" />
+    <entry file="file://$PROJECT_DIR$/run_Match.bash">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="10" lean-forward="true" selection-start-line="13" selection-start-column="10" selection-end-line="13" selection-end-column="10" />
-          <folding>
-            <element signature="e#783#3109#0" />
-            <element signature="e#3159#4552#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/general_helpers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="50" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
+        <state relative-caret-position="340">
+          <caret line="20" column="50" lean-forward="true" selection-start-line="20" selection-start-column="50" selection-end-line="20" selection-end-column="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/logger_setup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="34" column="29" selection-start-line="34" selection-start-column="29" selection-end-line="34" selection-end-column="29" />
+        <state relative-caret-position="36">
+          <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
             <element signature="e#1479#2136#1" />
@@ -621,24 +627,222 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/create_db.py">
+    <entry file="file://$PROJECT_DIR$/programs/general_helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="11" selection-start-line="17" selection-start-column="11" selection-end-line="17" selection-end-column="11" />
+        <state relative-caret-position="228">
+          <caret line="17" column="50" selection-start-line="17" selection-start-column="50" selection-end-line="17" selection-end-column="50" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/setup_envs_python.py">
+    <entry file="file://$PROJECT_DIR$/programs/febrl_methods.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+          <folding>
+            <element signature="e#123#132#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Documentation/address_component_mapping.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="14" column="52" lean-forward="true" selection-start-line="14" selection-start-column="52" selection-end-line="14" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/amgScore.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7">
+          <caret line="430" column="3" lean-forward="true" selection-start-line="430" selection-start-column="3" selection-end-line="430" selection-end-column="3" />
+          <folding>
+            <element signature="e#1436#2280#0" />
+            <element signature="e#2399#3811#0" />
+            <element signature="e#3902#4476#0" />
+            <element signature="e#4512#5747#0" />
+            <element signature="e#6687#9537#0" />
+            <element signature="e#8437#9288#0" />
+            <element signature="e#9377#9927#0" />
+            <element signature="e#10010#10362#0" />
+            <element signature="e#10446#12105#0" />
+            <element signature="e#12187#12826#0" />
+            <element signature="e#12876#13132#0" />
+            <element signature="e#13215#13521#0" />
+            <element signature="e#14856#15397#0" />
+            <element signature="e#15579#17964#0" />
+            <element signature="e#18944#20279#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/create_db.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="16" selection-start-line="9" selection-start-column="16" selection-end-line="9" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="694" column="1" lean-forward="true" selection-start-line="694" selection-start-column="1" selection-end-line="694" selection-end-column="1" />
+          <folding>
+            <element signature="e#93#10549#0" />
+            <element signature="e#10720#12638#0" />
+            <element signature="e#12668#14080#0" />
+            <element signature="e#14158#14322#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/custom_matching_models.py" />
+    <entry file="file://$PROJECT_DIR$/programs/custom_matching_models/custom_regression_2.py" />
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/scoring.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="31" column="3" selection-start-line="31" selection-start-column="3" selection-end-line="31" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/keyMatch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2860">
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/standardizer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="98">
+          <caret line="224" column="31" lean-forward="true" selection-start-line="224" selection-start-column="31" selection-end-line="224" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#16#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/number_processing.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
-          <caret selection-end-line="23" selection-end-column="30" />
+          <caret line="357" column="53" selection-start-line="357" selection-start-column="53" selection-end-line="357" selection-end-column="53" />
+          <folding>
+            <element signature="e#6191#6968#0" />
+            <element signature="e#7244#7645#0" />
+            <element signature="e#8069#9900#0" />
+            <element signature="e#10755#11618#0" />
+            <element signature="e#11918#13197#0" />
+            <element signature="e#13474#14626#0" />
+            <element signature="e#14629#14647#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/address_standardizer/constants.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="728" lean-forward="true" selection-start-line="728" selection-end-line="728" />
+          <folding>
+            <element signature="e#93#11001#0" />
+            <element signature="e#11172#13090#0" />
+            <element signature="e#13120#14532#0" />
+            <element signature="e#14610#14989#0" />
+            <element signature="e#15094#15601#0" />
+            <element signature="e#15621#15723#0" />
+            <element signature="e#15881#17562#0" />
+            <element signature="e#17630#18664#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/custom_matching_models/custom_models.py" />
+    <entry file="file://$PROJECT_DIR$/programs/custom_matching_models/custom_regression.py" />
+    <entry file="file://$PROJECT_DIR$/programs/custom_matching_models/custom_model.py" />
+    <entry file="file://$PROJECT_DIR$/programs/custom_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="e#464#1048#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_42.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/connect_sqlite.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/global_vars.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="740">
+          <caret line="68" column="14" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="14" />
+          <folding>
+            <element signature="e#25#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/connect_db.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <folding>
+            <element signature="e#25#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mamba.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="359">
+          <caret line="33" column="27" lean-forward="true" selection-start-line="33" selection-start-column="27" selection-end-line="33" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="334">
+            <caret line="201" column="102" selection-start-line="201" selection-start-column="102" selection-end-line="201" selection-end-column="102" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/run_match.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="12" column="191" selection-start-line="12" selection-start-column="191" selection-end-line="12" selection-end-column="191" />
+        <state relative-caret-position="238">
+          <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
           <folding>
             <element signature="e#0#34#0" expanded="true" />
           </folding>
@@ -647,36 +851,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/create_db_helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1870">
-          <caret line="114" column="16" selection-start-line="114" selection-start-column="16" selection-end-line="114" selection-end-column="16" />
+        <state relative-caret-position="340">
+          <caret line="20" column="15" selection-start-line="20" selection-end-line="20" selection-end-column="15" />
           <folding>
-            <element signature="e#91#125#0" expanded="true" />
-            <element signature="e#660#734#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/connect_sqlite.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
-          <folding>
-            <element signature="e#25#39#0" expanded="true" />
+            <element signature="e#91#133#0" expanded="true" />
+            <element signature="e#333#721#0" />
+            <element signature="e#747#821#0" />
+            <element signature="e#857#5858#0" />
+            <element signature="e#6548#9340#0" />
+            <element signature="e#10173#11556#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/programs/match_helpers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="234" column="129" selection-start-line="234" selection-start-column="129" selection-end-line="234" selection-end-column="129" />
+        <state relative-caret-position="255">
+          <caret line="275" column="39" lean-forward="true" selection-start-line="275" selection-start-column="39" selection-end-line="275" selection-end-column="39" />
           <folding>
             <element signature="e#63#94#0" expanded="true" />
-            <element signature="e#1271#2548#0" />
-            <element signature="e#2600#2940#0" />
-            <element signature="e#3063#3225#0" />
-            <element signature="e#3346#3626#0" />
-            <element signature="e#3725#4369#0" />
+            <element signature="e#332#1217#0" />
+            <element signature="e#1267#2544#0" />
+            <element signature="e#2596#2936#0" />
+            <element signature="e#3059#3221#0" />
+            <element signature="e#3342#3622#0" />
+            <element signature="e#3721#4365#0" />
+            <element signature="e#4544#5478#0" />
+            <element signature="e#16607#19222#0" />
+            <element signature="e#22057#23237#0" />
+            <element signature="e#23391#23644#0" />
+            <element signature="e#23945#25351#0" />
+            <element signature="e#25392#26897#0" />
+            <element signature="e#26941#28545#0" />
+            <element signature="e#28587#29893#0" />
+            <element signature="e#29928#31193#0" />
+            <element signature="e#31231#31449#0" />
           </folding>
         </state>
       </provider>

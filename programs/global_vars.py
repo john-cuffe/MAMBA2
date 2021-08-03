@@ -66,7 +66,7 @@ debug = ast.literal_eval(str(CONFIG['debugmode']))
 logging.info('Scoring Criteria: {0}'.format(scoringcriteria))
 logging.info('Debug Mode? {0}'.format(debug))
 
-from programs.connect_sqlite import *
+from programs.connect_db import *
 from programs.create_db_helpers import *
 from programs.general_helpers import *
 import programs.febrl_methods as feb

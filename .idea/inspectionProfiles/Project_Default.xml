@@ -4,7 +4,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="26">
+          <list size="27">
             <item index="0" class="java.lang.String" itemvalue="functools32" />
             <item index="1" class="java.lang.String" itemvalue="numba" />
             <item index="2" class="java.lang.String" itemvalue="pycurl" />
@@ -31,6 +31,7 @@
             <item index="23" class="java.lang.String" itemvalue="jedi" />
             <item index="24" class="java.lang.String" itemvalue="anaconda-client" />
             <item index="25" class="java.lang.String" itemvalue="ruamel-yaml" />
+            <item index="26" class="java.lang.String" itemvalue="SQLAlchemy" />
           </list>
         </value>
       </option>
