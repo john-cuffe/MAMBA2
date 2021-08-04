@@ -611,6 +611,7 @@ def match_fun(arg):
     var_rec: the variable records, showing what type of match to perform on each variable
     '''
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
+    start = time.time()
     if arg['logging_flag']!=-1:
         logger.info('{}% complete with block'.format(arg['logging_flag']))
     db=get_db_connection(CONFIG, timeout=1)
@@ -625,8 +626,17 @@ def match_fun(arg):
         input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2])
     ####Now get the data organized, by creating an array of the different types of variables
     if len(input_data)==0:
+        end = time.time() - start
         logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
-        return None
+        stats_dat={'batch_id':CONFIG['batch_id'],
+                                 'block_level':arg['block_info']['block_name'],
+                                 'block_id': arg['target'],
+                                 'block_time': end,
+                                 'block_size': 0,
+                                 'block_matches': 0,
+                                 'block_matches_avg_score': 0,
+                                 'block_non_matches': 0,
+                                 'block_non_matches_avg_score': 0}
     else:
         X, X_hdrs = create_all_scores(input_data, 'prediction')
         ###Mean Center
@@ -644,6 +654,7 @@ def match_fun(arg):
             keep_thresh=min(float(CONFIG['clerical_review_threshold']),float(CONFIG['match_threshold']))
         else:
             keep_thresh=float(CONFIG['match_threshold'])
+        stats_dat = copy.deepcopy(input_data)
         input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh].to_dict('record')
         if len(input_data) > 0:
             ###try to write to db, if not return and then we will dump later
@@ -698,7 +709,25 @@ def match_fun(arg):
                 return to_return
             else:
                 return None
-
+        ###do the block statistics
+        end = time.time() - start
+        stats_dat = {'batch_id': CONFIG['batch_id'],
+                                   'block_level': str(arg['block_info']['block_name']),
+                                   'block_id': str(arg['target']),
+                                   'block_time': end,
+                                   'block_size': len(stats_dat),
+                                   'block_matches': np.sum(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),1,0)),
+                                   'block_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
+                                   'block_non_matches': np.sum(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),1,0)),
+                                   'block_non_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan))}
+    db=get_db_connection(CONFIG)
+    cur = db.cursor()
+    columns_list = str(tuple([str(j) for j in stats_dat.keys()])).replace("'", '')
+    values = tuple(stats_dat[column] for column in stats_dat.keys())
+    vals_len = ','.join(['?' for _ in range(len(stats_dat.keys()))])
+    insert_statement = '''insert into batch_statistics {} VALUES({})'''.format(columns_list, vals_len)
+    cur.execute(insert_statement, values)
+    db.close()
 
 ####The block function
 def run_block(block, rf_mod):

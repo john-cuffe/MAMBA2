@@ -13,22 +13,21 @@ logger=logger_setup(CONFIG['log_file_name'])
 
 ###a query to create the batch_summary and batch_statistics tables
 batch_info_qry='''
-
-create table batch_summary
-(
-batch_id text,
+create table batch_summary(
+batch_id integer primary key autoincrement,
 batch_started timestamp,
 batch_completed timestamp,
 batch_status text,
-batch_config text);
+batch_config text,
+failure_message text);
 
 create index batch_summary_batch_idx on batch_summary(batch_id);
 
 create table batch_statistics(
 batch_id text,
 block_level text,
+block_id text,
 block_time float,
-failure_message text,
 block_size bigint,
 block_matches bigint,
 block_matches_avg_score float,
@@ -38,6 +37,16 @@ block_non_matches_avg_score bigint);
 create index batch_stat_idx on batch_statistics(batch_id)
 '''
 
+seq_query='''CREATE SEQUENCE batch_summary_query
+INCREMENT 1
+START 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+CACHE 1;'''
+
+###Alter if we aren't dealing with an sqlite database
+if CONFIG['sql_flavor']!='sqlite':
+    batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
 
 def intersect(x0, x1, y0, y1):
     '''
@@ -56,6 +65,21 @@ def intersect(x0, x1, y0, y1):
     else:
         return False
 
+def generate_batch_id(db):
+    '''
+    This function will query the central mojo db to generate our new batch number.
+    :param db: the database connection
+    :return: batch number to use
+    '''
+    cur = db.cursor()
+    cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')
+    #
+    columns = [i[0] for i in cur.description]
+    last_batch = [dict(zip(columns, row)) for row in cur]    #
+    if last_batch[0]['batch_id']:
+        return int(last_batch[0]['batch_id'])
+    else:
+        return 1
 
 def stem_fuzzy(x):
     if x=='NULL':

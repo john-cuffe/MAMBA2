@@ -8,17 +8,18 @@ import datetime as dt
 if __name__=='__main__':
     ###start up by printing out the full config file
     for key in CONFIG:
-        print('#############')
-        print('''{}: {}'''.format(key, CONFIG[key]))
+        logger.info('#############')
+        logger.info('''{}: {}'''.format(key, CONFIG[key]))
     batch_summary={}
-    batch_summary['batch_id'] = CONFIG['batch_id']
+    db = get_db_connection(CONFIG)
+    batch_summary['batch_id'] = generate_batch_id(db)
+    logger.info
     ###set the start time
     batch_summary['batch_started'] = dt.datetime.now()
     batch_summary['batch_status'] = 'in_progress'
     batch_summary['batch_config'] = json.dumps(CONFIG).encode('utf-8')
     ###check if the database exists already
     if os.path.isfile(CONFIG['db_name'])==False:
-        db=get_db_connection(CONFIG)
         cur = db.cursor()
         ##sqlite doesn't like multi-line statements
         if CONFIG['sql_flavor']=='sqlite':
@@ -28,6 +29,8 @@ if __name__=='__main__':
         else:
             cur.execute(batch_info_qry)
             db.commit()
+
+    ###Check if batch summary is not present
     update_batch_summary(batch_summary)
     ###create the database
     try:
