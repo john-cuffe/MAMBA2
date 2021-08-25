@@ -2,21 +2,15 @@
 
 # =============================================================================
 # Imports go here
-import os
-import bz2
 import difflib
-import logging
+
 import math
-import time
-import timeit
-import zlib
-import pandas as pd
-import csv
 ###sets wd
 import numpy as np
+import pandas as pd
+
 #import programs.encode  # For Phonix transformation routine (used in syllable alignment
                # distance)
-import programs.mymath  # Contains arithmetic coder
 
 # =============================================================================
 # Special character used in the Jaro, Winkler and q-gram comparions functions.

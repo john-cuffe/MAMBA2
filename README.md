@@ -10,7 +10,13 @@ MAMBA2 User Guide
 
 [MAMBA Files](#MAMBAFiles)
 
+[Setting Up](#settingup)
 
+[Parsing Addresses](#parsingaddresses)
+
+[Custom Matching Models](#custom_models)
+
+[Recursive Feature Elimination](#recursive_feature_elimination)
 # Introduction
 
 MAMBA2 represents a substantial improvement in the flexibility and scalability of the original MAMBA, enabling the use on datasets beyond the Census&#39; Business Register, using Natural Language Processing techniques to stem and clean textual data, and allow for comparisons of different match metrics in the same model. It also selects the best performing model from a list of Machine Learning algorithms.
@@ -33,7 +39,6 @@ MAMBA is going to match two datafiles. You can call them whatever you want, and 
 
 ##MAMBA Files
  <a name="#MAMBAFiles"/>
-
 
 ### /data/\*data1_name\*.csv
 
@@ -62,7 +67,7 @@ This file is going to tell MAMBA which variables in your dataset serve as &#39;b
 
 #### Figure 1. Demonstration of block_names.csv file.
 
-![](RackMultipart20210728-4-wfnh29_html_16987f19080a2da0.png)
+![plot](./Documentation/figure_1_block_names.png)
 
 ### mamba_variable_types.csv
 
@@ -90,20 +95,18 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
 
 - Ensure that variable_name, \*data1_name\* and \*data2_name\* are all filled out with the exact address_component from _address_component_matching.csv_ or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/)
 
-  - training_data.csv
+### training_data.csv
     - This is the data that will tell MAMBA what you believe is a match and which is not. Currently, MAMBA requires a truth deck of matches in order to build off of. This file only contains three columns.
       - \*data1_name\*_id: the id for the record in the first dataset
       - \*data2_name\*_id: the id for the record in the second dataset
       - match: 1 if the pair is a match, 0 otherwise.
 
-### Run_match.bash
-
-This is the actual .bash file you need to edit to run MAMBA. Edit the following environment variables, which are picked up by Python
+### MAMBA.properties
+ <a name="mamba_properties"/>
+This is the file you will edit to run MAMBA.  After setting your configurations, just run run_match.py.
 
 #### Variables:
 
-    - batch_id
-      - This is a unique identifier for the batch.
     - Data1_name
       - The name of the first dataset. Exclude the &#39;.csv&#39; ending.
     - data2_name
@@ -162,31 +165,44 @@ This is the actual .bash file you need to edit to run MAMBA. Edit the following 
       - Do you have a custom matching model you want to run? See Custom Models for details
     - Imputation_method:
       - Either 'Nominal' or 'Imputer'.  See Imputation Methods below for details
+    - saved_model:
+      - If you have a model that you have saved and wish to use, enter its name here (include the .joblib ending).
+    - saved_model_target:
+      - If you want to _save_ your model, enter a file name here, ending with '.joblib'
+    - feature_elimination_mode:
+      - If this is set to True, the models generated will be fitted with recursive feature elimination.  
+
+## Setting up:
+ <a name="#settingup"/>
+ 
+ - Edit mamba.properties so each variable is configured correctly
+ - Configure variable_names.csv and block_names.csv are configured correctly
+ - CD into the main MAMBA directory
+ - Enter run_match.py
+ _ Watch MAMBA go!
+
 
 ## Parsing Addresses
+ <a name="#parsingaddresses"/>
 
 Much pre-processing for record linkage programs focuses on how best to parse addresses into useful strings. Although MAMBA makes minimal assumptions about data structure, it does offer the ability to use unparsed addresses to create variables to feed into the record linkage model, as well as blocks to structure the record linkage. This feature uses python&#39;s _usaddress_ module to identify component blocks of an address. Imagine you have a column that contains an unparsed address (e.g 123 Main Street, Apartment 1, Anytown, AS, USA), the _usaddress_ library is able to identify the street number (123), the street name (Main), the street name type (Street), the occupancy type (Apartment) and the occupancy type number (1), as well as the city, state, and zip code. This presents a massive amount of data for MAMBA to use to match.
+As described above, to use this feature, ensure _parse_address_ is set to True in your .properties file, and enter in the corresponding address columns for both of your datasets.
+- In your mamba_variable_types file, enter in any variables you want and the type of match, using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the variable_name and the columns with the corresponding name for your datasets (Columns B and C). Indicate any parsed variables with a 1 in the parsed_variable column.
+- In your _block_names.csv_ file, indicate any parsed blocks and their order you want to use using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the block_name and the columns with the corresponding name for your datasets (Columns C and D). Indicate any parsed variables with a 1 in the parsed_block column.
 
-### Setting up:
-
-As described above, to use this feature, ensure _parse_address_ is set to True in your .bash file, and enter in the corresponding address columns for both of your datasets.
-
-      - In your mamba_variable_types file, enter in any variables you want and the type of match, using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the variable_name and the columns with the corresponding name for your datasets (Columns B and C). Indicate any parsed variables with a 1 in the parsed_variable column.
-      - In your _block_names.csv_ file, indicate any parsed blocks and their order you want to use using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the block_name and the columns with the corresponding name for your datasets (Columns C and D). Indicate any parsed variables with a 1 in the parsed_block column.
-
-#### Using the use_remaining_parsed_address feature
+### Using the use_remaining_parsed_address feature
 
   - While parsing addresses, users may not want to compare multiple strings, but rather only identify some components of a parsed address to use as blocks or strings. This function allows any remainder to be used as a fuzzy variable.
   - For example, imagine parsing the address &#39;123 Main Street SW Apartment 1, Anytown, AS, 12345&#39;. If we wanted to match using city, state, and zip as blocks and include the address number as its own variable, MAMBA would remove those features from the string but leave &quot;Main Street SW Apartment 1&quot; as a string, which itself contains valuable information. Leaving the _use_remaining_parsed_address_ feature as &#39;True&#39; tells MAMBA to create a new fuzzy variable to use in the model based on all of the address components _not otherwise used as a block or a separate variable_.
  
-#### Custom Matching Models
+## Custom Matching Models
  <a name="custom_models"/>
  
   - Users may wish to user their own custom matching model in addition to those available in MAMBA.  
   - If so, user must enter a fully self-contained function in _custom_matching_function.py_ to run, as well as set the custom_matching function in _mamba.properties_ to True.
   - Currently, this model will be compared to the standard suite of matching models available to MAMBA, but future iterations will allow users to replace the MAMBA models completely.
 
-#### Imputation Methods
+## Imputation Methods
  <a name="imputation_methods"/>
   - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of _mamba.properties_.
     - Imputer:
@@ -200,4 +216,9 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
   - Additional Imputation Notes:
     - Distance variables are imputed with a value, in kilometers, of 4 times the diameter of the earth.  Future iterations will impute based on any possible geographic information, e.g. taking mean difference between all cases in a certain zip code.
     - Exact matching variables are coded as 0 (non-match), 1 (match), and -1 (either case is missing).
-      
+   
+ 
+ ## Recursive Feature Elimination
+  <a name="recursive_feature_elimination"/>
+ One of the biggest drawbacks to MAMBA's use of multiple string comparators is, unsurprisingly, that MAMBA is then forced to generate scores for each of the 13 string comparators for any fuzzy variables the user wishes.  While the overall fit of the models improves with more string comparators (Cuffe and Goldschlag, 2016), no amount of clever computing can overcome the need to do this many calculations.  
+ To give the user an opportunity to avoid this issue, this mode selects the lowest number of features to maximize the score for the model, while still using a randomized, paramterized grid search.  This mode can save substantial time:  For example, for a single 'fuzzy' variable, it can take MAMBA approximately 4.17 seconds to create 1000 scores.  However, the individual string comparators themselves are created in a mean time of .317 seconds, with a median of approximately .1 seconds.  In large runs, the extra time required to generate models that filter out features that don't contribute to the overall performance of the model will save substantial time. 

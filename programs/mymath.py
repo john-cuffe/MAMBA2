@@ -42,7 +42,6 @@
 # See: http://datamining.anu.edu.au/linkage.html
 #
 # =============================================================================
-import __future__
 """Module mymath.py - Various mathematical routines.
 
    See doc strings of individual functions for detailed documentation.
@@ -52,8 +51,9 @@ import __future__
 # Imports go here
 
 import logging
-import math
 import random
+
+import math
 
 
 # =============================================================================

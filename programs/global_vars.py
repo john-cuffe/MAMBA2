@@ -1,48 +1,17 @@
 # -*- coding: utf-8 -*-
-
-import os
 import sys
+import time
 import pandas as pd
 ###turn off chain warnings
 pd.options.mode.chained_assignment = None  # default='warn'
-import numpy as np
-import time
-import itertools as it
-import re
-import sklearn.utils
-import datetime as dt
-from sqlalchemy import create_engine
-from scipy import stats as stats
-import sqlite3
-import importlib as imp
-import timeit
-import multiprocessing
-import unicodedata
-import random
-import csv
 import ast
-import glob as glob
-from sklearn import tree
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import RandomizedSearchCV
-from sklearn.feature_selection import chi2, SelectKBest, RFECV
 #from sklearn.preprocessing import Imputer
-from sklearn.feature_selection import VarianceThreshold
-from sklearn.metrics import roc_curve
-from sklearn import metrics as metrics
 import logging
-from scipy.stats import randint as sp_randint
-import string
 #from runner_block import *
-from multiprocessing import Pool
 from nltk.stem.porter import PorterStemmer
-from nltk.corpus import stopwords
-from nltk.tokenize import RegexpTokenizer, sent_tokenize, word_tokenize
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()
 stemmer = PorterStemmer()
-import re
 ####Load the CONFIG
 ##get properties
 from programs.config import *
@@ -66,12 +35,9 @@ debug = ast.literal_eval(str(CONFIG['debugmode']))
 logging.info('Scoring Criteria: {0}'.format(scoringcriteria))
 logging.info('Debug Mode? {0}'.format(debug))
 
-from programs.connect_db import *
 from programs.create_db_helpers import *
 from programs.general_helpers import *
 import programs.febrl_methods as feb
-
-from inspect import getmembers, isfunction
 
 ############
 ###CHUNK: SET DATA AND PROGRAM PATH, TIME, AND IMPORT FEBRL

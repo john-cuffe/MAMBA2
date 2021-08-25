@@ -7,26 +7,9 @@
 # Description: Mamba 2.0.  Simpler.  Mamba-ier
 ################################################################################
 '''
-import os
-import sys
-from subprocess import call
-import logging
-import csv
-import pandas as pd
-import numpy as np
-import datetime as dt
-import time
-import ast
-import multiprocessing
-import sqlite3
-from sqlalchemy import create_engine
-import nltk
-import sklearn.feature_extraction.text as txt
-import itertools as it
-from programs.global_vars import *
 from programs.create_db_helpers import *
-from programs.general_helpers import *
-from programs.connect_sqlite import *
+from programs.global_vars import *
+
 ###Set data and program paths
 outputPath=CONFIG['outputPath']
 

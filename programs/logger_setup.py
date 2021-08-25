@@ -1,4 +1,3 @@
-import logging, os, sys, time
 from programs.global_vars import *
 #from programs.psql_logging_handler import postgresqlLoggingHandler
 

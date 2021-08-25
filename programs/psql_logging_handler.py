@@ -1,10 +1,14 @@
-import psycopg2
-import logging
-import time
-import socket
-import traceback, os, threading, time
-from psycopg2.extras import execute_values
 import datetime as dt
+import logging
+import socket
+import threading
+import time
+import traceback
+
+import psycopg2
+from psycopg2.extras import execute_values
+
+
 class postgresqlLoggingHandler(logging.Handler):
 
     def format_time(self, record):

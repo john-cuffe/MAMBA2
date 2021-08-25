@@ -3,12 +3,13 @@
 '''
 This is a list of helper functions to create our database
 '''
-import programs.global_vars as global_vars
-from programs.logger_setup import *
-from programs.connect_db import *
 import usaddress as usadd
 from programs.address_standardizer.standardizer import *
 from psycopg2.extras import execute_values
+import programs.global_vars as global_vars
+from programs.connect_db import *
+from programs.logger_setup import *
+from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
 
 ###a query to create the batch_summary and batch_statistics tables
@@ -24,7 +25,7 @@ failure_message text);
 create index batch_summary_batch_idx on batch_summary(batch_id);
 
 create table batch_statistics(
-batch_id text,
+batch_id bigint,
 block_level text,
 block_id text,
 block_time float,
@@ -72,7 +73,14 @@ def generate_batch_id(db):
     :return: batch number to use
     '''
     cur = db.cursor()
-    cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')
+    if CONFIG['sql_flavor']=='sqlite':
+        out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]
+        if out['cnt'] > 0:
+            cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')
+        else:
+            return 1
+    else:
+        cur.execute('''select max(batch_id)+1 batch_id from batch_summary if exists batch_summary''')
     #
     columns = [i[0] for i in cur.description]
     last_batch = [dict(zip(columns, row)) for row in cur]    #

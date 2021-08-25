@@ -1,4 +1,3 @@
-import re
 import json
 
 def read_properties( props_file, dict):

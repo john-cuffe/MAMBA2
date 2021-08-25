@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-import psycopg2
 
-import time
+import psycopg2
 
 
 def get_db_connection(db_info, timeout=1):

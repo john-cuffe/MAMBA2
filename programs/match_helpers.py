@@ -2,12 +2,21 @@
 ###CHUNK: THE RANDOM FOREST FUNCTIONS
 ############
 from __future__ import division
-import os
-from programs.global_vars import *
-from copy import deepcopy as dcpy
+
 import copy
+import os
+from copy import deepcopy as dcpy
+import numpy as np
+from scipy.stats import randint as sp_randint
+from programs.global_vars import *
 from programs.logger_setup import *
+from  sklearn.model_selection import RandomizedSearchCV
+from sklearn.feature_selection import RFECV
+import warnings
+from sklearn.model_selection import StratifiedKFold
 logger=logger_setup(CONFIG['log_file_name'])
+from sklearn.ensemble import RandomForestClassifier
+import random
 
 ##Run the Classifier
 def runRFClassifier(y, X, nT, nE, mD):
@@ -101,8 +110,6 @@ def probsfunc(x):
 
 ####The Haversine distinace between two points
 import math
-
-
 def haversine(coord1, coord2):
     '''
     Lots of research went into this
@@ -152,7 +159,7 @@ def nominal_impute(values, header_names, header_types, nominal_info):
     return values
 
 
-def create_scores(input_data, score_type, varlist):
+def create_scores(input_data, score_type, varlist, headers):
     '''
     this function produces the list of dictionaries for all of the scores for the fuzzy variables.
     each dict will have two arguments: the array and a list of names
@@ -165,6 +172,27 @@ def create_scores(input_data, score_type, varlist):
     '''
     db=get_db_connection(CONFIG)
     if score_type=='fuzzy':
+        ##first, let's see if we need to hit the data at all
+        ####now for each pair, get the value for each fuzzy variable
+        fuzzy_var_list=[i['variable_name'] for i in varlist]
+        ####assemble the to_run list
+        method_names=[i.__name__ for i in methods]
+        to_run=[]
+        out_headers = []
+        #####if we aren't using all variables
+        if headers!='all':
+            for header in headers:
+                    if '_' in header:
+                        my_name=header.split('_')
+                        ###see if the name is in the method names
+                        if my_name[1] in method_names:
+                            to_run.append({'variable_name':my_name[0], 'function':[meth for meth in methods if meth.__name__==my_name[1]][0]})
+                            out_headers.append('{}_{}'.format(my_name[0], my_name[1]))
+        else:
+            to_run = [{'variable_name': i['variable_name'], 'function':m} for i in varlist for m in methods]
+            out_headers=['{}_{}'.format(i['variable_name'], i['function'].__name__) for i in to_run]
+        '''pick up here, need to do same thing for other types'''
+        ###get the datai
         data1_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###create an indexed list of the id pairs to serve as the core of our dictionary
@@ -180,27 +208,26 @@ def create_scores(input_data, score_type, varlist):
         ###give the data values the name for each searching
         data1_values = {str(item['id']):item for item in data1_values}
         data2_values = {str(item['id']):item for item in data2_values}
-        ####now for each pair, get the value for each fuzzy variable
-        fuzzy_var_list=[i['variable_name'] for i in varlist]
-        ##convert fuzzy vars to a list
         ###now create the dictionary with the list of names and the array
-        out_arr = np.zeros(shape=(len(core_dict), len(fuzzy_var_list)*len(methods)))
+        out_arr = np.zeros(shape=(len(core_dict), len(to_run)))
         for i in range(len(core_dict)):
             i_scores=[]
-            for j in range(len(fuzzy_var_list)):
-                for k in methods:
-                    if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][fuzzy_var_list[j]]!='NULL' and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][fuzzy_var_list[j]]!='NULL':
-                        ####Two null match methods: either they get a 0 or the median value for the chunk
-                        try:
-                            i_scores.append(k(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][fuzzy_var_list[j]], data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][fuzzy_var_list[j]]))
-                        except:
-                            i_scores.append(np.nan)
-                        ###other method can go here if we think of one
-                    else:
+            for k in to_run:
+                ####get the fuzzy var info
+                fuzzy_var_info=[var for var in varlist if var['variable_name']==k['variable_name']][0]
+                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][k['variable_name']]!='NULL' and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][k['variable_name']]!='NULL':
+                    ####Two null match methods: either they get a 0 or the median value for the chunk
+                    try:
+                        i_scores.append(k['function'](data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][fuzzy_var_info['variable_name']],
+                                                      data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][fuzzy_var_info['variable_name']]))
+                    except:
                         i_scores.append(np.nan)
+                    ###other method can go here if we think of one
+                else:
+                    i_scores.append(np.nan)
             out_arr[i,]=i_scores
         ####Now return a dictionary of the input array and the names
-        return {'output':out_arr, 'names':['{}_{}'.format(i,j.__name__) for i in fuzzy_var_list for j in methods]}
+        return {'output':out_arr, 'names':out_headers}
     elif score_type=='numeric_dist':
         ###numeric distance variables
         data1_ids = ','.join(
@@ -338,43 +365,58 @@ def create_scores(input_data, score_type, varlist):
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': date_vars}
 
-def create_all_scores(input_data, method):
+def create_all_scores(input_data, method, headers='all'):
     '''
     This function takes input data and creates all the scores needed
     :param input_data: the data we want to generate scores for
-    :param method: either "prediction" or "truth".  If prediction, just return an array of X values.  If "Truth" return y, X, and X_hdrs
+    :param method: either "prediction" or "truth".  If prediction, just return an array of X values.  If "Truth" return X, and X_hdrs
     :return: y, X_imputed, and X_hdrs
     '''
     ###get the varible types
     var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
+    ###add possible headers
+    for v in var_rec:
+        if v['match_type']=='fuzzy':
+            v['possible_headers'] = ['{}_{}'.format(v['variable_name'], meth.__name__) for meth in methods]
     ###We have three types of variables.
-    #1) Fuzzy: Create all the fuzzy values from febrl
-    fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
+    #1) First, identify all the variables we are going to need.  Fuzzy, exact, numeric_dist
+    if headers=='all':
+        fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
+        numeric_dist_vars=[i for i in var_rec if i['match_type']=='num_distance']
+        exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
+        geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
+        date_vars = [i for i in var_rec if i['match_type'] == 'date']
+    else:
+        ###If we are running with recursive feature elimination, just find the features we are going to use
+        fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy' and any(item in headers for item in i['possible_headers'])==True]
+        numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance' and i['variable_name'] in headers]
+        exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'] in headers]
+        geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and i['variable_name'] in headers]
+        date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
+    ###Are we running any fuzzy_vars?
     if len(fuzzy_vars) > 0:
-        fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars)
+        fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers)
         X=fuzzy_values['output']
         X_hdrs=copy.deepcopy(fuzzy_values['names'])
     #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
-    numeric_dist_vars=[i for i in var_rec if i['match_type']=='num_distance']
     if len(numeric_dist_vars) > 0:
-        numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars)
+        numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars, headers)
         X=np.hstack((X, numeric_dist_values['output']))
         X_hdrs.extend(numeric_dist_values['names'])
     #3) exact: if they match, 1, else 0
-    exact_match_vars=[i for i in var_rec if i['match_type']=='exact']
     if len(exact_match_vars) > 0:
-        exact_match_values=create_scores(input_data, 'exact', exact_match_vars)
+        exact_match_values=create_scores(input_data, 'exact', exact_match_vars, headers)
         X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
-    geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
+    ###Geo Distance
     if len(geo_distance) > 0:
-        geo_distance_values = create_scores(input_data, 'geo_distance', 'lat')
+        geo_distance_values = create_scores(input_data, 'geo_distance', 'lat', headers)
         if type(geo_distance_values['output']) != string:
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
-    date_vars = [i for i in var_rec if i['match_type']=='date']
+    ####date vars
     if len(date_vars) > 0:
-        date_values = create_scores(input_data,'date',date_vars)
+        date_values = create_scores(input_data,'date',date_vars, headers)
         if type(date_values['output']) != string:
             X = np.hstack((X, date_values['output']))
             X_hdrs.extend(date_values['names'])
@@ -386,6 +428,12 @@ def create_all_scores(input_data, method):
         ###fit the imputation
         imp.fit(X)
         X = imp.transform(X)
+        ###making the dependent variable array
+        if method == 'truth':
+            y = input_data['match'].values
+            return y, X, X_hdrs, imp
+        else:
+            return X, X_hdrs
     elif CONFIG['imputation_method'] == 'Nominal':
         ###for the fuzzy values, we will cut to each .1, and make any missing -1
         db = get_db_connection(CONFIG)
@@ -413,14 +461,13 @@ def create_all_scores(input_data, method):
                 header_types.append('other')
         ###Apply the nominal imputation function to each row
         X=np.apply_along_axis(nominal_impute, 1, X, header_names=X_hdrs, header_types=header_types, nominal_info=nominal_boundaries)
-    else:
-        pass
-    ###making the dependent variable array
-    if method=='truth':
-        y = input_data['match'].values
-        return y, X, X_hdrs
-    else:
-        return X, X_hdrs
+        ###making the dependent variable array
+        if method == 'truth':
+            y = input_data['match'].values
+            return y, X, X_hdrs, 'Nominal'
+        else:
+            return X, X_hdrs
+
 
 def generate_logit(y, X, X_hdrs):
     '''
@@ -431,28 +478,77 @@ def generate_logit(y, X, X_hdrs):
     :return: Dictionay with type, score, model, and means if applicable.  Note we have a warning for high multicollinearity, AND ONLY USED
     WHEN USING ACCURACY AS THE SCORE (ONLY REAL COMPARABLE OPTION OUT OF THE BOX)
     '''
-    logger.info('\n\n######CREATE LOGISTIC REGRESSION MODEL ######\n\n')
+    logger.info('######CREATE LOGISTIC REGRESSION MODEL ######')
+    from sklearn.linear_model import LogisticRegression
+    ##Run the Grid Search
+    if ast.literal_eval(CONFIG['debugmode'])==True:
+        niter = 5
+    else:
+        niter = 200
     ##Mean-Center
     X=pd.DataFrame(X)
     ##Save the means
     X.columns=X_hdrs
     X_means=X.mean().to_dict()
     X=X-X.mean()
-    ##Impute the missing data
-    imp = IterativeImputer(max_iter=10, random_state=0)
-    ###fit the imputation
-    imp.fit(X)
-    X_imputed=imp.transform(X)
-    mod=LogisticRegression(random_state=0, solver='liblinear').fit(X_imputed,y)
-    preds=mod.predict(X_imputed)
-    score=mod.score(X_imputed,y)
-    vif=calc_vif(X_imputed, X_hdrs)
-    if max(vif['VIF']) > 5:
-        logger.info('WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
-        for i in vif.to_dict('record'):
-            if i['VIF'] > 5:
-                logger.info('{}: VIF = {}'.format(i['name'], round(i['VIF'],2)))
-    return {'type':'Logistic Regression', 'score':score, 'model':mod, 'means':X_means, 'imputer':imp}
+    if ast.literal_eval(CONFIG['feature_elimination_mode']) == False:
+        myparams = {
+            'solver':['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']}
+        mod=LogisticRegression(random_state=0, solver='liblinear')
+        cv_rfc = RandomizedSearchCV(estimator=mod, param_distributions=myparams, cv=10, scoring=scoringcriteria,n_iter=niter)
+        cv_rfc.fit(X, y)
+        preds=cv_rfc.predict(X)
+        score=cv_rfc.score(X,y)
+        try:
+            vif=calc_vif(X, X_hdrs)
+            if max(vif['VIF']) > 5:
+                logger.info('WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
+                for i in vif.to_dict('record'):
+                    if i['VIF'] > 5:
+                        logger.info('{}: VIF = {}'.format(i['name'], round(i['VIF'],2)))
+            return {'type': 'Logistic Regression', 'score': score, 'model': mod, 'means': X_means,
+                    'variable_headers': X_hdrs}
+
+        except Exception as error:
+            logger.warning("Warning.  Unable to calculate VIF, error {}.  Restart MAMBA with logit disabled. Proceeding by ignoring Logit".format(error))
+            return 'fail'
+    else:
+        myparams = {
+            'estimator__solver': ['newton-cg', 'lbfgs', 'liblinear', 'sag', 'saga']}
+        mod = LogisticRegression(random_state=0, solver='liblinear').fit(X, y)
+        selector = RFECV(mod, step=1, cv=5)
+        cv_rfc = RandomizedSearchCV(estimator=selector, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                    n_iter=niter)
+        cv_rfc.fit(X, y)
+        preds = cv_rfc.predict(X)
+        score = cv_rfc.score(X, y)
+        try:
+            vif = calc_vif(X, X_hdrs)
+            if max(vif['VIF']) > 5:
+                logger.info(
+                    'WARNING, SOME VARIABLES HAVE HIGH COLINEARITY (EVEN WITH MEAN-CENTERING).  RECONSIDER USING THE LOGIT. VARIABLES WITH ISSUES ARE:')
+                for i in vif.to_dict('record'):
+                    if i['VIF'] > 5:
+                        logger.info('{}: VIF = {}'.format(i['name'], round(i['VIF'], 2)))
+        except Exception as error:
+            logger.warning("Warning.  Unable to calculate VIF, error {}.  Restart MAMBA with logit disabled. Proceeding by ignoring Logit".format(error))
+            return 'fail'
+        # Pick the X header values we need to use
+        new_X_hdrs = []
+        to_delete = []
+        for hdr in range(len(X_hdrs)):
+            my_ranking = cv_rfc.best_estimator_.ranking_[hdr]
+            if my_ranking > 7:
+                to_delete.append(hdr)
+            else:
+                new_X_hdrs.append(X_hdrs[hdr])
+        ####Now delete the columns from X
+        new_X = np.delete(X, to_delete, axis=1)
+        mod.fit(new_X, y)
+        score = np.round(mod.score(new_X, y), 5)
+        ###limit X to just what we need
+        logger.info('Random Forest Complete.  Score={}'.format(score))
+        return {'type': 'Logistic Regression', 'score': score, 'model': mod, 'variable_headers': new_X_hdrs, 'means': X_means}
 
 def generate_rf_mod(y, X, X_hdrs):
     '''
@@ -460,7 +556,7 @@ def generate_rf_mod(y, X, X_hdrs):
     :param y: the truth data column showing the real values.
     :param X: the indepdent variables for the model
     :param X_hdrs: the headers of X    '''
-    logger.info('\n\n######CREATE RANDOM FOREST MODEL ######\n\n')
+    logger.info('######CREATE RANDOM FOREST MODEL ######')
     ###Generate the Grid Search to find the ideal values
     features_per_tree = ['sqrt', 'log2']
     rf = RandomForestClassifier(n_jobs=int(CONFIG['rf_jobs']), max_depth=10, max_features='sqrt', n_estimators=10)
@@ -469,23 +565,53 @@ def generate_rf_mod(y, X, X_hdrs):
         'max_features': features_per_tree,
         'max_depth': sp_randint(5, 25)}
     ##Run the Grid Search
-    if debug:
-        niter = 5
+    if ast.literal_eval(CONFIG['debugmode'])==True:
+        niter = 1
     else:
         niter = 200
-    cv_rfc = RandomizedSearchCV(estimator=rf, param_distributions=myparams, cv=10, scoring=scoringcriteria,n_iter=niter)
-    cv_rfc.fit(X, y)
-    ##Save the parameters
-    trees = cv_rfc.best_params_['n_estimators']
-    features_per_tree = cv_rfc.best_params_['max_features']
-    score = cv_rfc.best_score_
-    max_depth = cv_rfc.best_params_['max_depth']
-    ###No obvious need for MAMBALITE here
-    ##In future could just remove the worst performaning variable using a relimp measure then run the full model
-    #if mambalite == False:
-    logger.info('Random Forest Completed.  Score {}'.format(score))
-    rf_mod = runRFClassifier(y, X, trees, features_per_tree, max_depth)
-    return {'type':'Random Forest', 'score':score, 'model':rf_mod, 'imputer':imp}
+    if ast.literal_eval(CONFIG['feature_elimination_mode']) == False:
+        cv_rfc = RandomizedSearchCV(estimator=rf, param_distributions=myparams, cv=5, scoring=scoringcriteria,n_iter=niter)
+        cv_rfc.fit(X, y)
+        ##Save the parameters
+        trees = cv_rfc.best_params_['n_estimators']
+        features_per_tree = cv_rfc.best_params_['max_features']
+        score = cv_rfc.best_score_
+        max_depth = cv_rfc.best_params_['max_depth']
+        ###No obvious need for MAMBALITE here
+        ##In future could just remove the worst performaning variable using a relimp measure then run the full model
+        #if mambalite == False:
+        logger.info('Random Forest Completed.  Score {}'.format(score))
+        rf_mod = runRFClassifier(y, X, trees, features_per_tree, max_depth)
+        return {'type':'Random Forest', 'score':score, 'model':rf_mod, 'variable_headers':X_hdrs}
+    else:
+        ##First, get the scores
+        myparams = {
+            'estimator__n_estimators': sp_randint(1, 25),
+            'estimator__max_features': features_per_tree,
+            'estimator__max_depth': sp_randint(5, 25)}
+        selector = RFECV(rf, step=1, cv=5)
+        cv_rfc = RandomizedSearchCV(estimator=selector, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                    n_iter=niter)
+        cv_rfc.fit(X, y)
+        # generate the model
+        rf_mod = runRFClassifier(y, X, cv_rfc.best_estimator_.get_params()['estimator__n_estimators'], cv_rfc.best_estimator_.get_params()['estimator__max_features'], cv_rfc.best_estimator_.get_params()['estimator__max_depth'])
+        # Pick the X header values we need to use
+        new_X_hdrs = []
+        to_delete = []
+        for hdr in range(len(X_hdrs)):
+            my_ranking = cv_rfc.best_estimator_.ranking_[hdr]
+            if my_ranking > 7:
+                to_delete.append(hdr)
+            else:
+                new_X_hdrs.append(X_hdrs[hdr])
+        ####Now delete the columns from X
+        new_X = np.delete(X, to_delete, axis=1)
+        rf_mod.fit(new_X, y)
+        score = np.round(rf_mod.score(new_X, y), 5)
+        ###limit X to just what we need
+        logger.info('Random Forest Complete.  Score={}'.format(score))
+        return {'type': 'Random Forest', 'score': score, 'model': rf_mod, 'variable_headers': new_X_hdrs}
+
 
 def generate_ada_boost(y, X, X_hdrs):
     '''
@@ -494,14 +620,14 @@ def generate_ada_boost(y, X, X_hdrs):
     :param X: the indepdent variables for the model
     :param X_hdrs: the headers of X
     '''
-    logger.info('\n\n######CREATE ADABoost MODEL ######\n\n')
+    logger.info('######CREATE ADABoost MODEL ######')
     from sklearn.ensemble import AdaBoostClassifier
     ###Generate the Grid Search to find the ideal values
     ##setup the SVM
     ada = AdaBoostClassifier(
                          algorithm="SAMME",
                          n_estimators=200)
-    if debug:
+    if ast.literal_eval(CONFIG['debugmode'])==True:
         niter = 5
     else:
         niter = int(np.round(len(X)/float(2),0))
@@ -509,21 +635,48 @@ def generate_ada_boost(y, X, X_hdrs):
     myparams = {
         'n_estimators': sp_randint(1, 25),
         'algorithm':['SAMME','SAMME.R']}
-    ##First, get the scores
-    cv_rfc = RandomizedSearchCV(estimator=ada, param_distributions=myparams, cv=10, scoring=scoringcriteria,
-                                n_iter=niter)
-    cv_rfc.fit(X, y)
-    ##Save the parameters
-    trees = cv_rfc.best_params_['n_estimators']
-    algo = cv_rfc.best_params_['algorithm']
-    score = cv_rfc.best_score_
-    ###No obvious need for MAMBALITE here
-    ##In future could just remove the worst performaning variable using a relimp measure then run the full model
-    # if mambalite == False:
-    ada_mod = AdaBoostClassifier(algorithm=algo, n_estimators=trees)
-    logger.info('AdaBoost Complete.  Score={}'.format(score))
-    ###Note for when you return--you need to change the predict function to do cross_val_predict
-    return {'type': 'AdaBoost', 'score': score, 'model': ada_mod, 'imputer':imp}
+    if ast.literal_eval(CONFIG['feature_elimination_mode'])==False:
+        ##First, get the scores
+        cv_rfc = RandomizedSearchCV(estimator=ada, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                    n_iter=niter)
+        cv_rfc.fit(X, y)
+        ##Save the parameters
+        trees = cv_rfc.best_params_['n_estimators']
+        algo = cv_rfc.best_params_['algorithm']
+        score = cv_rfc.best_score_
+        ###No obvious need for MAMBALITE here
+        ##In future could just remove the worst performaning variable using a relimp measure then run the full model
+        # if mambalite == False:
+        ada_mod = AdaBoostClassifier(algorithm=algo, n_estimators=trees)
+        logger.info('AdaBoost Complete.  Score={}'.format(score))
+        return {'type': 'AdaBoost', 'score': score, 'model': ada_mod, 'variable_headers':X_hdrs}
+    else:
+        ##First, get the scores
+        myparams = {
+            'estimator__n_estimators': sp_randint(1, 25),
+            'estimator__algorithm': ['SAMME', 'SAMME.R']}
+        selector = RFECV(ada, step=1, cv=5)
+        cv_rfc = RandomizedSearchCV(estimator=selector, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                    n_iter=niter)
+        cv_rfc.fit(X, y)
+        # generate the model
+        ada_mod = AdaBoostClassifier(algorithm=cv_rfc.best_estimator_.get_params()['estimator__algorithm'], n_estimators=cv_rfc.best_estimator_.get_params()['estimator__n_estimators'])
+        # Pick the X header values we need to use
+        new_X_hdrs = []
+        to_delete = []
+        for hdr in range(len(X_hdrs)):
+            my_ranking = cv_rfc.best_estimator_.ranking_[hdr]
+            if my_ranking > 7:
+                to_delete.append(hdr)
+            else:
+                new_X_hdrs.append(X_hdrs[hdr])
+        ####Now delete the columns from X
+        new_X = np.delete(X, to_delete, axis=1)
+        ada_mod.fit(new_X,y)
+        score = np.round(ada_mod.score(new_X,y), 5)
+        ###limit X to just what we need
+        logger.info('AdaBoost Complete.  Score={}'.format(score))
+        return {'type': 'AdaBoost', 'score': score, 'model': ada_mod, 'variable_headers':new_X_hdrs}
 
 def generate_svn_mod(y, X, X_Hdrs):
     '''
@@ -537,11 +690,10 @@ def generate_svn_mod(y, X, X_Hdrs):
     from sklearn import svm
     ##setup the SVM
     svc = svm.SVC(class_weight='balanced', gamma='scale')
-    if debug:
+    if ast.literal_eval(CONFIG['debugmode'])==True:
         niter = 5
     else:
         niter = int(np.round(len(X)/float(2),0))
-    from sklearn.model_selection import cross_val_score, cross_val_predict
     myparams={
         'kernel':['linear','poly','rbf'],
     }
@@ -556,8 +708,7 @@ def generate_svn_mod(y, X, X_Hdrs):
     logger.info('SVM Complete.  Max Score={}'.format(score))
     svc=svm.SVC(gamma=gamma, degree=degree, kernel=kernel)
     ###Note for when you return--you need to change the predict function to do cross_val_predict
-    return {'type':'SVM', 'score':score, 'model':svc, 'imputer':imp}
-
+    return {'type':'SVM', 'score':score, 'model':svc, 'variable_headers':new_X_hdrs}
 
 def choose_model(truthdat):
     '''
@@ -565,30 +716,33 @@ def choose_model(truthdat):
     :param truthdat:
     :return:
     '''
-    y, X, X_hdrs = create_all_scores(truthdat, method='truth')
+    models = []
+    y, X, X_hdrs, imputer = create_all_scores(truthdat, method='truth')
     if ast.literal_eval(CONFIG['use_logit'])==True:
         logit=generate_logit(y, X, X_hdrs)
+        if logit!='fail':
+            logit = {'score': 0}
     else:
         logit={'score':0}
+    models.append(logit)
     rf=generate_rf_mod(y, X, X_hdrs)
+    models.append(rf)
     #svn=generate_svn_mod(truthdat)
     svn={'score':0}
+    models.append(svn)
     ada=generate_ada_boost(y, X, X_hdrs)
+    models.append(ada)
     ###Are we using the custom model?
     if ast.literal_eval(CONFIG['use_custom_model'])==True:
         import programs.custom_model as cust
         logger.info('\n\n######CREATE CUSTOM MODEL {}######\n\n'.format(cust.my_model_name))
         custom_model = cust.my_custom_model(y, X, X_hdrs)
-        ###find the max score
-        best_score=max([i['score'] for i in [rf, svn, ada, logit, custom_model]])
-        best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
-    else:
-        best_score=max([i['score'] for i in [rf, svn, ada, logit]])
-        best_model=[i for i in [rf, svn,ada,logit] if i['score']==best_score][0]
+        models.append(custom_model)
+    ###ID the best score
+    best_score=max([i['score'] for i in models])
+    best_model=[i for i in models if i['score']==best_score][0]
     logger.info('Selected the {} Model, with the score of {}'.format(best_model['type'], best_model['score']))
     return best_model
-
-
 
 def intersection(lst1, lst2):
     '''
@@ -599,7 +753,6 @@ def intersection(lst1, lst2):
     '''
     lst3 = [value for value in lst1 if value in lst2]
     return lst3
-
 
 
 ####The actual match funciton
@@ -638,7 +791,7 @@ def match_fun(arg):
                                  'block_non_matches': 0,
                                  'block_non_matches_avg_score': 0}
     else:
-        X, X_hdrs = create_all_scores(input_data, 'prediction')
+        X, X_hdrs = create_all_scores(input_data, 'prediction', arg['mod']['variable_headers'])
         ###Mean Center
         if arg['model']['type']=='Logistic Regression':
             X=pd.DataFrame(X, columns=X_hdrs)-arg['model']['means']
@@ -730,7 +883,7 @@ def match_fun(arg):
     db.close()
 
 ####The block function
-def run_block(block, rf_mod):
+def run_block(block, model):
     '''
     This function creates the list of blocks to use for comparison and then runs the matches
     :param block: the dict of the block we are running
@@ -752,7 +905,8 @@ def run_block(block, rf_mod):
     for k in range(len(block_list)):
         my_arg={}
         my_arg['var_rec']=var_rec
-        my_arg['model']=rf_mod
+        my_arg['model']=model
+        my_arg['X_hdrs']=model['variable_headers']
         my_arg['target']=block_list[k]
         my_arg['block_info']=block
         if len(block_list) > 10:
@@ -796,6 +950,6 @@ def run_block(block, rf_mod):
 
 if __name__=='__main__':
     print('why did you do this?')
-    
+    os._exit(0)
     
     

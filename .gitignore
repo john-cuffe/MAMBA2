@@ -10,7 +10,6 @@ mamba_db
 mamba_test_log
 *.pyc
 *.gz
-*.pyc
 setup_envs_python.py
 *.csv
 setup_envs_python.py
@@ -22,5 +21,13 @@ programs/address_standardizer/amgScore.py
 programs/address_standardizer/test.py
 programs/address_standardizer/standardizer_copy.py
 programs/address_standardizer/encode.py
-programs/custom_model.py
 programs/connect_sqlite.py
+*.pyc
+*.pyc
+*.iml
+*.joblib
+*.imp
+newmod.joblib.txt
+*.xml
+*.ipynb
+data/readme.txt
