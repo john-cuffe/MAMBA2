@@ -14,6 +14,8 @@ from  sklearn.model_selection import RandomizedSearchCV
 from sklearn.feature_selection import RFECV
 import warnings
 from sklearn.model_selection import StratifiedKFold
+import programs.custom_scoring_methods as cust_scoring
+from inspect import getmembers, isfunction
 logger=logger_setup(CONFIG['log_file_name'])
 from sklearn.ensemble import RandomForestClassifier
 import random
@@ -39,50 +41,6 @@ def runRFClassifier(y, X, nT, nE, mD):
     model.fit(X, y)
     # print('Random Forest Time (Min): {0}'.format((time.time()-tfunc)/60))
     return model
-
-def featSelRFImpurity(y,X,hdr,k,nT, nE,mD):
-    """
-    Description: Perform random forest decreased impurity feature selection
-    Parameters:
-        y - array of 1/0 truth for UM
-        X - array of features
-        hdr - column names for features in X
-        k - number of features to select
-        nE - nubmer of estimators
-        mD - max depth
-    Returns: cols, indexed column positions for features selected
-    """
-    tfunc = time.time()
-    #print('#'*10+str(round((time.time() - t0)/60, 2))+' Minutes: Feature Selection (Impurity Method)'+'#'*10)
-    # fit requires 1-d array not column vector
-    y = y.ravel()
-    # fit feature selection model
-    model= RandomForestClassifier(n_estimators=nT,max_features=nE,max_depth=mD)
-    model.fit(X, y)
-    # extract column scores
-    rndscores=[round(i, 2) for i in model.feature_importances_]
-    colScore = sorted(zip(range(X.shape[1]),rndscores),key=lambda tup: tup[1],reverse=True)[0:k]
-    # scores with headers
-    hdrScore = sorted(zip(hdr,rndscores),key=lambda tup: tup[1],reverse=True)[0:k]
-    # vector of columns selected
-    cols=[x[0] for x in colScore]
-    #print('Top +'10 Features: {0}'.format(hdrScore))
-    #print('Selected Features: {0}'.format(hdrScore))
-    #print('Function Time (Min): {0}'.format((time.time()-tfunc)/60))
-    return hdrScore
-
-###Run the Predictions
-def predict(model, X):
-    """
-    Description: Executes predict function for a giinput model and set of features
-    Parameters:
-        model - model object of classifier (e.g. RandomForestClassifier)
-        X - array of features
-    Returns: predicted, array of 1/0 predictions
-    """
-    tfunc = time.time()
-    predicted = model.predict(X)
-    return predicted
 
 ####VIF score
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -191,7 +149,6 @@ def create_scores(input_data, score_type, varlist, headers):
         else:
             to_run = [{'variable_name': i['variable_name'], 'function':m} for i in varlist for m in methods]
             out_headers=['{}_{}'.format(i['variable_name'], i['function'].__name__) for i in to_run]
-        '''pick up here, need to do same thing for other types'''
         ###get the datai
         data1_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
@@ -364,6 +321,54 @@ def create_scores(input_data, score_type, varlist, headers):
             out_arr[i,] = i_scores
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': date_vars}
+    elif score_type=='custom':
+        ###If we are running a training data model
+        data1_ids = ','.join(
+            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+        data2_ids = ','.join(
+            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
+        ###now get the values from the database
+        data1_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data1_name']],i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data2_name']],i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
+        ###get the values
+        data1_values = get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,
+                                                                                      table_name=CONFIG['data1_name'],
+                                                                                      id_list=data1_ids), db)
+        data2_values = get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,
+                                                                                      table_name=CONFIG['data2_name'],
+                                                                                      id_list=data2_ids), db)
+        ###give the data values the name for each searching
+        data1_values = {str(item['id']): item for item in data1_values}
+        data2_values = {str(item['id']): item for item in data2_values}
+        ####now for each pair, get the value for each variable
+        ###create an indexed list of the id pairs to serve as the core of our dictionary
+        input_data = dcpy(input_data)
+        input_data.reset_index(inplace=True, drop=False)
+        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
+        custom_vars = [i['variable_name'] for i in varlist]
+        ##convert fuzzy vars to a list
+        ###now create the dictionary with the list of names and the array
+        ####get the right arrangement of custom functions and targets
+        custom_scoring_functions=[{'name':i[0],'function':i[1]} for i in getmembers(cust_scoring,isfunction)]
+        ###get the corresponding function attached to the var list
+        for i in varlist:
+            m = [m for m in getmembers(cust_scoring, isfunction) if i['custom_variable_name'] == m[0]][0]
+            if m:
+                i['function']= m[1]
+        out_arr = np.zeros(shape=(len(core_dict), len(custom_vars)))
+        for i in range(len(core_dict)):
+            i_scores = []
+            for j in range(len(varlist)):
+                #####NOTE HERE.  YOU MUST FIGURE OUT HOW TO RETURN NULL VALUES IN YOUR FUNCTION
+                #####I know this seems lazy on my part, BUT there's too many alternatives (impute? just 0?)
+                #####that vary with what you're trying to do. (Also yes, it's lazy on my part)
+                i_scores.append(varlist[j]['function'](data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][varlist[j]['variable_name']],
+                                                       data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][varlist[j]['variable_name']]))
+            out_arr[i,] = i_scores
+        ####Now return a dictionary of the input array and the names
+        return {'output': out_arr, 'names': custom_vars}
 
 def create_all_scores(input_data, method, headers='all'):
     '''
@@ -373,7 +378,7 @@ def create_all_scores(input_data, method, headers='all'):
     :return: y, X_imputed, and X_hdrs
     '''
     ###get the varible types
-    var_rec=pd.read_csv('mamba_variable_types.csv').to_dict('record')
+    var_rec=pd.read_csv('mamba_variable_types.csv', keep_default_na=False).replace({'':None}).to_dict('record')
     ###add possible headers
     for v in var_rec:
         if v['match_type']=='fuzzy':
@@ -386,6 +391,7 @@ def create_all_scores(input_data, method, headers='all'):
         exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
         date_vars = [i for i in var_rec if i['match_type'] == 'date']
+        custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None]
     else:
         ###If we are running with recursive feature elimination, just find the features we are going to use
         fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy' and any(item in headers for item in i['possible_headers'])==True]
@@ -393,6 +399,7 @@ def create_all_scores(input_data, method, headers='all'):
         exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'] in headers]
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and i['variable_name'] in headers]
         date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
+        custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None]
     ###Are we running any fuzzy_vars?
     if len(fuzzy_vars) > 0:
         fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers)
@@ -420,6 +427,12 @@ def create_all_scores(input_data, method, headers='all'):
         if type(date_values['output']) != string:
             X = np.hstack((X, date_values['output']))
             X_hdrs.extend(date_values['names'])
+    ###custom values
+    if len(custom_vars) > 0:
+        custom_values = create_scores(input_data,'custom',custom_vars, headers)
+        if type(custom_values['output']) != string:
+            X = np.hstack((X, custom_values['output']))
+            X_hdrs.extend(custom_values['names'])
     ##Impute the missing data
     ####Options for missing data: Impute, or Interval:
     ##Imputation: Just impute the scores based on an iterative imputer
@@ -600,7 +613,7 @@ def generate_rf_mod(y, X, X_hdrs):
         to_delete = []
         for hdr in range(len(X_hdrs)):
             my_ranking = cv_rfc.best_estimator_.ranking_[hdr]
-            if my_ranking > 7:
+            if my_ranking > cv_rfc.best_estimator_.n_features_:
                 to_delete.append(hdr)
             else:
                 new_X_hdrs.append(X_hdrs[hdr])
@@ -666,7 +679,7 @@ def generate_ada_boost(y, X, X_hdrs):
         to_delete = []
         for hdr in range(len(X_hdrs)):
             my_ranking = cv_rfc.best_estimator_.ranking_[hdr]
-            if my_ranking > 7:
+            if my_ranking > cv_rfc.best_estimator_.n_features_:
                 to_delete.append(hdr)
             else:
                 new_X_hdrs.append(X_hdrs[hdr])
@@ -695,20 +708,46 @@ def generate_svn_mod(y, X, X_Hdrs):
     else:
         niter = int(np.round(len(X)/float(2),0))
     myparams={
-        'kernel':['linear','poly','rbf'],
+        'kernel':['linear','poly','rbf']
     }
-    ##First, get the scores
-    svn_rfc = RandomizedSearchCV(estimator=svc, param_distributions=myparams, cv=5, scoring=scoringcriteria)
-    svn_rfc.fit(X, y)
-    ##Save the parameters
-    kernel = svn_rfc.best_params_['kernel']
-    degree = svn_rfc.best_params_['degree']
-    gamma = svn_rfc.best_params_['gamma']
-    score = svn_rfc.best_score_
-    logger.info('SVM Complete.  Max Score={}'.format(score))
-    svc=svm.SVC(gamma=gamma, degree=degree, kernel=kernel)
-    ###Note for when you return--you need to change the predict function to do cross_val_predict
-    return {'type':'SVM', 'score':score, 'model':svc, 'variable_headers':new_X_hdrs}
+    if ast.literal_eval(CONFIG['feature_elimination_mode'])==False:
+        ##First, get the scores
+        svn_rfc = RandomizedSearchCV(estimator=svc, param_distributions=myparams, cv=5, scoring=scoringcriteria)
+        svn_rfc.fit(X, y)
+        ##Save the parameters
+        kernel = svn_rfc.best_params_['kernel']
+        score = svn_rfc.best_score_
+        logger.info('SVM Complete.  Max Score={}'.format(score))
+        svc=svm.SVC(gamma=gamma, degree=degree, kernel=kernel)
+        ###Note for when you return--you need to change the predict function to do cross_val_predict
+        return {'type':'SVM', 'score':score, 'model':svc, 'variable_headers':X_hdrs}
+    else:
+        ##First, get the scores
+        myparams = {
+            'estimator__kernel':['linear','poly','rbf']}
+        selector = RFECV(svc, step=1, cv=5)
+        cv_rfc = RandomizedSearchCV(estimator=selector, param_distributions=myparams, cv=10, scoring=scoringcriteria,
+                                    n_iter=niter)
+        cv_rfc.fit(X, y)
+        # generate the model
+        svn_mod = svm.SVC(kernel=cv_rfc.best_estimator_.get_params()['estimator__kernel'])
+        # Pick the X header values we need to use
+        new_X_hdrs = []
+        to_delete = []
+        for hdr in range(len(X_hdrs)):
+            my_ranking = cv_rfc.best_estimator_.ranking_[hdr]
+            if my_ranking > cv_rfc.best_estimator_.n_features_:
+                to_delete.append(hdr)
+            else:
+                new_X_hdrs.append(X_hdrs[hdr])
+        ####Now delete the columns from X
+        new_X = np.delete(X, to_delete, axis=1)
+        svn_mod.fit(new_X,y)
+        score = np.round(svn_mod.score(new_X,y), 5)
+        ###limit X to just what we need
+        logger.info('Support Vector Machine Complete.  Score={}'.format(score))
+        return {'type': 'SVN', 'score': score, 'model': svn_mod, 'variable_headers':new_X_hdrs}
+
 
 def choose_model(truthdat):
     '''

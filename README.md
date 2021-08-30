@@ -86,6 +86,8 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
     - Date: Date variables following the format &#39;Date_Format&#39; entered in the .bash file. This type of date variable will be compared using the Levenstein (edit) distance between the two strings. If either value is missing, returns 0. We just use the edit distance here because it provides an informative view of the number of edits and substitutions required to make the strings match. This is preferred over a strict subtraction of dates. For example, 1/1/2021 and 1/1/1011 is most likely a clerical error and requires only one substitution would match, but a simple distance calculation would give these two dates as a millennia apart.
   - Parsed_variable
     - Is the variable an output from parsing an address? If so, 1, otherwise 0
+  - custom_variable_name
+    - With this column, you can enter the name of a custom scoring metric from _programs.custom_scoring_methods_.  See below for details. If not using a custom scoring metric for the variable in question, leave blank.
 
 #### Figure 2. Demonstration of mamba_variable_types.csv
 
@@ -94,6 +96,10 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
 #### NOTE ON PARSED VARIABLES:
 
 - Ensure that variable_name, \*data1_name\* and \*data2_name\* are all filled out with the exact address_component from _address_component_matching.csv_ or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/)
+
+#### NOTE ON CUSTOM SCORING METHODS:
+
+- If you have a custom scoring method you wish to use (e.g. counting characters, a different fuzzy comparator) include it as a function in _programs.custom_scoring_methods.py_.   The function must accept as an argument two strings, _and also must handle missing values_ (e.g. by giving a particular value to missings).
 
 ### training_data.csv
     - This is the data that will tell MAMBA what you believe is a match and which is not. Currently, MAMBA requires a truth deck of matches in order to build off of. This file only contains three columns.
