@@ -399,7 +399,7 @@ def create_all_scores(input_data, method, headers='all'):
         exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'] in headers]
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and i['variable_name'] in headers]
         date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
-        custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None]
+        custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None and i['variable_name'] in headers]
     ###Are we running any fuzzy_vars?
     if len(fuzzy_vars) > 0:
         fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers)
