@@ -271,11 +271,13 @@ def update_batch_summary(batch_summary):
         else:
             ##First check for any json and do a json.dumps
             for key in batch_summary:
+                if batch_summary[key].__class__==dt.datetime:
+                    batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
                 if batch_summary[key].__class__==dict:
                     batch_summary[key]=json.dumps(batch_summary[key])
                 if batch_summary[key]!=batch_exists[0][key]:
                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
-                    cur.execute(update_statement, batch_summary[key])
+                    cur.execute(update_statement, [batch_summary[key]])
                     db.commit()
     elif CONFIG['sql_flavor']=='postgres':
         if len(batch_exists) == 0:
