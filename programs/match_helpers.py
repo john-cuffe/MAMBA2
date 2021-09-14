@@ -117,17 +117,26 @@ def nominal_impute(values, header_names, header_types, nominal_info):
     return values
 
 
-def create_scores(input_data, score_type, varlist, headers):
+def create_scores(input_data, score_type, varlist, headers, method='full'):
     '''
     this function produces the list of dictionaries for all of the scores for the fuzzy variables.
     each dict will have two arguments: the array and a list of names
     :param input_data: Either a block to query the database with OR a dataframe of variable types
-    :param fuzzy_vars: a list of dictionaries of fuzzy variables to target
-    :param model_training: Are we training a model or running an acutal match (False)
+    :param score_type;: the type of score to calculate
+    :param varlist: the variable list
+    :param headers: the list of headers
+    :param method: eithe r'training' or 'full' (the default).  if 'training', pull from the _training database tables
     NOTE FOR FUTURE SELF: IN NORMAL FUNCTIONS (MODEL_TRAINING=FALSE) THIS WILL ALREADY BE RUN IN A SUB-PROCESS
     SO YOU HAVE TO SINGLE-THREAD THE CALCULATIONS, SO THE WHOLE THING IS SINGLE-THREADED
     return: an array of values for each pair to match/variable and a list of headers
     '''
+    ###If we are using truth/training data, use those table names.  Otherwise use the main tables
+    if method=='truth':
+        table_1_name='{}_training'.format(CONFIG['data1_name'])
+        table_2_name='{}_training'.format(CONFIG['data2_name'])
+    else:
+        table_1_name=CONFIG['data1_name']
+        table_2_name=CONFIG['data2_name']
     db=get_db_connection(CONFIG)
     if score_type=='fuzzy':
         ##first, let's see if we need to hit the data at all
@@ -160,8 +169,8 @@ def create_scores(input_data, score_type, varlist, headers):
         data1_names=','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
         data2_names=','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
-        data1_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names, table_name=CONFIG['data1_name'], id_list=data1_ids), db)
-        data2_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names, table_name=CONFIG['data2_name'], id_list=data2_ids), db)
+        data1_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names, table_name=table_1_name, id_list=data1_ids), db)
+        data2_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names, table_name=table_2_name, id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']):item for item in data1_values}
         data2_values = {str(item['id']):item for item in data2_values}
@@ -196,9 +205,9 @@ def create_scores(input_data, score_type, varlist, headers):
         data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=CONFIG['data1_name'],id_list=data1_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
         data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=CONFIG['data2_name'],id_list=data2_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name,id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
@@ -233,9 +242,9 @@ def create_scores(input_data, score_type, varlist, headers):
         data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=CONFIG['data1_name'],id_list=data1_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
         data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=CONFIG['data2_name'],id_list=data2_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name, id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
@@ -266,8 +275,8 @@ def create_scores(input_data, score_type, varlist, headers):
         data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
         ###get the values
-        data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data1_name'], id_list=data1_ids), db)
-        data2_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data2_name'],id_list=data2_ids), db)
+        data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=table_1_name, id_list=data1_ids), db)
+        data2_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=table_2_name,id_list=data2_ids), db)
         input_data = dcpy(input_data)
         input_data.reset_index(inplace=True, drop=False)
         core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('record')
@@ -294,9 +303,9 @@ def create_scores(input_data, score_type, varlist, headers):
         data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=CONFIG['data1_name'],id_list=data1_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
         data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=CONFIG['data2_name'],id_list=data2_ids), db)
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name,id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
@@ -333,11 +342,11 @@ def create_scores(input_data, score_type, varlist, headers):
         ###get the values
         data1_values = get_table_noconn(
             '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,
-                                                                                      table_name=CONFIG['data1_name'],
+                                                                                      table_name=table_1_name,
                                                                                       id_list=data1_ids), db)
         data2_values = get_table_noconn(
             '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,
-                                                                                      table_name=CONFIG['data2_name'],
+                                                                                      table_name=table_2_name,
                                                                                       id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
@@ -402,34 +411,34 @@ def create_all_scores(input_data, method, headers='all'):
         custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None and i['variable_name'] in headers]
     ###Are we running any fuzzy_vars?
     if len(fuzzy_vars) > 0:
-        fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers)
+        fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers, method)
         X=fuzzy_values['output']
         X_hdrs=copy.deepcopy(fuzzy_values['names'])
     #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
     if len(numeric_dist_vars) > 0:
-        numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars, headers)
+        numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars, headers, method)
         X=np.hstack((X, numeric_dist_values['output']))
         X_hdrs.extend(numeric_dist_values['names'])
     #3) exact: if they match, 1, else 0
     if len(exact_match_vars) > 0:
-        exact_match_values=create_scores(input_data, 'exact', exact_match_vars, headers)
+        exact_match_values=create_scores(input_data, 'exact', exact_match_vars, headers, method)
         X=np.hstack((X, exact_match_values['output']))
         X_hdrs.extend(exact_match_values['names'])
     ###Geo Distance
     if len(geo_distance) > 0:
-        geo_distance_values = create_scores(input_data, 'geo_distance', 'lat', headers)
+        geo_distance_values = create_scores(input_data, 'geo_distance', 'lat', headers, method)
         if type(geo_distance_values['output']) != string:
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
     ####date vars
     if len(date_vars) > 0:
-        date_values = create_scores(input_data,'date',date_vars, headers)
+        date_values = create_scores(input_data,'date',date_vars, headers, method)
         if type(date_values['output']) != string:
             X = np.hstack((X, date_values['output']))
             X_hdrs.extend(date_values['names'])
     ###custom values
     if len(custom_vars) > 0:
-        custom_values = create_scores(input_data,'custom',custom_vars, headers)
+        custom_values = create_scores(input_data,'custom',custom_vars, headers, method)
         if type(custom_values['output']) != string:
             X = np.hstack((X, custom_values['output']))
             X_hdrs.extend(custom_values['names'])

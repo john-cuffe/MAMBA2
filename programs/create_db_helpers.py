@@ -103,6 +103,8 @@ def get_stem_data(dataname):
     :return:
     '''
     ##get the CSV name
+    ###if training is in the dataname, strip it out
+    dataname = dataname.split('_training')[0]
     # 1) Load
     output=[]
     # the the fuzzy matches
@@ -194,7 +196,7 @@ def get_stem_data(dataname):
 def createDatabase(databaseName):
     # create individual data tables
     # ###for each input dataset, need to
-    for data_source in [CONFIG['data1_name'],CONFIG['data2_name']]:
+    for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
         #print(data_source)
         out=get_stem_data(data_source)
         # 3) Push to DB
@@ -232,7 +234,7 @@ def createDatabase(databaseName):
         db=get_db_connection(CONFIG)
         cur=db.cursor()
         for i in global_vars.blocks:
-            cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source], source=data_source))
+            cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
         ###additional index on id
         cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
         ###clerical_review_candidates and the two matched pairs table

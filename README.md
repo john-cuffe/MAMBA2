@@ -10,6 +10,8 @@ MAMBA2 User Guide
 
 [MAMBA Files](#MAMBAFiles)
 
+[MAMBA Files](#TrainingData)
+
 [Setting Up](#settingup)
 
 [Parsing Addresses](#parsingaddresses)
@@ -62,8 +64,8 @@ This file is going to tell MAMBA which variables in your dataset serve as &#39;b
 
 #### NOTE ON PARSE_ADDRESS AND BLOCKS
 
-    - If you are using the parse_address function and want to include outputs from the parsed addresses as block (e.g. you want to use the city and zip code) you must use the exact names from the _address_component_matching.csv_ file or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/) for the block name, \*data1_name\* and \*data2_name\* column.
-    - You can reduce the ZipCode variable to any number of digits by including the digit at the end of ZipCode. For example, to block by 3-digit zip code, include a block that has &#39;ZipCode3&#39; as its name.
+   - If you are using the parse_address function and want to include outputs from the parsed addresses as block (e.g. you want to use the city and zip code) you must use the exact names from the _address_component_matching.csv_ file or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/) for the block name, \*data1_name\* and \*data2_name\* column.
+   - You can reduce the ZipCode variable to any number of digits by including the digit at the end of ZipCode. For example, to block by 3-digit zip code, include a block that has &#39;ZipCode3&#39; as its name.
 
 #### Figure 1. Demonstration of block_names.csv file.
 
@@ -101,11 +103,21 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
 
 - If you have a custom scoring method you wish to use (e.g. counting characters, a different fuzzy comparator) include it as a function in _programs.custom_scoring_methods.py_.   The function must accept as an argument two strings, _and also must handle missing values_ (e.g. by giving a particular value to missings).
 
-### training_data.csv
-    - This is the data that will tell MAMBA what you believe is a match and which is not. Currently, MAMBA requires a truth deck of matches in order to build off of. This file only contains three columns.
-      - \*data1_name\*_id: the id for the record in the first dataset
-      - \*data2_name\*_id: the id for the record in the second dataset
-      - match: 1 if the pair is a match, 0 otherwise.
+## Training Data
+ <a name="#TrainingData"/>
+- The current iteration of MAMBA supports the insertion of training (ground-truth) data to the models.  This comes in three files.  This is to account for the possibility that you are using 'training' records that don't appear in your main datasets.
+
+### training_data_key.csv
+- This is the data that will tell MAMBA what you believe is a match and which is not. This file only contains three columns.
+  - \*data1_name\*_id: the id for the record in the first dataset
+  - \*data2_name\*_id: the id for the record in the second dataset
+  - match: 1 if the pair is a match, 0 otherwise.
+
+### \*data1_name\*_training.csv
+- This file is the full set of independent variables for the \*data1_name\*. All of _id_ entries in this file must appear in _training_data_key.csv_.  
+
+### \*data2_name\*_training.csv
+- This file is the full set of independent variables for the \*data2_name\*. All of _id_ entries in this file must appear in _training_data_key.csv_.  
 
 ### MAMBA.properties
  <a name="mamba_properties"/>
@@ -126,14 +138,10 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - The output directory you want to use
     - Debugmode
       - True/False that skips the majority of matches if used. Set to False
-    - block_file_name:
-      - the name of the file that you are using to define the blocks.
     - create_db_chunksize:
-      - A variable to set how big of a &#39;chunk&#39; you push to your db at once.
+      - A variable to set how big of a 'chunk' you push to your db at once.
     - inputPath:
       - Path to the datasets you want to match.
-    - Training_data_name:
-      - The name of the training data you are using. Exclude the &#39;.csv&#39; ending
     - Rf_jobs:
       - Number of jobs you want to calculate the random forest on. Note, for python you want to have one job per CPU for reasons I don&#39;t entirely understand.
     - clerical_review_candidates:

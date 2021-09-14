@@ -1,7 +1,7 @@
-variable_name,data1_test,data2_test,match_type,parsed_variable
-name,name,name,fuzzy,
-year,year,year,num_distance,
-businesstype,BusinessType,BusinessType,exact,
-geo_coord,latlong,LatLong,geom_distance,
-founding_date,date_founded,founding_date,date,
-AddressNumber,AddressNumber,AddressNumber,fuzzy,1
+variable_name,data1_test,data2_test,match_type,parsed_variable,custom_variable_name
+name,name,name,fuzzy,,
+year,year,year,num_distance,,
+businesstype,BusinessType,BusinessType,exact,,
+geo_coord,latlong,LatLong,geom_distance,,
+founding_date,date_founded,founding_date,date,,
+AddressNumber,AddressNumber,AddressNumber,fuzzy,1,
