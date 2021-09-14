@@ -45,7 +45,7 @@ if __name__=='__main__':
         os._exit(0)
     ####Create the Random Forest Model
     try:
-        training_data=pd.read_csv('data/{}.csv'.format(CONFIG['training_data_name']), engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
+        training_data=pd.read_csv('data/training_data_key.csv', engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
         if '.joblib' in CONFIG['saved_model']:
             mod = load_model(CONFIG['saved_model'])
         ###generate the rf_mod
