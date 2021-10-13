@@ -836,7 +836,7 @@ def match_fun(arg):
                                  'block_non_matches': 0,
                                  'block_non_matches_avg_score': 0}
     else:
-        X, X_hdrs = create_all_scores(input_data, 'prediction', arg['mod']['variable_headers'])
+        X, X_hdrs = create_all_scores(input_data, 'prediction', arg['model']['variable_headers'])
         ###Mean Center
         if arg['model']['type']=='Logistic Regression':
             X=pd.DataFrame(X, columns=X_hdrs)-arg['model']['means']
