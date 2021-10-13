@@ -490,7 +490,6 @@ def create_all_scores(input_data, method, headers='all'):
         else:
             return X, X_hdrs
 
-
 def generate_logit(y, X, X_hdrs):
     '''
     Generates a linear logistic regression model
@@ -634,7 +633,6 @@ def generate_rf_mod(y, X, X_hdrs):
         logger.info('Random Forest Complete.  Score={}'.format(score))
         return {'type': 'Random Forest', 'score': score, 'model': rf_mod, 'variable_headers': new_X_hdrs}
 
-
 def generate_ada_boost(y, X, X_hdrs):
     '''
     This function generates the adaboosted model
@@ -757,7 +755,6 @@ def generate_svn_mod(y, X, X_Hdrs):
         logger.info('Support Vector Machine Complete.  Score={}'.format(score))
         return {'type': 'SVN', 'score': score, 'model': svn_mod, 'variable_headers':new_X_hdrs}
 
-
 def choose_model(truthdat):
     '''
     This function generates a random forest, svn, and adaboost classifier for the training data, then returns the
@@ -768,7 +765,7 @@ def choose_model(truthdat):
     y, X, X_hdrs, imputer = create_all_scores(truthdat, method='truth')
     if ast.literal_eval(CONFIG['use_logit'])==True:
         logit=generate_logit(y, X, X_hdrs)
-        if logit!='fail':
+        if logit=='fail':
             logit = {'score': 0}
     else:
         logit={'score':0}

@@ -46,8 +46,8 @@ if __name__=='__main__':
     ####Create the Random Forest Model
     try:
         training_data=pd.read_csv('data/training_data_key.csv', engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
-        if '.joblib' in CONFIG['saved_model']:
-            mod = load_model(CONFIG['saved_model'])
+        if CONFIG['saved_model'].lower()!='none':
+            mod = load_model(CONFIG['saved_model'], CONFIG['imputation_method'])
         ###generate the rf_mod
         else:
             mod=choose_model(training_data)
