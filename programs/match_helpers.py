@@ -406,7 +406,7 @@ def create_all_scores(input_data, method, headers='all'):
         fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy' and any(item in headers for item in i['possible_headers'])==True]
         numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance' and i['variable_name'] in headers]
         exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'] in headers]
-        geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and i['variable_name'] in headers]
+        geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and 'geo_distance' in headers]
         date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
         custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None and i['variable_name'] in headers]
     ###Are we running any fuzzy_vars?
@@ -460,24 +460,25 @@ def create_all_scores(input_data, method, headers='all'):
         ###for the fuzzy values, we will cut to each .1, and make any missing -1
         db = get_db_connection(CONFIG)
         nominal_boundaries={}
-        for var in numeric_dist_vars:
-            ###get the values from the database
-            my_values = get_table_noconn('''select min(min_1, min_2) min, max(max_1, max_2) max
-                                             from 
-                                             (select '0' id, min({data1_var}) min_1, max({data1_var}) max_1 from {table1_name})
-                                             left outer join 
-                                             (select '0' id, min({data2_var}) min_2, max({data2_var}) max_2 from {table2_name})'''.format(table1_name=CONFIG['data1_name'],
-                                                                                                                                          table2_name=CONFIG['data2_name'],
-                                                                                                                                          data1_var=var[CONFIG['data1_name']],
-                                                                                                                                          data2_var=var[CONFIG['data2_name']]),db)
-            ###save as a dictionary entry
-            nominal_boundaries[var['variable_name']] = my_values[0]
+        if len(numeric_dist_vars) > 0:
+            for var in numeric_dist_vars:
+                ###get the values from the database
+                my_values = get_table_noconn('''select min(min_1, min_2) min, max(max_1, max_2) max
+                                                 from 
+                                                 (select '0' id, min({data1_var}) min_1, max({data1_var}) max_1 from {table1_name})
+                                                 left outer join 
+                                                 (select '0' id, min({data2_var}) min_2, max({data2_var}) max_2 from {table2_name})'''.format(table1_name=CONFIG['data1_name'],
+                                                                                                                                              table2_name=CONFIG['data2_name'],
+                                                                                                                                              data1_var=var[CONFIG['data1_name']],
+                                                                                                                                              data2_var=var[CONFIG['data2_name']]),db)
+                ###save as a dictionary entry
+                nominal_boundaries[var['variable_name']] = my_values[0]
         ###first, get the min and max values for the possible nominal variables
         header_types=[]
         for k in range(len(X_hdrs)):
             if X_hdrs[k] in fuzzy_values['names']:
                 header_types.append('fuzzy')
-            elif X_hdrs[k] in numeric_dist_values['names']:
+            elif X_hdrs[k] in [j['name'] for j in numeric_dist_vars]:
                 header_types.append('numeric')
             else:
                 header_types.append('other')
