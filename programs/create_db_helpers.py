@@ -3,15 +3,16 @@
 '''
 This is a list of helper functions to create our database
 '''
-import usaddress as usadd
-from programs.address_standardizer.standardizer import *
+
 from psycopg2.extras import execute_values
 import programs.global_vars as global_vars
 from programs.connect_db import *
 from programs.logger_setup import *
 from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
-
+if ast.literal_eval(CONFIG['parse_address'])==True:
+    import usaddress as usadd
+    from programs.address_standardizer.standardizer import *
 ###a query to create the batch_summary and batch_statistics tables
 batch_info_qry='''
 create table batch_summary(
@@ -96,7 +97,7 @@ def stem_fuzzy(x):
         return stemmer.stem(x)
 
 
-def get_stem_data(dataname):
+def get_stem_data(data_source,databaseName):
     '''
     This function loads and then stems the data
     :param dataname:
@@ -104,7 +105,7 @@ def get_stem_data(dataname):
     '''
     ##get the CSV name
     ###if training is in the dataname, strip it out
-    dataname = dataname.split('_training')[0]
+    dataname = data_source.split('_training')[0]
     # 1) Load
     output=[]
     # the the fuzzy matches
@@ -189,8 +190,39 @@ def get_stem_data(dataname):
                 ###now we have it, replace the original value
                 for i in range(len(data)):
                     data[i][var] = out[i]
-        output.extend(data)
-    return output
+                # 3) Push to DB
+                if ast.literal_eval(CONFIG['prediction']) == True:
+                    if CONFIG['sql_flavor'] == 'sqlite':
+                        diskEngine = create_engine('sqlite:///' + databaseName)
+                        pd.DataFrame(out).to_sql(data_source, diskEngine, if_exists='append', index=False)
+                    elif CONFIG['sql_flavor'] == 'postgres':
+                        db = get_db_connection(CONFIG)
+                        out = out.to_dict('record')
+                        columns = out[0].keys()
+                        values = [tuple(i[column] for column in columns) for i in out]
+                        # logger.info('Reports Written')
+                        columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
+                        cur = db.cursor()
+                        insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
+                                                                                            collist=columns_list)
+                        execute_values(cur, insert_statement, values)
+                        db.commit()
+                if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
+                    if CONFIG['sql_flavor'] == 'sqlite':
+                        pd.DataFrame(out).sample(frac=.05).to_sql(data_source, diskEngine, if_exists='replace',
+                                                                  index=False)
+                    elif CONFIG['sql_flavor'] == 'postgres':
+                        out = out.sample(frac=.05).to_dict('record')
+                        columns = out[0].keys()
+                        values = [tuple(i[column] for column in columns) for i in out]
+                        # logger.info('Reports Written')
+                        columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
+                        cur = db.cursor()
+                        insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
+                                                                                            collist=columns_list)
+                        execute_values(cur, insert_statement, values)
+                        db.commit()
+
 
 
 def createDatabase(databaseName):
@@ -198,38 +230,7 @@ def createDatabase(databaseName):
     # ###for each input dataset, need to
     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
         #print(data_source)
-        out=get_stem_data(data_source)
-        # 3) Push to DB
-        if ast.literal_eval(CONFIG['prediction'])==True:
-            if CONFIG['sql_flavor']=='sqlite':
-                diskEngine = create_engine('sqlite:///' + databaseName)
-                pd.DataFrame(out).to_sql(data_source, diskEngine, if_exists='replace',index=False)
-            elif CONFIG['sql_flavor']=='postgres':
-                db=get_db_connection(CONFIG)
-                out = out.to_dict('record')
-                columns = out[0].keys()
-                values = [tuple(i[column] for column in columns) for i in out]
-                # logger.info('Reports Written')
-                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
-                cur = db.cursor()
-                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
-                                                                                    collist=columns_list)
-                execute_values(cur, insert_statement, values)
-                db.commit()
-        if ast.literal_eval(CONFIG['prediction'])==False and ast.literal_eval(CONFIG['clerical_review_candidates'])==True:
-            if CONFIG['sql_flavor']=='sqlite':
-                pd.DataFrame(out).sample(frac=.05).to_sql(data_source, diskEngine,if_exists='replace', index=False)
-            elif CONFIG['sql_flavor'] == 'postgres':
-                out = out.sample(frac=.05).to_dict('record')
-                columns = out[0].keys()
-                values = [tuple(i[column] for column in columns) for i in out]
-                # logger.info('Reports Written')
-                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
-                cur = db.cursor()
-                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
-                                                                                    collist=columns_list)
-                execute_values(cur, insert_statement, values)
-                db.commit()
+        get_stem_data(data_source,databaseName)
         ####now index the tables
         db=get_db_connection(CONFIG)
         cur=db.cursor()

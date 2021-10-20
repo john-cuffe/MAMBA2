@@ -18,6 +18,8 @@ MAMBA2 User Guide
 
 [Custom Matching Models](#custom_models)
 
+[Imputation Methods](#imputation_methods)
+
 [Recursive Feature Elimination](#recursive_feature_elimination)
 # Introduction
 
@@ -159,13 +161,13 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
     - Prediction:
       - Do you want MAMBA to predict matches. If set to False, then you can generate clerical review candidates only (if clerical_review_candidates=True)
     - Scoringcriteria:
-      - A scoring criteria selected from scikit-learn&#39;s list. See [https://scikit-learn.org/stable/modules/model_evaluation.html](https://scikit-learn.org/stable/modules/model_evaluation.html)
+      - A scoring criteria selected from scikit-learn's list. See [https://scikit-learn.org/stable/modules/model_evaluation.html](https://scikit-learn.org/stable/modules/model_evaluation.html)
     - Ignore_duplicate_ids:
       - If True, assumes that you are attempting to de-duplicate the same file, and thus does not compare records with matching ID variables. If False, then compares all records as normal.
     - Use_logit:
       - If True, run a logit and set scoringcriteria to accuracy. Logger will return a warning message about collinearity if it&#39;s bad. If False, doesn&#39;t run a logit.
     - date_format:
-      - The format of the date columns in your .csv files. For example, &#39;09-01-2020&#39; would be &#39;%m-%d-%Y&#39;. See format codes here [https://docs.python.org/3/library/datetime.html](https://docs.python.org/3/library/datetime.html)
+      - The format of the date columns in your .csv files. For example, '09-01-2020'; would be '%m-%d-%Y'. See format codes here [https://docs.python.org/3/library/datetime.html](https://docs.python.org/3/library/datetime.html)
     - Parse_address:
       - See below for details
       - If parse_address is True, then the following three variables must be used.
@@ -175,12 +177,17 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - The name of the address column to parse in the \*data2_name\* csv file
     - Use_remaining_parsed_address:
       - Do you want to use any remaining address information beyond what is specified as a variable or a block.
+     -standardize_addresses:
+      - boolean.  If True, provide a json of address columns you wish to standardize in _address_to_standrize_.  False skips.
+    - address_to_standardize:
+      - a json entry showing a comma separated list of address variables to standardize within a dataset. 
+         - example {'data1':'firstaddress,secondaddress','data2':'anaddress,anotheraddress'}
     - Use_custom_model:
       - Do you have a custom matching model you want to run? See Custom Models for details
     - Imputation_method:
       - Either 'Nominal' or 'Imputer'.  See Imputation Methods below for details
     - saved_model:
-      - If you have a model that you have saved and wish to use, enter its name here (include the .joblib ending).
+      - If you have a model that you have saved and wish to use, enter its name here (include the .joblib ending).  "None' if not.
     - saved_model_target:
       - If you want to _save_ your model, enter a file name here, ending with '.joblib'
     - feature_elimination_mode:
@@ -218,16 +225,16 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
 
 ## Imputation Methods
  <a name="imputation_methods"/>
-  - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of _mamba.properties_.
-    - Imputer:
-      - With this option, any missing values for 'fuzzy' or 'numeric distance' variables are replaced iterative imputer.  See the [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) for futher details.
-        - While this option is easy to implement, it may result in non-sensical outcomes or potentially be subject to existing missing biases in the data.
-    - Nominal:
-      - This option follows a more traditional approach of converting the continuous fuzzy and numeric variables to nominal variables, and then assigning cases with missing data a particular value.
-        - In the case of 'fuzzy' variables, the nominal variable created is divided evenly between every .1 value (so 0, .1, .2...1.0).  In a case where _either_ value is missing, the score is -1.
-        - In the case of numeric variables, any case with missing data is filled with ten times the maximum possible value for the comparison across the entire dataset.  I should probabaly research if this was a good idea.
-    
-  - Additional Imputation Notes:
+ Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of mamba.properties.
+ 
+ - Imputer:
+   - With this option, any missing values for 'fuzzy' or 'numeric distance' variables are replaced iterative imputer.  See the [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) for futher details.
+    - While this option is easy to implement, it may result in non-sensical outcomes or potentially be subject to existing missing biases in the data.
+- Nominal:
+  - This option follows a more traditional approach of converting the continuous fuzzy and numeric variables to nominal variables, and then assigning cases with missing data a particular value.
+    - In the case of 'fuzzy' variables, the nominal variable created is divided evenly between every .1 value (so 0, .1, .2...1.0).  In a case where _either_ value is missing, the score is -1.
+    - In the case of numeric variables, any case with missing data is filled with ten times the maximum possible value for the comparison across the entire dataset.  I should probabaly research if this was a good idea.
+ - Additional Imputation Notes:
     - Distance variables are imputed with a value, in kilometers, of 4 times the diameter of the earth.  Future iterations will impute based on any possible geographic information, e.g. taking mean difference between all cases in a certain zip code.
     - Exact matching variables are coded as 0 (non-match), 1 (match), and -1 (either case is missing).
    
