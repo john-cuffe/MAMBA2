@@ -3,11 +3,11 @@
 '''
 This is a list of helper functions to create our database
 '''
-
 from psycopg2.extras import execute_values
 import programs.global_vars as global_vars
 from programs.connect_db import *
 from programs.logger_setup import *
+import pandas as pd
 from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
 if ast.literal_eval(CONFIG['parse_address'])==True:
@@ -34,7 +34,8 @@ block_size bigint,
 block_matches bigint,
 block_matches_avg_score float,
 block_non_matches bigint,
-block_non_matches_avg_score bigint);
+block_non_matches_avg_score bigint,
+match_pairs_removed_filter bigint);
 
 create index batch_stat_idx on batch_statistics(batch_id)
 '''
@@ -96,8 +97,7 @@ def stem_fuzzy(x):
     else:
         return stemmer.stem(x)
 
-
-def get_stem_data(data_source,databaseName):
+def get_stem_data(data_source):
     '''
     This function loads and then stems the data
     :param dataname:
@@ -106,11 +106,9 @@ def get_stem_data(data_source,databaseName):
     ##get the CSV name
     ###if training is in the dataname, strip it out
     dataname = data_source.split('_training')[0]
-    # 1) Load
-    output=[]
     # the the fuzzy matches
     ###dictionary to read all blocks as strings
-    str_dict={item[dataname]:str for item in global_vars.blocks}
+    str_dict = {item[dataname]: str for item in global_vars.blocks}
     ###Get list of the fuzzy variables
     fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']
     ###add address1 if we are using the remaining parsed addresses
@@ -119,15 +117,15 @@ def get_stem_data(data_source,databaseName):
         fuzzy_vars.append('address1')
     ##chunk data so we don't blow up memory
     if sys.platform == 'win32':
-        csvname='{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
+        csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
     else:
-        csvname='{}/{}.csv'.format(CONFIG['inputPath'], dataname)
-    for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c',dtype=str_dict):
+        csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
+    for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c', dtype=str_dict):
         ###If we have a date variable, find it and convert to a date
-        date_columns=[i[dataname] for i in global_vars.var_types if i['match_type']=='date']
+        date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
         if len(date_columns) > 0:
             for date_col in date_columns:
-                data[date_col]=pd.to_datetime(data[date_col], format=CONFIG['date_format']).dt.strftime('%Y-%m-%d')
+                data[date_col] = pd.to_datetime(data[date_col], format=CONFIG['date_format']).dt.strftime('%Y-%m-%d')
         ####If we have addresses to standardize, do so
         ###ID from config
         ####If we have addresses to standardize for the data source
@@ -137,27 +135,29 @@ def get_stem_data(data_source,databaseName):
                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
         data['matched'] = 0
         if 'full' in [b['block_name'] for b in global_vars.blocks]:
-            data['full']=1
+            data['full'] = 1
         ###convert to dictionary
-        data = data.to_dict('record')
+        data = data.to_dict('records')
         ########
         ##Are we using the parsed address feature? if so, add those variables into the row
         ########
-        if ast.literal_eval(CONFIG['parse_address'])==True:
+        if ast.literal_eval(CONFIG['parse_address']) == True:
             ###For each row, parse the address
             for row in data:
-                parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]], tag_mapping=global_vars.address_component_mapping)
-                for parsed_block in [v for v in global_vars.blocks if v['parsed_block']==1]:
+                parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],
+                                           tag_mapping=global_vars.address_component_mapping)
+                for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
-                        row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][0:int(parsed_block['block_name'][-1])]
+                        row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][
+                                                          0:int(parsed_block['block_name'][-1])]
                     else:
                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
-                for variable in [var for var in global_vars.var_types if var['parsed_variable']==1]:
+                for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:
                     if variable['variable_name'] in parsed_address[0].keys():
                         row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
                     else:
                         row[variable['variable_name']] = None
-                if ast.literal_eval(CONFIG['use_remaining_parsed_address'])==True:
+                if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
                     if 'address1' in parsed_address[0].keys():
                         row['address1'] = parsed_address[0]['address1']
                     else:
@@ -170,14 +170,16 @@ def get_stem_data(data_source,databaseName):
                 data[r][p] = str(data[r][p]).upper()
                 if 'zip' in p.lower():
                     ###find the max length
-                    out=data[r][p].astype(str).tolist()
+                    out = data[r][p].astype(str).tolist()
                     ###get the max length
-                    maxlen=max([len(k) for k in out])
+                    maxlen = max([len(k) for k in out])
                     ###log
-                    logger.info('''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(p, dataname))
-                    data[r][p]=data[r][p].astype(str).str.zfill(maxlen)
+                    logger.info(
+                        '''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(
+                            p, dataname))
+                    data[r][p] = data[r][p].astype(str).str.zfill(maxlen)
         # 2) Standardized via stemming any fuzzy matching variables
-        if ast.literal_eval(CONFIG['stem_phrase'])==True:
+        if ast.literal_eval(CONFIG['stem_phrase']) == True:
             for var in fuzzy_vars:
                 ###first convert to all upper case
                 ###get the list of the entries
@@ -190,47 +192,44 @@ def get_stem_data(data_source,databaseName):
                 ###now we have it, replace the original value
                 for i in range(len(data)):
                     data[i][var] = out[i]
-                # 3) Push to DB
-                if ast.literal_eval(CONFIG['prediction']) == True:
-                    if CONFIG['sql_flavor'] == 'sqlite':
-                        diskEngine = create_engine('sqlite:///' + databaseName)
-                        pd.DataFrame(out).to_sql(data_source, diskEngine, if_exists='append', index=False)
-                    elif CONFIG['sql_flavor'] == 'postgres':
-                        db = get_db_connection(CONFIG)
-                        out = out.to_dict('record')
-                        columns = out[0].keys()
-                        values = [tuple(i[column] for column in columns) for i in out]
-                        # logger.info('Reports Written')
-                        columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
-                        cur = db.cursor()
-                        insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
-                                                                                            collist=columns_list)
-                        execute_values(cur, insert_statement, values)
-                        db.commit()
-                if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
-                    if CONFIG['sql_flavor'] == 'sqlite':
-                        pd.DataFrame(out).sample(frac=.05).to_sql(data_source, diskEngine, if_exists='replace',
-                                                                  index=False)
-                    elif CONFIG['sql_flavor'] == 'postgres':
-                        out = out.sample(frac=.05).to_dict('record')
-                        columns = out[0].keys()
-                        values = [tuple(i[column] for column in columns) for i in out]
-                        # logger.info('Reports Written')
-                        columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
-                        cur = db.cursor()
-                        insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
-                                                                                            collist=columns_list)
-                        execute_values(cur, insert_statement, values)
-                        db.commit()
-
-
+        # 3) Push to DB
+        if ast.literal_eval(CONFIG['prediction']) == True:
+            if CONFIG['sql_flavor'] == 'sqlite':
+                diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
+                pd.DataFrame(data).to_sql(data_source, diskEngine, if_exists='append', index=False)
+            elif CONFIG['sql_flavor'] == 'postgres':
+                db = get_db_connection(CONFIG)
+                columns = data[0].keys()
+                values = [tuple(i[column] for column in columns) for i in data]
+                # logger.info('Reports Written')
+                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
+                cur = db.cursor()
+                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
+                                                                                    collist=columns_list)
+                execute_values(cur, insert_statement, values)
+                db.commit()
+        if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
+            if CONFIG['sql_flavor'] == 'sqlite':
+                pd.DataFrame(data).sample(frac=.05).to_sql(data_source, diskEngine, if_exists='replace',
+                                                          index=False)
+            elif CONFIG['sql_flavor'] == 'postgres':
+                data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
+                columns = data[0].keys()
+                values = [tuple(i[column] for column in columns) for i in data]
+                # logger.info('Reports Written')
+                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
+                cur = db.cursor()
+                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
+                                                                                    collist=columns_list)
+                execute_values(cur, insert_statement, values)
+                db.commit()
 
 def createDatabase(databaseName):
     # create individual data tables
     # ###for each input dataset, need to
     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
-        #print(data_source)
-        get_stem_data(data_source,databaseName)
+        print(data_source)
+        get_stem_data(data_source)
         ####now index the tables
         db=get_db_connection(CONFIG)
         cur=db.cursor()
@@ -280,7 +279,7 @@ def update_batch_summary(batch_summary):
                     batch_summary[key]=json.dumps(batch_summary[key])
                 if batch_summary[key]!=batch_exists[0][key]:
                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
-                    cur.execute(update_statement, [batch_summary[key]])
+                    cur.execute(update_statement, batch_summary[key])
                     db.commit()
     elif CONFIG['sql_flavor']=='postgres':
         if len(batch_exists) == 0:
