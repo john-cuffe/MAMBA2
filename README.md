@@ -179,6 +179,11 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - If you want to _save_ your model, enter a file name here, ending with '.joblib'
     - feature_elimination_mode:
       - If this is set to True, the models generated will be fitted with recursive feature elimination.  
+    - use_variable_filter:
+      - If this is set to True, MAMBA will use a filter to pre-sort any match candidates.
+    - variable_filter_info:
+      - json dictionary required details if use_variable_filter is set to True.  See below for details.
+
 
 ## Setting up:
  <a id="#settingup"/>
