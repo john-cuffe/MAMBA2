@@ -8,7 +8,7 @@ import math
 ###sets wd
 import numpy as np
 import pandas as pd
-
+import mymath
 #import programs.encode  # For Phonix transformation routine (used in syllable alignment
                # distance)
 
