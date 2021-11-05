@@ -573,7 +573,8 @@ def filter_data(data):
     data.reset_index(inplace=True, drop=False)
     data = data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]]
     ###get the values
-    myvar = [i for i in var_types if i['variable_name'] == CONFIG['variable_filter_info']['variable_name']][0]
+    myvar = \
+    [i for i in var_types if i['variable_name'].lower() == CONFIG['variable_filter_info']['variable_name'].lower()][0]
     if myvar['match_type'] != 'geo_distance':
         data1_values = pd.DataFrame(get_table_noconn(
             '''select cast(id as character) id, {var_name} data1_target from {table_name} where id in ({id_list})'''.format(
@@ -618,6 +619,15 @@ def filter_data(data):
                                                        (x['data2_latitude'], x['data2_longitude'])), axis=1)
     elif myvar['match_type'] == 'date':
         data['score'] = (pd.to_datetime(data['data1_target']) - pd.to_datetime(data['data2_target'])).dt.days
+    elif myvar['match_type'] == 'custom':
+        ####get the right arrangement of custom functions and targets
+        custom_scoring_functions = [{'name': i[0], 'function': i[1]} for i in getmembers(cust_scoring, isfunction)]
+        ###get the corresponding function attached to the var list
+        my_function = [k for k in custom_scoring_functions if k['name'].lower() == myvar['variable_name'].lower()][0]
+        data['score'] = data.apply(
+            lambda x: my_function['function'](x['data1_target'], x['data2_target']) if x['data1_target'] != 'NULL' and
+                                                                                       x['data2_target'] != 'NULL'
+            else 0, axis=1)
     ####now return the columns needed with just the rows that meet the criteria
     qry = '''score {} {}'''.format(CONFIG['variable_filter_info']['test'],
                                    CONFIG['variable_filter_info']['filter_value'])

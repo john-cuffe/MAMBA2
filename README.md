@@ -85,11 +85,14 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
     - num_distance: difference between the two values.
     - exact: If the two values match, scored as a 1, otherwise scored as a 0.
     - geo_distance: Distance between two points (in kilometers) based on Haversine formula. Using this type requires that each dataset has a latitude and longitude variable, and this column is completely filled for all observations.
-    - Date: Date variables following the format 'Date_Format' entered in the .bash file. This type of date variable will be compared using the Levenstein (edit) distance between the two strings. If either value is missing, returns 0. We just use the edit distance here because it provides an informative view of the number of edits and substitutions required to make the strings match. This is preferred over a strict subtraction of dates. For example, 1/1/2021 and 1/1/1011 is most likely a clerical error and requires only one substitution would match, but a simple distance calculation would give these two dates as a millennia apart.
+    - Date: Date variables following the format 'Date_Format' entered in the .bash file. This type of date variable will be compared using the Levenstein (edit) distance between the two strings.
+    - If either value is missing, returns 0. 
+    - We just use the edit distance here because it provides an informative view of the number of edits and substitutions required to make the strings match. This is preferred over a strict subtraction of dates. For example, 1/1/2021 and 1/1/1011 is most likely a clerical error and requires only one substitution would match, but a simple distance calculation would give these two dates as a millennia apart.
   - Parsed_variable
     - Is the variable an output from parsing an address? If so, 1, otherwise 0
   - custom_variable_name
-    - With this column, you can enter the name of a custom scoring metric from _programs.custom_scoring_methods_.  See below for details. If not using a custom scoring metric for the variable in question, leave blank.
+    - With this column, you can enter the name of a custom scoring metric from _programs.custom_scoring_methods_.  See below for details. \
+    - If not using a custom scoring metric for the variable in question, leave blank.
 
 #### Figure 2. Demonstration of mamba_variable_types.csv
 
@@ -101,7 +104,9 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
 
 #### NOTE ON CUSTOM SCORING METHODS:
 
-- If you have a custom scoring method you wish to use (e.g. counting characters, a different fuzzy comparator) include it as a function in _programs.custom_scoring_methods.py_.   The function must accept as an argument two strings, _and also must handle missing values_ (e.g. by giving a particular value to missings).
+- If you have a custom scoring method you wish to use (e.g. counting characters, a different fuzzy comparator) include it as a function in _programs.custom_scoring_methods.py_.
+- The function must accept as an argument two strings, _and also must handle missing values_ (e.g. by giving a particular value to missings).
+- {data1_name} and {data2_name} should appear as they do in their respective datasets.
 
 ### training_data.csv
     - This is the data that will tell MAMBA what you believe is a match and which is not. Currently, MAMBA requires a truth deck of matches in order to build off of. This file only contains three columns.
@@ -254,7 +259,6 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
       - Options: =, !=, >, >=, <, <=
     - filter_value: the value you want to compare.demo for fuzzy {'variable_name': name, 'fuzzy_name': 'jaro', 'test':'>', 'filter_value':.75}
 - Notes:
-  - Currently feature is not implemented for custom scoring functions.
   - For exact matches, user still must select either 1 or 0 for the filter value.  You can select something other than '=' as the test but isn't this complicated enough already?
   - For date variables, user must give the gap between two days in days.
   - The logs and stats for the run will show how many observations were cut by the filter.
