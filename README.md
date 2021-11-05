@@ -195,10 +195,12 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
  
  - Edit mamba.properties so each variable is configured correctly
  - Configure variable_names.csv and block_names.csv are configured correctly
+ - In a terminal, CD into the /programs directory
+ - enter _python setup.py build_ext --inplace_
+   - This will cythonize the fuzzy methods. You can skip this step if you want, but MAMBA will be much slower. 
  - CD into the main MAMBA directory
  - Enter run_match.py
  _ Watch MAMBA go!
-
 
 ## Parsing Addresses
  <a id="#parsingaddresses"/>
