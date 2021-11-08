@@ -28,7 +28,7 @@ MAMBA2 represents a substantial improvement in the flexibility and scalability o
  
 System requirements:
 
-Python 3.7 >
+Python 3.6 >
 
 Getting MAMBA:
 
@@ -81,13 +81,13 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
   - \*data1_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the variable in the first dataset you wish to match
   - \*data2_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the variable in the second dataset you wish to match.
   - match_type: What kind of match analysis do you want to perform?
-    - fuzzy: generate 12 fuzzy string comparators for the pair
+    - fuzzy: generate 12 fuzzy string comparators for the candidate pair
     - num_distance: difference between the two values.
     - exact: If the two values match, scored as a 1, otherwise scored as a 0.
     - geo_distance: Distance between two points (in kilometers) based on Haversine formula. Using this type requires that each dataset has a latitude and longitude variable, and this column is completely filled for all observations.
     - Date: Date variables following the format 'Date_Format' entered in the .bash file. This type of date variable will be compared using the Levenstein (edit) distance between the two strings.
-    - If either value is missing, returns 0. 
-    - We just use the edit distance here because it provides an informative view of the number of edits and substitutions required to make the strings match. This is preferred over a strict subtraction of dates. For example, 1/1/2021 and 1/1/1011 is most likely a clerical error and requires only one substitution would match, but a simple distance calculation would give these two dates as a millennia apart.
+      - If either value is missing, returns 0. 
+      - We just use the edit distance here because it provides an informative view of the number of edits and substitutions required to make the strings match. This is preferred over a strict subtraction of dates. For example, 1/1/2021 and 1/1/1011 is most likely a clerical error and requires only one substitution would match, but a simple distance calculation would give these two dates as a millennia apart.
   - Parsed_variable
     - Is the variable an output from parsing an address? If so, 1, otherwise 0
   - custom_variable_name
@@ -128,11 +128,11 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - The 'flavor' of sql database.  Current options: sqlite, postgres.
         - NOTE: if using postgres, ensure you have the correct db_host, db_port, db_user, and db_password in the mamba.properties file
     - db_name
-      - The name you want to give your database. Exclude the '.db' ending
+      - The name you want to give your database file. Exclude the '.db' ending
     - outputPath:
       - The output directory you want to use
     - Debugmode
-      - True/False that skips the majority of matches if used. Set to False
+      - True/False that skips the majority of matches and develops a model on only one iteration, so the program runs quickly for efficient testing.
     - block_file_name:
       - the name of the file that you are using to define the blocks.
     - create_db_chunksize:
@@ -142,9 +142,9 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
     - Training_data_name:
       - The name of the training data you are using. Exclude the '.csv' ending
     - Rf_jobs:
-      - Number of jobs you want to calculate the random forest on. Note, for python you want to have one job per CPU for reasons I don't entirely understand.
+      - Number of jobs you want to calculate the random forest on. Note, for Python you want to have one job per CPU for reasons I don't entirely understand.
     - clerical_review_candidates:
-      - If True, then python generates clerical review candidates for you to do further training data creation.
+      - If True, then python generates clerical review candidates for you to do further training data creation. These candidates will be a sample of all matches with a predicted probability greater than the clerical review threshold below.
     - clerical_review_threshold:
       - What predicted probability do you want to limit clerical review candidates to? Generally, you want this to be closer to .5 and 0, as low probability matches won't help the model determine harder cases.
     - match_threshold:
@@ -197,15 +197,16 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
  - Configure variable_names.csv and block_names.csv are configured correctly
  - In a terminal, CD into the /programs directory
  - enter _python setup.py build_ext --inplace_
-   - This will cythonize the fuzzy methods. You can skip this step if you want, but MAMBA will be much slower. 
+   - This will cythonize the fuzzy variables. You can skip this step if you want, but MAMBA will be much slower. 
  - CD into the main MAMBA directory
  - Enter run_match.py
  _ Watch MAMBA go!
 
+
 ## Parsing Addresses
  <a id="#parsingaddresses"/>
 
-Much pre-processing for record linkage programs focuses on how best to parse addresses into useful strings. Although MAMBA makes minimal assumptions about data structure, it does offer the ability to use unparsed addresses to create variables to feed into the record linkage model, as well as blocks to structure the record linkage. This feature uses python's _usaddress_ module to identify component blocks of an address. Imagine you have a column that contains an unparsed address (e.g 123 Main Street, Apartment 1, Anytown, AS, USA), the _usaddress_ library is able to identify the street number (123), the street name (Main), the street name type (Street), the occupancy type (Apartment) and the occupancy type number (1), as well as the city, state, and zip code. This presents a massive amount of data for MAMBA to use to match.
+Much pre-processing for record linkage programs focuses on how best to parse addresses into useful strings. Although MAMBA makes minimal assumptions about data structure, it does offer the ability to use unparsed addresses to create variables to feed into the record linkage model, as well as blocks to structure the record linkage. This feature uses Python's _usaddress_ module to identify component blocks of an address. Imagine you have a column that contains an unparsed address (e.g 123 Main Street, Apartment 1, Anytown, AS, USA), the _usaddress_ library is able to identify the street number (123), the street name (Main), the street name type (Street), the occupancy type (Apartment) and the occupancy type number (1), as well as the city, state, and zip code. This presents a massive amount of data for MAMBA to use to match.
 As described above, to use this feature, ensure _parse_address_ is set to True in your .properties file, and enter in the corresponding address columns for both of your datasets.
 - In your mamba_variable_types file, enter in any variables you want and the type of match, using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the variable_name and the columns with the corresponding name for your datasets (Columns B and C). Indicate any parsed variables with a 1 in the parsed_variable column.
 - In your _block_names.csv_ file, indicate any parsed blocks and their order you want to use using the _exact_ naming convention used in the _address_component_mapping.csv_ file (also available on the usaddress website) for both the block_name and the columns with the corresponding name for your datasets (Columns C and D). Indicate any parsed variables with a 1 in the parsed_block column.
@@ -213,18 +214,19 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
 ### Using the use_remaining_parsed_address feature
 
   - While parsing addresses, users may not want to compare multiple strings, but rather only identify some components of a parsed address to use as blocks or strings. This function allows any remainder to be used as a fuzzy variable.
-  - For example, imagine parsing the address '123 Main Street SW Apartment 1, Anytown, AS, 12345'. If we wanted to match using city, state, and zip as blocks and include the address number as its own variable, MAMBA would remove those features from the string but leave &quot;Main Street SW Apartment 1&quot; as a string, which itself contains valuable information. Leaving the _use_remaining_parsed_address_ feature as 'True' tells MAMBA to create a new fuzzy variable to use in the model based on all of the address components _not otherwise used as a block or a separate variable_.
+  - For example, imagine parsing the address '123 Main Street SW Apartment 1, Anytown, AS, 12345'. If we wanted to match using city, state, and zip as blocks and include the address number as its own variable, MAMBA would remove those features from the string but leave 'Main Street SW Apartment' as a string, which itself may contain valuable information. Leaving the _use_remaining_parsed_address_ feature as 'True' tells MAMBA to create a new fuzzy variable to use in the model based on all of the address components _not otherwise used as a block or a separate variable_.
  
 ## Custom Matching Models
  <a id="custom_models"/>
  
   - Users may wish to user their own custom matching model in addition to those available in MAMBA.  
   - If so, user must enter a fully self-contained function in _custom_matching_function.py_ to run, as well as set the custom_matching function in _mamba.properties_ to True.
+  - Must return a model-like object that has the same features (predict, scoring etc) as a standard scikit-learn model.
   - Currently, this model will be compared to the standard suite of matching models available to MAMBA, but future iterations will allow users to replace the MAMBA models completely.
 
 ## Imputation Methods
  <a id="imputation_methods"/>
-  - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of _mamba.properties_.
+  - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off (i.e. the user has to do it) approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of _mamba.properties_.
     - Imputer:
       - With this option, any missing values for 'fuzzy' or 'numeric distance' variables are replaced iterative imputer.  See the [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) for futher details.
         - While this option is easy to implement, it may result in non-sensical outcomes or potentially be subject to existing missing biases in the data.
@@ -241,7 +243,7 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
  ## Recursive Feature Elimination
   <a id="recursive_feature_elimination"/>
  One of the biggest drawbacks to MAMBA's use of multiple string comparators is, unsurprisingly, that MAMBA is then forced to generate scores for each of the 13 string comparators for any fuzzy variables the user wishes.  While the overall fit of the models improves with more string comparators (Cuffe and Goldschlag, 2016), no amount of clever computing can overcome the need to do this many calculations.  
- To give the user an opportunity to avoid this issue, this mode selects the lowest number of features to maximize the score for the model, while still using a randomized, paramterized grid search.  This mode can save substantial time:  For example, for a single 'fuzzy' variable, it can take MAMBA approximately 4.17 seconds to create 1000 scores.  However, the individual string comparators themselves are created in a mean time of .317 seconds, with a median of approximately .1 seconds.  In large runs, the extra time required to generate models that filter out features that don't contribute to the overall performance of the model will save substantial time. 
+ To give the user an opportunity to avoid this issue, this mode selects the lowest number of features to maximize the score for the model, while still using a randomized, paramterized grid search.  This mode can save substantial time:  For example, for a single 'fuzzy' variable, it can take MAMBA approximately 1.28 seconds (over 4 seconds without Cython) to create 1000 scores.  However, the individual string comparators themselves are created in a mean time of .098 seconds, with a median of approximately .03 seconds.  In large runs, the extra time required to generate models that filter out features that don't contribute to the overall performance of the model will save substantial time. For example, the Smith-Waterman distance function takes .69 of a second to complete 1000 comparisons, over 375 times slower than the fastest algorithm (the Jaro-Winkler comparator)
 
 ## Manual Filter Selection
 <a id="manual_filter_selection"/>
@@ -250,7 +252,7 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
   1) Generate a score, for each match candidate pair, on the variable chosen
   2) Retain only those match candidate pairs that have a score exceeding the chosen threshold
   3) Generate full scores/model predictions for remaining pairs
-- The intent behind this metric is to allow users some level of control. For example, SMEs may determining that a entity names that score less than .75 on a Jaro comparator will _never_ result in a match.  This feature then allows MAMBA to skip those matches.  The additional benefit is that by only calculating one single score, and then deleting a subset, this makes MAMBA run substantially faster.
+- The intent behind this metric is to allow users some level of control. For example, SMEs may determine that an entity names that score less than .75 on a Jaro comparator will _never_ result in a match.  This feature then allows MAMBA to skip those matches.  The additional benefit is that by only calculating one single score, and then deleting a subset, this makes MAMBA run substantially faster.
 - To implement, turn the use_variable_filter parameter to True in your _mamba.properties_ file.
 - Then edit the variable_filter_info json
 - Keys:
@@ -259,8 +261,13 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
       - Options:'jaro', 'winkler', 'bagdist', 'seqmatch', 'qgram2', 'qgram3', 'posqgram3', 'editdist', 'lcs2', 'lcs3', 'charhistogram', 'swdist', 'sortwinkler'
     - test: the test you want to apply.
       - Options: =, !=, >, >=, <, <=
-    - filter_value: the value you want to compare.demo for fuzzy {'variable_name': name, 'fuzzy_name': 'jaro', 'test':'>', 'filter_value':.75}
+    - filter_value: the value you want to compare.
+- Demos:
+  - fuzzy {'variable_name': name, 'fuzzy_name': 'jaro', 'test':'>', 'filter_value':.75}
+  - custom {'variable_name': first_char, 'fuzzy_name': '', 'test':'=', 'filter_value':1}
+  - date {'variable_name': year, 'fuzzy_name':'', 'test':'>=', 'filter_value':365}
+
 - Notes:
   - For exact matches, user still must select either 1 or 0 for the filter value.  You can select something other than '=' as the test but isn't this complicated enough already?
-  - For date variables, user must give the gap between two days in days.
+  - For date variables, filter_value must be the gap between two dates in days.
   - The logs and stats for the run will show how many observations were cut by the filter.
