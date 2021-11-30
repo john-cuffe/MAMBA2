@@ -618,7 +618,7 @@ def filter_data(data):
         data['score'] = data.apply(lambda x: haversine((x['data1_latitude'], x['data1_longitude']),
                                                        (x['data2_latitude'], x['data2_longitude'])), axis=1)
     elif myvar['match_type'] == 'date':
-        data['score'] = (pd.to_datetime(data['data1_target']) - pd.to_datetime(data['data2_target'])).dt.days
+        data['score'] = data.apply(lambda x: feb.editdist(x['data1_target'], x['data2_target']), axis=1)
     elif myvar['match_type'] == 'custom':
         ####get the right arrangement of custom functions and targets
         custom_scoring_functions = [{'name': i[0], 'function': i[1]} for i in getmembers(cust_scoring, isfunction)]

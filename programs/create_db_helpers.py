@@ -109,6 +109,11 @@ def get_stem_data(data_source):
     # the the fuzzy matches
     ###dictionary to read all blocks as strings
     str_dict = {item[dataname]: str for item in global_vars.blocks}
+    ###If we have a date variable, find it and ensure it's read as a string
+    date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
+    if len(date_columns) > 0:
+        for col in date_columns:
+            str_dict[col]=str
     ###Get list of the fuzzy variables
     fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']
     ###add address1 if we are using the remaining parsed addresses
@@ -121,11 +126,6 @@ def get_stem_data(data_source):
     else:
         csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
     for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c', dtype=str_dict):
-        ###If we have a date variable, find it and convert to a date
-        date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
-        if len(date_columns) > 0:
-            for date_col in date_columns:
-                data[date_col] = pd.to_datetime(data[date_col], format=CONFIG['date_format']).dt.strftime('%Y-%m-%d')
         ####If we have addresses to standardize, do so
         ###ID from config
         ####If we have addresses to standardize for the data source
