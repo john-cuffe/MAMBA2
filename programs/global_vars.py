@@ -96,7 +96,7 @@ numWorkers=int(CONFIG['numWorkers'])
 #     logging.info('{}'.format(i['block_name']))
 ###import the blocks and variable types
 var_types = pd.read_csv('mamba_variable_types.csv').to_dict('record')
-blocks = pd.read_csv('block_names.csv').to_dict('record')
+blocks = pd.read_csv('{}.csv'.format(CONFIG['block_file_name'])).to_dict('record')
 ###create the address_component_tag_mapping
 address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('record')
 ###makte the address component mapping.
