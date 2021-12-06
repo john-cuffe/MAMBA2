@@ -15,7 +15,11 @@ if __name__=='__main__':
     ###set the start time
     batch_summary['batch_started'] = dt.datetime.now()
     batch_summary['batch_status'] = 'in_progress'
-    batch_summary['batch_config'] = json.dumps(CONFIG).encode('utf-8')
+    batch_summary['batch_config'] = {}
+    for key in CONFIG:
+        if 'password' not in key:
+            batch_summary['batch_config']=CONFIG[key]
+    batch_summary['batch_config']=json.dumps(batch_summary['batch_config']).encode('utf-8')
     ###check if the database exists already
     if os.path.isfile(CONFIG['db_name'])==False:
         db=get_db_connection(CONFIG)
