@@ -7,6 +7,7 @@ from psycopg2.extras import execute_values
 import programs.global_vars as global_vars
 from programs.connect_db import *
 from programs.logger_setup import *
+from programs.write_to_db import write_to_db
 import pandas as pd
 from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
@@ -97,6 +98,37 @@ def stem_fuzzy(x):
     else:
         return stemmer.stem(x)
 
+def create_table(dataname,column_types):
+    '''
+    Create a table given the data snippet
+    :param dataname: name of the table
+    :param column_types: the types of columns
+    :return:
+    '''
+    try:
+        db = get_db_connection(CONFIG)
+        cur = db.cursor()
+        col_dict=column_types.to_dict()
+        sql_trans={}
+        for c in col_dict:
+            if col_dict[c] in ['O']:
+                sql_trans[c]='text'
+            elif col_dict[c]=='int64':
+                sql_trans[c]='int'
+            elif col_dict[c]=='float64':
+                sql_trans[c]['mytype']='float'
+        ###Make the full statement
+        col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])
+        if CONFIG['sql_flavor']=='postgres':
+            col_stmt = col_stmt.replace('int','bigint')
+        full_statement = 'create table {} ({})'.format(dataname, col_stmt)
+        cur.execute(full_statement)
+        db.commit()
+        return 'success'
+    except Exception as error:
+        logger.info('Failed to Create DB Table {}, error {}'.format(dataname, error))
+        return 'fail'
+
 def get_stem_data(data_source):
     '''
     This function loads and then stems the data
@@ -125,9 +157,9 @@ def get_stem_data(data_source):
         csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
     else:
         csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
+    ###flagging if the table exists
+    table_exists=False
     for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c', dtype=str_dict):
-        ####If we have addresses to standardize, do so
-        ###ID from config
         ####If we have addresses to standardize for the data source
         if dataname in CONFIG['address_to_standardize'].keys():
             cols = CONFIG['address_to_standardize'][dataname].split(',')
@@ -192,37 +224,25 @@ def get_stem_data(data_source):
                 ###now we have it, replace the original value
                 for i in range(len(data)):
                     data[i][var] = out[i]
-        # 3) Push to DB
+        # 3) check if table exists
+        ####First a quick check on if the table exists.  If not, create it.
+        if table_exists==False:
+            outcome = create_table(data_source,pd.DataFrame(data).dtypes)
+            if outcome =='success':
+                table_exists=True
+            else: break
+        # 4) Push to DB
         if ast.literal_eval(CONFIG['prediction']) == True:
-            if CONFIG['sql_flavor'] == 'sqlite':
-                diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
-                pd.DataFrame(data).to_sql(data_source, diskEngine, if_exists='append', index=False)
-            elif CONFIG['sql_flavor'] == 'postgres':
-                db = get_db_connection(CONFIG)
-                columns = data[0].keys()
-                values = [tuple(i[column] for column in columns) for i in data]
-                # logger.info('Reports Written')
-                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
-                cur = db.cursor()
-                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
-                                                                                    collist=columns_list)
-                execute_values(cur, insert_statement, values)
-                db.commit()
+            write_out= write_to_db(data, data_source)
+            if write_out:
+                logger.info('Failed to write data to database, breaking')
+                break
         if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
-            if CONFIG['sql_flavor'] == 'sqlite':
-                pd.DataFrame(data).sample(frac=.05).to_sql(data_source, diskEngine, if_exists='replace',
-                                                          index=False)
-            elif CONFIG['sql_flavor'] == 'postgres':
-                data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
-                columns = data[0].keys()
-                values = [tuple(i[column] for column in columns) for i in data]
-                # logger.info('Reports Written')
-                columns_list = str(tuple([str(i) for i in columns])).replace("'", '')
-                cur = db.cursor()
-                insert_statement = 'insert into {table} {collist} values %s'.format(table=data_source,
-                                                                                    collist=columns_list)
-                execute_values(cur, insert_statement, values)
-                db.commit()
+            data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
+            write_out= write_to_db(data, data_source)
+            if write_out:
+                logger.info('Failed to write data to database, breaking')
+                break
 
 def createDatabase(databaseName):
     # create individual data tables
@@ -279,8 +299,12 @@ def update_batch_summary(batch_summary):
                     batch_summary[key]=json.dumps(batch_summary[key])
                 if batch_summary[key]!=batch_exists[0][key]:
                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
-                    cur.execute(update_statement, batch_summary[key])
-                    db.commit()
+                    try:
+                        cur.execute(update_statement, batch_summary[key])
+                        db.commit()
+                    except Exception as err:
+                        print(err)
+                        print(batch_summary[key])
     elif CONFIG['sql_flavor']=='postgres':
         if len(batch_exists) == 0:
             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)

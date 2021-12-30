@@ -5,6 +5,7 @@ from programs.logger_setup import *
 from programs.general_helpers import *
 logger=logger_setup(CONFIG['log_file_name'])
 import datetime as dt
+import traceback
 ###actuaion function
 if __name__=='__main__':
     ###start up by printing out the full config file
@@ -18,9 +19,8 @@ if __name__=='__main__':
     batch_summary['batch_config'] = {}
     for key in CONFIG:
         if 'password' not in key:
-            batch_summary['batch_config']=CONFIG[key]
-    batch_summary['batch_config']=json.dumps(batch_summary['batch_config']).encode('utf-8')
-    ###check if the database exists already
+            batch_summary['batch_config'][key]=CONFIG[key]
+    batch_summary['batch_config']=json.dumps(batch_summary['batch_config']).encode('utf-8')    ###check if the database exists already
     if os.path.isfile(CONFIG['db_name'])==False:
         db=get_db_connection(CONFIG)
         cur = db.cursor()
@@ -38,11 +38,11 @@ if __name__=='__main__':
     logger.info('''Batch ID: {}'''.format(CONFIG['batch_id']))
     ###update the batch summary
     update_batch_summary(batch_summary)
-    ###create the database
+###create the database
     try:
         createDatabase(CONFIG['db_name'])
     except Exception as error:
-        logger.info('Error in creating database. Error: {}'.format(error))
+        logger.info('Error in creating database. Error: {}'.format(''.join(traceback.format_tb(error.__traceback__))))
         batch_summary['batch_status'] = 'failed'
         batch_summary['failure_message'] = 'Failed to create database tables.  See logs for information'
         update_batch_summary(batch_summary)
@@ -50,15 +50,15 @@ if __name__=='__main__':
     ####Create the Random Forest Model
     try:
         training_data=pd.read_csv('data/training_data_key.csv', engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
-        if CONFIG['saved_model'].lower()!='none':
-            mod = load_model(CONFIG['saved_model'], CONFIG['imputation_method'])
+        if '.joblib' in CONFIG['saved_model']:
+            mod = load_model(CONFIG['saved_model'], CONFIG['saved_model_imputation_method'])
         ###generate the rf_mod
         else:
             mod=choose_model(training_data)
             ###Dump it
-            dump_model(mod, CONFIG['saved_model_target'])
+            dump_model(mod, CONFIG['saved_model_target'], CONFIG['imputation_method'])
     except Exception as error:
-        logger.info('Error in selecting . Error: {}'.format(error))
+        logger.info('Error in selecting . Error: {}'.format(''.join(traceback.format_tb(error.__traceback__))))
         batch_summary['batch_status'] = 'failed'
         batch_summary['failure_message'] = 'Failed to select a model.  See logs for information'
         update_batch_summary(batch_summary)
@@ -71,7 +71,7 @@ if __name__=='__main__':
             run_block(block, mod)
             logger.info('### Completed Block {}'.format(block['block_name']))
     except Exception as error:
-        logger.info('Error in running block {} . Error: {}'.format(block['block_name'],error))
+        logger.info('Error in running block {} . Error: {}'.format(block['block_name'],''.join(traceback.format_tb(error.__traceback__))))
         batch_summary['batch_status'] = 'failed'
         batch_summary['failure_message'] = 'Failed to run block {}.  See logs for information'.format(block['block_name'])
         update_batch_summary(batch_summary)
@@ -93,8 +93,8 @@ if __name__=='__main__':
          sum(block_time) total_time,
         sum(block_matches) total_matches, 
         sum(block_non_matches) total_non_matches,
-        (sum(block_matches_avg_score * block_matches)/sum(block_matches) average_match_score,
-         (sum(block_non_matches_avg_score * block_non_matches)/sum(block_non_matches) average_non_match_score
+        (sum(block_matches_avg_score * block_matches)/sum(block_matches)) average_match_score,
+         (sum(block_non_matches_avg_score * block_non_matches)/sum(block_non_matches)) average_non_match_score
            from batch_statistics where batch_id = {} group by block_level'''.format(CONFIG['batch_id']),db)
         logger.info(sumstats)
     batch_summary['batch_status']='complete'

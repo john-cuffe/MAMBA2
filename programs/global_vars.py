@@ -16,7 +16,7 @@ stemmer = PorterStemmer()
 ##get properties
 from programs.config import *
 CONFIG = {}
-read_properties('mamba.properties', CONFIG)
+read_properties('{}.properties'.format(sys.argv[1]), CONFIG)
 
 import datetime as dt
 CONFIG['date']=dt.datetime.now().date().strftime("%Y_%m_%d")
@@ -36,7 +36,7 @@ logging.info('Scoring Criteria: {0}'.format(scoringcriteria))
 logging.info('Debug Mode? {0}'.format(debug))
 
 from programs.create_db_helpers import *
-from programs.general_helpers import *
+##from programs.general_helpers import *
 import programs.febrl_methods as feb
 
 ############
@@ -95,10 +95,11 @@ numWorkers=int(CONFIG['numWorkers'])
 # for i in blocks:
 #     logging.info('{}'.format(i['block_name']))
 ###import the blocks and variable types
-var_types = pd.read_csv('mamba_variable_types.csv').to_dict('record')
-blocks = pd.read_csv(CONFIG['block_file_name']).to_dict('record')
+var_types = pd.read_csv('mamba_variable_types.csv').to_dict('records')
+
+blocks = pd.read_csv(CONFIG['block_file_name']).to_dict('records')
 ###create the address_component_tag_mapping
-address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('record')
+address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('records')
 ###makte the address component mapping.
 address_component_mapping={}
 for component in [add['address_component'] for add in address_components]:

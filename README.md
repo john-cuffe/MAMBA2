@@ -47,7 +47,7 @@ MAMBA is going to match two datafiles. You can call them whatever you want, and 
 The name of the first dataset you want to match. Must contain a unique column 'id' to server as your unique identifier for that record. Whenever you see \*data1_name\* in this guide, substitute this for the name of the dataset in your code/.bash file.
 
 ### /data/\*data2_name\*.csv
-
+ 
 The name of the second dataset you want to match. Must contain a unique column 'id' to server as your unique identifier for that record. Whenever you see \*data2_name\* in this guide, substitute this for the name of the dataset in your code/.bash file.
 
 ### Block_names.csv
@@ -62,8 +62,9 @@ This file is going to tell MAMBA which variables in your dataset serve as 'block
     - \*data2_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the block in the second dataset you wish to match.
     - Parsed_block: See below. 1 if the block comes from a parsed variable, 0 otherwise.
 
-#### NOTE ON PARSE_ADDRESS AND BLOCKS
+#### NOTES
 
+    - If you want to do a full cross product with no blocking, include a row with 'full' as the entry for the block name and both of your datasets.  
     - If you are using the parse_address function and want to include outputs from the parsed addresses as block (e.g. you want to use the city and zip code) you must use the exact names from the _address_component_matching.csv_ file or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/) for the block name, \*data1_name\* and \*data2_name\* column.
     - You can reduce the ZipCode variable to any number of digits by including the digit at the end of ZipCode. For example, to block by 3-digit zip code, include a block that has 'ZipCode3' as its name.
 
@@ -85,9 +86,10 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
     - num_distance: difference between the two values.
     - exact: If the two values match, scored as a 1, otherwise scored as a 0.
     - geo_distance: Distance between two points (in kilometers) based on Haversine formula. Using this type requires that each dataset has a latitude and longitude variable, and this column is completely filled for all observations.
-    - Date: Date variables following the format 'Date_Format' entered in the .bash file. This type of date variable will be compared using the Levenstein (edit) distance between the two strings.
+    - date: This type of date variable will be compared using the Levenstein (edit) distance between the two strings of dates.  Ensure your dates are formatted in the same way before saving your datasets.
       - If either value is missing, returns 0. 
       - We just use the edit distance here because it provides an informative view of the number of edits and substitutions required to make the strings match. This is preferred over a strict subtraction of dates. For example, 1/1/2021 and 1/1/1011 is most likely a clerical error and requires only one substitution would match, but a simple distance calculation would give these two dates as a millennia apart.
+      - If you wish to block or filter by particular portions of a date, then include it as a separate variable (so extract the year and put in a separate column).  Issues with how pandas and python read potential erroneous timestamps [Pandas Docs](http://pandas-docs.github.io/pandas-docs-travis/user_guide/timeseries.html#timeseries-timestamp-limits)
   - Parsed_variable
     - Is the variable an output from parsing an address? If so, 1, otherwise 0
   - custom_variable_name
@@ -114,9 +116,9 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
       - \*data2_name\*_id: the id for the record in the second dataset
       - match: 1 if the pair is a match, 0 otherwise.
 
-### MAMBA.properties
+### MAMBA properties
  <a id="mamba_properties"/>
-This is the file you will edit to run MAMBA.  After setting your configurations, just run run_match.py.
+This is the file you will edit to run MAMBA.  After setting your configurations, just run run_match.py *your properties file name here*. Do not include the .properties file ending in the command
 
 #### Variables:
 
@@ -126,7 +128,7 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - The name of the second dataset. Exclude the '.csv' ending.
     - db_flavor
       - The 'flavor' of sql database.  Current options: sqlite, postgres.
-        - NOTE: if using postgres, ensure you have the correct db_host, db_port, db_user, and db_password in the mamba.properties file
+        - NOTE: if using postgres, ensure you have the correct db_host, db_port, db_user, and db_password in the mamba properties file
     - db_name
       - The name you want to give your database file. Exclude the '.db' ending
     - outputPath:
@@ -188,18 +190,21 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - If this is set to True, MAMBA will use a filter to pre-sort any match candidates.
     - variable_filter_info:
       - json dictionary required details if use_variable_filter is set to True.  See below for details.
+    - use_mamba_models:
+      - If True, use the mamba machine learning built-in models to find the best model.  If False, you must have a custom model in place, and this will be used to make predictions.
 
 
 ## Setting up:
  <a id="#settingup"/>
  
- - Edit mamba.properties so each variable is configured correctly
+ - Edit your MAMBA properties so each variable is configured correctly, save it with a name you want.
  - Configure variable_names.csv and block_names.csv are configured correctly
  - In a terminal, CD into the /programs directory
  - enter _python setup.py build_ext --inplace_
    - This will cythonize the fuzzy variables. You can skip this step if you want, but MAMBA will be much slower. 
  - CD into the main MAMBA directory
- - Enter run_match.py
+ - Run run_match.py *your mamba properties file*
+   - example: "python run_match.py my_properties_file"
  _ Watch MAMBA go!
 
 
@@ -220,15 +225,15 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
  <a id="custom_models"/>
  
   - Users may wish to user their own custom matching model in addition to those available in MAMBA.  
-  - If so, user must enter a fully self-contained function in _custom_matching_function.py_ to run, as well as set the custom_matching function in _mamba.properties_ to True.
+  - If so, user must enter a fully self-contained function in _custom_matching_function.py_ to run, as well as set the custom_matching function in your mamba properties file to True.
   - Must return a model-like object that has the same features (predict, scoring etc) as a standard scikit-learn model.
   - Currently, this model will be compared to the standard suite of matching models available to MAMBA, but future iterations will allow users to replace the MAMBA models completely.
 
 ## Imputation Methods
  <a id="imputation_methods"/>
-  - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off (i.e. the user has to do it) approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable of _mamba.properties_.
+  - Imputation of missing data is a major element of record linkage problems.  MAMBA takes a more hands-off (i.e. the user has to do it) approach to this problem, but offers users two options to fill in misisng values, set in the imputation_method variable in your mamba_properties.
     - Imputer:
-      - With this option, any missing values for 'fuzzy' or 'numeric distance' variables are replaced iterative imputer.  See the [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) for futher details.
+      - With this option, any missing values for 'fuzzy' or 'numeric distance' variables are replaced iterative imputer.  See the [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.impute.IterativeImputer.html) for further details.
         - While this option is easy to implement, it may result in non-sensical outcomes or potentially be subject to existing missing biases in the data.
     - Nominal:
       - This option follows a more traditional approach of converting the continuous fuzzy and numeric variables to nominal variables, and then assigning cases with missing data a particular value.
@@ -253,7 +258,7 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
   2) Retain only those match candidate pairs that have a score exceeding the chosen threshold
   3) Generate full scores/model predictions for remaining pairs
 - The intent behind this metric is to allow users some level of control. For example, SMEs may determine that an entity names that score less than .75 on a Jaro comparator will _never_ result in a match.  This feature then allows MAMBA to skip those matches.  The additional benefit is that by only calculating one single score, and then deleting a subset, this makes MAMBA run substantially faster.
-- To implement, turn the use_variable_filter parameter to True in your _mamba.properties_ file.
+- To implement, turn the use_variable_filter parameter to True in your mamba properties file.
 - Then edit the variable_filter_info json
 - Keys:
     - variable_name: name of the variable as it appears in mamba_variable_types.csv
@@ -265,9 +270,9 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
 - Demos:
   - fuzzy {'variable_name': name, 'fuzzy_name': 'jaro', 'test':'>', 'filter_value':.75}
   - custom {'variable_name': first_char, 'fuzzy_name': '', 'test':'=', 'filter_value':1}
-  - date {'variable_name': year, 'fuzzy_name':'', 'test':'>=', 'filter_value':365}
+  - date {'variable_name': year, 'fuzzy_name':'', 'test':'>=', 'filter_value':.5}
 
 - Notes:
   - For exact matches, user still must select either 1 or 0 for the filter value.  You can select something other than '=' as the test but isn't this complicated enough already?
-  - For date variables, filter_value must be the gap between two dates in days.
+  - For date variables, filter_value is given as the score on the Editdist command, which is limited between 0 and 1.
   - The logs and stats for the run will show how many observations were cut by the filter.

@@ -31,3 +31,5 @@ newmod.joblib.txt
 *.xml
 *.ipynb
 data/readme.txt
+r10000_db
+R10000_Log
