@@ -26,13 +26,13 @@ def write_to_db(the_data, target_table):
         if isinstance(the_data, list)==True:
             ##remove any index column, assemble into a list
             columns = [k for k in the_data[0].keys() if k!='index']
+            columns_list = tuple(column for column in columns)
             values = [tuple(i[column] for column in columns) for i in the_data]
-            val_len = len(values[0])
         else:
-            columns_list = str(tuple([str(j) for j in the_data.keys() if j!='index'])).replace("'", '')
-            values = tuple(the_data[column] for column in the_data.keys())
-            val_len=len(values)
+            columns_list = str(tuple([str(j) for j in the_data.keys() if j != 'index'])).replace("'", '')
+            values = [tuple([the_data[key] for key in the_data if key in columns_list])]
         ###now write to the individual types of database
+        val_len = len(values[0])
         if CONFIG['sql_flavor'] == 'sqlite':
             ###get the length of the values
             insert_statement = '''insert into {} values ({})'''.format(target_table, ", ".join('?'*val_len))
