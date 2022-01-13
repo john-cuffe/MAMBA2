@@ -30,7 +30,7 @@ openpyxl @ file:///tmp/build/80754af9/openpyxl_1632777717936/work
 pandas==1.3.4
 pandasql @ file:///opt/concourse/worker/volumes/live/6ac7c7ca-c730-4252-6d39-93604e9412a3/volume/pandasql_1632894643643/work
 patsy==0.5.2
-Pillow==8.4.0
+Pillow==9.0.0
 psycopg2 @ file:///opt/concourse/worker/volumes/live/d12e789f-5b6c-4947-7cc2-187f3a9c9696/volume/psycopg2_1612298599991/work
 pycosat==0.6.3
 pycparser @ file:///tmp/build/80754af9/pycparser_1636541352034/work
