@@ -11,7 +11,7 @@ from programs.create_db_helpers import *
 from programs.global_vars import *
 
 ###Set data and program paths
-outputPath=CONFIG['outputPath']
+projectPath=CONFIG['projectPath']
 
 ##debugmode will run on a 1% sample of each side of the data
 debugmode = ast.literal_eval(str(CONFIG['debugmode']))

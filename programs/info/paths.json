@@ -1,0 +1,53 @@
+{
+  "paths": [
+    {
+      "_path": "lib/python3.6/site-packages/usaddress-0.5.10-py3.6.egg-info/PKG-INFO",
+      "path_type": "hardlink",
+      "sha256": "27cc830c7ac4b5ede19745680b03632f3eaec5a16b24fb9d5909e20289c2e847",
+      "size_in_bytes": 1607
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress-0.5.10-py3.6.egg-info/SOURCES.txt",
+      "path_type": "hardlink",
+      "sha256": "7c4d1d0f9fcdfcf83f4d5d1bea47cff6984404f4f311620dd5f6d3a078cf133a",
+      "size_in_bytes": 230
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress-0.5.10-py3.6.egg-info/dependency_links.txt",
+      "path_type": "hardlink",
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "size_in_bytes": 1
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress-0.5.10-py3.6.egg-info/requires.txt",
+      "path_type": "hardlink",
+      "sha256": "2e964153015bd0ae93f12c19a4f08422ccfb760445e5bb9d850e6338eeb1407b",
+      "size_in_bytes": 50
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress-0.5.10-py3.6.egg-info/top_level.txt",
+      "path_type": "hardlink",
+      "sha256": "f205e6d6531b9588fbd86b274eeb00d63eaf65127765061d65b0699880d5ee2f",
+      "size_in_bytes": 10
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress/__init__.py",
+      "path_type": "hardlink",
+      "sha256": "c254663d317e9b709b63c10d4f40732bd328cc79c30f89a009dcf41fdd29d24b",
+      "size_in_bytes": 11396
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress/__pycache__/__init__.cpython-36.pyc",
+      "path_type": "hardlink",
+      "sha256": "575e150bb427bc96f357bac04b159c4c49838a2fc26d91332db08df67d4809b7",
+      "size_in_bytes": 10345
+    },
+    {
+      "_path": "lib/python3.6/site-packages/usaddress/usaddr.crfsuite",
+      "path_type": "hardlink",
+      "sha256": "ae683903a147f67a23a9ca93086b0fe5912cc1dbd38ab745f3a977cd84521534",
+      "size_in_bytes": 126992
+    }
+  ],
+  "paths_version": 1
+}

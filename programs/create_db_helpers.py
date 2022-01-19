@@ -9,10 +9,11 @@ from programs.connect_db import *
 from programs.logger_setup import *
 from programs.write_to_db import write_to_db
 import pandas as pd
+import numpy as np
 from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
 if ast.literal_eval(CONFIG['parse_address'])==True:
-    import usaddress as usadd
+    import programs.usaddress.usaddress as usadd
     from programs.address_standardizer.standardizer import *
 ###a query to create the batch_summary and batch_statistics tables
 batch_info_qry='''
@@ -116,8 +117,9 @@ def create_table(dataname,column_types):
             elif col_dict[c]=='int64':
                 sql_trans[c]='int'
             elif col_dict[c]=='float64':
-                sql_trans[c]['mytype']='float'
+                sql_trans[c]='float'
         ###Make the full statement
+        #print(sql_trans)
         col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])
         if CONFIG['sql_flavor']=='postgres':
             col_stmt = col_stmt.replace('int','bigint')
@@ -159,16 +161,26 @@ def get_stem_data(data_source):
         csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
     ###flagging if the table exists
     table_exists=False
+    row_number=0
     for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c', dtype=str_dict):
+        #print('foo {}'.format(table_exists))
         ####If we have addresses to standardize for the data source
         if dataname in CONFIG['address_to_standardize'].keys():
             cols = CONFIG['address_to_standardize'][dataname].split(',')
             for col in cols:
                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
         data['matched'] = 0
-        if 'full' in [b['block_name'] for b in global_vars.blocks]:
-            data['full'] = 1
+        for block in global_vars.blocks:
+            #print(block['block_name'])
+            ###for 'full' blocks, we will divide everything into equally sized chunks.  This is much easier to do on the front end while we are writing
+            ###than to deal with later when we dn't want to pull the entire DB and have SQL-dependencies
+            ###And yes I mean it's easier for me. Sue me.
+            if block['block_name'].lower()=='full':
+                row_seq = [np.floor(i/block['chunk_size']) for i in list(range(row_number, row_number+len(data)))]
+                data['full'] = row_seq
+                row_number += len(data)
         ###convert to dictionary
+        #print('got the full')
         data = data.to_dict('records')
         ########
         ##Are we using the parsed address feature? if so, add those variables into the row
@@ -227,6 +239,8 @@ def get_stem_data(data_source):
         # 3) check if table exists
         ####First a quick check on if the table exists.  If not, create it.
         if table_exists==False:
+            #print('creating table')
+            #print(pd.DataFrame(data).dtypes)
             outcome = create_table(data_source,pd.DataFrame(data).dtypes)
             if outcome =='success':
                 table_exists=True
@@ -248,18 +262,18 @@ def createDatabase(databaseName):
     # create individual data tables
     # ###for each input dataset, need to
     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
-        print(data_source)
         get_stem_data(data_source)
+        ####what the fuck is going on here?
         ####now index the tables
         db=get_db_connection(CONFIG)
         cur=db.cursor()
         for i in global_vars.blocks:
             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
-        ###additional index on id
-        cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
-        ###clerical_review_candidates and the two matched pairs table
-        db.commit()
-        ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+            ###additional index on id
+            cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
+            ###clerical_review_candidates and the two matched pairs table
+            db.commit()
+            ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
     for table in ['clerical_review_candidates','matched_pairs']:
         if CONFIG['sql_flavor']=='sqlite':
             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)

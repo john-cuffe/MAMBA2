@@ -1,0 +1,19 @@
+{
+  "arch": "x86_64",
+  "build": "py36_1",
+  "build_number": 1,
+  "depends": [
+    "future",
+    "metaphone",
+    "probableparsing",
+    "python 3.6*",
+    "python-crfsuite",
+    "requests"
+  ],
+  "license": "MIT",
+  "license_family": "MIT",
+  "name": "usaddress",
+  "platform": "osx",
+  "subdir": "osx-64",
+  "version": "0.5.10"
+}

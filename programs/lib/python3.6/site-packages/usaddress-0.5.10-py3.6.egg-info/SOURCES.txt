@@ -1,0 +1,9 @@
+setup.cfg
+setup.py
+usaddress/__init__.py
+usaddress/usaddr.crfsuite
+usaddress.egg-info/PKG-INFO
+usaddress.egg-info/SOURCES.txt
+usaddress.egg-info/dependency_links.txt
+usaddress.egg-info/requires.txt
+usaddress.egg-info/top_level.txt

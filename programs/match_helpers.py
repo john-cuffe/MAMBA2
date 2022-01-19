@@ -2,10 +2,11 @@
 ###CHUNK: THE RANDOM FOREST FUNCTIONS
 ############
 from __future__ import division
-#import pandasql as ps
 import copy
 import os
 from copy import deepcopy as dcpy
+
+import programs.soundex
 from programs.write_to_db import write_to_db
 import numpy as np
 from scipy.stats import randint as sp_randint
@@ -21,6 +22,8 @@ from inspect import getmembers, isfunction
 logger=logger_setup(CONFIG['log_file_name'])
 from sklearn.ensemble import RandomForestClassifier
 import random
+from programs.soundex import soundex
+from programs.soundex import nysiis
 
 ##Run the Classifier
 def runRFClassifier(y, X, nT, nE, mD):
@@ -336,8 +339,14 @@ def create_scores(input_data, score_type, varlist, headers, method='full'):
         data2_ids = ','.join(
             str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
-        data1_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data1_name']],i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data2_name']],i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
+        data1_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data1_name']],
+                                                                                               i[CONFIG['data1_name']],
+                                                                                               i['variable_name']) for i
+                                in varlist])
+        data2_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data2_name']],
+                                                                                               i[CONFIG['data2_name']],
+                                                                                               i['variable_name']) for i
+                                in varlist])
         ###get the values
         data1_values = get_table_noconn(
             '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,
@@ -377,6 +386,55 @@ def create_scores(input_data, score_type, varlist, headers, method='full'):
             out_arr[i,] = i_scores
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': custom_vars}
+    elif score_type=='phoenetic':
+        ###If we are running a training data model
+        data1_ids = ','.join(
+            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+        data2_ids = ','.join(
+            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
+        ###now get the values from the database
+        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
+        ###get the values
+        data1_values = pd.DataFrame(get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db))
+        data2_values = pd.DataFrame(get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name, id_list=data2_ids), db))
+        ###give the data values the name for each soundex code
+        for mydata in [data1_values,data2_values]:
+            for col in mydata.columns:
+                if 'soundex' in col:
+                    mydata[col] = mydata.apply(lambda x: soundex(x[col]), axis=1)
+                if 'nysiis' in col:
+                    mydata[col] = mydata.apply(lambda x: nysiis(x[col]), axis=1)
+        ##Return to list of dicts
+        data1_values=data1_values.to_dict('records')
+        data2_values=data2_values.to_dict('records')
+        ###give the data values the name for each searching
+        data1_values = {str(item['id']): item for item in data1_values}
+        data2_values = {str(item['id']): item for item in data2_values}
+        ###create an indexed list of the id pairs to serve as the core of our dictionary
+        input_data = dcpy(input_data)
+        input_data.reset_index(inplace=True, drop=False)
+        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
+        phoenetic_vars = [i['variable_name'] for i in varlist]
+        ##convert fuzzy vars to a list
+        ###now create the dictionary with the list of names and the array
+        out_arr = np.zeros(shape=(len(core_dict), len(phoenetic_vars)))
+        for i in range(len(core_dict)):
+            i_scores = []
+            for j in range(len(phoenetic_vars)):
+                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][phoenetic_vars[j]] and \
+                        data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][phoenetic_vars[j]]:
+                    i_scores.append(
+                        feb.editdist(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][phoenetic_vars[j]],
+                                     data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][phoenetic_vars[j]]))
+                else:
+                    i_scores.append(0)
+            out_arr[i,] = i_scores
+        ####Now return a dictionary of the input array and the names
+        return {'output': out_arr, 'names': phoenetic_vars}
+
 
 def create_all_scores(input_data, method, headers='all'):
     '''
@@ -386,7 +444,7 @@ def create_all_scores(input_data, method, headers='all'):
     :return: y, X_imputed, and X_hdrs
     '''
     ###get the varible types
-    var_rec=pd.read_csv('mamba_variable_types.csv', keep_default_na=False).replace({'':None}).to_dict('records')
+    var_rec=pd.read_csv('{}/mamba_variable_types.csv'.format(CONFIG['projectPath']), keep_default_na=False).replace({'':None}).to_dict('records')
     ###add possible headers
     for v in var_rec:
         if v['match_type']=='fuzzy':
@@ -400,6 +458,7 @@ def create_all_scores(input_data, method, headers='all'):
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
         date_vars = [i for i in var_rec if i['match_type'] == 'date']
         custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None]
+        phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis']]
     else:
         ###If we are running with recursive feature elimination, just find the features we are going to use
         fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy' and any(item in headers for item in i['possible_headers'])==True]
@@ -408,17 +467,18 @@ def create_all_scores(input_data, method, headers='all'):
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and 'geo_distance' in headers]
         date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
         custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None and i['variable_name'] in headers]
-        ###Are we running any fuzzy_vars?
+        phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis'] and i['variable_name'] in headers]
+    ### fuzzy vars
     if len(fuzzy_vars) > 0:
         fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers, method)
         X=fuzzy_values['output']
         X_hdrs=copy.deepcopy(fuzzy_values['names'])
-    #2) num_distance: get the numeric distance between the two values, with a score of -9999 if missing
+    ### num_distance: get the numeric distance between the two values, with a score of -9999 if missing
     if len(numeric_dist_vars) > 0:
         numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars, headers, method)
         X=np.hstack((X, numeric_dist_values['output']))
         X_hdrs.extend(numeric_dist_values['names'])
-    #3) exact: if they match, 1, else 0
+    ### exact: if they match, 1, else 0
     if len(exact_match_vars) > 0:
         exact_match_values=create_scores(input_data, 'exact', exact_match_vars, headers, method)
         X=np.hstack((X, exact_match_values['output']))
@@ -429,7 +489,7 @@ def create_all_scores(input_data, method, headers='all'):
         if type(geo_distance_values['output']) != str:
             X = np.hstack((X, geo_distance_values['output']))
             X_hdrs.extend(geo_distance_values['names'])
-    ####date vars
+    #### date vars
     if len(date_vars) > 0:
         date_values = create_scores(input_data,'date',date_vars, headers, method)
         if type(date_values['output']) != str:
@@ -441,6 +501,12 @@ def create_all_scores(input_data, method, headers='all'):
         if type(custom_values['output']) != str:
             X = np.hstack((X, custom_values['output']))
             X_hdrs.extend(custom_values['names'])
+    ### phonetic values:
+    if len(phoenetic_vars) > 0:
+        phoenetic_vars = create_scores(input_data, 'phoenetic', custom_vars, headers, method)
+        if type(phoenetic_vars['output']) != str:
+            X = np.hstack((X, phoenetic_vars['output']))
+            X_hdrs.extend(phoenetic_vars['names'])
     ##Impute the missing data
     ####Options for missing data: Impute, or Interval:
     ##Imputation: Just impute the scores based on an iterative imputer
@@ -489,7 +555,6 @@ def create_all_scores(input_data, method, headers='all'):
             return y, X, X_hdrs, 'Nominal'
         else:
             return X, X_hdrs
-
 
 def filter_data(data):
     '''
@@ -897,8 +962,14 @@ def match_fun(arg):
     logger.info('starting block {}'.format(arg['target']))
     db=get_db_connection(CONFIG, timeout=1)
     ###get the two dataframes
-    data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
-    data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
+    ##if we aren't doing a chunked block
+    if arg['block_info']['chunk_size']==-1:
+        data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
+        data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
+    else:
+        ###if we are chunking out the block, this identifies the block using the appropriate target element (remember, arg['target'] in this case is a tuple)
+        data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target'][0]), db)
+        data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target'][1]), db)
     ###get the data
     ###If we are running in deduplication mode, take only the input records that the IDs don't match
     if ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True:
@@ -1033,13 +1104,18 @@ def run_block(block, model):
     :param rf_mod; the random forest model we are using
     :return:
     '''
-    ####First get the blocks that appear in both
-    db=get_db_connection(CONFIG)
-    data1_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data1_name']], CONFIG['data1_name']), db)
-    data1_blocks=[i['block'] for i in data1_blocks]
-    data2_blocks=get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data2_name']], CONFIG['data2_name']), db)
-    data2_blocks=[i['block'] for i in data2_blocks]
-    block_list=intersection(data1_blocks, data2_blocks)
+    ####If we are running the 'full' block
+    db = get_db_connection(CONFIG)
+    data1_blocks = get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data1_name']], CONFIG['data1_name']), db)
+    data1_blocks = [i['block'] for i in data1_blocks]
+    data2_blocks = get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data2_name']], CONFIG['data2_name']), db)
+    data2_blocks = [i['block'] for i in data2_blocks]
+    if block['chunk_size']==-1:
+        ###So if we ARE NOT doing a chunked out block, the block list is the intersection (ie all the blocks that match)
+        block_list=intersection(data1_blocks, data2_blocks)
+    else:
+        ###otherwise it's a list of tuples of all of the possible combinations of the blocks
+        block_list=[(x, y) for x in data1_blocks for y in data2_blocks]
     logger.info('We have {} blocks to run for {}'.format(len(block_list), block['block_name']))
     ###get the list of variables we are trying to match
     var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('records')

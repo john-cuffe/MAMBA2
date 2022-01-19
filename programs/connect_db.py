@@ -7,7 +7,7 @@ import psycopg2
 
 def get_db_connection(db_info, timeout=1):
     if db_info['sql_flavor']=='sqlite':
-        db = sqlite3.connect(db_info['db_name'], timeout=timeout)
+        db = sqlite3.connect('{}/{}'.format(db_info['projectPath'],db_info['db_name']), timeout=timeout)
     elif db_info['sql_flavor']=='postgres':
         db = psycopg2.connect(dbname=db_info['db_name'],
                               host=db_info['db_host'],

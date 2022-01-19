@@ -1,0 +1,51 @@
+# This file created by conda-build 2.1.17
+# meta.yaml template originally from:
+# /Users/travis/build/conda-forge/usaddress-feedstock/recipe, last modified Wed Nov  1 15:29:42 2017
+# ------------------------------------------------
+
+package:
+    name: usaddress
+    version: 0.5.10
+source:
+    fn: usaddress-0.5.10.tar.gz
+    sha256: 1a8ebf62d0cce58d7d8286dde70373c530a9317b6fe1752a4197b75b7d0870e3
+    url: https://pypi.io/packages/source/u/usaddress/usaddress-0.5.10.tar.gz
+build:
+    noarch: ''
+    noarch_python: false
+    number: '1'
+    script: python setup.py install --single-version-externally-managed --record record.txt
+    string: py36_1
+requirements:
+    build:
+        - ca-certificates 2017.7.27.1 0
+        - certifi 2017.7.27.1 py36_0
+        - ncurses 5.9 10
+        - openssl 1.0.2l 0
+        - python 3.6.3 0
+        - readline 6.2 0
+        - setuptools 36.6.0 py36_1
+        - sqlite 3.13.0 1
+        - tk 8.5.19 2
+        - xz 5.2.3 0
+        - zlib 1.2.8 3
+    run:
+        - python
+        - requests
+        - future
+        - python-crfsuite
+        - probableparsing
+        - metaphone
+test:
+    imports:
+        - usaddress
+about:
+    home: https://github.com/datamade/usaddress
+    license: MIT
+    license_family: MIT
+    summary: Parse US addresses using conditional random fields
+extra:
+    final: true
+    recipe-maintainers:
+        - wyseguy7
+        - ericdill

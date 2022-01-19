@@ -37,16 +37,16 @@ Download from our GitHub repo, [https://github.com/john-cuffe/MAMBA2](https://gi
 ### What Does MAMBA do?
  <a id="#WhatDoesMAMBAdo"/>
 
-MAMBA is going to match two datafiles. You can call them whatever you want, and save the names of the .csv files (without the .csv ending) in the run_Match.bash file as data1_name and data2_name respectively. This .bash file will then feed these names through all of the subsequent programs.
+MAMBA is going to match two datafiles. You can call them whatever you want, and save the names of the .csv files (without the .csv ending) in the PROPERTIES file as data1_name and data2_name respectively. This file will then feed these names through all of the subsequent programs.
 
 ##MAMBA Files
  <a id="#MAMBAFiles"/>
 
-### /data/\*data1_name\*.csv
+### /PROJECT_PATH/\*data1_name\*.csv
 
 The name of the first dataset you want to match. Must contain a unique column 'id' to server as your unique identifier for that record. Whenever you see \*data1_name\* in this guide, substitute this for the name of the dataset in your code/.bash file.
 
-### /data/\*data2_name\*.csv
+### /PROJECT_PATH/\*data2_name\*.csv
  
 The name of the second dataset you want to match. Must contain a unique column 'id' to server as your unique identifier for that record. Whenever you see \*data2_name\* in this guide, substitute this for the name of the dataset in your code/.bash file.
 
@@ -61,18 +61,20 @@ This file is going to tell MAMBA which variables in your dataset serve as 'block
     - \*data1_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the block in the first dataset you wish to match
     - \*data2_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the block in the second dataset you wish to match.
     - Parsed_block: See below. 1 if the block comes from a parsed variable, 0 otherwise.
+    - chunk_size: If you expect very large blocks, or want to do an unblocked match but still want multiprocessing, enter a max block size here.  Leave blank otherwise.  See Note for details.
 
 #### NOTES
 
     - If you want to do a full cross product with no blocking, include a row with 'full' as the entry for the block name and both of your datasets.  
     - If you are using the parse_address function and want to include outputs from the parsed addresses as block (e.g. you want to use the city and zip code) you must use the exact names from the _address_component_matching.csv_ file or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/) for the block name, \*data1_name\* and \*data2_name\* column.
     - You can reduce the ZipCode variable to any number of digits by including the digit at the end of ZipCode. For example, to block by 3-digit zip code, include a block that has 'ZipCode3' as its name.
+    - The chunk_size parameter is only avazxvvilable on 'full' blocks.
 
 #### Figure 1. Demonstration of block_names.csv file.
 
 ![plot](./Documentation/figure_1_block_names.png)
 
-### mamba_variable_types.csv
+### PROJECT_PATH/mamba_variable_types.csv
 
 This file tells MAMBA what kind of analysis to do on different kinds of variables you are using for matching. All of these models will be used to generate the matching models.
 
@@ -85,6 +87,8 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
     - fuzzy: generate 12 fuzzy string comparators for the candidate pair
     - num_distance: difference between the two values.
     - exact: If the two values match, scored as a 1, otherwise scored as a 0.
+    - soundex: A Levenshtein distance comparison of soundex codes from the fuzzy library (see: https://pypi.org/project/Fuzzy/).
+    - nysiis: A Levenshtein distance comparison of NYSIIS codes from the fuzzy library (see: https://pypi.org/project/Fuzzy/).
     - geo_distance: Distance between two points (in kilometers) based on Haversine formula. Using this type requires that each dataset has a latitude and longitude variable, and this column is completely filled for all observations.
     - date: This type of date variable will be compared using the Levenstein (edit) distance between the two strings of dates.  Ensure your dates are formatted in the same way before saving your datasets.
       - If either value is missing, returns 0. 
@@ -110,18 +114,22 @@ This file tells MAMBA what kind of analysis to do on different kinds of variable
 - The function must accept as an argument two strings, _and also must handle missing values_ (e.g. by giving a particular value to missings).
 - {data1_name} and {data2_name} should appear as they do in their respective datasets.
 
-### training_data.csv
+### PROJECT_PATH/training_data_key.csv
     - This is the data that will tell MAMBA what you believe is a match and which is not. Currently, MAMBA requires a truth deck of matches in order to build off of. This file only contains three columns.
       - \*data1_name\*_id: the id for the record in the first dataset
       - \*data2_name\*_id: the id for the record in the second dataset
       - match: 1 if the pair is a match, 0 otherwise.
+### PROJECT_PATH/*data_1_name*_training.csv and PROJECT_PATH/*data_2_name*_training.csv
+    - These two files contain the right-hand side variables for the records in training_data_key.csv.
 
-### MAMBA properties
+### PROJECT_PATH/MAMBA.properties
  <a id="mamba_properties"/>
-This is the file you will edit to run MAMBA.  After setting your configurations, just run run_match.py *your properties file name here*. Do not include the .properties file ending in the command
+This is the file you will edit to run MAMBA.  After setting your configurations, just run run_match.py *your project folder name here*.
 
 #### Variables:
 
+    - projectPath:
+      - Path to a folder you create (can be inside or outside the MAMBA directory) that contains all of your project's data and configuration files.
     - Data1_name
       - The name of the first dataset. Exclude the '.csv' ending.
     - data2_name
@@ -131,16 +139,12 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
         - NOTE: if using postgres, ensure you have the correct db_host, db_port, db_user, and db_password in the mamba properties file
     - db_name
       - The name you want to give your database file. Exclude the '.db' ending
-    - outputPath:
-      - The output directory you want to use
     - Debugmode
       - True/False that skips the majority of matches and develops a model on only one iteration, so the program runs quickly for efficient testing.
     - block_file_name:
       - the name of the file that you are using to define the blocks.
     - create_db_chunksize:
       - A variable to set how big of a 'chunk' you push to your db at once.
-    - inputPath:
-      - Path to the datasets you want to match.
     - Training_data_name:
       - The name of the training data you are using. Exclude the '.csv' ending
     - Rf_jobs:
@@ -197,14 +201,16 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
 ## Setting up:
  <a id="#settingup"/>
  
+ - Create your project folder.  Inside it, you should have your two data files, three training data files (if you have them already), and your mamba.properties file.
  - Edit your MAMBA properties so each variable is configured correctly, save it with a name you want.
- - Configure variable_names.csv and block_names.csv are configured correctly
- - In a terminal, CD into the /programs directory
- - enter _python setup.py build_ext --inplace_
-   - This will cythonize the fuzzy variables. You can skip this step if you want, but MAMBA will be much slower. 
+ - Configure variable_names.csv and block_names.csv are configured correctly.
+ - IF YOU HAVE MADE ANY CUSTOMIZATIONS to create_db_helpers.py, match_helpers.py, soundex.py, or febrl_methods.py in the programs directory...
+     - In a terminal, CD into the /programs directory
+     - run the command _python setup.py build_ext --inplace_
+       - This will cythonize the helper functions. 
  - CD into the main MAMBA directory
- - Run run_match.py *your mamba properties file*
-   - example: "python run_match.py my_properties_file"
+ - Run run_match.py *your projectPath here*
+   - example: "python run_match.py /home/users/foo/foo_matching_project/bar"
  _ Watch MAMBA go!
 
 
@@ -219,15 +225,15 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
 ### Using the use_remaining_parsed_address feature
 
   - While parsing addresses, users may not want to compare multiple strings, but rather only identify some components of a parsed address to use as blocks or strings. This function allows any remainder to be used as a fuzzy variable.
-  - For example, imagine parsing the address '123 Main Street SW Apartment 1, Anytown, AS, 12345'. If we wanted to match using city, state, and zip as blocks and include the address number as its own variable, MAMBA would remove those features from the string but leave 'Main Street SW Apartment' as a string, which itself may contain valuable information. Leaving the _use_remaining_parsed_address_ feature as 'True' tells MAMBA to create a new fuzzy variable to use in the model based on all of the address components _not otherwise used as a block or a separate variable_.
+  - For example, imagine parsing the address '123 Main Street SW Apartment 1, Anytown, AS, 12345'. If we wanted to match using city, state, and zip as blocks and include the address number as a variable, MAMBA would remove those features from the string but leave 'Main Street SW Apartment' as a string, which itself may contain valuable information. Leaving the _use_remaining_parsed_address_ feature as 'True' tells MAMBA to create a new fuzzy variable to use in the model based on _all_ of the address components _not otherwise used as a block or a separate variable_.
  
 ## Custom Matching Models
  <a id="custom_models"/>
  
   - Users may wish to user their own custom matching model in addition to those available in MAMBA.  
   - If so, user must enter a fully self-contained function in _custom_matching_function.py_ to run, as well as set the custom_matching function in your mamba properties file to True.
-  - Must return a model-like object that has the same features (predict, scoring etc) as a standard scikit-learn model.
-  - Currently, this model will be compared to the standard suite of matching models available to MAMBA, but future iterations will allow users to replace the MAMBA models completely.
+  - Must return a model-like object that has the same features (predicts, predict_proba, scoring etc.) as a standard scikit-learn model.
+  - Turn _use_mamba_models_ to 'False' to only use the custom model and none of the MAMBA built-in models.
 
 ## Imputation Methods
  <a id="imputation_methods"/>

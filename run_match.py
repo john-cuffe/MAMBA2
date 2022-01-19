@@ -3,7 +3,7 @@ from programs.create_db_helpers import *
 from programs.match_helpers import *
 from programs.logger_setup import *
 from programs.general_helpers import *
-logger=logger_setup(CONFIG['log_file_name'])
+logger=logger_setup('{}/{}'.format(CONFIG['projectPath'],CONFIG['log_file_name']))
 import datetime as dt
 import traceback
 ###actuaion function
@@ -49,9 +49,9 @@ if __name__=='__main__':
         os._exit(0)
     ####Create the Random Forest Model
     try:
-        training_data=pd.read_csv('data/training_data_key.csv', engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
+        training_data=pd.read_csv('{}/training_data_key.csv'.format(CONFIG['projectPath']), engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
         if '.joblib' in CONFIG['saved_model']:
-            mod = load_model(CONFIG['saved_model'], CONFIG['saved_model_imputation_method'])
+            mod = load_model(CONFIG)
         ###generate the rf_mod
         else:
             mod=choose_model(training_data)

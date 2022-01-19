@@ -16,7 +16,16 @@ stemmer = PorterStemmer()
 ##get properties
 from programs.config import *
 CONFIG = {}
-read_properties('{}.properties'.format(sys.argv[1]), CONFIG)
+############
+###CHUNK: SET DATA AND PROGRAM PATH, TIME, AND IMPORT FEBRL
+############
+projectPath = sys.argv[1]
+##Check if it ends in a /, if it does, leave it, otherwise add a /
+if projectPath[-1:] == '/':
+    projectPath = projectPath[:-1]
+
+####read in the mamba properties file
+read_properties('{}/mamba.properties'.format(sys.argv[1]), CONFIG)
 
 import datetime as dt
 CONFIG['date']=dt.datetime.now().date().strftime("%Y_%m_%d")
@@ -39,23 +48,6 @@ from programs.create_db_helpers import *
 ##from programs.general_helpers import *
 import programs.febrl_methods as feb
 
-############
-###CHUNK: SET DATA AND PROGRAM PATH, TIME, AND IMPORT FEBRL
-############
-inputPath = CONFIG['inputPath']
-outputPath=CONFIG['outputPath']
-##Check if it ends in a /, if it does, leave it, otherwise add a /
-if inputPath[-1:] == '/':
-    inputPath = inputPath
-else:
-    inputPath = inputPath + '/'
-
-###Repeating for output path
-if outputPath[-1:] == '/':
-    outputPath = outputPath
-else:
-    outputPath = outputPath + '/'
-
 ###setting the start time
 starttime = time.time()
 
@@ -72,32 +64,12 @@ namelist = [i.__name__ for i in methods]
 ##date and time
 date = dt.datetime.now().date()
 numWorkers=int(CONFIG['numWorkers'])
-# Open log file
-# logging.basicConfig(filename=outputPath + 'br_match_log{}.log'.format(date), level=logging.DEBUG)
-# ############
-# ##The parameters for the run, called from the .bash file
-# ##NOTE--order matters here, so don't change the order of the arguments in the .bash file
-# logging.info('############################')
-# logging.info('############################')
-# logging.info('###### Starting Main Match Program ######')
-# logging.info('############################')
-# logging.info('############################')
-#
-# logging.info('\n\n###### PARAMS ######\n\n')
-# #logging.info('Number of workers: {0}'.format(CONFIG['numWorkers']))
-# #logging.info('Number of CPUs: {0}'.format(CONFIG['numcpus']))
-# #logging.info('Memory Usage: {0}'.format(CONFIG['memusage']))
-#
-#
-# ###get the list of blocks we are looking for
-# blocks=get_block_variable_list(CONFIG['block_file_name'])
-# logging.info('Blocks Used:')
-# for i in blocks:
-#     logging.info('{}'.format(i['block_name']))
-###import the blocks and variable types
-var_types = pd.read_csv('mamba_variable_types.csv').to_dict('records')
 
-blocks = pd.read_csv(CONFIG['block_file_name']).to_dict('records')
+###import the blocks and variable types
+var_types = pd.read_csv('{}/mamba_variable_types.csv'.format(projectPath)).to_dict('records')
+
+blocks = pd.read_csv('{}/{}'.format(projectPath,CONFIG['block_file_name'])).fillna(-1).to_dict('records')
+
 ###create the address_component_tag_mapping
 address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('records')
 ###makte the address component mapping.
