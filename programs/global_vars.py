@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
+import os
+sys.path.append(os.getcwd())
 import time
 import pandas as pd
 ###turn off chain warnings
@@ -19,6 +21,7 @@ CONFIG = {}
 ############
 ###CHUNK: SET DATA AND PROGRAM PATH, TIME, AND IMPORT FEBRL
 ############
+####
 projectPath = sys.argv[1]
 ##Check if it ends in a /, if it does, leave it, otherwise add a /
 if projectPath[-1:] == '/':
@@ -44,8 +47,6 @@ debug = ast.literal_eval(str(CONFIG['debugmode']))
 logging.info('Scoring Criteria: {0}'.format(scoringcriteria))
 logging.info('Debug Mode? {0}'.format(debug))
 
-from programs.create_db_helpers import *
-##from programs.general_helpers import *
 import programs.febrl_methods as feb
 
 ###setting the start time
@@ -66,10 +67,18 @@ date = dt.datetime.now().date()
 numWorkers=int(CONFIG['numWorkers'])
 
 ###import the blocks and variable types
-var_types = pd.read_csv('{}/mamba_variable_types.csv'.format(projectPath)).to_dict('records')
+var_types = pd.read_csv('{}/mamba_variable_types.csv'.format(projectPath),keep_default_na=False).replace({'':None}).to_dict('records')
+for k in var_types:
+    for key in [CONFIG['data1_name'],CONFIG['data2_name']]:
+        k[key] = k[key].lower()
+
 
 blocks = pd.read_csv('{}/{}'.format(projectPath,CONFIG['block_file_name'])).fillna(-1).to_dict('records')
-
+###quickly strip out any spaces
+for block in blocks:
+    for key in block.keys():
+        if type(block[key])==str:
+            block[key] = block[key].replace(' ','')
 ###create the address_component_tag_mapping
 address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('records')
 ###makte the address component mapping.

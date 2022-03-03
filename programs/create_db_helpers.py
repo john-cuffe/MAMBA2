@@ -12,8 +12,13 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
+from glob import glob
+###check if we have local usaddress or a proper version
 if ast.literal_eval(CONFIG['parse_address'])==True:
-    import programs.usaddress.usaddress as usadd
+    if 'programs/usaddress' in glob("programs/*/"):
+        import usaddress as usadd
+    else:
+        import usaddress as usadd
     from programs.address_standardizer.standardizer import *
 ###a query to create the batch_summary and batch_statistics tables
 batch_info_qry='''
@@ -51,7 +56,7 @@ CACHE 1;'''
 
 ###Alter if we aren't dealing with an sqlite database
 if CONFIG['sql_flavor']!='sqlite':
-    batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+    batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
 
 def intersect(x0, x1, y0, y1):
     '''
@@ -84,7 +89,7 @@ def generate_batch_id(db):
         else:
             return 1
     else:
-        cur.execute('''select max(batch_id)+1 batch_id from batch_summary if exists batch_summary''')
+        cur.execute('''select coalesce(max(batch_id)+1,1) batch_id from batch_summary''')
     #
     columns = [i[0] for i in cur.description]
     last_batch = [dict(zip(columns, row)) for row in cur]    #
@@ -143,6 +148,7 @@ def get_stem_data(data_source):
     # the the fuzzy matches
     ###dictionary to read all blocks as strings
     str_dict = {item[dataname]: str for item in global_vars.blocks}
+    str_dict['id'] = str
     ###If we have a date variable, find it and ensure it's read as a string
     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
     if len(date_columns) > 0:
@@ -156,9 +162,9 @@ def get_stem_data(data_source):
         fuzzy_vars.append('address1')
     ##chunk data so we don't blow up memory
     if sys.platform == 'win32':
-        csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
+        csvname = '{}\\{}.csv'.format(CONFIG['projectPath'], dataname)
     else:
-        csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
+        csvname = '{}/{}.csv'.format(CONFIG['projectPath'], dataname)
     ###flagging if the table exists
     table_exists=False
     row_number=0
@@ -237,6 +243,8 @@ def get_stem_data(data_source):
                 for i in range(len(data)):
                     data[i][var] = out[i]
         # 3) check if table exists
+        ###convert all column headers to lower case
+        data = [{k.lower(): v for k, v in x.items()} for x in data]
         ####First a quick check on if the table exists.  If not, create it.
         if table_exists==False:
             #print('creating table')
@@ -262,28 +270,30 @@ def createDatabase(databaseName):
     # create individual data tables
     # ###for each input dataset, need to
     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
-        get_stem_data(data_source)
-        ####what the fuck is going on here?
-        ####now index the tables
-        db=get_db_connection(CONFIG)
-        cur=db.cursor()
-        for i in global_vars.blocks:
-            cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
+        if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:
+            #print(data_source)
+            get_stem_data(data_source)
+            ####now index the tables
+            db=get_db_connection(CONFIG)
+            cur=db.cursor()
+            for i in global_vars.blocks:
+                cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
             ###additional index on id
             cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
             ###clerical_review_candidates and the two matched pairs table
             db.commit()
-            ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+        else:
+            logger.info('File {} does not exist.  Passing'.format(data_source))
+                ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
     for table in ['clerical_review_candidates','matched_pairs']:
         if CONFIG['sql_flavor']=='sqlite':
             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
         elif CONFIG['sql_flavor']=='postgres':
-            ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
-
+            ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
         if len(ret) > 0:
             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
             db.commit()
-    cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+    cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
     db.commit()
 
@@ -300,7 +310,7 @@ def update_batch_summary(batch_summary):
     if CONFIG['sql_flavor']=='sqlite':
         if len(batch_exists)==0:
             # create individual data tables
-            diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
+            diskEngine = create_engine('sqlite:///{}/{}.db'.format(CONFIG['projectPath'],CONFIG['db_name']))
             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
             pd.DataFrame(batch_summary, index=[0]).to_sql('batch_summary', diskEngine, if_exists='append', index=False)
             db.commit()
@@ -308,13 +318,13 @@ def update_batch_summary(batch_summary):
             ##First check for any json and do a json.dumps
             for key in batch_summary:
                 if batch_summary[key].__class__==dt.datetime:
-                    batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+                    batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
                 if batch_summary[key].__class__==dict:
                     batch_summary[key]=json.dumps(batch_summary[key])
                 if batch_summary[key]!=batch_exists[0][key]:
                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
                     try:
-                        cur.execute(update_statement, batch_summary[key])
+                        cur.execute(update_statement, (batch_summary[key],))
                         db.commit()
                     except Exception as err:
                         print(err)
@@ -337,7 +347,7 @@ def update_batch_summary(batch_summary):
             columns = [i for i in batch_summary.keys() if i != 'batch_id']
             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]
-            update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+            update_statement = 'update batch_summary set {} where batch_id={}'.format(
                 columns_statement, batch_summary['batch_id'])
             cur.execute(update_statement, values[0])
             db.commit()

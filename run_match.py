@@ -1,3 +1,6 @@
+import os
+import sys
+sys.path.append(os.getcwd())
 from programs.global_vars import *
 from programs.create_db_helpers import *
 from programs.match_helpers import *
@@ -20,18 +23,37 @@ if __name__=='__main__':
     for key in CONFIG:
         if 'password' not in key:
             batch_summary['batch_config'][key]=CONFIG[key]
-    batch_summary['batch_config']=json.dumps(batch_summary['batch_config']).encode('utf-8')    ###check if the database exists already
-    if os.path.isfile(CONFIG['db_name'])==False:
-        db=get_db_connection(CONFIG)
-        cur = db.cursor()
-        ##sqlite doesn't like multi-line statements
-        if CONFIG['sql_flavor']=='sqlite':
+    batch_summary['batch_config']=json.dumps(batch_summary['batch_config']).encode('utf-8')
+    ###check if the database exists already
+    ##sqlite doesn't like multi-line statements
+    if CONFIG['sql_flavor'] == 'sqlite':
+        if os.path.isfile('{}/{}.db'.format(CONFIG['projectPath'],CONFIG['db_name']))==False:
+            db=get_db_connection(CONFIG)
+            cur = db.cursor()
             for stm in batch_info_qry.split(';'):
                 cur.execute(stm)
             db.commit()
-        else:
-            cur.execute(batch_info_qry)
-            db.commit()
+    elif CONFIG['sql_flavor']=='postgres':
+        test_conn = psycopg2.connect(host=CONFIG['db_host'],dbname='postgres',
+                              port=CONFIG['db_port'],
+                              user='cuffe002',
+                              password=os.environ['db_password'],
+                              connect_timeout=10)
+        cur=test_conn.cursor()
+        cur.execute('''select 1 from pg_database where datname='{}' '''.format(CONFIG['db_name']))
+        db_exists=cur.fetchall()
+        if len(db_exists)==0:
+            test_conn.set_isolation_level(0)
+            cur.execute('''create database {} owner='{}' '''.format(CONFIG['db_name'], CONFIG['db_user']))
+        test_conn.close()
+        db=psycopg2.connect(host=CONFIG['db_host'],dbname=CONFIG['db_name'],
+                              port=CONFIG['db_port'],
+                              user='cuffe002',
+                              password=os.environ['db_password'],
+                              connect_timeout=10)
+        ###now create the schema
+        cur=db.cursor()
+        cur.execute('''create schema if not exists {} authorization {} '''.format(CONFIG['db_schema'], CONFIG['db_user']))
     db = get_db_connection(CONFIG)
     batch_summary['batch_id'] = CONFIG['batch_id'] = generate_batch_id(db)
     logger.info('#############')
@@ -47,16 +69,19 @@ if __name__=='__main__':
         batch_summary['failure_message'] = 'Failed to create database tables.  See logs for information'
         update_batch_summary(batch_summary)
         os._exit(0)
-    ####Create the Random Forest Model
+    ####Either create or find our model
     try:
-        training_data=pd.read_csv('{}/training_data_key.csv'.format(CONFIG['projectPath']), engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
-        if '.joblib' in CONFIG['saved_model']:
-            mod = load_model(CONFIG)
-        ###generate the rf_mod
+        if ast.literal_eval(CONFIG['prediction'])==True:
+            training_data=pd.read_csv('{}/training_data_key.csv'.format(CONFIG['projectPath']), engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
+            if '.joblib' in CONFIG['saved_model']:
+                mod = load_model(CONFIG)
+            ###generate the rf_mod
+            else:
+                mod=choose_model(training_data)
+                ###Dump it
+                dump_model(mod, CONFIG)
         else:
-            mod=choose_model(training_data)
-            ###Dump it
-            dump_model(mod, CONFIG['saved_model_target'], CONFIG['imputation_method'])
+            mod = {'model':'Just Prediction', 'variable_headers':'all'}
     except Exception as error:
         logger.info('Error in selecting . Error: {}'.format(''.join(traceback.format_tb(error.__traceback__))))
         batch_summary['batch_status'] = 'failed'
@@ -78,8 +103,8 @@ if __name__=='__main__':
         os._exit(0)
     ###Once we are done, spit out the final information on the number of matches, and the .csv files
     db=get_db_connection(CONFIG)
-    pd.DataFrame(get_table_noconn('''select * from matched_pairs''', db)).to_csv('output/all_matches_{}.csv'.format(CONFIG['date']), index=False)
-    pd.DataFrame(get_table_noconn('''select * from clerical_review_candidates''', db)).to_csv('output/clerical_review_candidates_{}.csv'.format(CONFIG['date']), index=False)
+    pd.DataFrame(get_table_noconn('''select * from matched_pairs''', db)).to_csv('{}/output/all_matches_{}.csv'.format(CONFIG['projectPath'],CONFIG['date']), index=False)
+    pd.DataFrame(get_table_noconn('''select * from clerical_review_candidates''', db)).to_csv('{}/output/clerical_review_candidates_{}.csv'.format(CONFIG['projectPath'],CONFIG['date']), index=False)
     logger.info('Match Complete')
     if ast.literal_eval(CONFIG['prediction'])==True:
         summstats=get_table_noconn('''select count(distinct {}_id) data1_matched, count(distinct {}_id) data2_matched, count(*) total_pairs from matched_pairs'''.format(CONFIG['data1_name'], CONFIG['data2_name']), db)[0]

@@ -35,13 +35,13 @@ def write_to_db(the_data, target_table):
         val_len = len(values[0])
         if CONFIG['sql_flavor'] == 'sqlite':
             ###get the length of the values
-            insert_statement = '''insert into {} values ({})'''.format(target_table, ", ".join('?'*val_len))
+            insert_statement = '''insert into {} {} values ({})'''.format(target_table,str(columns_list).replace("'","").lower(), ", ".join('?'*val_len))
             cur.executemany(insert_statement,values)
             db.commit()
             cur.close()
             db.close()
         elif CONFIG['sql_flavor'] == 'postgres':
-            insert_statement = '''insert into {} {} VALUES %s'''.format(target_table,columns_list)
+            insert_statement = '''insert into {} {} VALUES %s'''.format(target_table,str(columns_list).replace("'","").lower())
             execute_values(cur, insert_statement, values)
             db.commit()
             db.close()

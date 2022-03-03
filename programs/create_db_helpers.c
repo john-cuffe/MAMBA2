@@ -843,7 +843,7 @@ struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct__update_batch_
 struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr;
 struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct_2_genexpr;
 
-/* "programs/create_db_helpers.py":290
+/* "programs/create_db_helpers.py":300
  *     db.commit()
  * 
  * def update_batch_summary(batch_summary):             # <<<<<<<<<<<<<<
@@ -856,7 +856,7 @@ struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct__update_batch_
 };
 
 
-/* "programs/create_db_helpers.py":327
+/* "programs/create_db_helpers.py":337
  *             columns = batch_summary.keys()
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
  *             values = [tuple(batch_summary[key] for key in batch_summary)]             # <<<<<<<<<<<<<<
@@ -873,11 +873,11 @@ struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr {
 };
 
 
-/* "programs/create_db_helpers.py":339
+/* "programs/create_db_helpers.py":349
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]             # <<<<<<<<<<<<<<
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(
  *                 columns_statement, batch_summary['batch_id'])
  */
 struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct_2_genexpr {
@@ -1615,7 +1615,9 @@ static const char __pyx_k__7[] = "";
 static const char __pyx_k__9[] = "*";
 static const char __pyx_k_db[] = "db";
 static const char __pyx_k_dt[] = "dt";
+static const char __pyx_k_id[] = "id";
 static const char __pyx_k_np[] = "np";
+static const char __pyx_k_os[] = "os";
 static const char __pyx_k_pd[] = "pd";
 static const char __pyx_k_r1[] = "r1";
 static const char __pyx_k_r2[] = "r2";
@@ -1624,8 +1626,8 @@ static const char __pyx_k_x0[] = "x0";
 static const char __pyx_k_x1[] = "x1";
 static const char __pyx_k_y0[] = "y0";
 static const char __pyx_k_y1[] = "y1";
-static const char __pyx_k__10[] = "\n";
-static const char __pyx_k__11[] = " ";
+static const char __pyx_k__11[] = "\n";
+static const char __pyx_k__12[] = " ";
 static const char __pyx_k_ast[] = "ast";
 static const char __pyx_k_cnt[] = "cnt";
 static const char __pyx_k_col[] = "col";
@@ -1654,6 +1656,7 @@ static const char __pyx_k_fail[] = "fail";
 static const char __pyx_k_file[] = "file";
 static const char __pyx_k_frac[] = "frac";
 static const char __pyx_k_full[] = "full";
+static const char __pyx_k_glob[] = "glob";
 static const char __pyx_k_info[] = "info";
 static const char __pyx_k_isna[] = "isna";
 static const char __pyx_k_item[] = "item";
@@ -1662,6 +1665,7 @@ static const char __pyx_k_json[] = "json";
 static const char __pyx_k_keys[] = "keys";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
+static const char __pyx_k_path[] = "path";
 static const char __pyx_k_send[] = "send";
 static const char __pyx_k_stem[] = "stem";
 static const char __pyx_k_test[] = "__test__";
@@ -1681,6 +1685,7 @@ static const char __pyx_k_floor[] = "floor";
 static const char __pyx_k_fuzzy[] = "fuzzy";
 static const char __pyx_k_index[] = "index";
 static const char __pyx_k_int64[] = "int64";
+static const char __pyx_k_items[] = "items";
 static const char __pyx_k_lower[] = "lower";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_print[] = "print";
@@ -1703,6 +1708,7 @@ static const char __pyx_k_dtypes[] = "dtypes";
 static const char __pyx_k_engine[] = "engine";
 static const char __pyx_k_format[] = "format";
 static const char __pyx_k_import[] = "__import__";
+static const char __pyx_k_isfile[] = "isfile";
 static const char __pyx_k_logger[] = "logger";
 static const char __pyx_k_maxlen[] = "maxlen";
 static const char __pyx_k_pandas[] = "pandas";
@@ -1739,8 +1745,8 @@ static const char __pyx_k_dataname[] = "dataname";
 static const char __pyx_k_datetime[] = "datetime";
 static const char __pyx_k_platform[] = "platform";
 static const char __pyx_k_postgres[] = "postgres";
+static const char __pyx_k_programs[] = "programs/*/";
 static const char __pyx_k_read_csv[] = "read_csv";
-static const char __pyx_k_sqlite_2[] = "sqlite:///";
 static const char __pyx_k_str_dict[] = "str_dict";
 static const char __pyx_k_strftime[] = "strftime";
 static const char __pyx_k_training[] = "_training";
@@ -1748,11 +1754,12 @@ static const char __pyx_k_variable[] = "variable";
 static const char __pyx_k_DataFrame[] = "DataFrame";
 static const char __pyx_k_chunksize[] = "chunksize";
 static const char __pyx_k_if_exists[] = "if_exists";
-static const char __pyx_k_inputPath[] = "inputPath";
 static const char __pyx_k_intersect[] = "intersect";
 static const char __pyx_k_page_size[] = "page_size";
 static const char __pyx_k_seq_query[] = "seq_query";
 static const char __pyx_k_sql_trans[] = "sql_trans";
+static const char __pyx_k_sqlite_db[] = "sqlite:///{}/{}.db";
+static const char __pyx_k_usaddress[] = "usaddress";
 static const char __pyx_k_var_types[] = "var_types";
 static const char __pyx_k_write_out[] = "write_out";
 static const char __pyx_k_block_name[] = "block_name";
@@ -1769,11 +1776,12 @@ static const char __pyx_k_sql_flavor[] = "sql_flavor";
 static const char __pyx_k_sqlalchemy[] = "sqlalchemy";
 static const char __pyx_k_stem_fuzzy[] = "stem_fuzzy";
 static const char __pyx_k_training_2[] = "{}_training";
-static const char __pyx_k_Y_m_D_H_M_S[] = "%Y-%m-%D %H:%M:%S";
+static const char __pyx_k_Y_m_d_H_M_S[] = "%Y-%m-%d %H:%M:%S";
 static const char __pyx_k_ZipCode_0_9[] = "ZipCode[0-9]";
 static const char __pyx_k_data_source[] = "data_source";
 static const char __pyx_k_description[] = "description";
 static const char __pyx_k_global_vars[] = "global_vars";
+static const char __pyx_k_projectPath[] = "projectPath";
 static const char __pyx_k_standardize[] = "standardize";
 static const char __pyx_k_stem_phrase[] = "stem_phrase";
 static const char __pyx_k_tag_mapping[] = "tag_mapping";
@@ -1813,6 +1821,7 @@ static const char __pyx_k_columns_statement[] = "columns_statement";
 static const char __pyx_k_generate_batch_id[] = "generate_batch_id";
 static const char __pyx_k_get_db_connection[] = "get_db_connection";
 static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
+static const char __pyx_k_programs_usaddress[] = "programs/usaddress";
 static const char __pyx_k_create_db_chunksize[] = "create_db_chunksize";
 static const char __pyx_k_programs_connect_db[] = "programs.connect_db";
 static const char __pyx_k_why_did_you_do_this[] = "why did you do this?";
@@ -1827,8 +1836,8 @@ static const char __pyx_k_address_component_mapping[] = "address_component_mappi
 static const char __pyx_k_clerical_review_candidates[] = "clerical_review_candidates";
 static const char __pyx_k_create_index__id_idx_on_id[] = "create index {}_id_idx on {} (id)";
 static const char __pyx_k_programs_create_db_helpers[] = "programs.create_db_helpers";
+static const char __pyx_k_File_does_not_exist_Passing[] = "File {} does not exist.  Passing";
 static const char __pyx_k_get_stem_data_locals_lambda[] = "get_stem_data.<locals>.<lambda>";
-static const char __pyx_k_programs_usaddress_usaddress[] = "programs.usaddress.usaddress";
 static const char __pyx_k_use_remaining_parsed_address[] = "use_remaining_parsed_address";
 static const char __pyx_k_create_index_source___variable[] = "create index {source}_{variable}_idx on {source} ({variable});";
 static const char __pyx_k_Failed_to_Create_DB_Table_error[] = "Failed to Create DB Table {}, error {}";
@@ -1837,38 +1846,37 @@ static const char __pyx_k_create_table_batch_summary_batc[] = "\ncreate table ba
 static const char __pyx_k_select_from_batch_summary_where[] = "select * from batch_summary where batch_id={}";
 static const char __pyx_k_CREATE_SEQUENCE_batch_summary_qu[] = "CREATE SEQUENCE batch_summary_query\nINCREMENT 1\nSTART 1\nMINVALUE 1\nMAXVALUE 9223372036854775807\nCACHE 1;";
 static const char __pyx_k_Failed_to_write_data_to_database[] = "Failed to write data to database, breaking";
-static const char __pyx_k_SELECT_name_FROM_pg_catalog_pg_t[] = "SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' ";
 static const char __pyx_k_SELECT_name_FROM_sqlite_master_W[] = "SELECT name FROM sqlite_master WHERE type='table' AND name='{}' ";
+static const char __pyx_k_SELECT_tablename_FROM_pg_catalog[] = "SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' ";
 static const char __pyx_k_Variable_for_data_is_likely_to_b[] = "Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' ";
-static const char __pyx_k_batch_id_integer_primary_key_aut[] = "batch_id integer primary key autoincrement";
-static const char __pyx_k_bigint_primary_key_DEFAULT_nextv[] = "bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)";
-static const char __pyx_k_create_table_clerical_review_can[] = "create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);";
+static const char __pyx_k_create_table_clerical_review_can[] = "create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);";
 static const char __pyx_k_create_table_matched_pairs_data1[] = "create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);";
 static const char __pyx_k_insert_into_table_collist_values[] = "insert into {table} {collist} values %s";
 static const char __pyx_k_programs_address_standardizer_st[] = "programs.address_standardizer.standardizer";
+static const char __pyx_k_select_coalesce_max_batch_id_1_1[] = "select coalesce(max(batch_id)+1,1) batch_id from batch_summary";
 static const char __pyx_k_select_count_cnt_from_sqlite_mas[] = "select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ";
 static const char __pyx_k_select_max_batch_id_1_batch_id_f[] = "select max(batch_id)+1 batch_id from batch_summary";
-static const char __pyx_k_update_batch_summaries_set_where[] = "update batch_summaries set {} where batch_id={}";
 static const char __pyx_k_update_batch_summary_locals_gene[] = "update_batch_summary.<locals>.genexpr";
 static const char __pyx_k_update_batch_summary_set_where_b[] = "update batch_summary set {}=? where batch_id={}";
-static const char __pyx_k_select_max_batch_id_1_batch_id_f_2[] = "select max(batch_id)+1 batch_id from batch_summary if exists batch_summary";
+static const char __pyx_k_update_batch_summary_set_where_b_2[] = "update batch_summary set {} where batch_id={}";
 static PyObject *__pyx_kp_s_;
 static PyObject *__pyx_n_s_CONFIG;
 static PyObject *__pyx_kp_s_CREATE_SEQUENCE_batch_summary_qu;
 static PyObject *__pyx_n_s_DataFrame;
 static PyObject *__pyx_kp_s_Failed_to_Create_DB_Table_error;
 static PyObject *__pyx_kp_s_Failed_to_write_data_to_database;
+static PyObject *__pyx_kp_s_File_does_not_exist_Passing;
 static PyObject *__pyx_n_s_NULL;
 static PyObject *__pyx_n_s_O;
-static PyObject *__pyx_kp_s_SELECT_name_FROM_pg_catalog_pg_t;
 static PyObject *__pyx_kp_s_SELECT_name_FROM_sqlite_master_W;
+static PyObject *__pyx_kp_s_SELECT_tablename_FROM_pg_catalog;
 static PyObject *__pyx_kp_s_Variable_for_data_is_likely_to_b;
 static PyObject *__pyx_kp_s_Y__M__d__H__m;
-static PyObject *__pyx_kp_s_Y_m_D_H_M_S;
+static PyObject *__pyx_kp_s_Y_m_d_H_M_S;
 static PyObject *__pyx_n_s_ZipCode;
 static PyObject *__pyx_kp_s_ZipCode_0_9;
-static PyObject *__pyx_kp_s__10;
 static PyObject *__pyx_kp_s__11;
+static PyObject *__pyx_kp_s__12;
 static PyObject *__pyx_kp_s__2;
 static PyObject *__pyx_kp_s__4;
 static PyObject *__pyx_kp_s__6;
@@ -1886,11 +1894,9 @@ static PyObject *__pyx_n_s_ast;
 static PyObject *__pyx_n_s_astype;
 static PyObject *__pyx_n_s_batch_exists;
 static PyObject *__pyx_n_s_batch_id;
-static PyObject *__pyx_kp_s_batch_id_integer_primary_key_aut;
 static PyObject *__pyx_n_s_batch_info_qry;
 static PyObject *__pyx_n_s_batch_summary;
 static PyObject *__pyx_n_s_bigint;
-static PyObject *__pyx_kp_s_bigint_primary_key_DEFAULT_nextv;
 static PyObject *__pyx_n_s_block;
 static PyObject *__pyx_n_s_block_name;
 static PyObject *__pyx_n_s_blocks;
@@ -1971,21 +1977,24 @@ static PyObject *__pyx_n_s_get_db_connection;
 static PyObject *__pyx_n_s_get_stem_data;
 static PyObject *__pyx_n_s_get_stem_data_locals_lambda;
 static PyObject *__pyx_n_s_get_table_noconn;
+static PyObject *__pyx_n_s_glob;
 static PyObject *__pyx_n_s_global_vars;
 static PyObject *__pyx_n_s_i;
+static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_if_exists;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_index;
 static PyObject *__pyx_n_s_info;
-static PyObject *__pyx_n_s_inputPath;
 static PyObject *__pyx_kp_s_insert_into_table_collist_values;
 static PyObject *__pyx_n_s_insert_statement;
 static PyObject *__pyx_n_s_int;
 static PyObject *__pyx_n_s_int64;
 static PyObject *__pyx_n_s_intersect;
 static PyObject *__pyx_n_s_intersection;
+static PyObject *__pyx_n_s_isfile;
 static PyObject *__pyx_n_s_isna;
 static PyObject *__pyx_n_s_item;
+static PyObject *__pyx_n_s_items;
 static PyObject *__pyx_n_s_j;
 static PyObject *__pyx_n_s_join;
 static PyObject *__pyx_n_s_json;
@@ -2009,6 +2018,7 @@ static PyObject *__pyx_n_s_name;
 static PyObject *__pyx_n_s_now;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
+static PyObject *__pyx_n_s_os;
 static PyObject *__pyx_n_s_out;
 static PyObject *__pyx_n_s_outcome;
 static PyObject *__pyx_n_s_p;
@@ -2018,18 +2028,21 @@ static PyObject *__pyx_n_s_parse_address;
 static PyObject *__pyx_n_s_parsed_address;
 static PyObject *__pyx_n_s_parsed_block;
 static PyObject *__pyx_n_s_parsed_variable;
+static PyObject *__pyx_n_s_path;
 static PyObject *__pyx_n_s_pd;
 static PyObject *__pyx_n_s_platform;
 static PyObject *__pyx_n_s_postgres;
 static PyObject *__pyx_n_s_prediction;
 static PyObject *__pyx_n_s_print;
+static PyObject *__pyx_kp_s_programs;
 static PyObject *__pyx_n_s_programs_address_standardizer_st;
 static PyObject *__pyx_n_s_programs_connect_db;
 static PyObject *__pyx_n_s_programs_create_db_helpers;
 static PyObject *__pyx_n_s_programs_global_vars;
 static PyObject *__pyx_n_s_programs_logger_setup;
-static PyObject *__pyx_n_s_programs_usaddress_usaddress;
+static PyObject *__pyx_kp_s_programs_usaddress;
 static PyObject *__pyx_n_s_programs_write_to_db;
+static PyObject *__pyx_n_s_projectPath;
 static PyObject *__pyx_n_s_psycopg2_extras;
 static PyObject *__pyx_n_s_r;
 static PyObject *__pyx_n_s_r1;
@@ -2046,10 +2059,10 @@ static PyObject *__pyx_n_s_row_number;
 static PyObject *__pyx_n_s_row_seq;
 static PyObject *__pyx_kp_s_s;
 static PyObject *__pyx_n_s_sample;
+static PyObject *__pyx_kp_s_select_coalesce_max_batch_id_1_1;
 static PyObject *__pyx_kp_s_select_count_cnt_from_sqlite_mas;
 static PyObject *__pyx_kp_s_select_from_batch_summary_where;
 static PyObject *__pyx_kp_s_select_max_batch_id_1_batch_id_f;
-static PyObject *__pyx_kp_s_select_max_batch_id_1_batch_id_f_2;
 static PyObject *__pyx_n_s_send;
 static PyObject *__pyx_n_s_seq_query;
 static PyObject *__pyx_n_s_source;
@@ -2058,7 +2071,7 @@ static PyObject *__pyx_n_s_sql_flavor;
 static PyObject *__pyx_n_s_sql_trans;
 static PyObject *__pyx_n_s_sqlalchemy;
 static PyObject *__pyx_n_s_sqlite;
-static PyObject *__pyx_kp_s_sqlite_2;
+static PyObject *__pyx_kp_s_sqlite_db;
 static PyObject *__pyx_n_s_standardize;
 static PyObject *__pyx_n_s_stem;
 static PyObject *__pyx_n_s_stem_fuzzy;
@@ -2082,13 +2095,14 @@ static PyObject *__pyx_n_s_to_stem;
 static PyObject *__pyx_n_s_tolist;
 static PyObject *__pyx_n_s_training;
 static PyObject *__pyx_kp_s_training_2;
-static PyObject *__pyx_kp_s_update_batch_summaries_set_where;
 static PyObject *__pyx_n_s_update_batch_summary;
 static PyObject *__pyx_n_s_update_batch_summary_locals_gene;
 static PyObject *__pyx_kp_s_update_batch_summary_set_where_b;
+static PyObject *__pyx_kp_s_update_batch_summary_set_where_b_2;
 static PyObject *__pyx_n_s_update_statement;
 static PyObject *__pyx_n_s_upper;
 static PyObject *__pyx_n_s_usadd;
+static PyObject *__pyx_n_s_usaddress;
 static PyObject *__pyx_n_s_use_remaining_parsed_address;
 static PyObject *__pyx_n_s_v;
 static PyObject *__pyx_n_s_values;
@@ -2127,7 +2141,7 @@ static PyObject *__pyx_int_1;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__5;
 static PyObject *__pyx_tuple__8;
-static PyObject *__pyx_tuple__12;
+static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__14;
 static PyObject *__pyx_tuple__16;
@@ -2145,8 +2159,8 @@ static PyObject *__pyx_codeobj__25;
 static PyObject *__pyx_codeobj__27;
 /* Late includes */
 
-/* "programs/create_db_helpers.py":56
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+/* "programs/create_db_helpers.py":61
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
  * 
  * def intersect(x0, x1, y0, y1):             # <<<<<<<<<<<<<<
  *     '''
@@ -2195,23 +2209,23 @@ static PyObject *__pyx_pw_8programs_17create_db_helpers_1intersect(PyObject *__p
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_x1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, 1); __PYX_ERR(0, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, 1); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y0)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, 2); __PYX_ERR(0, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, 2); __PYX_ERR(0, 61, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_y1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, 3); __PYX_ERR(0, 56, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, 3); __PYX_ERR(0, 61, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "intersect") < 0)) __PYX_ERR(0, 56, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "intersect") < 0)) __PYX_ERR(0, 61, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -2228,7 +2242,7 @@ static PyObject *__pyx_pw_8programs_17create_db_helpers_1intersect(PyObject *__p
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 56, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("intersect", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 61, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("programs.create_db_helpers.intersect", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2256,16 +2270,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("intersect", 0);
 
-  /* "programs/create_db_helpers.py":65
+  /* "programs/create_db_helpers.py":70
  *     y1--last year on other side
  *     '''
  *     r1=set(range(x0, x1+1))             # <<<<<<<<<<<<<<
  *     r2=set(range(y0, y1+1))
  *     intersect=r1.intersection(r2)
  */
-  __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_x1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_AddObjC(__pyx_v_x1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_x0);
   __Pyx_GIVEREF(__pyx_v_x0);
@@ -2273,25 +2287,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PySet_New(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+  __pyx_t_2 = PySet_New(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 70, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_r1 = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":66
+  /* "programs/create_db_helpers.py":71
  *     '''
  *     r1=set(range(x0, x1+1))
  *     r2=set(range(y0, y1+1))             # <<<<<<<<<<<<<<
  *     intersect=r1.intersection(r2)
  *     if len(intersect) > 0:
  */
-  __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_y1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_AddObjC(__pyx_v_y1, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_y0);
   __Pyx_GIVEREF(__pyx_v_y0);
@@ -2299,39 +2313,39 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_1, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PySet_New(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 66, __pyx_L1_error)
+  __pyx_t_1 = PySet_New(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 71, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_r2 = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "programs/create_db_helpers.py":67
+  /* "programs/create_db_helpers.py":72
  *     r1=set(range(x0, x1+1))
  *     r2=set(range(y0, y1+1))
  *     intersect=r1.intersection(r2)             # <<<<<<<<<<<<<<
  *     if len(intersect) > 0:
  *         return True
  */
-  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_intersection, __pyx_v_r1, __pyx_v_r2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 67, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_CallUnboundCMethod1(&__pyx_umethod_PySet_Type_intersection, __pyx_v_r1, __pyx_v_r2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_intersect = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "programs/create_db_helpers.py":68
+  /* "programs/create_db_helpers.py":73
  *     r2=set(range(y0, y1+1))
  *     intersect=r1.intersection(r2)
  *     if len(intersect) > 0:             # <<<<<<<<<<<<<<
  *         return True
  *     else:
  */
-  __pyx_t_3 = PyObject_Length(__pyx_v_intersect); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_3 = PyObject_Length(__pyx_v_intersect); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(0, 73, __pyx_L1_error)
   __pyx_t_4 = ((__pyx_t_3 > 0) != 0);
   if (__pyx_t_4) {
 
-    /* "programs/create_db_helpers.py":69
+    /* "programs/create_db_helpers.py":74
  *     intersect=r1.intersection(r2)
  *     if len(intersect) > 0:
  *         return True             # <<<<<<<<<<<<<<
@@ -2343,7 +2357,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
     __pyx_r = Py_True;
     goto __pyx_L0;
 
-    /* "programs/create_db_helpers.py":68
+    /* "programs/create_db_helpers.py":73
  *     r2=set(range(y0, y1+1))
  *     intersect=r1.intersection(r2)
  *     if len(intersect) > 0:             # <<<<<<<<<<<<<<
@@ -2352,7 +2366,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
  */
   }
 
-  /* "programs/create_db_helpers.py":71
+  /* "programs/create_db_helpers.py":76
  *         return True
  *     else:
  *         return False             # <<<<<<<<<<<<<<
@@ -2366,8 +2380,8 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
     goto __pyx_L0;
   }
 
-  /* "programs/create_db_helpers.py":56
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+  /* "programs/create_db_helpers.py":61
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
  * 
  * def intersect(x0, x1, y0, y1):             # <<<<<<<<<<<<<<
  *     '''
@@ -2389,7 +2403,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_intersect(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":73
+/* "programs/create_db_helpers.py":78
  *         return False
  * 
  * def generate_batch_id(db):             # <<<<<<<<<<<<<<
@@ -2434,14 +2448,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("generate_batch_id", 0);
 
-  /* "programs/create_db_helpers.py":79
+  /* "programs/create_db_helpers.py":84
  *     :return: batch number to use
  *     '''
  *     cur = db.cursor()             # <<<<<<<<<<<<<<
  *     if CONFIG['sql_flavor']=='sqlite':
  *         out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -2455,36 +2469,36 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 79, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_cur = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "programs/create_db_helpers.py":80
+  /* "programs/create_db_helpers.py":85
  *     '''
  *     cur = db.cursor()
  *     if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
  *         out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]
  *         if out['cnt'] > 0:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_sqlite, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 80, __pyx_L1_error)
+  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_sqlite, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 85, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_4) {
 
-    /* "programs/create_db_helpers.py":81
+    /* "programs/create_db_helpers.py":86
  *     cur = db.cursor()
  *     if CONFIG['sql_flavor']=='sqlite':
  *         out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]             # <<<<<<<<<<<<<<
  *         if out['cnt'] > 0:
  *             cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_3 = NULL;
     __pyx_t_5 = 0;
@@ -2501,7 +2515,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_1)) {
       PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_kp_s_select_count_cnt_from_sqlite_mas, __pyx_v_db};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else
@@ -2509,13 +2523,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
       PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_kp_s_select_count_cnt_from_sqlite_mas, __pyx_v_db};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_5, 2+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 81, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(2+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 86, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       if (__pyx_t_3) {
         __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -2526,40 +2540,40 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
       __Pyx_INCREF(__pyx_v_db);
       __Pyx_GIVEREF(__pyx_v_db);
       PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_5, __pyx_v_db);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_2, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_out = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "programs/create_db_helpers.py":82
+    /* "programs/create_db_helpers.py":87
  *     if CONFIG['sql_flavor']=='sqlite':
  *         out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]
  *         if out['cnt'] > 0:             # <<<<<<<<<<<<<<
  *             cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')
  *         else:
  */
-    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_out, __pyx_n_s_cnt); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_out, __pyx_n_s_cnt); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = PyObject_RichCompare(__pyx_t_1, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_2 = PyObject_RichCompare(__pyx_t_1, __pyx_int_0, Py_GT); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 87, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 82, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 87, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_4) {
 
-      /* "programs/create_db_helpers.py":83
+      /* "programs/create_db_helpers.py":88
  *         out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]
  *         if out['cnt'] > 0:
  *             cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')             # <<<<<<<<<<<<<<
  *         else:
  *             return 1
  */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 83, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 88, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_6 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2573,12 +2587,12 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
       }
       __pyx_t_2 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_6, __pyx_kp_s_select_max_batch_id_1_batch_id_f) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s_select_max_batch_id_1_batch_id_f);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 83, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 88, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "programs/create_db_helpers.py":82
+      /* "programs/create_db_helpers.py":87
  *     if CONFIG['sql_flavor']=='sqlite':
  *         out=get_table_noconn('''select count(*) cnt from sqlite_master where type='table' and name='batch_summary' ''', db)[0]
  *         if out['cnt'] > 0:             # <<<<<<<<<<<<<<
@@ -2588,12 +2602,12 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
       goto __pyx_L4;
     }
 
-    /* "programs/create_db_helpers.py":85
+    /* "programs/create_db_helpers.py":90
  *             cur.execute('''select max(batch_id)+1 batch_id from batch_summary''')
  *         else:
  *             return 1             # <<<<<<<<<<<<<<
  *     else:
- *         cur.execute('''select max(batch_id)+1 batch_id from batch_summary if exists batch_summary''')
+ *         cur.execute('''select coalesce(max(batch_id)+1,1) batch_id from batch_summary''')
  */
     /*else*/ {
       __Pyx_XDECREF(__pyx_r);
@@ -2603,7 +2617,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     }
     __pyx_L4:;
 
-    /* "programs/create_db_helpers.py":80
+    /* "programs/create_db_helpers.py":85
  *     '''
  *     cur = db.cursor()
  *     if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
@@ -2613,15 +2627,15 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     goto __pyx_L3;
   }
 
-  /* "programs/create_db_helpers.py":87
+  /* "programs/create_db_helpers.py":92
  *             return 1
  *     else:
- *         cur.execute('''select max(batch_id)+1 batch_id from batch_summary if exists batch_summary''')             # <<<<<<<<<<<<<<
+ *         cur.execute('''select coalesce(max(batch_id)+1,1) batch_id from batch_summary''')             # <<<<<<<<<<<<<<
  *     #
  *     columns = [i[0] for i in cur.description]
  */
   /*else*/ {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 92, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -2633,33 +2647,33 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
         __Pyx_DECREF_SET(__pyx_t_1, function);
       }
     }
-    __pyx_t_2 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_6, __pyx_kp_s_select_max_batch_id_1_batch_id_f_2) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s_select_max_batch_id_1_batch_id_f_2);
+    __pyx_t_2 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_6, __pyx_kp_s_select_coalesce_max_batch_id_1_1) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_kp_s_select_coalesce_max_batch_id_1_1);
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 87, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
   __pyx_L3:;
 
-  /* "programs/create_db_helpers.py":89
- *         cur.execute('''select max(batch_id)+1 batch_id from batch_summary if exists batch_summary''')
+  /* "programs/create_db_helpers.py":94
+ *         cur.execute('''select coalesce(max(batch_id)+1,1) batch_id from batch_summary''')
  *     #
  *     columns = [i[0] for i in cur.description]             # <<<<<<<<<<<<<<
  *     last_batch = [dict(zip(columns, row)) for row in cur]    #
  *     if last_batch[0]['batch_id']:
  */
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_description); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_description); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
     __pyx_t_6 = __pyx_t_1; __Pyx_INCREF(__pyx_t_6); __pyx_t_7 = 0;
     __pyx_t_8 = NULL;
   } else {
-    __pyx_t_7 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_7 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_8 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 94, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -2667,17 +2681,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
       if (likely(PyList_CheckExact(__pyx_t_6))) {
         if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_6)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_7 >= PyTuple_GET_SIZE(__pyx_t_6)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 89, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 94, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -2687,7 +2701,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 89, __pyx_L1_error)
+          else __PYX_ERR(0, 94, __pyx_L1_error)
         }
         break;
       }
@@ -2695,48 +2709,48 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     }
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_i, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_v_i, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_1))) __PYX_ERR(0, 89, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_1))) __PYX_ERR(0, 94, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_columns = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":90
+  /* "programs/create_db_helpers.py":95
  *     #
  *     columns = [i[0] for i in cur.description]
  *     last_batch = [dict(zip(columns, row)) for row in cur]    #             # <<<<<<<<<<<<<<
  *     if last_batch[0]['batch_id']:
  *         return int(last_batch[0]['batch_id'])
  */
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 90, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 95, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   if (likely(PyList_CheckExact(__pyx_v_cur)) || PyTuple_CheckExact(__pyx_v_cur)) {
     __pyx_t_6 = __pyx_v_cur; __Pyx_INCREF(__pyx_t_6); __pyx_t_7 = 0;
     __pyx_t_8 = NULL;
   } else {
-    __pyx_t_7 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_v_cur); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_7 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_v_cur); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_8 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_8 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 95, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_8)) {
       if (likely(PyList_CheckExact(__pyx_t_6))) {
         if (__pyx_t_7 >= PyList_GET_SIZE(__pyx_t_6)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 95, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_7 >= PyTuple_GET_SIZE(__pyx_t_6)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_7); __Pyx_INCREF(__pyx_t_1); __pyx_t_7++; if (unlikely(0 < 0)) __PYX_ERR(0, 95, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_7); __pyx_t_7++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -2746,7 +2760,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 90, __pyx_L1_error)
+          else __PYX_ERR(0, 95, __pyx_L1_error)
         }
         break;
       }
@@ -2754,7 +2768,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     }
     __Pyx_XDECREF_SET(__pyx_v_row, __pyx_t_1);
     __pyx_t_1 = 0;
-    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_v_columns);
     __Pyx_GIVEREF(__pyx_v_columns);
@@ -2762,36 +2776,36 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     __Pyx_INCREF(__pyx_v_row);
     __Pyx_GIVEREF(__pyx_v_row);
     PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_v_row);
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 90, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyDict_Type)), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_1))) __PYX_ERR(0, 90, __pyx_L1_error)
+    if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_1))) __PYX_ERR(0, 95, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_v_last_batch = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":91
+  /* "programs/create_db_helpers.py":96
  *     columns = [i[0] for i in cur.description]
  *     last_batch = [dict(zip(columns, row)) for row in cur]    #
  *     if last_batch[0]['batch_id']:             # <<<<<<<<<<<<<<
  *         return int(last_batch[0]['batch_id'])
  *     else:
  */
-  __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_last_batch, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_last_batch, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_6); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 96, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   if (__pyx_t_4) {
 
-    /* "programs/create_db_helpers.py":92
+    /* "programs/create_db_helpers.py":97
  *     last_batch = [dict(zip(columns, row)) for row in cur]    #
  *     if last_batch[0]['batch_id']:
  *         return int(last_batch[0]['batch_id'])             # <<<<<<<<<<<<<<
@@ -2799,19 +2813,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
  *         return 1
  */
     __Pyx_XDECREF(__pyx_r);
-    __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_last_batch, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 92, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_last_batch, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 92, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 92, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 97, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_r = __pyx_t_6;
     __pyx_t_6 = 0;
     goto __pyx_L0;
 
-    /* "programs/create_db_helpers.py":91
+    /* "programs/create_db_helpers.py":96
  *     columns = [i[0] for i in cur.description]
  *     last_batch = [dict(zip(columns, row)) for row in cur]    #
  *     if last_batch[0]['batch_id']:             # <<<<<<<<<<<<<<
@@ -2820,7 +2834,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
  */
   }
 
-  /* "programs/create_db_helpers.py":94
+  /* "programs/create_db_helpers.py":99
  *         return int(last_batch[0]['batch_id'])
  *     else:
  *         return 1             # <<<<<<<<<<<<<<
@@ -2834,7 +2848,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
     goto __pyx_L0;
   }
 
-  /* "programs/create_db_helpers.py":73
+  /* "programs/create_db_helpers.py":78
  *         return False
  * 
  * def generate_batch_id(db):             # <<<<<<<<<<<<<<
@@ -2862,7 +2876,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_2generate_batch_id(CYTHO
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":96
+/* "programs/create_db_helpers.py":101
  *         return 1
  * 
  * def stem_fuzzy(x):             # <<<<<<<<<<<<<<
@@ -2896,17 +2910,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("stem_fuzzy", 0);
 
-  /* "programs/create_db_helpers.py":97
+  /* "programs/create_db_helpers.py":102
  * 
  * def stem_fuzzy(x):
  *     if x=='NULL':             # <<<<<<<<<<<<<<
  *         return None
  *     else:
  */
-  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_x, __pyx_n_s_NULL, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 97, __pyx_L1_error)
+  __pyx_t_1 = (__Pyx_PyString_Equals(__pyx_v_x, __pyx_n_s_NULL, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 102, __pyx_L1_error)
   if (__pyx_t_1) {
 
-    /* "programs/create_db_helpers.py":98
+    /* "programs/create_db_helpers.py":103
  * def stem_fuzzy(x):
  *     if x=='NULL':
  *         return None             # <<<<<<<<<<<<<<
@@ -2917,7 +2931,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "programs/create_db_helpers.py":97
+    /* "programs/create_db_helpers.py":102
  * 
  * def stem_fuzzy(x):
  *     if x=='NULL':             # <<<<<<<<<<<<<<
@@ -2926,7 +2940,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
  */
   }
 
-  /* "programs/create_db_helpers.py":100
+  /* "programs/create_db_helpers.py":105
  *         return None
  *     else:
  *         return stemmer.stem(x)             # <<<<<<<<<<<<<<
@@ -2935,9 +2949,9 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
  */
   /*else*/ {
     __Pyx_XDECREF(__pyx_r);
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_stemmer); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_stemmer); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_stem); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_stem); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -2952,7 +2966,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
     }
     __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_3, __pyx_v_x) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_x);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 105, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_r = __pyx_t_2;
@@ -2960,7 +2974,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
     goto __pyx_L0;
   }
 
-  /* "programs/create_db_helpers.py":96
+  /* "programs/create_db_helpers.py":101
  *         return 1
  * 
  * def stem_fuzzy(x):             # <<<<<<<<<<<<<<
@@ -2981,7 +2995,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_4stem_fuzzy(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":102
+/* "programs/create_db_helpers.py":107
  *         return stemmer.stem(x)
  * 
  * def create_table(dataname,column_types):             # <<<<<<<<<<<<<<
@@ -3025,11 +3039,11 @@ static PyObject *__pyx_pw_8programs_17create_db_helpers_7create_table(PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_column_types)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("create_table", 1, 2, 2, 1); __PYX_ERR(0, 102, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("create_table", 1, 2, 2, 1); __PYX_ERR(0, 107, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create_table") < 0)) __PYX_ERR(0, 102, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "create_table") < 0)) __PYX_ERR(0, 107, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -3042,7 +3056,7 @@ static PyObject *__pyx_pw_8programs_17create_db_helpers_7create_table(PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("create_table", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 102, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("create_table", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 107, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("programs.create_db_helpers.create_table", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -3091,7 +3105,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("create_table", 0);
 
-  /* "programs/create_db_helpers.py":109
+  /* "programs/create_db_helpers.py":114
  *     :return:
  *     '''
  *     try:             # <<<<<<<<<<<<<<
@@ -3107,16 +3121,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "programs/create_db_helpers.py":110
+      /* "programs/create_db_helpers.py":115
  *     '''
  *     try:
  *         db = get_db_connection(CONFIG)             # <<<<<<<<<<<<<<
  *         cur = db.cursor()
  *         col_dict=column_types.to_dict()
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_get_db_connection); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 110, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_get_db_connection); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 110, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 115, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_6);
       __pyx_t_7 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -3131,20 +3145,20 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 110, __pyx_L3_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 115, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_db = __pyx_t_4;
       __pyx_t_4 = 0;
 
-      /* "programs/create_db_helpers.py":111
+      /* "programs/create_db_helpers.py":116
  *     try:
  *         db = get_db_connection(CONFIG)
  *         cur = db.cursor()             # <<<<<<<<<<<<<<
  *         col_dict=column_types.to_dict()
  *         sql_trans={}
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 116, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -3158,20 +3172,20 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       }
       __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 111, __pyx_L3_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 116, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_cur = __pyx_t_4;
       __pyx_t_4 = 0;
 
-      /* "programs/create_db_helpers.py":112
+      /* "programs/create_db_helpers.py":117
  *         db = get_db_connection(CONFIG)
  *         cur = db.cursor()
  *         col_dict=column_types.to_dict()             # <<<<<<<<<<<<<<
  *         sql_trans={}
  *         for c in col_dict:
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_column_types, __pyx_n_s_to_dict); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 112, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_column_types, __pyx_n_s_to_dict); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 117, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_6 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -3185,25 +3199,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       }
       __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 112, __pyx_L3_error)
+      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 117, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_col_dict = __pyx_t_4;
       __pyx_t_4 = 0;
 
-      /* "programs/create_db_helpers.py":113
+      /* "programs/create_db_helpers.py":118
  *         cur = db.cursor()
  *         col_dict=column_types.to_dict()
  *         sql_trans={}             # <<<<<<<<<<<<<<
  *         for c in col_dict:
  *             if col_dict[c] in ['O']:
  */
-      __pyx_t_4 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 113, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 118, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_v_sql_trans = ((PyObject*)__pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "programs/create_db_helpers.py":114
+      /* "programs/create_db_helpers.py":119
  *         col_dict=column_types.to_dict()
  *         sql_trans={}
  *         for c in col_dict:             # <<<<<<<<<<<<<<
@@ -3214,26 +3228,26 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         __pyx_t_4 = __pyx_v_col_dict; __Pyx_INCREF(__pyx_t_4); __pyx_t_8 = 0;
         __pyx_t_9 = NULL;
       } else {
-        __pyx_t_8 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_col_dict); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 114, __pyx_L3_error)
+        __pyx_t_8 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_col_dict); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 119, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_9 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 114, __pyx_L3_error)
+        __pyx_t_9 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 119, __pyx_L3_error)
       }
       for (;;) {
         if (likely(!__pyx_t_9)) {
           if (likely(PyList_CheckExact(__pyx_t_4))) {
             if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_4)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_5 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_5); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 114, __pyx_L3_error)
+            __pyx_t_5 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_5); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 119, __pyx_L3_error)
             #else
-            __pyx_t_5 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 114, __pyx_L3_error)
+            __pyx_t_5 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 119, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_5);
             #endif
           } else {
             if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_4)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_5); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 114, __pyx_L3_error)
+            __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_5); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 119, __pyx_L3_error)
             #else
-            __pyx_t_5 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 114, __pyx_L3_error)
+            __pyx_t_5 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 119, __pyx_L3_error)
             __Pyx_GOTREF(__pyx_t_5);
             #endif
           }
@@ -3243,7 +3257,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 114, __pyx_L3_error)
+              else __PYX_ERR(0, 119, __pyx_L3_error)
             }
             break;
           }
@@ -3252,30 +3266,30 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         __Pyx_XDECREF_SET(__pyx_v_c, __pyx_t_5);
         __pyx_t_5 = 0;
 
-        /* "programs/create_db_helpers.py":115
+        /* "programs/create_db_helpers.py":120
  *         sql_trans={}
  *         for c in col_dict:
  *             if col_dict[c] in ['O']:             # <<<<<<<<<<<<<<
  *                 sql_trans[c]='text'
  *             elif col_dict[c]=='int64':
  */
-        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_col_dict, __pyx_v_c); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 115, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_col_dict, __pyx_v_c); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 120, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_10 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_O, Py_EQ)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 115, __pyx_L3_error)
+        __pyx_t_10 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_O, Py_EQ)); if (unlikely(__pyx_t_10 < 0)) __PYX_ERR(0, 120, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         __pyx_t_11 = (__pyx_t_10 != 0);
         if (__pyx_t_11) {
 
-          /* "programs/create_db_helpers.py":116
+          /* "programs/create_db_helpers.py":121
  *         for c in col_dict:
  *             if col_dict[c] in ['O']:
  *                 sql_trans[c]='text'             # <<<<<<<<<<<<<<
  *             elif col_dict[c]=='int64':
  *                 sql_trans[c]='int'
  */
-          if (unlikely(PyDict_SetItem(__pyx_v_sql_trans, __pyx_v_c, __pyx_n_s_text) < 0)) __PYX_ERR(0, 116, __pyx_L3_error)
+          if (unlikely(PyDict_SetItem(__pyx_v_sql_trans, __pyx_v_c, __pyx_n_s_text) < 0)) __PYX_ERR(0, 121, __pyx_L3_error)
 
-          /* "programs/create_db_helpers.py":115
+          /* "programs/create_db_helpers.py":120
  *         sql_trans={}
  *         for c in col_dict:
  *             if col_dict[c] in ['O']:             # <<<<<<<<<<<<<<
@@ -3285,29 +3299,29 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
           goto __pyx_L11;
         }
 
-        /* "programs/create_db_helpers.py":117
+        /* "programs/create_db_helpers.py":122
  *             if col_dict[c] in ['O']:
  *                 sql_trans[c]='text'
  *             elif col_dict[c]=='int64':             # <<<<<<<<<<<<<<
  *                 sql_trans[c]='int'
  *             elif col_dict[c]=='float64':
  */
-        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_col_dict, __pyx_v_c); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 117, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_col_dict, __pyx_v_c); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 122, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_int64, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 117, __pyx_L3_error)
+        __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_int64, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 122, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (__pyx_t_11) {
 
-          /* "programs/create_db_helpers.py":118
+          /* "programs/create_db_helpers.py":123
  *                 sql_trans[c]='text'
  *             elif col_dict[c]=='int64':
  *                 sql_trans[c]='int'             # <<<<<<<<<<<<<<
  *             elif col_dict[c]=='float64':
  *                 sql_trans[c]='float'
  */
-          if (unlikely(PyDict_SetItem(__pyx_v_sql_trans, __pyx_v_c, __pyx_n_s_int) < 0)) __PYX_ERR(0, 118, __pyx_L3_error)
+          if (unlikely(PyDict_SetItem(__pyx_v_sql_trans, __pyx_v_c, __pyx_n_s_int) < 0)) __PYX_ERR(0, 123, __pyx_L3_error)
 
-          /* "programs/create_db_helpers.py":117
+          /* "programs/create_db_helpers.py":122
  *             if col_dict[c] in ['O']:
  *                 sql_trans[c]='text'
  *             elif col_dict[c]=='int64':             # <<<<<<<<<<<<<<
@@ -3317,29 +3331,29 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
           goto __pyx_L11;
         }
 
-        /* "programs/create_db_helpers.py":119
+        /* "programs/create_db_helpers.py":124
  *             elif col_dict[c]=='int64':
  *                 sql_trans[c]='int'
  *             elif col_dict[c]=='float64':             # <<<<<<<<<<<<<<
  *                 sql_trans[c]='float'
  *         ###Make the full statement
  */
-        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_col_dict, __pyx_v_c); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 119, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_col_dict, __pyx_v_c); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_float64, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 119, __pyx_L3_error)
+        __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_5, __pyx_n_s_float64, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 124, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (__pyx_t_11) {
 
-          /* "programs/create_db_helpers.py":120
+          /* "programs/create_db_helpers.py":125
  *                 sql_trans[c]='int'
  *             elif col_dict[c]=='float64':
  *                 sql_trans[c]='float'             # <<<<<<<<<<<<<<
  *         ###Make the full statement
  *         #print(sql_trans)
  */
-          if (unlikely(PyDict_SetItem(__pyx_v_sql_trans, __pyx_v_c, __pyx_n_s_float) < 0)) __PYX_ERR(0, 120, __pyx_L3_error)
+          if (unlikely(PyDict_SetItem(__pyx_v_sql_trans, __pyx_v_c, __pyx_n_s_float) < 0)) __PYX_ERR(0, 125, __pyx_L3_error)
 
-          /* "programs/create_db_helpers.py":119
+          /* "programs/create_db_helpers.py":124
  *             elif col_dict[c]=='int64':
  *                 sql_trans[c]='int'
  *             elif col_dict[c]=='float64':             # <<<<<<<<<<<<<<
@@ -3349,7 +3363,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         }
         __pyx_L11:;
 
-        /* "programs/create_db_helpers.py":114
+        /* "programs/create_db_helpers.py":119
  *         col_dict=column_types.to_dict()
  *         sql_trans={}
  *         for c in col_dict:             # <<<<<<<<<<<<<<
@@ -3359,17 +3373,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       }
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "programs/create_db_helpers.py":123
+      /* "programs/create_db_helpers.py":128
  *         ###Make the full statement
  *         #print(sql_trans)
  *         col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])             # <<<<<<<<<<<<<<
  *         if CONFIG['sql_flavor']=='postgres':
  *             col_stmt = col_stmt.replace('int','bigint')
  */
-      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 123, __pyx_L3_error)
+      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_t_8 = 0;
-      __pyx_t_6 = __Pyx_dict_iterator(__pyx_v_sql_trans, 1, ((PyObject *)NULL), (&__pyx_t_12), (&__pyx_t_13)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 123, __pyx_L3_error)
+      __pyx_t_6 = __Pyx_dict_iterator(__pyx_v_sql_trans, 1, ((PyObject *)NULL), (&__pyx_t_12), (&__pyx_t_13)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_XDECREF(__pyx_t_5);
       __pyx_t_5 = __pyx_t_6;
@@ -3377,13 +3391,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       while (1) {
         __pyx_t_14 = __Pyx_dict_iter_next(__pyx_t_5, __pyx_t_12, &__pyx_t_8, &__pyx_t_6, NULL, NULL, __pyx_t_13);
         if (unlikely(__pyx_t_14 == 0)) break;
-        if (unlikely(__pyx_t_14 == -1)) __PYX_ERR(0, 123, __pyx_L3_error)
+        if (unlikely(__pyx_t_14 == -1)) __PYX_ERR(0, 128, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_XDECREF_SET(__pyx_v_k, __pyx_t_6);
         __pyx_t_6 = 0;
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s__2, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 123, __pyx_L3_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s__2, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 128, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_15 = __Pyx_PyDict_GetItem(__pyx_v_sql_trans, __pyx_v_k); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 123, __pyx_L3_error)
+        __pyx_t_15 = __Pyx_PyDict_GetItem(__pyx_v_sql_trans, __pyx_v_k); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 128, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_15);
         __pyx_t_16 = NULL;
         __pyx_t_14 = 0;
@@ -3400,7 +3414,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_7)) {
           PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_v_k, __pyx_t_15};
-          __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_14, 2+__pyx_t_14); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 123, __pyx_L3_error)
+          __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_14, 2+__pyx_t_14); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L3_error)
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
@@ -3409,14 +3423,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
           PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_v_k, __pyx_t_15};
-          __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_14, 2+__pyx_t_14); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 123, __pyx_L3_error)
+          __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_14, 2+__pyx_t_14); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L3_error)
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
         } else
         #endif
         {
-          __pyx_t_17 = PyTuple_New(2+__pyx_t_14); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 123, __pyx_L3_error)
+          __pyx_t_17 = PyTuple_New(2+__pyx_t_14); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 128, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_17);
           if (__pyx_t_16) {
             __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_16); __pyx_t_16 = NULL;
@@ -3427,53 +3441,53 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
           __Pyx_GIVEREF(__pyx_t_15);
           PyTuple_SET_ITEM(__pyx_t_17, 1+__pyx_t_14, __pyx_t_15);
           __pyx_t_15 = 0;
-          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_17, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 123, __pyx_L3_error)
+          __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_17, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 128, __pyx_L3_error)
           __Pyx_GOTREF(__pyx_t_6);
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
         }
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 123, __pyx_L3_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_6))) __PYX_ERR(0, 128, __pyx_L3_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __Pyx_PyString_Join(__pyx_kp_s_, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyString_Join(__pyx_kp_s_, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_col_stmt = __pyx_t_5;
       __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":124
+      /* "programs/create_db_helpers.py":129
  *         #print(sql_trans)
  *         col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])
  *         if CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
  *             col_stmt = col_stmt.replace('int','bigint')
  *         full_statement = 'create table {} ({})'.format(dataname, col_stmt)
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 124, __pyx_L3_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 129, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 124, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 129, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_postgres, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 124, __pyx_L3_error)
+      __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_postgres, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 129, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (__pyx_t_11) {
 
-        /* "programs/create_db_helpers.py":125
+        /* "programs/create_db_helpers.py":130
  *         col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])
  *         if CONFIG['sql_flavor']=='postgres':
  *             col_stmt = col_stmt.replace('int','bigint')             # <<<<<<<<<<<<<<
  *         full_statement = 'create table {} ({})'.format(dataname, col_stmt)
  *         cur.execute(full_statement)
  */
-        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_col_stmt, __pyx_n_s_replace); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 125, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_col_stmt, __pyx_n_s_replace); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 130, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 125, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 130, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_DECREF_SET(__pyx_v_col_stmt, __pyx_t_5);
         __pyx_t_5 = 0;
 
-        /* "programs/create_db_helpers.py":124
+        /* "programs/create_db_helpers.py":129
  *         #print(sql_trans)
  *         col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])
  *         if CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
@@ -3482,14 +3496,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
  */
       }
 
-      /* "programs/create_db_helpers.py":126
+      /* "programs/create_db_helpers.py":131
  *         if CONFIG['sql_flavor']=='postgres':
  *             col_stmt = col_stmt.replace('int','bigint')
  *         full_statement = 'create table {} ({})'.format(dataname, col_stmt)             # <<<<<<<<<<<<<<
  *         cur.execute(full_statement)
  *         db.commit()
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_table, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 126, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_table, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 131, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_t_6 = NULL;
       __pyx_t_13 = 0;
@@ -3506,7 +3520,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_dataname, __pyx_v_col_stmt};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 126, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L3_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_5);
       } else
@@ -3514,13 +3528,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_v_dataname, __pyx_v_col_stmt};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 126, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L3_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_5);
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 126, __pyx_L3_error)
+        __pyx_t_7 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 131, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_7);
         if (__pyx_t_6) {
           __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -3531,7 +3545,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         __Pyx_INCREF(__pyx_v_col_stmt);
         __Pyx_GIVEREF(__pyx_v_col_stmt);
         PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_13, __pyx_v_col_stmt);
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 126, __pyx_L3_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 131, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -3539,14 +3553,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       __pyx_v_full_statement = __pyx_t_5;
       __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":127
+      /* "programs/create_db_helpers.py":132
  *             col_stmt = col_stmt.replace('int','bigint')
  *         full_statement = 'create table {} ({})'.format(dataname, col_stmt)
  *         cur.execute(full_statement)             # <<<<<<<<<<<<<<
  *         db.commit()
  *         return 'success'
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 127, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 132, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_t_7 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -3560,19 +3574,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       }
       __pyx_t_5 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_7, __pyx_v_full_statement) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_v_full_statement);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 127, __pyx_L3_error)
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 132, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":128
+      /* "programs/create_db_helpers.py":133
  *         full_statement = 'create table {} ({})'.format(dataname, col_stmt)
  *         cur.execute(full_statement)
  *         db.commit()             # <<<<<<<<<<<<<<
  *         return 'success'
  *     except Exception as error:
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 128, __pyx_L3_error)
+      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 133, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_t_7 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -3586,12 +3600,12 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       }
       __pyx_t_5 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 128, __pyx_L3_error)
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 133, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":129
+      /* "programs/create_db_helpers.py":134
  *         cur.execute(full_statement)
  *         db.commit()
  *         return 'success'             # <<<<<<<<<<<<<<
@@ -3603,7 +3617,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       __pyx_r = __pyx_n_s_success;
       goto __pyx_L7_try_return;
 
-      /* "programs/create_db_helpers.py":109
+      /* "programs/create_db_helpers.py":114
  *     :return:
  *     '''
  *     try:             # <<<<<<<<<<<<<<
@@ -3620,7 +3634,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "programs/create_db_helpers.py":130
+    /* "programs/create_db_helpers.py":135
  *         db.commit()
  *         return 'success'
  *     except Exception as error:             # <<<<<<<<<<<<<<
@@ -3630,26 +3644,26 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
     __pyx_t_13 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
     if (__pyx_t_13) {
       __Pyx_AddTraceback("programs.create_db_helpers.create_table", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_4, &__pyx_t_7) < 0) __PYX_ERR(0, 130, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_4, &__pyx_t_7) < 0) __PYX_ERR(0, 135, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GOTREF(__pyx_t_7);
       __Pyx_INCREF(__pyx_t_4);
       __pyx_v_error = __pyx_t_4;
 
-      /* "programs/create_db_helpers.py":131
+      /* "programs/create_db_helpers.py":136
  *         return 'success'
  *     except Exception as error:
  *         logger.info('Failed to Create DB Table {}, error {}'.format(dataname, error))             # <<<<<<<<<<<<<<
  *         return 'fail'
  * 
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_logger); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_17, __pyx_n_s_logger); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 136, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_17);
-      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_info); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+      __pyx_t_15 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_info); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 136, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_15);
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Failed_to_Create_DB_Table_error, __pyx_n_s_format); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+      __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Failed_to_Create_DB_Table_error, __pyx_n_s_format); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 136, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_16);
       __pyx_t_18 = NULL;
       __pyx_t_13 = 0;
@@ -3666,7 +3680,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_16)) {
         PyObject *__pyx_temp[3] = {__pyx_t_18, __pyx_v_dataname, __pyx_v_error};
-        __pyx_t_17 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+        __pyx_t_17 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 136, __pyx_L5_except_error)
         __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
         __Pyx_GOTREF(__pyx_t_17);
       } else
@@ -3674,13 +3688,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_16)) {
         PyObject *__pyx_temp[3] = {__pyx_t_18, __pyx_v_dataname, __pyx_v_error};
-        __pyx_t_17 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+        __pyx_t_17 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 136, __pyx_L5_except_error)
         __Pyx_XDECREF(__pyx_t_18); __pyx_t_18 = 0;
         __Pyx_GOTREF(__pyx_t_17);
       } else
       #endif
       {
-        __pyx_t_19 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+        __pyx_t_19 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 136, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_19);
         if (__pyx_t_18) {
           __Pyx_GIVEREF(__pyx_t_18); PyTuple_SET_ITEM(__pyx_t_19, 0, __pyx_t_18); __pyx_t_18 = NULL;
@@ -3691,7 +3705,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
         __Pyx_INCREF(__pyx_v_error);
         __Pyx_GIVEREF(__pyx_v_error);
         PyTuple_SET_ITEM(__pyx_t_19, 1+__pyx_t_13, __pyx_v_error);
-        __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_19, NULL); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+        __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_19, NULL); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 136, __pyx_L5_except_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
       }
@@ -3709,12 +3723,12 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
       __pyx_t_6 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_15, __pyx_t_16, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_15, __pyx_t_17);
       __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
       __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 131, __pyx_L5_except_error)
+      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 136, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "programs/create_db_helpers.py":132
+      /* "programs/create_db_helpers.py":137
  *     except Exception as error:
  *         logger.info('Failed to Create DB Table {}, error {}'.format(dataname, error))
  *         return 'fail'             # <<<<<<<<<<<<<<
@@ -3732,7 +3746,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
     goto __pyx_L5_except_error;
     __pyx_L5_except_error:;
 
-    /* "programs/create_db_helpers.py":109
+    /* "programs/create_db_helpers.py":114
  *     :return:
  *     '''
  *     try:             # <<<<<<<<<<<<<<
@@ -3758,7 +3772,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
     goto __pyx_L0;
   }
 
-  /* "programs/create_db_helpers.py":102
+  /* "programs/create_db_helpers.py":107
  *         return stemmer.stem(x)
  * 
  * def create_table(dataname,column_types):             # <<<<<<<<<<<<<<
@@ -3794,7 +3808,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_6create_table(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":134
+/* "programs/create_db_helpers.py":139
  *         return 'fail'
  * 
  * def get_stem_data(data_source):             # <<<<<<<<<<<<<<
@@ -3817,7 +3831,7 @@ static PyObject *__pyx_pw_8programs_17create_db_helpers_9get_stem_data(PyObject 
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":171
+/* "programs/create_db_helpers.py":177
  *             cols = CONFIG['address_to_standardize'][dataname].split(',')
  *             for col in cols:
  *                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))             # <<<<<<<<<<<<<<
@@ -3852,7 +3866,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("lambda", 0);
   __Pyx_XDECREF(__pyx_r);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_standardize); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_standardize); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 177, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -3869,7 +3883,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_x, __pyx_n_s_n};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -3877,13 +3891,13 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_x, __pyx_n_s_n};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (__pyx_t_3) {
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -3894,7 +3908,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
     __Pyx_INCREF(__pyx_n_s_n);
     __Pyx_GIVEREF(__pyx_n_s_n);
     PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_n_s_n);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 177, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -3917,7 +3931,7 @@ static PyObject *__pyx_lambda_funcdef_lambda(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":134
+/* "programs/create_db_helpers.py":139
  *         return 'fail'
  * 
  * def get_stem_data(data_source):             # <<<<<<<<<<<<<<
@@ -3955,6 +3969,9 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   PyObject *__pyx_7genexpr__pyx_v_item = NULL;
   PyObject *__pyx_v_v = NULL;
   PyObject *__pyx_v_j = NULL;
+  PyObject *__pyx_v_x = NULL;
+  PyObject *__pyx_8genexpr1__pyx_v_k = NULL;
+  PyObject *__pyx_8genexpr1__pyx_v_v = NULL;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -3980,19 +3997,21 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   int __pyx_t_21;
   Py_ssize_t __pyx_t_22;
   Py_ssize_t __pyx_t_23;
+  PyObject *__pyx_t_24 = NULL;
+  PyObject *(*__pyx_t_25)(PyObject *);
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_stem_data", 0);
 
-  /* "programs/create_db_helpers.py":142
+  /* "programs/create_db_helpers.py":147
  *     ##get the CSV name
  *     ###if training is in the dataname, strip it out
  *     dataname = data_source.split('_training')[0]             # <<<<<<<<<<<<<<
  *     # the the fuzzy matches
  *     ###dictionary to read all blocks as strings
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_data_source, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_data_source, __pyx_n_s_split); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -4006,37 +4025,37 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_n_s_training) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_training);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 142, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_dataname = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":145
+  /* "programs/create_db_helpers.py":150
  *     # the the fuzzy matches
  *     ###dictionary to read all blocks as strings
  *     str_dict = {item[dataname]: str for item in global_vars.blocks}             # <<<<<<<<<<<<<<
+ *     str_dict['id'] = str
  *     ###If we have a date variable, find it and ensure it's read as a string
- *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
  */
   { /* enter inner scope */
-    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 145, __pyx_L5_error)
+    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 150, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L5_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_blocks); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L5_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_blocks); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L5_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
       __pyx_t_1 = __pyx_t_3; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
       __pyx_t_5 = NULL;
     } else {
-      __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 145, __pyx_L5_error)
+      __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L5_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_5 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 145, __pyx_L5_error)
+      __pyx_t_5 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 150, __pyx_L5_error)
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     for (;;) {
@@ -4044,17 +4063,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         if (likely(PyList_CheckExact(__pyx_t_1))) {
           if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 145, __pyx_L5_error)
+          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 150, __pyx_L5_error)
           #else
-          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L5_error)
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L5_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         } else {
           if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 145, __pyx_L5_error)
+          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 150, __pyx_L5_error)
           #else
-          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L5_error)
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L5_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         }
@@ -4064,7 +4083,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 145, __pyx_L5_error)
+            else __PYX_ERR(0, 150, __pyx_L5_error)
           }
           break;
         }
@@ -4072,9 +4091,9 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       __Pyx_XDECREF_SET(__pyx_7genexpr__pyx_v_item, __pyx_t_3);
       __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_7genexpr__pyx_v_item, __pyx_v_dataname); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 145, __pyx_L5_error)
+      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_7genexpr__pyx_v_item, __pyx_v_dataname); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L5_error)
       __Pyx_GOTREF(__pyx_t_3);
-      if (unlikely(PyDict_SetItem(__pyx_t_2, (PyObject*)__pyx_t_3, (PyObject*)(&PyString_Type)))) __PYX_ERR(0, 145, __pyx_L5_error)
+      if (unlikely(PyDict_SetItem(__pyx_t_2, (PyObject*)__pyx_t_3, (PyObject*)(&PyString_Type)))) __PYX_ERR(0, 150, __pyx_L5_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -4088,27 +4107,36 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __pyx_v_str_dict = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":147
+  /* "programs/create_db_helpers.py":151
+ *     ###dictionary to read all blocks as strings
  *     str_dict = {item[dataname]: str for item in global_vars.blocks}
+ *     str_dict['id'] = str             # <<<<<<<<<<<<<<
+ *     ###If we have a date variable, find it and ensure it's read as a string
+ *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
+ */
+  if (unlikely(PyDict_SetItem(__pyx_v_str_dict, __pyx_n_s_id, ((PyObject *)(&PyString_Type))) < 0)) __PYX_ERR(0, 151, __pyx_L1_error)
+
+  /* "programs/create_db_helpers.py":153
+ *     str_dict['id'] = str
  *     ###If we have a date variable, find it and ensure it's read as a string
  *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']             # <<<<<<<<<<<<<<
  *     if len(date_columns) > 0:
  *         for col in date_columns:
  */
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_var_types); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_var_types); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
     __pyx_t_1 = __pyx_t_3; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
   } else {
-    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_5 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 153, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   for (;;) {
@@ -4116,17 +4144,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
+        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 153, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       } else {
         if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 153, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       }
@@ -4136,7 +4164,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 147, __pyx_L1_error)
+          else __PYX_ERR(0, 153, __pyx_L1_error)
         }
         break;
       }
@@ -4144,14 +4172,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_i, __pyx_n_s_match_type); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_i, __pyx_n_s_match_type); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_date, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 147, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_date, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 153, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_i, __pyx_v_dataname); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 147, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_i, __pyx_v_dataname); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 147, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 153, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
   }
@@ -4159,18 +4187,18 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __pyx_v_date_columns = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":148
+  /* "programs/create_db_helpers.py":154
  *     ###If we have a date variable, find it and ensure it's read as a string
  *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
  *     if len(date_columns) > 0:             # <<<<<<<<<<<<<<
  *         for col in date_columns:
  *             str_dict[col]=str
  */
-  __pyx_t_4 = PyList_GET_SIZE(__pyx_v_date_columns); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 148, __pyx_L1_error)
+  __pyx_t_4 = PyList_GET_SIZE(__pyx_v_date_columns); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 154, __pyx_L1_error)
   __pyx_t_6 = ((__pyx_t_4 > 0) != 0);
   if (__pyx_t_6) {
 
-    /* "programs/create_db_helpers.py":149
+    /* "programs/create_db_helpers.py":155
  *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
  *     if len(date_columns) > 0:
  *         for col in date_columns:             # <<<<<<<<<<<<<<
@@ -4181,24 +4209,24 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     for (;;) {
       if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_2)) break;
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-      __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 149, __pyx_L1_error)
+      __pyx_t_1 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 155, __pyx_L1_error)
       #else
-      __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 149, __pyx_L1_error)
+      __pyx_t_1 = PySequence_ITEM(__pyx_t_2, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       #endif
       __Pyx_XDECREF_SET(__pyx_v_col, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":150
+      /* "programs/create_db_helpers.py":156
  *     if len(date_columns) > 0:
  *         for col in date_columns:
  *             str_dict[col]=str             # <<<<<<<<<<<<<<
  *     ###Get list of the fuzzy variables
  *     fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']
  */
-      if (unlikely(PyDict_SetItem(__pyx_v_str_dict, __pyx_v_col, ((PyObject *)(&PyString_Type))) < 0)) __PYX_ERR(0, 150, __pyx_L1_error)
+      if (unlikely(PyDict_SetItem(__pyx_v_str_dict, __pyx_v_col, ((PyObject *)(&PyString_Type))) < 0)) __PYX_ERR(0, 156, __pyx_L1_error)
 
-      /* "programs/create_db_helpers.py":149
+      /* "programs/create_db_helpers.py":155
  *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
  *     if len(date_columns) > 0:
  *         for col in date_columns:             # <<<<<<<<<<<<<<
@@ -4208,7 +4236,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "programs/create_db_helpers.py":148
+    /* "programs/create_db_helpers.py":154
  *     ###If we have a date variable, find it and ensure it's read as a string
  *     date_columns = [i[dataname] for i in global_vars.var_types if i['match_type'] == 'date']
  *     if len(date_columns) > 0:             # <<<<<<<<<<<<<<
@@ -4217,27 +4245,27 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
   }
 
-  /* "programs/create_db_helpers.py":152
+  /* "programs/create_db_helpers.py":158
  *             str_dict[col]=str
  *     ###Get list of the fuzzy variables
  *     fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']             # <<<<<<<<<<<<<<
  *     ###add address1 if we are using the remaining parsed addresses
  *     if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
  */
-  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_var_types); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_var_types); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
     __pyx_t_1 = __pyx_t_3; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
   } else {
-    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_5 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_5 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 158, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   for (;;) {
@@ -4245,17 +4273,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 152, __pyx_L1_error)
+        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 158, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       } else {
         if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 152, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 158, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
       }
@@ -4265,7 +4293,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 152, __pyx_L1_error)
+          else __PYX_ERR(0, 158, __pyx_L1_error)
         }
         break;
       }
@@ -4273,9 +4301,9 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_i, __pyx_n_s_match_type); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_i, __pyx_n_s_match_type); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_lower); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_lower); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_7 = NULL;
@@ -4290,15 +4318,15 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __pyx_t_3 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_8, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_8);
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_fuzzy, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 152, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_fuzzy, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 158, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_i, __pyx_v_dataname); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 152, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_v_i, __pyx_v_dataname); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 152, __pyx_L1_error)
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 158, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
   }
@@ -4306,21 +4334,21 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __pyx_v_fuzzy_vars = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":154
+  /* "programs/create_db_helpers.py":160
  *     fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']
  *     ###add address1 if we are using the remaining parsed addresses
  *     if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:             # <<<<<<<<<<<<<<
  *         ###append the address 1 to the fuzzy vars
  *         fuzzy_vars.append('address1')
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_ast); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_ast); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_use_remaining_parsed_address); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_use_remaining_parsed_address); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = NULL;
@@ -4336,25 +4364,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __pyx_t_2 = (__pyx_t_1) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_1, __pyx_t_8) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_8);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 154, __pyx_L1_error)
+  if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_3 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 154, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 160, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_6) {
 
-    /* "programs/create_db_helpers.py":156
+    /* "programs/create_db_helpers.py":162
  *     if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
  *         ###append the address 1 to the fuzzy vars
  *         fuzzy_vars.append('address1')             # <<<<<<<<<<<<<<
  *     ##chunk data so we don't blow up memory
  *     if sys.platform == 'win32':
  */
-    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_fuzzy_vars, __pyx_n_s_address1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 156, __pyx_L1_error)
+    __pyx_t_9 = __Pyx_PyList_Append(__pyx_v_fuzzy_vars, __pyx_n_s_address1); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 162, __pyx_L1_error)
 
-    /* "programs/create_db_helpers.py":154
+    /* "programs/create_db_helpers.py":160
  *     fuzzy_vars = [i[dataname] for i in global_vars.var_types if i['match_type'].lower() == 'fuzzy']
  *     ###add address1 if we are using the remaining parsed addresses
  *     if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:             # <<<<<<<<<<<<<<
@@ -4363,34 +4391,34 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
   }
 
-  /* "programs/create_db_helpers.py":158
+  /* "programs/create_db_helpers.py":164
  *         fuzzy_vars.append('address1')
  *     ##chunk data so we don't blow up memory
  *     if sys.platform == 'win32':             # <<<<<<<<<<<<<<
- *         csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
+ *         csvname = '{}\\{}.csv'.format(CONFIG['projectPath'], dataname)
  *     else:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_sys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 158, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_sys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 164, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_platform); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_platform); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 164, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_win32, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 158, __pyx_L1_error)
+  __pyx_t_6 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_win32, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 164, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_6) {
 
-    /* "programs/create_db_helpers.py":159
+    /* "programs/create_db_helpers.py":165
  *     ##chunk data so we don't blow up memory
  *     if sys.platform == 'win32':
- *         csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)             # <<<<<<<<<<<<<<
+ *         csvname = '{}\\{}.csv'.format(CONFIG['projectPath'], dataname)             # <<<<<<<<<<<<<<
  *     else:
- *         csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
+ *         csvname = '{}/{}.csv'.format(CONFIG['projectPath'], dataname)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_csv, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 159, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_csv, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 165, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 159, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 165, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_inputPath); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_8, __pyx_n_s_projectPath); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     __pyx_t_8 = NULL;
@@ -4408,7 +4436,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_1, __pyx_v_dataname};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -4417,14 +4445,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_1, __pyx_v_dataname};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     } else
     #endif
     {
-      __pyx_t_7 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 159, __pyx_L1_error)
+      __pyx_t_7 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 165, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
       if (__pyx_t_8) {
         __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_8); __pyx_t_8 = NULL;
@@ -4435,7 +4463,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       __Pyx_GIVEREF(__pyx_v_dataname);
       PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_10, __pyx_v_dataname);
       __pyx_t_1 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
@@ -4443,29 +4471,29 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     __pyx_v_csvname = __pyx_t_2;
     __pyx_t_2 = 0;
 
-    /* "programs/create_db_helpers.py":158
+    /* "programs/create_db_helpers.py":164
  *         fuzzy_vars.append('address1')
  *     ##chunk data so we don't blow up memory
  *     if sys.platform == 'win32':             # <<<<<<<<<<<<<<
- *         csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
+ *         csvname = '{}\\{}.csv'.format(CONFIG['projectPath'], dataname)
  *     else:
  */
     goto __pyx_L19;
   }
 
-  /* "programs/create_db_helpers.py":161
- *         csvname = '{}\\{}.csv'.format(CONFIG['inputPath'], dataname)
+  /* "programs/create_db_helpers.py":167
+ *         csvname = '{}\\{}.csv'.format(CONFIG['projectPath'], dataname)
  *     else:
- *         csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)             # <<<<<<<<<<<<<<
+ *         csvname = '{}/{}.csv'.format(CONFIG['projectPath'], dataname)             # <<<<<<<<<<<<<<
  *     ###flagging if the table exists
  *     table_exists=False
  */
   /*else*/ {
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_csv_2, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 161, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_csv_2, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 161, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 167, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_inputPath); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_projectPath); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 167, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_7 = NULL;
@@ -4483,7 +4511,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_t_1, __pyx_v_dataname};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -4492,14 +4520,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_t_1, __pyx_v_dataname};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     } else
     #endif
     {
-      __pyx_t_8 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 161, __pyx_L1_error)
+      __pyx_t_8 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 167, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_8);
       if (__pyx_t_7) {
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
@@ -4510,7 +4538,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       __Pyx_GIVEREF(__pyx_v_dataname);
       PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_10, __pyx_v_dataname);
       __pyx_t_1 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_8, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 167, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
@@ -4520,8 +4548,8 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   }
   __pyx_L19:;
 
-  /* "programs/create_db_helpers.py":163
- *         csvname = '{}/{}.csv'.format(CONFIG['inputPath'], dataname)
+  /* "programs/create_db_helpers.py":169
+ *         csvname = '{}/{}.csv'.format(CONFIG['projectPath'], dataname)
  *     ###flagging if the table exists
  *     table_exists=False             # <<<<<<<<<<<<<<
  *     row_number=0
@@ -4529,7 +4557,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
   __pyx_v_table_exists = 0;
 
-  /* "programs/create_db_helpers.py":164
+  /* "programs/create_db_helpers.py":170
  *     ###flagging if the table exists
  *     table_exists=False
  *     row_number=0             # <<<<<<<<<<<<<<
@@ -4539,38 +4567,38 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __Pyx_INCREF(__pyx_int_0);
   __pyx_v_row_number = __pyx_int_0;
 
-  /* "programs/create_db_helpers.py":165
+  /* "programs/create_db_helpers.py":171
  *     table_exists=False
  *     row_number=0
  *     for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c', dtype=str_dict):             # <<<<<<<<<<<<<<
  *         #print('foo {}'.format(table_exists))
  *         ####If we have addresses to standardize for the data source
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_pd); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_pd); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_read_csv); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_read_csv); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_v_csvname);
   __Pyx_GIVEREF(__pyx_v_csvname);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_v_csvname);
-  __pyx_t_8 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_create_db_chunksize); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_create_db_chunksize); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_chunksize, __pyx_t_1) < 0) __PYX_ERR(0, 165, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_chunksize, __pyx_t_1) < 0) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_engine, __pyx_n_s_c) < 0) __PYX_ERR(0, 165, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_dtype, __pyx_v_str_dict) < 0) __PYX_ERR(0, 165, __pyx_L1_error)
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_2, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_engine, __pyx_n_s_c) < 0) __PYX_ERR(0, 171, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_dtype, __pyx_v_str_dict) < 0) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_2, __pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -4579,9 +4607,9 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     __pyx_t_8 = __pyx_t_1; __Pyx_INCREF(__pyx_t_8); __pyx_t_4 = 0;
     __pyx_t_5 = NULL;
   } else {
-    __pyx_t_4 = -1; __pyx_t_8 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 165, __pyx_L1_error)
+    __pyx_t_4 = -1; __pyx_t_8 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 171, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __pyx_t_5 = Py_TYPE(__pyx_t_8)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 165, __pyx_L1_error)
+    __pyx_t_5 = Py_TYPE(__pyx_t_8)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 171, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -4589,17 +4617,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       if (likely(PyList_CheckExact(__pyx_t_8))) {
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_8)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_8, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 165, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_8, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 171, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_8, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_8, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_8)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_8, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 165, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_8, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 171, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_8, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 165, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_8, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 171, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -4609,7 +4637,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 165, __pyx_L1_error)
+          else __PYX_ERR(0, 171, __pyx_L1_error)
         }
         break;
       }
@@ -4618,19 +4646,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     __Pyx_XDECREF_SET(__pyx_v_data, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "programs/create_db_helpers.py":168
+    /* "programs/create_db_helpers.py":174
  *         #print('foo {}'.format(table_exists))
  *         ####If we have addresses to standardize for the data source
  *         if dataname in CONFIG['address_to_standardize'].keys():             # <<<<<<<<<<<<<<
  *             cols = CONFIG['address_to_standardize'][dataname].split(',')
  *             for col in cols:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_address_to_standardize); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_address_to_standardize); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_keys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_keys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
@@ -4645,30 +4673,30 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 168, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_v_dataname, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 168, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_v_dataname, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_11 = (__pyx_t_6 != 0);
     if (__pyx_t_11) {
 
-      /* "programs/create_db_helpers.py":169
+      /* "programs/create_db_helpers.py":175
  *         ####If we have addresses to standardize for the data source
  *         if dataname in CONFIG['address_to_standardize'].keys():
  *             cols = CONFIG['address_to_standardize'][dataname].split(',')             # <<<<<<<<<<<<<<
  *             for col in cols:
  *                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_address_to_standardize); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_address_to_standardize); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_3, __pyx_v_dataname); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_3, __pyx_v_dataname); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_split); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_split); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_t_2 = NULL;
@@ -4683,13 +4711,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_kp_s__4) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s__4);
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 169, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 175, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_XDECREF_SET(__pyx_v_cols, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":170
+      /* "programs/create_db_helpers.py":176
  *         if dataname in CONFIG['address_to_standardize'].keys():
  *             cols = CONFIG['address_to_standardize'][dataname].split(',')
  *             for col in cols:             # <<<<<<<<<<<<<<
@@ -4700,26 +4728,26 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __pyx_t_1 = __pyx_v_cols; __Pyx_INCREF(__pyx_t_1); __pyx_t_12 = 0;
         __pyx_t_13 = NULL;
       } else {
-        __pyx_t_12 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_cols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 170, __pyx_L1_error)
+        __pyx_t_12 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_cols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 176, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_13 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 170, __pyx_L1_error)
+        __pyx_t_13 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 176, __pyx_L1_error)
       }
       for (;;) {
         if (likely(!__pyx_t_13)) {
           if (likely(PyList_CheckExact(__pyx_t_1))) {
             if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 170, __pyx_L1_error)
+            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 176, __pyx_L1_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           } else {
             if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 170, __pyx_L1_error)
+            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 176, __pyx_L1_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 170, __pyx_L1_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 176, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           }
@@ -4729,7 +4757,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 170, __pyx_L1_error)
+              else __PYX_ERR(0, 176, __pyx_L1_error)
             }
             break;
           }
@@ -4738,19 +4766,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __Pyx_XDECREF_SET(__pyx_v_col, __pyx_t_3);
         __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":171
+        /* "programs/create_db_helpers.py":177
  *             cols = CONFIG['address_to_standardize'][dataname].split(',')
  *             for col in cols:
  *                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))             # <<<<<<<<<<<<<<
  *         data['matched'] = 0
  *         for block in global_vars.blocks:
  */
-        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_data, __pyx_v_col); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_v_data, __pyx_v_col); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 177, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_apply); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 171, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_apply); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 177, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_13get_stem_data_lambda, 0, __pyx_n_s_get_stem_data_locals_lambda, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 171, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_13get_stem_data_lambda, 0, __pyx_n_s_get_stem_data_locals_lambda, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 177, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __pyx_t_14 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
@@ -4765,13 +4793,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __pyx_t_3 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_14, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_2);
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 171, __pyx_L1_error)
+        if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_v_col, __pyx_t_3) < 0)) __PYX_ERR(0, 171, __pyx_L1_error)
+        if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_v_col, __pyx_t_3) < 0)) __PYX_ERR(0, 177, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":170
+        /* "programs/create_db_helpers.py":176
  *         if dataname in CONFIG['address_to_standardize'].keys():
  *             cols = CONFIG['address_to_standardize'][dataname].split(',')
  *             for col in cols:             # <<<<<<<<<<<<<<
@@ -4781,7 +4809,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":168
+      /* "programs/create_db_helpers.py":174
  *         #print('foo {}'.format(table_exists))
  *         ####If we have addresses to standardize for the data source
  *         if dataname in CONFIG['address_to_standardize'].keys():             # <<<<<<<<<<<<<<
@@ -4790,34 +4818,34 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
     }
 
-    /* "programs/create_db_helpers.py":172
+    /* "programs/create_db_helpers.py":178
  *             for col in cols:
  *                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
  *         data['matched'] = 0             # <<<<<<<<<<<<<<
  *         for block in global_vars.blocks:
  *             #print(block['block_name'])
  */
-    if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_matched, __pyx_int_0) < 0)) __PYX_ERR(0, 172, __pyx_L1_error)
+    if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_matched, __pyx_int_0) < 0)) __PYX_ERR(0, 178, __pyx_L1_error)
 
-    /* "programs/create_db_helpers.py":173
+    /* "programs/create_db_helpers.py":179
  *                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
  *         data['matched'] = 0
  *         for block in global_vars.blocks:             # <<<<<<<<<<<<<<
  *             #print(block['block_name'])
  *             ###for 'full' blocks, we will divide everything into equally sized chunks.  This is much easier to do on the front end while we are writing
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 173, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 179, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_blocks); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_blocks); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
       __pyx_t_1 = __pyx_t_3; __Pyx_INCREF(__pyx_t_1); __pyx_t_12 = 0;
       __pyx_t_13 = NULL;
     } else {
-      __pyx_t_12 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_12 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 179, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_13 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 173, __pyx_L1_error)
+      __pyx_t_13 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 179, __pyx_L1_error)
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     for (;;) {
@@ -4825,17 +4853,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         if (likely(PyList_CheckExact(__pyx_t_1))) {
           if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 173, __pyx_L1_error)
+          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
           #else
-          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         } else {
           if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 173, __pyx_L1_error)
+          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
           #else
-          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 173, __pyx_L1_error)
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         }
@@ -4845,7 +4873,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 173, __pyx_L1_error)
+            else __PYX_ERR(0, 179, __pyx_L1_error)
           }
           break;
         }
@@ -4854,16 +4882,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       __Pyx_XDECREF_SET(__pyx_v_block, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":178
+      /* "programs/create_db_helpers.py":184
  *             ###than to deal with later when we dn't want to pull the entire DB and have SQL-dependencies
  *             ###And yes I mean it's easier for me. Sue me.
  *             if block['block_name'].lower()=='full':             # <<<<<<<<<<<<<<
  *                 row_seq = [np.floor(i/block['chunk_size']) for i in list(range(row_number, row_number+len(data)))]
  *                 data['full'] = row_seq
  */
-      __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 178, __pyx_L1_error)
+      __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 184, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_lower); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 178, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_lower); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 184, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __pyx_t_7 = NULL;
@@ -4878,29 +4906,29 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       __pyx_t_3 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
       __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_full, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 178, __pyx_L1_error)
+      __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_full, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 184, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       if (__pyx_t_11) {
 
-        /* "programs/create_db_helpers.py":179
+        /* "programs/create_db_helpers.py":185
  *             ###And yes I mean it's easier for me. Sue me.
  *             if block['block_name'].lower()=='full':
  *                 row_seq = [np.floor(i/block['chunk_size']) for i in list(range(row_number, row_number+len(data)))]             # <<<<<<<<<<<<<<
  *                 data['full'] = row_seq
  *                 row_number += len(data)
  */
-        __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 179, __pyx_L1_error)
-        __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_15); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 185, __pyx_L1_error)
+        __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_15); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 185, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_7 = PyNumber_Add(__pyx_v_row_number, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_7 = PyNumber_Add(__pyx_v_row_number, __pyx_t_2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 185, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 185, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_INCREF(__pyx_v_row_number);
         __Pyx_GIVEREF(__pyx_v_row_number);
@@ -4908,10 +4936,10 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __Pyx_GIVEREF(__pyx_t_7);
         PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_7);
         __pyx_t_7 = 0;
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_2, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_2, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 185, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = PySequence_List(__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_2 = PySequence_List(__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 185, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_7 = __pyx_t_2; __Pyx_INCREF(__pyx_t_7); __pyx_t_15 = 0;
@@ -4919,21 +4947,21 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         for (;;) {
           if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_7)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_2 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_2); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 179, __pyx_L1_error)
+          __pyx_t_2 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_2); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 185, __pyx_L1_error)
           #else
-          __pyx_t_2 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
+          __pyx_t_2 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           #endif
           __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_2);
           __pyx_t_2 = 0;
-          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 179, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_np); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
-          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_floor); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 179, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_floor); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_v_block, __pyx_n_s_chunk_size); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 179, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_v_block, __pyx_n_s_chunk_size); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
-          __pyx_t_17 = __Pyx_PyNumber_Divide(__pyx_v_i, __pyx_t_14); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 179, __pyx_L1_error)
+          __pyx_t_17 = __Pyx_PyNumber_Divide(__pyx_v_i, __pyx_t_14); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_17);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __pyx_t_14 = NULL;
@@ -4949,42 +4977,42 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           __pyx_t_2 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_14, __pyx_t_17) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_17);
           __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 179, __pyx_L1_error)
+          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 179, __pyx_L1_error)
+          if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 185, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         }
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_XDECREF_SET(__pyx_v_row_seq, ((PyObject*)__pyx_t_3));
         __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":180
+        /* "programs/create_db_helpers.py":186
  *             if block['block_name'].lower()=='full':
  *                 row_seq = [np.floor(i/block['chunk_size']) for i in list(range(row_number, row_number+len(data)))]
  *                 data['full'] = row_seq             # <<<<<<<<<<<<<<
  *                 row_number += len(data)
  *         ###convert to dictionary
  */
-        if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_full, __pyx_v_row_seq) < 0)) __PYX_ERR(0, 180, __pyx_L1_error)
+        if (unlikely(PyObject_SetItem(__pyx_v_data, __pyx_n_s_full, __pyx_v_row_seq) < 0)) __PYX_ERR(0, 186, __pyx_L1_error)
 
-        /* "programs/create_db_helpers.py":181
+        /* "programs/create_db_helpers.py":187
  *                 row_seq = [np.floor(i/block['chunk_size']) for i in list(range(row_number, row_number+len(data)))]
  *                 data['full'] = row_seq
  *                 row_number += len(data)             # <<<<<<<<<<<<<<
  *         ###convert to dictionary
  *         #print('got the full')
  */
-        __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 181, __pyx_L1_error)
-        __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_15); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 181, __pyx_L1_error)
+        __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 187, __pyx_L1_error)
+        __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_15); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 187, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_7 = PyNumber_InPlaceAdd(__pyx_v_row_number, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 181, __pyx_L1_error)
+        __pyx_t_7 = PyNumber_InPlaceAdd(__pyx_v_row_number, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 187, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF_SET(__pyx_v_row_number, __pyx_t_7);
         __pyx_t_7 = 0;
 
-        /* "programs/create_db_helpers.py":178
+        /* "programs/create_db_helpers.py":184
  *             ###than to deal with later when we dn't want to pull the entire DB and have SQL-dependencies
  *             ###And yes I mean it's easier for me. Sue me.
  *             if block['block_name'].lower()=='full':             # <<<<<<<<<<<<<<
@@ -4993,7 +5021,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
       }
 
-      /* "programs/create_db_helpers.py":173
+      /* "programs/create_db_helpers.py":179
  *                 data[col] = data[col].apply(lambda x: standardize(x, 'n'))
  *         data['matched'] = 0
  *         for block in global_vars.blocks:             # <<<<<<<<<<<<<<
@@ -5003,14 +5031,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "programs/create_db_helpers.py":184
+    /* "programs/create_db_helpers.py":190
  *         ###convert to dictionary
  *         #print('got the full')
  *         data = data.to_dict('records')             # <<<<<<<<<<<<<<
  *         ########
  *         ##Are we using the parsed address feature? if so, add those variables into the row
  */
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_to_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_data, __pyx_n_s_to_dict); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_3 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
@@ -5024,27 +5052,27 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_3, __pyx_n_s_records) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_n_s_records);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 184, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF_SET(__pyx_v_data, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "programs/create_db_helpers.py":188
+    /* "programs/create_db_helpers.py":194
  *         ##Are we using the parsed address feature? if so, add those variables into the row
  *         ########
  *         if ast.literal_eval(CONFIG['parse_address']) == True:             # <<<<<<<<<<<<<<
  *             ###For each row, parse the address
  *             for row in data:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ast); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ast); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_parse_address); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_parse_address); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __pyx_t_7 = NULL;
@@ -5060,16 +5088,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2);
     __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 188, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 188, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 194, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_11) {
 
-      /* "programs/create_db_helpers.py":190
+      /* "programs/create_db_helpers.py":196
  *         if ast.literal_eval(CONFIG['parse_address']) == True:
  *             ###For each row, parse the address
  *             for row in data:             # <<<<<<<<<<<<<<
@@ -5080,26 +5108,26 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __pyx_t_3 = __pyx_v_data; __Pyx_INCREF(__pyx_t_3); __pyx_t_12 = 0;
         __pyx_t_13 = NULL;
       } else {
-        __pyx_t_12 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
+        __pyx_t_12 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 196, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_13 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 190, __pyx_L1_error)
+        __pyx_t_13 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 196, __pyx_L1_error)
       }
       for (;;) {
         if (likely(!__pyx_t_13)) {
           if (likely(PyList_CheckExact(__pyx_t_3))) {
             if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_3)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 190, __pyx_L1_error)
+            __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 196, __pyx_L1_error)
             #else
-            __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+            __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 196, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             #endif
           } else {
             if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 190, __pyx_L1_error)
+            __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_1); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 196, __pyx_L1_error)
             #else
-            __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+            __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 196, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             #endif
           }
@@ -5109,7 +5137,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 190, __pyx_L1_error)
+              else __PYX_ERR(0, 196, __pyx_L1_error)
             }
             break;
           }
@@ -5118,21 +5146,21 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __Pyx_XDECREF_SET(__pyx_v_row, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "programs/create_db_helpers.py":191
+        /* "programs/create_db_helpers.py":197
  *             ###For each row, parse the address
  *             for row in data:
  *                 parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],             # <<<<<<<<<<<<<<
  *                                            tag_mapping=global_vars.address_component_mapping)
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_usadd); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_usadd); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_tag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_tag); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_address_column, __pyx_n_s_format); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_address_column, __pyx_n_s_format); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __pyx_t_17 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_16))) {
@@ -5146,47 +5174,47 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __pyx_t_7 = (__pyx_t_17) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_17, __pyx_v_dataname) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_v_dataname);
         __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 191, __pyx_L1_error)
+        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_t_7); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_1, __pyx_t_7); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_row, __pyx_t_16); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_v_row, __pyx_t_16); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        __pyx_t_16 = PyTuple_New(1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_16 = PyTuple_New(1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_GIVEREF(__pyx_t_7);
         PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_7);
         __pyx_t_7 = 0;
 
-        /* "programs/create_db_helpers.py":192
+        /* "programs/create_db_helpers.py":198
  *             for row in data:
  *                 parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],
  *                                            tag_mapping=global_vars.address_component_mapping)             # <<<<<<<<<<<<<<
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
  */
-        __pyx_t_7 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 192, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 198, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 192, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 198, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_address_component_mapping); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 192, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_address_component_mapping); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 198, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_tag_mapping, __pyx_t_17) < 0) __PYX_ERR(0, 192, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_tag_mapping, __pyx_t_17) < 0) __PYX_ERR(0, 198, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
 
-        /* "programs/create_db_helpers.py":191
+        /* "programs/create_db_helpers.py":197
  *             ###For each row, parse the address
  *             for row in data:
  *                 parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],             # <<<<<<<<<<<<<<
  *                                            tag_mapping=global_vars.address_component_mapping)
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  */
-        __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_16, __pyx_t_7); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 191, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_16, __pyx_t_7); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 197, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -5194,27 +5222,27 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __Pyx_XDECREF_SET(__pyx_v_parsed_address, __pyx_t_17);
         __pyx_t_17 = 0;
 
-        /* "programs/create_db_helpers.py":193
+        /* "programs/create_db_helpers.py":199
  *                 parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],
  *                                            tag_mapping=global_vars.address_component_mapping)
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:             # <<<<<<<<<<<<<<
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
  *                         row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][
  */
-        __pyx_t_17 = PyList_New(0); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_17 = PyList_New(0); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 199, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
-        __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 199, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_blocks); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_blocks); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 199, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         if (likely(PyList_CheckExact(__pyx_t_16)) || PyTuple_CheckExact(__pyx_t_16)) {
           __pyx_t_7 = __pyx_t_16; __Pyx_INCREF(__pyx_t_7); __pyx_t_15 = 0;
           __pyx_t_18 = NULL;
         } else {
-          __pyx_t_15 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_16); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_15 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_16); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 199, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
-          __pyx_t_18 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_18 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 199, __pyx_L1_error)
         }
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         for (;;) {
@@ -5222,17 +5250,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             if (likely(PyList_CheckExact(__pyx_t_7))) {
               if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_7)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_16 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 193, __pyx_L1_error)
+              __pyx_t_16 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
               #else
-              __pyx_t_16 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 193, __pyx_L1_error)
+              __pyx_t_16 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 199, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_16);
               #endif
             } else {
               if (__pyx_t_15 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_16 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 193, __pyx_L1_error)
+              __pyx_t_16 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
               #else
-              __pyx_t_16 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 193, __pyx_L1_error)
+              __pyx_t_16 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 199, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_16);
               #endif
             }
@@ -5242,7 +5270,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
               PyObject* exc_type = PyErr_Occurred();
               if (exc_type) {
                 if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                else __PYX_ERR(0, 193, __pyx_L1_error)
+                else __PYX_ERR(0, 199, __pyx_L1_error)
               }
               break;
             }
@@ -5250,15 +5278,15 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __Pyx_XDECREF_SET(__pyx_v_v, __pyx_t_16);
           __pyx_t_16 = 0;
-          __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_v_v, __pyx_n_s_parsed_block); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_v_v, __pyx_n_s_parsed_block); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 199, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_t_16, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyInt_EqObjC(__pyx_t_16, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 199, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           if (__pyx_t_11) {
-            if (unlikely(__Pyx_ListComp_Append(__pyx_t_17, (PyObject*)__pyx_v_v))) __PYX_ERR(0, 193, __pyx_L1_error)
+            if (unlikely(__Pyx_ListComp_Append(__pyx_t_17, (PyObject*)__pyx_v_v))) __PYX_ERR(0, 199, __pyx_L1_error)
           }
         }
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -5267,27 +5295,27 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         for (;;) {
           if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_7)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_17 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_17); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_17 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_17); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
           #else
-          __pyx_t_17 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 193, __pyx_L1_error)
+          __pyx_t_17 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 199, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_17);
           #endif
           __Pyx_XDECREF_SET(__pyx_v_parsed_block, __pyx_t_17);
           __pyx_t_17 = 0;
 
-          /* "programs/create_db_helpers.py":194
+          /* "programs/create_db_helpers.py":200
  *                                            tag_mapping=global_vars.address_component_mapping)
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:             # <<<<<<<<<<<<<<
  *                         row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][
  *                                                           0:int(parsed_block['block_name'][-1])]
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_re); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_re); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
-          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_findall); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 194, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_findall); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 200, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 194, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __pyx_t_1 = NULL;
           __pyx_t_10 = 0;
@@ -5304,7 +5332,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_16)) {
             PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_kp_s_ZipCode_0_9, __pyx_t_2};
-            __pyx_t_17 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 194, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_GOTREF(__pyx_t_17);
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -5313,14 +5341,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_16)) {
             PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_kp_s_ZipCode_0_9, __pyx_t_2};
-            __pyx_t_17 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 194, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyCFunction_FastCall(__pyx_t_16, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
             __Pyx_GOTREF(__pyx_t_17);
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           } else
           #endif
           {
-            __pyx_t_14 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 194, __pyx_L1_error)
+            __pyx_t_14 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             if (__pyx_t_1) {
               __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_1); __pyx_t_1 = NULL;
@@ -5331,63 +5359,63 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             __Pyx_GIVEREF(__pyx_t_2);
             PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_10, __pyx_t_2);
             __pyx_t_2 = 0;
-            __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_14, NULL); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 194, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyObject_Call(__pyx_t_16, __pyx_t_14, NULL); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 200, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           }
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          __pyx_t_19 = PyObject_Length(__pyx_t_17); if (unlikely(__pyx_t_19 == ((Py_ssize_t)-1))) __PYX_ERR(0, 194, __pyx_L1_error)
+          __pyx_t_19 = PyObject_Length(__pyx_t_17); if (unlikely(__pyx_t_19 == ((Py_ssize_t)-1))) __PYX_ERR(0, 200, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
           __pyx_t_11 = ((__pyx_t_19 > 0) != 0);
           if (__pyx_t_11) {
 
-            /* "programs/create_db_helpers.py":195
+            /* "programs/create_db_helpers.py":201
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
  *                         row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][             # <<<<<<<<<<<<<<
  *                                                           0:int(parsed_block['block_name'][-1])]
  *                     else:
  */
-            __pyx_t_17 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 195, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 201, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
-            __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_17, __pyx_n_s_ZipCode); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 195, __pyx_L1_error)
+            __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_17, __pyx_n_s_ZipCode); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 201, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_16);
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
 
-            /* "programs/create_db_helpers.py":196
+            /* "programs/create_db_helpers.py":202
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
  *                         row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][
  *                                                           0:int(parsed_block['block_name'][-1])]             # <<<<<<<<<<<<<<
  *                     else:
  *                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
  */
-            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 196, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 202, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
-            __pyx_t_14 = __Pyx_GetItemInt(__pyx_t_17, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 196, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_GetItemInt(__pyx_t_17, -1L, long, 1, __Pyx_PyInt_From_long, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 202, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-            __pyx_t_17 = __Pyx_PyNumber_Int(__pyx_t_14); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 196, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyNumber_Int(__pyx_t_14); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 202, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-            /* "programs/create_db_helpers.py":195
+            /* "programs/create_db_helpers.py":201
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
  *                         row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][             # <<<<<<<<<<<<<<
  *                                                           0:int(parsed_block['block_name'][-1])]
  *                     else:
  */
-            __pyx_t_14 = __Pyx_PyObject_GetSlice(__pyx_t_16, 0, 0, NULL, &__pyx_t_17, NULL, 1, 0, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 195, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_PyObject_GetSlice(__pyx_t_16, 0, 0, NULL, &__pyx_t_17, NULL, 1, 0, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 201, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 195, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 201, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
-            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_17, __pyx_t_14) < 0)) __PYX_ERR(0, 195, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_17, __pyx_t_14) < 0)) __PYX_ERR(0, 201, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-            /* "programs/create_db_helpers.py":194
+            /* "programs/create_db_helpers.py":200
  *                                            tag_mapping=global_vars.address_component_mapping)
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
  *                     if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:             # <<<<<<<<<<<<<<
@@ -5397,7 +5425,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             goto __pyx_L38;
           }
 
-          /* "programs/create_db_helpers.py":198
+          /* "programs/create_db_helpers.py":204
  *                                                           0:int(parsed_block['block_name'][-1])]
  *                     else:
  *                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]             # <<<<<<<<<<<<<<
@@ -5405,23 +5433,23 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  *                     if variable['variable_name'] in parsed_address[0].keys():
  */
           /*else*/ {
-            __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
-            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
-            __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_t_17); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_t_17); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_16);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 198, __pyx_L1_error)
+            __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_parsed_block, __pyx_n_s_block_name); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_17);
-            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_17, __pyx_t_16) < 0)) __PYX_ERR(0, 198, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_17, __pyx_t_16) < 0)) __PYX_ERR(0, 204, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
             __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
           }
           __pyx_L38:;
 
-          /* "programs/create_db_helpers.py":193
+          /* "programs/create_db_helpers.py":199
  *                 parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],
  *                                            tag_mapping=global_vars.address_component_mapping)
  *                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:             # <<<<<<<<<<<<<<
@@ -5431,27 +5459,27 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-        /* "programs/create_db_helpers.py":199
+        /* "programs/create_db_helpers.py":205
  *                     else:
  *                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
  *                 for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:             # <<<<<<<<<<<<<<
  *                     if variable['variable_name'] in parsed_address[0].keys():
  *                         row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
  */
-        __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 199, __pyx_L1_error)
+        __pyx_t_7 = PyList_New(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 199, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
-        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_var_types); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 199, __pyx_L1_error)
+        __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_var_types); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_17);
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         if (likely(PyList_CheckExact(__pyx_t_17)) || PyTuple_CheckExact(__pyx_t_17)) {
           __pyx_t_16 = __pyx_t_17; __Pyx_INCREF(__pyx_t_16); __pyx_t_15 = 0;
           __pyx_t_18 = NULL;
         } else {
-          __pyx_t_15 = -1; __pyx_t_16 = PyObject_GetIter(__pyx_t_17); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_15 = -1; __pyx_t_16 = PyObject_GetIter(__pyx_t_17); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 205, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_18 = Py_TYPE(__pyx_t_16)->tp_iternext; if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_18 = Py_TYPE(__pyx_t_16)->tp_iternext; if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 205, __pyx_L1_error)
         }
         __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
         for (;;) {
@@ -5459,17 +5487,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             if (likely(PyList_CheckExact(__pyx_t_16))) {
               if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_16)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_17 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_17); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
+              __pyx_t_17 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_17); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 205, __pyx_L1_error)
               #else
-              __pyx_t_17 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 199, __pyx_L1_error)
+              __pyx_t_17 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 205, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_17);
               #endif
             } else {
               if (__pyx_t_15 >= PyTuple_GET_SIZE(__pyx_t_16)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_17 = PyTuple_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_17); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
+              __pyx_t_17 = PyTuple_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_17); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 205, __pyx_L1_error)
               #else
-              __pyx_t_17 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 199, __pyx_L1_error)
+              __pyx_t_17 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 205, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_17);
               #endif
             }
@@ -5479,7 +5507,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
               PyObject* exc_type = PyErr_Occurred();
               if (exc_type) {
                 if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                else __PYX_ERR(0, 199, __pyx_L1_error)
+                else __PYX_ERR(0, 205, __pyx_L1_error)
               }
               break;
             }
@@ -5487,15 +5515,15 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __Pyx_XDECREF_SET(__pyx_v_var, __pyx_t_17);
           __pyx_t_17 = 0;
-          __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_var, __pyx_n_s_parsed_variable); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_17 = __Pyx_PyObject_Dict_GetItem(__pyx_v_var, __pyx_n_s_parsed_variable); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 205, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_17);
-          __pyx_t_14 = __Pyx_PyInt_EqObjC(__pyx_t_17, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyInt_EqObjC(__pyx_t_17, __pyx_int_1, 1, 0); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 205, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
-          __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_14); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_14); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 205, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           if (__pyx_t_11) {
-            if (unlikely(__Pyx_ListComp_Append(__pyx_t_7, (PyObject*)__pyx_v_var))) __PYX_ERR(0, 199, __pyx_L1_error)
+            if (unlikely(__Pyx_ListComp_Append(__pyx_t_7, (PyObject*)__pyx_v_var))) __PYX_ERR(0, 205, __pyx_L1_error)
           }
         }
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -5504,26 +5532,26 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         for (;;) {
           if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_16)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_7 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_7); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_7 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_7); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 205, __pyx_L1_error)
           #else
-          __pyx_t_7 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 199, __pyx_L1_error)
+          __pyx_t_7 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 205, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           #endif
           __Pyx_XDECREF_SET(__pyx_v_variable, __pyx_t_7);
           __pyx_t_7 = 0;
 
-          /* "programs/create_db_helpers.py":200
+          /* "programs/create_db_helpers.py":206
  *                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
  *                 for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:
  *                     if variable['variable_name'] in parsed_address[0].keys():             # <<<<<<<<<<<<<<
  *                         row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
  *                     else:
  */
-          __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 200, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 206, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
-          __pyx_t_17 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 200, __pyx_L1_error)
+          __pyx_t_17 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 206, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_17);
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_keys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 200, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_17, __pyx_n_s_keys); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
           __pyx_t_17 = NULL;
@@ -5538,37 +5566,37 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_14 = (__pyx_t_17) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_17) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
           __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
-          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 200, __pyx_L1_error)
+          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 206, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_t_7, __pyx_t_14, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
+          __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_t_7, __pyx_t_14, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 206, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __pyx_t_6 = (__pyx_t_11 != 0);
           if (__pyx_t_6) {
 
-            /* "programs/create_db_helpers.py":201
+            /* "programs/create_db_helpers.py":207
  *                 for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:
  *                     if variable['variable_name'] in parsed_address[0].keys():
  *                         row[variable['variable_name']] = parsed_address[0][variable['variable_name']]             # <<<<<<<<<<<<<<
  *                     else:
  *                         row[variable['variable_name']] = None
  */
-            __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 201, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 207, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
-            __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 201, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 207, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 201, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 201, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 207, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_7, __pyx_t_2) < 0)) __PYX_ERR(0, 201, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_7, __pyx_t_2) < 0)) __PYX_ERR(0, 207, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-            /* "programs/create_db_helpers.py":200
+            /* "programs/create_db_helpers.py":206
  *                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
  *                 for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:
  *                     if variable['variable_name'] in parsed_address[0].keys():             # <<<<<<<<<<<<<<
@@ -5578,7 +5606,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             goto __pyx_L44;
           }
 
-          /* "programs/create_db_helpers.py":203
+          /* "programs/create_db_helpers.py":209
  *                         row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
  *                     else:
  *                         row[variable['variable_name']] = None             # <<<<<<<<<<<<<<
@@ -5586,14 +5614,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  *                     if 'address1' in parsed_address[0].keys():
  */
           /*else*/ {
-            __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
+            __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_v_variable, __pyx_n_s_variable_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 209, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
-            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_2, Py_None) < 0)) __PYX_ERR(0, 203, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_t_2, Py_None) < 0)) __PYX_ERR(0, 209, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           }
           __pyx_L44:;
 
-          /* "programs/create_db_helpers.py":199
+          /* "programs/create_db_helpers.py":205
  *                     else:
  *                         row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
  *                 for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:             # <<<<<<<<<<<<<<
@@ -5603,21 +5631,21 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-        /* "programs/create_db_helpers.py":204
+        /* "programs/create_db_helpers.py":210
  *                     else:
  *                         row[variable['variable_name']] = None
  *                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:             # <<<<<<<<<<<<<<
  *                     if 'address1' in parsed_address[0].keys():
  *                         row['address1'] = parsed_address[0]['address1']
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ast); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ast); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 204, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 204, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_use_remaining_parsed_address); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 204, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_use_remaining_parsed_address); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_t_2 = NULL;
@@ -5633,25 +5661,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __pyx_t_16 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_2, __pyx_t_14) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_14);
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-        if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 204, __pyx_L1_error)
+        if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_7 = PyObject_RichCompare(__pyx_t_16, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 204, __pyx_L1_error)
+        __pyx_t_7 = PyObject_RichCompare(__pyx_t_16, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 204, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 210, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         if (__pyx_t_6) {
 
-          /* "programs/create_db_helpers.py":205
+          /* "programs/create_db_helpers.py":211
  *                         row[variable['variable_name']] = None
  *                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
  *                     if 'address1' in parsed_address[0].keys():             # <<<<<<<<<<<<<<
  *                         row['address1'] = parsed_address[0]['address1']
  *                     else:
  */
-          __pyx_t_16 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 205, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 211, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_keys); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 205, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_keys); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 211, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
           __pyx_t_16 = NULL;
@@ -5666,30 +5694,30 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_7 = (__pyx_t_16) ? __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_t_16) : __Pyx_PyObject_CallNoArg(__pyx_t_14);
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 205, __pyx_L1_error)
+          if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 211, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_address1, __pyx_t_7, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 205, __pyx_L1_error)
+          __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_address1, __pyx_t_7, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 211, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_11 = (__pyx_t_6 != 0);
           if (__pyx_t_11) {
 
-            /* "programs/create_db_helpers.py":206
+            /* "programs/create_db_helpers.py":212
  *                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
  *                     if 'address1' in parsed_address[0].keys():
  *                         row['address1'] = parsed_address[0]['address1']             # <<<<<<<<<<<<<<
  *                     else:
  *                         row['address1'] = None
  */
-            __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 206, __pyx_L1_error)
+            __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_parsed_address, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 212, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_7);
-            __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_address1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 206, __pyx_L1_error)
+            __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_address1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 212, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
             __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_n_s_address1, __pyx_t_14) < 0)) __PYX_ERR(0, 206, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_n_s_address1, __pyx_t_14) < 0)) __PYX_ERR(0, 212, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-            /* "programs/create_db_helpers.py":205
+            /* "programs/create_db_helpers.py":211
  *                         row[variable['variable_name']] = None
  *                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
  *                     if 'address1' in parsed_address[0].keys():             # <<<<<<<<<<<<<<
@@ -5699,7 +5727,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             goto __pyx_L46;
           }
 
-          /* "programs/create_db_helpers.py":208
+          /* "programs/create_db_helpers.py":214
  *                         row['address1'] = parsed_address[0]['address1']
  *                     else:
  *                         row['address1'] = None             # <<<<<<<<<<<<<<
@@ -5707,11 +5735,11 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  *             for r in range(len(data)):
  */
           /*else*/ {
-            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_n_s_address1, Py_None) < 0)) __PYX_ERR(0, 208, __pyx_L1_error)
+            if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_n_s_address1, Py_None) < 0)) __PYX_ERR(0, 214, __pyx_L1_error)
           }
           __pyx_L46:;
 
-          /* "programs/create_db_helpers.py":204
+          /* "programs/create_db_helpers.py":210
  *                     else:
  *                         row[variable['variable_name']] = None
  *                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:             # <<<<<<<<<<<<<<
@@ -5720,7 +5748,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
         }
 
-        /* "programs/create_db_helpers.py":190
+        /* "programs/create_db_helpers.py":196
  *         if ast.literal_eval(CONFIG['parse_address']) == True:
  *             ###For each row, parse the address
  *             for row in data:             # <<<<<<<<<<<<<<
@@ -5730,7 +5758,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":188
+      /* "programs/create_db_helpers.py":194
  *         ##Are we using the parsed address feature? if so, add those variables into the row
  *         ########
  *         if ast.literal_eval(CONFIG['parse_address']) == True:             # <<<<<<<<<<<<<<
@@ -5739,7 +5767,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
     }
 
-    /* "programs/create_db_helpers.py":209
+    /* "programs/create_db_helpers.py":215
  *                     else:
  *                         row['address1'] = None
  *         for p in fuzzy_vars:             # <<<<<<<<<<<<<<
@@ -5750,41 +5778,41 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     for (;;) {
       if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_3)) break;
       #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-      __pyx_t_14 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_14); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_14 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_14); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 215, __pyx_L1_error)
       #else
-      __pyx_t_14 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 209, __pyx_L1_error)
+      __pyx_t_14 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 215, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
       #endif
       __Pyx_XDECREF_SET(__pyx_v_p, __pyx_t_14);
       __pyx_t_14 = 0;
 
-      /* "programs/create_db_helpers.py":210
+      /* "programs/create_db_helpers.py":216
  *                         row['address1'] = None
  *         for p in fuzzy_vars:
  *             for r in range(len(data)):             # <<<<<<<<<<<<<<
  *                 ###fill in NULL for the fuzzy vars
  *                 if pd.isna(data[r][p]) or data[r][p] is None:
  */
-      __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 210, __pyx_L1_error)
+      __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 216, __pyx_L1_error)
       __pyx_t_19 = __pyx_t_15;
       for (__pyx_t_20 = 0; __pyx_t_20 < __pyx_t_19; __pyx_t_20+=1) {
         __pyx_v_r = __pyx_t_20;
 
-        /* "programs/create_db_helpers.py":212
+        /* "programs/create_db_helpers.py":218
  *             for r in range(len(data)):
  *                 ###fill in NULL for the fuzzy vars
  *                 if pd.isna(data[r][p]) or data[r][p] is None:             # <<<<<<<<<<<<<<
  *                     data[r][p] = 'NULL'
  *                 data[r][p] = str(data[r][p]).upper()
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_pd); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_pd); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_isna); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_isna); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __pyx_t_7 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
-        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_7, __pyx_v_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_7, __pyx_v_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
         __pyx_t_7 = NULL;
@@ -5800,19 +5828,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __pyx_t_14 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_7, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_16, __pyx_t_2);
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 212, __pyx_L1_error)
+        if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_14); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __pyx_t_6 = __Pyx_PyObject_IsTrue(__pyx_t_14); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
         if (!__pyx_t_6) {
         } else {
           __pyx_t_11 = __pyx_t_6;
           goto __pyx_L52_bool_binop_done;
         }
-        __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_p); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 212, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_p); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 218, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
         __pyx_t_6 = (__pyx_t_16 == Py_None);
@@ -5822,19 +5850,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __pyx_L52_bool_binop_done:;
         if (__pyx_t_11) {
 
-          /* "programs/create_db_helpers.py":213
+          /* "programs/create_db_helpers.py":219
  *                 ###fill in NULL for the fuzzy vars
  *                 if pd.isna(data[r][p]) or data[r][p] is None:
  *                     data[r][p] = 'NULL'             # <<<<<<<<<<<<<<
  *                 data[r][p] = str(data[r][p]).upper()
  *                 if 'zip' in p.lower():
  */
-          __pyx_t_16 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 213, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 219, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          if (unlikely(PyObject_SetItem(__pyx_t_16, __pyx_v_p, __pyx_n_s_NULL) < 0)) __PYX_ERR(0, 213, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_t_16, __pyx_v_p, __pyx_n_s_NULL) < 0)) __PYX_ERR(0, 219, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":212
+          /* "programs/create_db_helpers.py":218
  *             for r in range(len(data)):
  *                 ###fill in NULL for the fuzzy vars
  *                 if pd.isna(data[r][p]) or data[r][p] is None:             # <<<<<<<<<<<<<<
@@ -5843,22 +5871,22 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
         }
 
-        /* "programs/create_db_helpers.py":214
+        /* "programs/create_db_helpers.py":220
  *                 if pd.isna(data[r][p]) or data[r][p] is None:
  *                     data[r][p] = 'NULL'
  *                 data[r][p] = str(data[r][p]).upper()             # <<<<<<<<<<<<<<
  *                 if 'zip' in p.lower():
  *                     ###find the max length
  */
-        __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 214, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
-        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_p); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-        __pyx_t_14 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_2); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 214, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_2); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_upper); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_upper); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
         __pyx_t_14 = NULL;
@@ -5873,23 +5901,23 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __pyx_t_16 = (__pyx_t_14) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_14) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 214, __pyx_L1_error)
+        if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 214, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_v_p, __pyx_t_16) < 0)) __PYX_ERR(0, 214, __pyx_L1_error)
+        if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_v_p, __pyx_t_16) < 0)) __PYX_ERR(0, 220, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-        /* "programs/create_db_helpers.py":215
+        /* "programs/create_db_helpers.py":221
  *                     data[r][p] = 'NULL'
  *                 data[r][p] = str(data[r][p]).upper()
  *                 if 'zip' in p.lower():             # <<<<<<<<<<<<<<
  *                     ###find the max length
  *                     out = data[r][p].astype(str).tolist()
  */
-        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_p, __pyx_n_s_lower); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 215, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_p, __pyx_n_s_lower); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 221, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __pyx_t_14 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -5903,27 +5931,27 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __pyx_t_16 = (__pyx_t_14) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_14) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
         __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-        if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 215, __pyx_L1_error)
+        if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 221, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_zip, __pyx_t_16, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 215, __pyx_L1_error)
+        __pyx_t_11 = (__Pyx_PySequence_ContainsTF(__pyx_n_s_zip, __pyx_t_16, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 221, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         __pyx_t_21 = (__pyx_t_11 != 0);
         if (__pyx_t_21) {
 
-          /* "programs/create_db_helpers.py":217
+          /* "programs/create_db_helpers.py":223
  *                 if 'zip' in p.lower():
  *                     ###find the max length
  *                     out = data[r][p].astype(str).tolist()             # <<<<<<<<<<<<<<
  *                     ###get the max length
  *                     maxlen = max([len(k) for k in out])
  */
-          __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 217, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 223, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
-          __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_p); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 217, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_14, __pyx_v_p); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 223, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_astype); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 217, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_astype); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 223, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_7 = NULL;
@@ -5938,10 +5966,10 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_2 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_7, ((PyObject *)(&PyString_Type))) : __Pyx_PyObject_CallOneArg(__pyx_t_14, ((PyObject *)(&PyString_Type)));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 217, __pyx_L1_error)
+          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_tolist); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 217, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_tolist); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 223, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __pyx_t_2 = NULL;
@@ -5956,45 +5984,45 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_16 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_14);
           __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-          if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 217, __pyx_L1_error)
+          if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 223, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_XDECREF_SET(__pyx_v_out, __pyx_t_16);
           __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":219
+          /* "programs/create_db_helpers.py":225
  *                     out = data[r][p].astype(str).tolist()
  *                     ###get the max length
  *                     maxlen = max([len(k) for k in out])             # <<<<<<<<<<<<<<
  *                     ###log
  *                     logger.info(
  */
-          __pyx_t_16 = PyList_New(0); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 219, __pyx_L1_error)
+          __pyx_t_16 = PyList_New(0); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 225, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           if (likely(PyList_CheckExact(__pyx_v_out)) || PyTuple_CheckExact(__pyx_v_out)) {
             __pyx_t_14 = __pyx_v_out; __Pyx_INCREF(__pyx_t_14); __pyx_t_22 = 0;
             __pyx_t_13 = NULL;
           } else {
-            __pyx_t_22 = -1; __pyx_t_14 = PyObject_GetIter(__pyx_v_out); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 219, __pyx_L1_error)
+            __pyx_t_22 = -1; __pyx_t_14 = PyObject_GetIter(__pyx_v_out); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 225, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_14);
-            __pyx_t_13 = Py_TYPE(__pyx_t_14)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 219, __pyx_L1_error)
+            __pyx_t_13 = Py_TYPE(__pyx_t_14)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 225, __pyx_L1_error)
           }
           for (;;) {
             if (likely(!__pyx_t_13)) {
               if (likely(PyList_CheckExact(__pyx_t_14))) {
                 if (__pyx_t_22 >= PyList_GET_SIZE(__pyx_t_14)) break;
                 #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-                __pyx_t_2 = PyList_GET_ITEM(__pyx_t_14, __pyx_t_22); __Pyx_INCREF(__pyx_t_2); __pyx_t_22++; if (unlikely(0 < 0)) __PYX_ERR(0, 219, __pyx_L1_error)
+                __pyx_t_2 = PyList_GET_ITEM(__pyx_t_14, __pyx_t_22); __Pyx_INCREF(__pyx_t_2); __pyx_t_22++; if (unlikely(0 < 0)) __PYX_ERR(0, 225, __pyx_L1_error)
                 #else
-                __pyx_t_2 = PySequence_ITEM(__pyx_t_14, __pyx_t_22); __pyx_t_22++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
+                __pyx_t_2 = PySequence_ITEM(__pyx_t_14, __pyx_t_22); __pyx_t_22++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_2);
                 #endif
               } else {
                 if (__pyx_t_22 >= PyTuple_GET_SIZE(__pyx_t_14)) break;
                 #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-                __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_14, __pyx_t_22); __Pyx_INCREF(__pyx_t_2); __pyx_t_22++; if (unlikely(0 < 0)) __PYX_ERR(0, 219, __pyx_L1_error)
+                __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_14, __pyx_t_22); __Pyx_INCREF(__pyx_t_2); __pyx_t_22++; if (unlikely(0 < 0)) __PYX_ERR(0, 225, __pyx_L1_error)
                 #else
-                __pyx_t_2 = PySequence_ITEM(__pyx_t_14, __pyx_t_22); __pyx_t_22++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
+                __pyx_t_2 = PySequence_ITEM(__pyx_t_14, __pyx_t_22); __pyx_t_22++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
                 __Pyx_GOTREF(__pyx_t_2);
                 #endif
               }
@@ -6004,7 +6032,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
                 PyObject* exc_type = PyErr_Occurred();
                 if (exc_type) {
                   if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                  else __PYX_ERR(0, 219, __pyx_L1_error)
+                  else __PYX_ERR(0, 225, __pyx_L1_error)
                 }
                 break;
               }
@@ -6012,43 +6040,43 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             }
             __Pyx_XDECREF_SET(__pyx_v_k, __pyx_t_2);
             __pyx_t_2 = 0;
-            __pyx_t_23 = PyObject_Length(__pyx_v_k); if (unlikely(__pyx_t_23 == ((Py_ssize_t)-1))) __PYX_ERR(0, 219, __pyx_L1_error)
-            __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_23); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 219, __pyx_L1_error)
+            __pyx_t_23 = PyObject_Length(__pyx_v_k); if (unlikely(__pyx_t_23 == ((Py_ssize_t)-1))) __PYX_ERR(0, 225, __pyx_L1_error)
+            __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_23); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 225, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
-            if (unlikely(__Pyx_ListComp_Append(__pyx_t_16, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 219, __pyx_L1_error)
+            if (unlikely(__Pyx_ListComp_Append(__pyx_t_16, (PyObject*)__pyx_t_2))) __PYX_ERR(0, 225, __pyx_L1_error)
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           }
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_14 = __Pyx_PyObject_CallOneArg(__pyx_builtin_max, __pyx_t_16); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 219, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_CallOneArg(__pyx_builtin_max, __pyx_t_16); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 225, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
           __Pyx_XDECREF_SET(__pyx_v_maxlen, __pyx_t_14);
           __pyx_t_14 = 0;
 
-          /* "programs/create_db_helpers.py":221
+          /* "programs/create_db_helpers.py":227
  *                     maxlen = max([len(k) for k in out])
  *                     ###log
  *                     logger.info(             # <<<<<<<<<<<<<<
  *                         '''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(
  *                             p, dataname))
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_logger); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 221, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_16, __pyx_n_s_logger); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 227, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_info); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 221, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_info); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 227, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":222
+          /* "programs/create_db_helpers.py":228
  *                     ###log
  *                     logger.info(
  *                         '''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(             # <<<<<<<<<<<<<<
  *                             p, dataname))
  *                     data[r][p] = data[r][p].astype(str).str.zfill(maxlen)
  */
-          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Variable_for_data_is_likely_to_b, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 222, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Variable_for_data_is_likely_to_b, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 228, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
 
-          /* "programs/create_db_helpers.py":223
+          /* "programs/create_db_helpers.py":229
  *                     logger.info(
  *                         '''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(
  *                             p, dataname))             # <<<<<<<<<<<<<<
@@ -6070,7 +6098,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_7)) {
             PyObject *__pyx_temp[3] = {__pyx_t_17, __pyx_v_p, __pyx_v_dataname};
-            __pyx_t_16 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 222, __pyx_L1_error)
+            __pyx_t_16 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 228, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
             __Pyx_GOTREF(__pyx_t_16);
           } else
@@ -6078,13 +6106,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
             PyObject *__pyx_temp[3] = {__pyx_t_17, __pyx_v_p, __pyx_v_dataname};
-            __pyx_t_16 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 222, __pyx_L1_error)
+            __pyx_t_16 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 228, __pyx_L1_error)
             __Pyx_XDECREF(__pyx_t_17); __pyx_t_17 = 0;
             __Pyx_GOTREF(__pyx_t_16);
           } else
           #endif
           {
-            __pyx_t_1 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 222, __pyx_L1_error)
+            __pyx_t_1 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 228, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_1);
             if (__pyx_t_17) {
               __Pyx_GIVEREF(__pyx_t_17); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_17); __pyx_t_17 = NULL;
@@ -6095,7 +6123,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             __Pyx_INCREF(__pyx_v_dataname);
             __Pyx_GIVEREF(__pyx_v_dataname);
             PyTuple_SET_ITEM(__pyx_t_1, 1+__pyx_t_10, __pyx_v_dataname);
-            __pyx_t_16 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 222, __pyx_L1_error)
+            __pyx_t_16 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_1, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 228, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_16);
             __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           }
@@ -6113,24 +6141,24 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           __pyx_t_14 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_7, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_16);
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 221, __pyx_L1_error)
+          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 227, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-          /* "programs/create_db_helpers.py":224
+          /* "programs/create_db_helpers.py":230
  *                         '''Variable {} for data {} is likely to be a zipcode variable.  Converted to a zero-filled string.  If you didn't want this to happen, change the variable name to not include 'zip' '''.format(
  *                             p, dataname))
  *                     data[r][p] = data[r][p].astype(str).str.zfill(maxlen)             # <<<<<<<<<<<<<<
  *         # 2) Standardized via stemming any fuzzy matching variables
  *         if ast.literal_eval(CONFIG['stem_phrase']) == True:
  */
-          __pyx_t_16 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 224, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_16, __pyx_v_p); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 224, __pyx_L1_error)
+          __pyx_t_7 = __Pyx_PyObject_GetItem(__pyx_t_16, __pyx_v_p); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_7);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_astype); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 224, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_astype); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           __pyx_t_7 = NULL;
@@ -6145,13 +6173,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_2 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_16, __pyx_t_7, ((PyObject *)(&PyString_Type))) : __Pyx_PyObject_CallOneArg(__pyx_t_16, ((PyObject *)(&PyString_Type)));
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
+          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_str); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 224, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_str); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_zfill); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_zfill); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
           __pyx_t_16 = NULL;
@@ -6166,16 +6194,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_14 = (__pyx_t_16) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_16, __pyx_v_maxlen) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_maxlen);
           __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
-          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 224, __pyx_L1_error)
+          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 224, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_GetItemInt(__pyx_v_data, __pyx_v_r, Py_ssize_t, 1, PyInt_FromSsize_t, 0, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
-          if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_v_p, __pyx_t_14) < 0)) __PYX_ERR(0, 224, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_t_2, __pyx_v_p, __pyx_t_14) < 0)) __PYX_ERR(0, 230, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-          /* "programs/create_db_helpers.py":215
+          /* "programs/create_db_helpers.py":221
  *                     data[r][p] = 'NULL'
  *                 data[r][p] = str(data[r][p]).upper()
  *                 if 'zip' in p.lower():             # <<<<<<<<<<<<<<
@@ -6185,7 +6213,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
       }
 
-      /* "programs/create_db_helpers.py":209
+      /* "programs/create_db_helpers.py":215
  *                     else:
  *                         row['address1'] = None
  *         for p in fuzzy_vars:             # <<<<<<<<<<<<<<
@@ -6195,21 +6223,21 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "programs/create_db_helpers.py":226
+    /* "programs/create_db_helpers.py":232
  *                     data[r][p] = data[r][p].astype(str).str.zfill(maxlen)
  *         # 2) Standardized via stemming any fuzzy matching variables
  *         if ast.literal_eval(CONFIG['stem_phrase']) == True:             # <<<<<<<<<<<<<<
  *             for var in fuzzy_vars:
  *                 ###first convert to all upper case
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_ast); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_ast); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_stem_phrase); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_stem_phrase); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
     __pyx_t_14 = NULL;
@@ -6225,16 +6253,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     __pyx_t_3 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_14, __pyx_t_16) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_16);
     __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
-    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 226, __pyx_L1_error)
+    if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 226, __pyx_L1_error)
+    __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_21) {
 
-      /* "programs/create_db_helpers.py":227
+      /* "programs/create_db_helpers.py":233
  *         # 2) Standardized via stemming any fuzzy matching variables
  *         if ast.literal_eval(CONFIG['stem_phrase']) == True:
  *             for var in fuzzy_vars:             # <<<<<<<<<<<<<<
@@ -6245,47 +6273,47 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       for (;;) {
         if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_2)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 227, __pyx_L1_error)
+        __pyx_t_3 = PyList_GET_ITEM(__pyx_t_2, __pyx_t_12); __Pyx_INCREF(__pyx_t_3); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 233, __pyx_L1_error)
         #else
-        __pyx_t_3 = PySequence_ITEM(__pyx_t_2, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
+        __pyx_t_3 = PySequence_ITEM(__pyx_t_2, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 233, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         #endif
         __Pyx_XDECREF_SET(__pyx_v_var, __pyx_t_3);
         __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":230
+        /* "programs/create_db_helpers.py":236
  *                 ###first convert to all upper case
  *                 ###get the list of the entries
  *                 to_stem = [j[var] for j in data]             # <<<<<<<<<<<<<<
  *                 ###to get through our stemmer, we need to convert nulls to
  *                 out = []
  */
-        __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 230, __pyx_L1_error)
+        __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 236, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         if (likely(PyList_CheckExact(__pyx_v_data)) || PyTuple_CheckExact(__pyx_v_data)) {
           __pyx_t_16 = __pyx_v_data; __Pyx_INCREF(__pyx_t_16); __pyx_t_15 = 0;
           __pyx_t_13 = NULL;
         } else {
-          __pyx_t_15 = -1; __pyx_t_16 = PyObject_GetIter(__pyx_v_data); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 230, __pyx_L1_error)
+          __pyx_t_15 = -1; __pyx_t_16 = PyObject_GetIter(__pyx_v_data); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 236, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_13 = Py_TYPE(__pyx_t_16)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 230, __pyx_L1_error)
+          __pyx_t_13 = Py_TYPE(__pyx_t_16)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 236, __pyx_L1_error)
         }
         for (;;) {
           if (likely(!__pyx_t_13)) {
             if (likely(PyList_CheckExact(__pyx_t_16))) {
               if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_16)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_14 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_14); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 230, __pyx_L1_error)
+              __pyx_t_14 = PyList_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_14); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 236, __pyx_L1_error)
               #else
-              __pyx_t_14 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
+              __pyx_t_14 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 236, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_14);
               #endif
             } else {
               if (__pyx_t_15 >= PyTuple_GET_SIZE(__pyx_t_16)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_14 = PyTuple_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_14); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 230, __pyx_L1_error)
+              __pyx_t_14 = PyTuple_GET_ITEM(__pyx_t_16, __pyx_t_15); __Pyx_INCREF(__pyx_t_14); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 236, __pyx_L1_error)
               #else
-              __pyx_t_14 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
+              __pyx_t_14 = PySequence_ITEM(__pyx_t_16, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 236, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_14);
               #endif
             }
@@ -6295,7 +6323,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
               PyObject* exc_type = PyErr_Occurred();
               if (exc_type) {
                 if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                else __PYX_ERR(0, 230, __pyx_L1_error)
+                else __PYX_ERR(0, 236, __pyx_L1_error)
               }
               break;
             }
@@ -6303,28 +6331,28 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __Pyx_XDECREF_SET(__pyx_v_j, __pyx_t_14);
           __pyx_t_14 = 0;
-          __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_v_j, __pyx_v_var); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 230, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_v_j, __pyx_v_var); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 236, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
-          if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_14))) __PYX_ERR(0, 230, __pyx_L1_error)
+          if (unlikely(__Pyx_ListComp_Append(__pyx_t_3, (PyObject*)__pyx_t_14))) __PYX_ERR(0, 236, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
         }
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         __Pyx_XDECREF_SET(__pyx_v_to_stem, ((PyObject*)__pyx_t_3));
         __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":232
+        /* "programs/create_db_helpers.py":238
  *                 to_stem = [j[var] for j in data]
  *                 ###to get through our stemmer, we need to convert nulls to
  *                 out = []             # <<<<<<<<<<<<<<
  *                 for k in to_stem:
  *                     out.append(stem_fuzzy(k))
  */
-        __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 232, __pyx_L1_error)
+        __pyx_t_3 = PyList_New(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 238, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_XDECREF_SET(__pyx_v_out, __pyx_t_3);
         __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":233
+        /* "programs/create_db_helpers.py":239
  *                 ###to get through our stemmer, we need to convert nulls to
  *                 out = []
  *                 for k in to_stem:             # <<<<<<<<<<<<<<
@@ -6335,22 +6363,22 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         for (;;) {
           if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_16 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 233, __pyx_L1_error)
+          __pyx_t_16 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 239, __pyx_L1_error)
           #else
-          __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 233, __pyx_L1_error)
+          __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 239, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           #endif
           __Pyx_XDECREF_SET(__pyx_v_k, __pyx_t_16);
           __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":234
+          /* "programs/create_db_helpers.py":240
  *                 out = []
  *                 for k in to_stem:
  *                     out.append(stem_fuzzy(k))             # <<<<<<<<<<<<<<
  *                 # out=pool.map(stem_fuzzy, to_stem)
  *                 ###now we have it, replace the original value
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_stem_fuzzy); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 234, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_stem_fuzzy); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 240, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
           __pyx_t_7 = NULL;
           if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_14))) {
@@ -6364,13 +6392,13 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           }
           __pyx_t_16 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_7, __pyx_v_k) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_v_k);
           __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-          if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 234, __pyx_L1_error)
+          if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 240, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-          __pyx_t_9 = __Pyx_PyObject_Append(__pyx_v_out, __pyx_t_16); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 234, __pyx_L1_error)
+          __pyx_t_9 = __Pyx_PyObject_Append(__pyx_v_out, __pyx_t_16); if (unlikely(__pyx_t_9 == ((int)-1))) __PYX_ERR(0, 240, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":233
+          /* "programs/create_db_helpers.py":239
  *                 ###to get through our stemmer, we need to convert nulls to
  *                 out = []
  *                 for k in to_stem:             # <<<<<<<<<<<<<<
@@ -6380,26 +6408,26 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":237
+        /* "programs/create_db_helpers.py":243
  *                 # out=pool.map(stem_fuzzy, to_stem)
  *                 ###now we have it, replace the original value
  *                 for i in range(len(data)):             # <<<<<<<<<<<<<<
  *                     data[i][var] = out[i]
  *         # 3) check if table exists
  */
-        __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 237, __pyx_L1_error)
-        __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_15); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 237, __pyx_L1_error)
+        __pyx_t_15 = PyObject_Length(__pyx_v_data); if (unlikely(__pyx_t_15 == ((Py_ssize_t)-1))) __PYX_ERR(0, 243, __pyx_L1_error)
+        __pyx_t_3 = PyInt_FromSsize_t(__pyx_t_15); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 243, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_16 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 237, __pyx_L1_error)
+        __pyx_t_16 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_3); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 243, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_16);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (likely(PyList_CheckExact(__pyx_t_16)) || PyTuple_CheckExact(__pyx_t_16)) {
           __pyx_t_3 = __pyx_t_16; __Pyx_INCREF(__pyx_t_3); __pyx_t_15 = 0;
           __pyx_t_13 = NULL;
         } else {
-          __pyx_t_15 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_16); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 237, __pyx_L1_error)
+          __pyx_t_15 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_16); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 243, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_13 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 237, __pyx_L1_error)
+          __pyx_t_13 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 243, __pyx_L1_error)
         }
         __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
         for (;;) {
@@ -6407,17 +6435,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             if (likely(PyList_CheckExact(__pyx_t_3))) {
               if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_3)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_16 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 237, __pyx_L1_error)
+              __pyx_t_16 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 243, __pyx_L1_error)
               #else
-              __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 237, __pyx_L1_error)
+              __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 243, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_16);
               #endif
             } else {
               if (__pyx_t_15 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
               #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-              __pyx_t_16 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 237, __pyx_L1_error)
+              __pyx_t_16 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_15); __Pyx_INCREF(__pyx_t_16); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 243, __pyx_L1_error)
               #else
-              __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 237, __pyx_L1_error)
+              __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 243, __pyx_L1_error)
               __Pyx_GOTREF(__pyx_t_16);
               #endif
             }
@@ -6427,7 +6455,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
               PyObject* exc_type = PyErr_Occurred();
               if (exc_type) {
                 if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                else __PYX_ERR(0, 237, __pyx_L1_error)
+                else __PYX_ERR(0, 243, __pyx_L1_error)
               }
               break;
             }
@@ -6436,22 +6464,22 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_16);
           __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":238
+          /* "programs/create_db_helpers.py":244
  *                 ###now we have it, replace the original value
  *                 for i in range(len(data)):
  *                     data[i][var] = out[i]             # <<<<<<<<<<<<<<
  *         # 3) check if table exists
- *         ####First a quick check on if the table exists.  If not, create it.
+ *         ###convert all column headers to lower case
  */
-          __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_v_out, __pyx_v_i); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 238, __pyx_L1_error)
+          __pyx_t_16 = __Pyx_PyObject_GetItem(__pyx_v_out, __pyx_v_i); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 244, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_16);
-          __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_v_data, __pyx_v_i); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 238, __pyx_L1_error)
+          __pyx_t_14 = __Pyx_PyObject_GetItem(__pyx_v_data, __pyx_v_i); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 244, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_14);
-          if (unlikely(PyObject_SetItem(__pyx_t_14, __pyx_v_var, __pyx_t_16) < 0)) __PYX_ERR(0, 238, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_t_14, __pyx_v_var, __pyx_t_16) < 0)) __PYX_ERR(0, 244, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-          /* "programs/create_db_helpers.py":237
+          /* "programs/create_db_helpers.py":243
  *                 # out=pool.map(stem_fuzzy, to_stem)
  *                 ###now we have it, replace the original value
  *                 for i in range(len(data)):             # <<<<<<<<<<<<<<
@@ -6461,7 +6489,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         }
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "programs/create_db_helpers.py":227
+        /* "programs/create_db_helpers.py":233
  *         # 2) Standardized via stemming any fuzzy matching variables
  *         if ast.literal_eval(CONFIG['stem_phrase']) == True:
  *             for var in fuzzy_vars:             # <<<<<<<<<<<<<<
@@ -6471,7 +6499,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "programs/create_db_helpers.py":226
+      /* "programs/create_db_helpers.py":232
  *                     data[r][p] = data[r][p].astype(str).str.zfill(maxlen)
  *         # 2) Standardized via stemming any fuzzy matching variables
  *         if ast.literal_eval(CONFIG['stem_phrase']) == True:             # <<<<<<<<<<<<<<
@@ -6480,8 +6508,205 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
     }
 
-    /* "programs/create_db_helpers.py":241
+    /* "programs/create_db_helpers.py":247
  *         # 3) check if table exists
+ *         ###convert all column headers to lower case
+ *         data = [{k.lower(): v for k, v in x.items()} for x in data]             # <<<<<<<<<<<<<<
+ *         ####First a quick check on if the table exists.  If not, create it.
+ *         if table_exists==False:
+ */
+    __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 247, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    if (likely(PyList_CheckExact(__pyx_v_data)) || PyTuple_CheckExact(__pyx_v_data)) {
+      __pyx_t_3 = __pyx_v_data; __Pyx_INCREF(__pyx_t_3); __pyx_t_12 = 0;
+      __pyx_t_13 = NULL;
+    } else {
+      __pyx_t_12 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 247, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_13 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 247, __pyx_L1_error)
+    }
+    for (;;) {
+      if (likely(!__pyx_t_13)) {
+        if (likely(PyList_CheckExact(__pyx_t_3))) {
+          if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_3)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_16 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_16); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 247, __pyx_L1_error)
+          #else
+          __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 247, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_16);
+          #endif
+        } else {
+          if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_16 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_12); __Pyx_INCREF(__pyx_t_16); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 247, __pyx_L1_error)
+          #else
+          __pyx_t_16 = PySequence_ITEM(__pyx_t_3, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 247, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_16);
+          #endif
+        }
+      } else {
+        __pyx_t_16 = __pyx_t_13(__pyx_t_3);
+        if (unlikely(!__pyx_t_16)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else __PYX_ERR(0, 247, __pyx_L1_error)
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_16);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_x, __pyx_t_16);
+      __pyx_t_16 = 0;
+      { /* enter inner scope */
+        __pyx_t_16 = PyDict_New(); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 247, __pyx_L70_error)
+        __Pyx_GOTREF(__pyx_t_16);
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_x, __pyx_n_s_items); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 247, __pyx_L70_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __pyx_t_1 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+          __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_7);
+          if (likely(__pyx_t_1)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+            __Pyx_INCREF(__pyx_t_1);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_7, function);
+          }
+        }
+        __pyx_t_14 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
+        __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+        if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 247, __pyx_L70_error)
+        __Pyx_GOTREF(__pyx_t_14);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        if (likely(PyList_CheckExact(__pyx_t_14)) || PyTuple_CheckExact(__pyx_t_14)) {
+          __pyx_t_7 = __pyx_t_14; __Pyx_INCREF(__pyx_t_7); __pyx_t_15 = 0;
+          __pyx_t_18 = NULL;
+        } else {
+          __pyx_t_15 = -1; __pyx_t_7 = PyObject_GetIter(__pyx_t_14); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 247, __pyx_L70_error)
+          __Pyx_GOTREF(__pyx_t_7);
+          __pyx_t_18 = Py_TYPE(__pyx_t_7)->tp_iternext; if (unlikely(!__pyx_t_18)) __PYX_ERR(0, 247, __pyx_L70_error)
+        }
+        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        for (;;) {
+          if (likely(!__pyx_t_18)) {
+            if (likely(PyList_CheckExact(__pyx_t_7))) {
+              if (__pyx_t_15 >= PyList_GET_SIZE(__pyx_t_7)) break;
+              #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+              __pyx_t_14 = PyList_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_14); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 247, __pyx_L70_error)
+              #else
+              __pyx_t_14 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 247, __pyx_L70_error)
+              __Pyx_GOTREF(__pyx_t_14);
+              #endif
+            } else {
+              if (__pyx_t_15 >= PyTuple_GET_SIZE(__pyx_t_7)) break;
+              #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+              __pyx_t_14 = PyTuple_GET_ITEM(__pyx_t_7, __pyx_t_15); __Pyx_INCREF(__pyx_t_14); __pyx_t_15++; if (unlikely(0 < 0)) __PYX_ERR(0, 247, __pyx_L70_error)
+              #else
+              __pyx_t_14 = PySequence_ITEM(__pyx_t_7, __pyx_t_15); __pyx_t_15++; if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 247, __pyx_L70_error)
+              __Pyx_GOTREF(__pyx_t_14);
+              #endif
+            }
+          } else {
+            __pyx_t_14 = __pyx_t_18(__pyx_t_7);
+            if (unlikely(!__pyx_t_14)) {
+              PyObject* exc_type = PyErr_Occurred();
+              if (exc_type) {
+                if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+                else __PYX_ERR(0, 247, __pyx_L70_error)
+              }
+              break;
+            }
+            __Pyx_GOTREF(__pyx_t_14);
+          }
+          if ((likely(PyTuple_CheckExact(__pyx_t_14))) || (PyList_CheckExact(__pyx_t_14))) {
+            PyObject* sequence = __pyx_t_14;
+            Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
+            if (unlikely(size != 2)) {
+              if (size > 2) __Pyx_RaiseTooManyValuesError(2);
+              else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
+              __PYX_ERR(0, 247, __pyx_L70_error)
+            }
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            if (likely(PyTuple_CheckExact(sequence))) {
+              __pyx_t_1 = PyTuple_GET_ITEM(sequence, 0); 
+              __pyx_t_17 = PyTuple_GET_ITEM(sequence, 1); 
+            } else {
+              __pyx_t_1 = PyList_GET_ITEM(sequence, 0); 
+              __pyx_t_17 = PyList_GET_ITEM(sequence, 1); 
+            }
+            __Pyx_INCREF(__pyx_t_1);
+            __Pyx_INCREF(__pyx_t_17);
+            #else
+            __pyx_t_1 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 247, __pyx_L70_error)
+            __Pyx_GOTREF(__pyx_t_1);
+            __pyx_t_17 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 247, __pyx_L70_error)
+            __Pyx_GOTREF(__pyx_t_17);
+            #endif
+            __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+          } else {
+            Py_ssize_t index = -1;
+            __pyx_t_24 = PyObject_GetIter(__pyx_t_14); if (unlikely(!__pyx_t_24)) __PYX_ERR(0, 247, __pyx_L70_error)
+            __Pyx_GOTREF(__pyx_t_24);
+            __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+            __pyx_t_25 = Py_TYPE(__pyx_t_24)->tp_iternext;
+            index = 0; __pyx_t_1 = __pyx_t_25(__pyx_t_24); if (unlikely(!__pyx_t_1)) goto __pyx_L73_unpacking_failed;
+            __Pyx_GOTREF(__pyx_t_1);
+            index = 1; __pyx_t_17 = __pyx_t_25(__pyx_t_24); if (unlikely(!__pyx_t_17)) goto __pyx_L73_unpacking_failed;
+            __Pyx_GOTREF(__pyx_t_17);
+            if (__Pyx_IternextUnpackEndCheck(__pyx_t_25(__pyx_t_24), 2) < 0) __PYX_ERR(0, 247, __pyx_L70_error)
+            __pyx_t_25 = NULL;
+            __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
+            goto __pyx_L74_unpacking_done;
+            __pyx_L73_unpacking_failed:;
+            __Pyx_DECREF(__pyx_t_24); __pyx_t_24 = 0;
+            __pyx_t_25 = NULL;
+            if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
+            __PYX_ERR(0, 247, __pyx_L70_error)
+            __pyx_L74_unpacking_done:;
+          }
+          __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_k, __pyx_t_1);
+          __pyx_t_1 = 0;
+          __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_v, __pyx_t_17);
+          __pyx_t_17 = 0;
+          __pyx_t_17 = __Pyx_PyObject_GetAttrStr(__pyx_8genexpr1__pyx_v_k, __pyx_n_s_lower); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 247, __pyx_L70_error)
+          __Pyx_GOTREF(__pyx_t_17);
+          __pyx_t_1 = NULL;
+          if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_17))) {
+            __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_17);
+            if (likely(__pyx_t_1)) {
+              PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_17);
+              __Pyx_INCREF(__pyx_t_1);
+              __Pyx_INCREF(function);
+              __Pyx_DECREF_SET(__pyx_t_17, function);
+            }
+          }
+          __pyx_t_14 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_17, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_17);
+          __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
+          if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 247, __pyx_L70_error)
+          __Pyx_GOTREF(__pyx_t_14);
+          __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
+          if (unlikely(PyDict_SetItem(__pyx_t_16, (PyObject*)__pyx_t_14, (PyObject*)__pyx_8genexpr1__pyx_v_v))) __PYX_ERR(0, 247, __pyx_L70_error)
+          __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        }
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_k); __pyx_8genexpr1__pyx_v_k = 0;
+        __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_v); __pyx_8genexpr1__pyx_v_v = 0;
+        goto __pyx_L75_exit_scope;
+        __pyx_L70_error:;
+        __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_k); __pyx_8genexpr1__pyx_v_k = 0;
+        __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_v); __pyx_8genexpr1__pyx_v_v = 0;
+        goto __pyx_L1_error;
+        __pyx_L75_exit_scope:;
+      } /* exit inner scope */
+      if (unlikely(__Pyx_ListComp_Append(__pyx_t_2, (PyObject*)__pyx_t_16))) __PYX_ERR(0, 247, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
+    }
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF_SET(__pyx_v_data, __pyx_t_2);
+    __pyx_t_2 = 0;
+
+    /* "programs/create_db_helpers.py":249
+ *         data = [{k.lower(): v for k, v in x.items()} for x in data]
  *         ####First a quick check on if the table exists.  If not, create it.
  *         if table_exists==False:             # <<<<<<<<<<<<<<
  *             #print('creating table')
@@ -6490,37 +6715,37 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
     __pyx_t_21 = ((__pyx_v_table_exists == 0) != 0);
     if (__pyx_t_21) {
 
-      /* "programs/create_db_helpers.py":244
+      /* "programs/create_db_helpers.py":252
  *             #print('creating table')
  *             #print(pd.DataFrame(data).dtypes)
  *             outcome = create_table(data_source,pd.DataFrame(data).dtypes)             # <<<<<<<<<<<<<<
  *             if outcome =='success':
  *                 table_exists=True
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_create_table_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 244, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_create_table_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_pd); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 244, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_14);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 244, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_pd); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 252, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_t_14 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_14)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_14);
+      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 252, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_14);
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_7 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_14))) {
+        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_14);
+        if (likely(__pyx_t_7)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_14);
+          __Pyx_INCREF(__pyx_t_7);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
+          __Pyx_DECREF_SET(__pyx_t_14, function);
         }
       }
-      __pyx_t_16 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_14, __pyx_v_data) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_data);
-      __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
-      if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 244, __pyx_L1_error)
+      __pyx_t_16 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_7, __pyx_v_data) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_v_data);
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 252, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_dtypes); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 244, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_16, __pyx_n_s_dtypes); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 252, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __pyx_t_16 = NULL;
       __pyx_t_10 = 0;
@@ -6536,53 +6761,53 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_v_data_source, __pyx_t_7};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 244, __pyx_L1_error)
+        PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_v_data_source, __pyx_t_14};
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
         __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_v_data_source, __pyx_t_7};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 244, __pyx_L1_error)
+        PyObject *__pyx_temp[3] = {__pyx_t_16, __pyx_v_data_source, __pyx_t_14};
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_16); __pyx_t_16 = 0;
         __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 244, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_14);
+        __pyx_t_7 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 252, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         if (__pyx_t_16) {
-          __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_16); __pyx_t_16 = NULL;
+          __Pyx_GIVEREF(__pyx_t_16); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_16); __pyx_t_16 = NULL;
         }
         __Pyx_INCREF(__pyx_v_data_source);
         __Pyx_GIVEREF(__pyx_v_data_source);
-        PyTuple_SET_ITEM(__pyx_t_14, 0+__pyx_t_10, __pyx_v_data_source);
-        __Pyx_GIVEREF(__pyx_t_7);
-        PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_10, __pyx_t_7);
-        __pyx_t_7 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_14, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 244, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_10, __pyx_v_data_source);
+        __Pyx_GIVEREF(__pyx_t_14);
+        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_10, __pyx_t_14);
+        __pyx_t_14 = 0;
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_XDECREF_SET(__pyx_v_outcome, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "programs/create_db_helpers.py":245
+      /* "programs/create_db_helpers.py":253
  *             #print(pd.DataFrame(data).dtypes)
  *             outcome = create_table(data_source,pd.DataFrame(data).dtypes)
  *             if outcome =='success':             # <<<<<<<<<<<<<<
  *                 table_exists=True
  *             else: break
  */
-      __pyx_t_21 = (__Pyx_PyString_Equals(__pyx_v_outcome, __pyx_n_s_success, Py_EQ)); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 245, __pyx_L1_error)
+      __pyx_t_21 = (__Pyx_PyString_Equals(__pyx_v_outcome, __pyx_n_s_success, Py_EQ)); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 253, __pyx_L1_error)
       if (__pyx_t_21) {
 
-        /* "programs/create_db_helpers.py":246
+        /* "programs/create_db_helpers.py":254
  *             outcome = create_table(data_source,pd.DataFrame(data).dtypes)
  *             if outcome =='success':
  *                 table_exists=True             # <<<<<<<<<<<<<<
@@ -6591,17 +6816,17 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
         __pyx_v_table_exists = 1;
 
-        /* "programs/create_db_helpers.py":245
+        /* "programs/create_db_helpers.py":253
  *             #print(pd.DataFrame(data).dtypes)
  *             outcome = create_table(data_source,pd.DataFrame(data).dtypes)
  *             if outcome =='success':             # <<<<<<<<<<<<<<
  *                 table_exists=True
  *             else: break
  */
-        goto __pyx_L67;
+        goto __pyx_L77;
       }
 
-      /* "programs/create_db_helpers.py":247
+      /* "programs/create_db_helpers.py":255
  *             if outcome =='success':
  *                 table_exists=True
  *             else: break             # <<<<<<<<<<<<<<
@@ -6611,10 +6836,10 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       /*else*/ {
         goto __pyx_L21_break;
       }
-      __pyx_L67:;
+      __pyx_L77:;
 
-      /* "programs/create_db_helpers.py":241
- *         # 3) check if table exists
+      /* "programs/create_db_helpers.py":249
+ *         data = [{k.lower(): v for k, v in x.items()} for x in data]
  *         ####First a quick check on if the table exists.  If not, create it.
  *         if table_exists==False:             # <<<<<<<<<<<<<<
  *             #print('creating table')
@@ -6622,61 +6847,61 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
     }
 
-    /* "programs/create_db_helpers.py":249
+    /* "programs/create_db_helpers.py":257
  *             else: break
  *         # 4) Push to DB
  *         if ast.literal_eval(CONFIG['prediction']) == True:             # <<<<<<<<<<<<<<
  *             write_out= write_to_db(data, data_source)
  *             if write_out:
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_ast); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_ast); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 257, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_14);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_prediction); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 257, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 257, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_prediction); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 257, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_14);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_14))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_14);
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_7);
       if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_14);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
         __Pyx_INCREF(__pyx_t_3);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_14, function);
+        __Pyx_DECREF_SET(__pyx_t_7, function);
       }
     }
-    __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_t_7);
+    __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_3, __pyx_t_14) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_14);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 257, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-    __pyx_t_14 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_14); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 249, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 257, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_t_14); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 249, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+    __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 257, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     if (__pyx_t_21) {
 
-      /* "programs/create_db_helpers.py":250
+      /* "programs/create_db_helpers.py":258
  *         # 4) Push to DB
  *         if ast.literal_eval(CONFIG['prediction']) == True:
  *             write_out= write_to_db(data, data_source)             # <<<<<<<<<<<<<<
  *             if write_out:
  *                 logger.info('Failed to write data to database, breaking')
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_write_to_db); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 250, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_write_to_db); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 258, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = NULL;
+      __pyx_t_14 = NULL;
       __pyx_t_10 = 0;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_7)) {
+        __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_2);
+        if (likely(__pyx_t_14)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_7);
+          __Pyx_INCREF(__pyx_t_14);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_2, function);
           __pyx_t_10 = 1;
@@ -6684,25 +6909,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_2)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_v_data, __pyx_v_data_source};
-        __pyx_t_14 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 250, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __Pyx_GOTREF(__pyx_t_14);
+        PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_v_data, __pyx_v_data_source};
+        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 258, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+        __Pyx_GOTREF(__pyx_t_7);
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_v_data, __pyx_v_data_source};
-        __pyx_t_14 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 250, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-        __Pyx_GOTREF(__pyx_t_14);
+        PyObject *__pyx_temp[3] = {__pyx_t_14, __pyx_v_data, __pyx_v_data_source};
+        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 258, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+        __Pyx_GOTREF(__pyx_t_7);
       } else
       #endif
       {
-        __pyx_t_3 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 250, __pyx_L1_error)
+        __pyx_t_3 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 258, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        if (__pyx_t_7) {
-          __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_7); __pyx_t_7 = NULL;
+        if (__pyx_t_14) {
+          __Pyx_GIVEREF(__pyx_t_14); PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_14); __pyx_t_14 = NULL;
         }
         __Pyx_INCREF(__pyx_v_data);
         __Pyx_GIVEREF(__pyx_v_data);
@@ -6710,34 +6935,34 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __Pyx_INCREF(__pyx_v_data_source);
         __Pyx_GIVEREF(__pyx_v_data_source);
         PyTuple_SET_ITEM(__pyx_t_3, 1+__pyx_t_10, __pyx_v_data_source);
-        __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 250, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_14);
+        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 258, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       }
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_XDECREF_SET(__pyx_v_write_out, __pyx_t_14);
-      __pyx_t_14 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_write_out, __pyx_t_7);
+      __pyx_t_7 = 0;
 
-      /* "programs/create_db_helpers.py":251
+      /* "programs/create_db_helpers.py":259
  *         if ast.literal_eval(CONFIG['prediction']) == True:
  *             write_out= write_to_db(data, data_source)
  *             if write_out:             # <<<<<<<<<<<<<<
  *                 logger.info('Failed to write data to database, breaking')
  *                 break
  */
-      __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_v_write_out); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 251, __pyx_L1_error)
+      __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_v_write_out); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 259, __pyx_L1_error)
       if (__pyx_t_21) {
 
-        /* "programs/create_db_helpers.py":252
+        /* "programs/create_db_helpers.py":260
  *             write_out= write_to_db(data, data_source)
  *             if write_out:
  *                 logger.info('Failed to write data to database, breaking')             # <<<<<<<<<<<<<<
  *                 break
  *         if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_logger); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 252, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_logger); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 260, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_info); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 252, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_info); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 260, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_t_2 = NULL;
@@ -6750,14 +6975,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
             __Pyx_DECREF_SET(__pyx_t_3, function);
           }
         }
-        __pyx_t_14 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_kp_s_Failed_to_write_data_to_database) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s_Failed_to_write_data_to_database);
+        __pyx_t_7 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_kp_s_Failed_to_write_data_to_database) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s_Failed_to_write_data_to_database);
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 252, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_14);
+        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 260, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-        /* "programs/create_db_helpers.py":253
+        /* "programs/create_db_helpers.py":261
  *             if write_out:
  *                 logger.info('Failed to write data to database, breaking')
  *                 break             # <<<<<<<<<<<<<<
@@ -6766,7 +6991,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
         goto __pyx_L21_break;
 
-        /* "programs/create_db_helpers.py":251
+        /* "programs/create_db_helpers.py":259
  *         if ast.literal_eval(CONFIG['prediction']) == True:
  *             write_out= write_to_db(data, data_source)
  *             if write_out:             # <<<<<<<<<<<<<<
@@ -6775,7 +7000,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
       }
 
-      /* "programs/create_db_helpers.py":249
+      /* "programs/create_db_helpers.py":257
  *             else: break
  *         # 4) Push to DB
  *         if ast.literal_eval(CONFIG['prediction']) == True:             # <<<<<<<<<<<<<<
@@ -6784,22 +7009,22 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
     }
 
-    /* "programs/create_db_helpers.py":254
+    /* "programs/create_db_helpers.py":262
  *                 logger.info('Failed to write data to database, breaking')
  *                 break
  *         if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:             # <<<<<<<<<<<<<<
  *             data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
  *             write_out= write_to_db(data, data_source)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_ast); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_ast); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_prediction); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_prediction); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_14);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_t_3 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -6811,93 +7036,93 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
         __Pyx_DECREF_SET(__pyx_t_2, function);
       }
     }
-    __pyx_t_14 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_7);
+    __pyx_t_7 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_t_14) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_14);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_14);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = PyObject_RichCompare(__pyx_t_14, Py_False, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 254, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 254, __pyx_L1_error)
+    if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_t_2 = PyObject_RichCompare(__pyx_t_7, Py_False, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     if (__pyx_t_11) {
     } else {
       __pyx_t_21 = __pyx_t_11;
-      goto __pyx_L71_bool_binop_done;
+      goto __pyx_L81_bool_binop_done;
     }
-    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_ast); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_ast); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_14, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
-    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_14, __pyx_n_s_clerical_review_candidates); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_clerical_review_candidates); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-    __pyx_t_14 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
-      __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_7);
-      if (likely(__pyx_t_14)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-        __Pyx_INCREF(__pyx_t_14);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_14))) {
+      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_14);
+      if (likely(__pyx_t_7)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_14);
+        __Pyx_INCREF(__pyx_t_7);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_7, function);
+        __Pyx_DECREF_SET(__pyx_t_14, function);
       }
     }
-    __pyx_t_2 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_14, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_3);
-    __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+    __pyx_t_2 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_7, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_t_3);
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 254, __pyx_L1_error)
+    if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __pyx_t_7 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_7); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 254, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+    __pyx_t_14 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_14); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 262, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_7); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 254, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_14); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 262, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
     __pyx_t_21 = __pyx_t_11;
-    __pyx_L71_bool_binop_done:;
+    __pyx_L81_bool_binop_done:;
     if (__pyx_t_21) {
 
-      /* "programs/create_db_helpers.py":255
+      /* "programs/create_db_helpers.py":263
  *                 break
  *         if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
  *             data = pd.DataFrame(data).sample(frac=.05).to_dict('record')             # <<<<<<<<<<<<<<
  *             write_out= write_to_db(data, data_source)
  *             if write_out:
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_pd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_pd); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 255, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_14);
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 263, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_14))) {
-        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_14);
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_7);
         if (likely(__pyx_t_3)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_14);
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
           __Pyx_INCREF(__pyx_t_3);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_14, function);
+          __Pyx_DECREF_SET(__pyx_t_7, function);
         }
       }
-      __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_3, __pyx_v_data) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_v_data);
+      __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_3, __pyx_v_data) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_v_data);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 255, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sample); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 255, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_14);
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_sample); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 263, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 255, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_frac, __pyx_float__05) < 0) __PYX_ERR(0, 255, __pyx_L1_error)
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_14, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 255, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_frac, __pyx_float__05) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_empty_tuple, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_to_dict); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 255, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_to_dict); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
@@ -6910,22 +7135,22 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
           __Pyx_DECREF_SET(__pyx_t_2, function);
         }
       }
-      __pyx_t_7 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_n_s_record) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_record);
+      __pyx_t_14 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_n_s_record) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_n_s_record);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 255, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
+      if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 263, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_14);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF_SET(__pyx_v_data, __pyx_t_7);
-      __pyx_t_7 = 0;
+      __Pyx_DECREF_SET(__pyx_v_data, __pyx_t_14);
+      __pyx_t_14 = 0;
 
-      /* "programs/create_db_helpers.py":256
+      /* "programs/create_db_helpers.py":264
  *         if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
  *             data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
  *             write_out= write_to_db(data, data_source)             # <<<<<<<<<<<<<<
  *             if write_out:
  *                 logger.info('Failed to write data to database, breaking')
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_write_to_db); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 256, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_write_to_db); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_3 = NULL;
       __pyx_t_10 = 0;
@@ -6942,79 +7167,79 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_2)) {
         PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_data, __pyx_v_data_source};
-        __pyx_t_7 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 256, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 264, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_GOTREF(__pyx_t_14);
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
         PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_data, __pyx_v_data_source};
-        __pyx_t_7 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 256, __pyx_L1_error)
+        __pyx_t_14 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 264, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_GOTREF(__pyx_t_14);
       } else
       #endif
       {
-        __pyx_t_14 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 256, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_14);
+        __pyx_t_7 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 264, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         if (__pyx_t_3) {
-          __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_14, 0, __pyx_t_3); __pyx_t_3 = NULL;
+          __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_3); __pyx_t_3 = NULL;
         }
         __Pyx_INCREF(__pyx_v_data);
         __Pyx_GIVEREF(__pyx_v_data);
-        PyTuple_SET_ITEM(__pyx_t_14, 0+__pyx_t_10, __pyx_v_data);
+        PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_10, __pyx_v_data);
         __Pyx_INCREF(__pyx_v_data_source);
         __Pyx_GIVEREF(__pyx_v_data_source);
-        PyTuple_SET_ITEM(__pyx_t_14, 1+__pyx_t_10, __pyx_v_data_source);
-        __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_14, NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 256, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_10, __pyx_v_data_source);
+        __pyx_t_14 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_7, NULL); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 264, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_14);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_XDECREF_SET(__pyx_v_write_out, __pyx_t_7);
-      __pyx_t_7 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_write_out, __pyx_t_14);
+      __pyx_t_14 = 0;
 
-      /* "programs/create_db_helpers.py":257
+      /* "programs/create_db_helpers.py":265
  *             data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
  *             write_out= write_to_db(data, data_source)
  *             if write_out:             # <<<<<<<<<<<<<<
  *                 logger.info('Failed to write data to database, breaking')
  *                 break
  */
-      __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_v_write_out); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 257, __pyx_L1_error)
+      __pyx_t_21 = __Pyx_PyObject_IsTrue(__pyx_v_write_out); if (unlikely(__pyx_t_21 < 0)) __PYX_ERR(0, 265, __pyx_L1_error)
       if (__pyx_t_21) {
 
-        /* "programs/create_db_helpers.py":258
+        /* "programs/create_db_helpers.py":266
  *             write_out= write_to_db(data, data_source)
  *             if write_out:
  *                 logger.info('Failed to write data to database, breaking')             # <<<<<<<<<<<<<<
  *                 break
  * 
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_logger); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 258, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_logger); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 266, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_info); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 258, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_14);
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_info); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 266, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_t_2 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_14))) {
-          __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_14);
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+          __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_7);
           if (likely(__pyx_t_2)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_14);
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
             __Pyx_INCREF(__pyx_t_2);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_14, function);
+            __Pyx_DECREF_SET(__pyx_t_7, function);
           }
         }
-        __pyx_t_7 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_14, __pyx_t_2, __pyx_kp_s_Failed_to_write_data_to_database) : __Pyx_PyObject_CallOneArg(__pyx_t_14, __pyx_kp_s_Failed_to_write_data_to_database);
+        __pyx_t_14 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_2, __pyx_kp_s_Failed_to_write_data_to_database) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_s_Failed_to_write_data_to_database);
         __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 258, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+        if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 266, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_14);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-        /* "programs/create_db_helpers.py":259
+        /* "programs/create_db_helpers.py":267
  *             if write_out:
  *                 logger.info('Failed to write data to database, breaking')
  *                 break             # <<<<<<<<<<<<<<
@@ -7023,7 +7248,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
         goto __pyx_L21_break;
 
-        /* "programs/create_db_helpers.py":257
+        /* "programs/create_db_helpers.py":265
  *             data = pd.DataFrame(data).sample(frac=.05).to_dict('record')
  *             write_out= write_to_db(data, data_source)
  *             if write_out:             # <<<<<<<<<<<<<<
@@ -7032,7 +7257,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
       }
 
-      /* "programs/create_db_helpers.py":254
+      /* "programs/create_db_helpers.py":262
  *                 logger.info('Failed to write data to database, breaking')
  *                 break
  *         if ast.literal_eval(CONFIG['prediction']) == False and ast.literal_eval(CONFIG['clerical_review_candidates']) == True:             # <<<<<<<<<<<<<<
@@ -7041,7 +7266,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
  */
     }
 
-    /* "programs/create_db_helpers.py":165
+    /* "programs/create_db_helpers.py":171
  *     table_exists=False
  *     row_number=0
  *     for data in pd.read_csv(csvname, chunksize=int(CONFIG['create_db_chunksize']), engine='c', dtype=str_dict):             # <<<<<<<<<<<<<<
@@ -7052,7 +7277,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __pyx_L21_break:;
   __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
 
-  /* "programs/create_db_helpers.py":134
+  /* "programs/create_db_helpers.py":139
  *         return 'fail'
  * 
  * def get_stem_data(data_source):             # <<<<<<<<<<<<<<
@@ -7072,6 +7297,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __Pyx_XDECREF(__pyx_t_14);
   __Pyx_XDECREF(__pyx_t_16);
   __Pyx_XDECREF(__pyx_t_17);
+  __Pyx_XDECREF(__pyx_t_24);
   __Pyx_AddTraceback("programs.create_db_helpers.get_stem_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -7102,12 +7328,15 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_8get_stem_data(CYTHON_UN
   __Pyx_XDECREF(__pyx_7genexpr__pyx_v_item);
   __Pyx_XDECREF(__pyx_v_v);
   __Pyx_XDECREF(__pyx_v_j);
+  __Pyx_XDECREF(__pyx_v_x);
+  __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_k);
+  __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_v);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":261
+/* "programs/create_db_helpers.py":269
  *                 break
  * 
  * def createDatabase(databaseName):             # <<<<<<<<<<<<<<
@@ -7146,39 +7375,39 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   PyObject *__pyx_t_6 = NULL;
   PyObject *__pyx_t_7 = NULL;
   Py_ssize_t __pyx_t_8;
-  Py_ssize_t __pyx_t_9;
-  PyObject *(*__pyx_t_10)(PyObject *);
-  PyObject *__pyx_t_11 = NULL;
-  PyObject *__pyx_t_12 = NULL;
-  int __pyx_t_13;
-  int __pyx_t_14;
+  int __pyx_t_9;
+  PyObject *__pyx_t_10 = NULL;
+  int __pyx_t_11;
+  Py_ssize_t __pyx_t_12;
+  PyObject *(*__pyx_t_13)(PyObject *);
+  PyObject *__pyx_t_14 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("createDatabase", 0);
 
-  /* "programs/create_db_helpers.py":264
+  /* "programs/create_db_helpers.py":272
  *     # create individual data tables
  *     # ###for each input dataset, need to
  *     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:             # <<<<<<<<<<<<<<
- *         get_stem_data(data_source)
- *         ####what the fuck is going on here?
+ *         if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:
+ *             #print(data_source)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_training_2, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_training_2, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
@@ -7194,14 +7423,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 264, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_training_2, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_training_2, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
@@ -7217,10 +7446,10 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_5, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 264, __pyx_L1_error)
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 264, __pyx_L1_error)
+  __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 272, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2);
@@ -7239,53 +7468,85 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   for (;;) {
     if (__pyx_t_8 >= 4) break;
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_6); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 264, __pyx_L1_error)
+    __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_6); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 272, __pyx_L1_error)
     #else
-    __pyx_t_6 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 264, __pyx_L1_error)
+    __pyx_t_6 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 272, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     #endif
     __Pyx_XDECREF_SET(__pyx_v_data_source, __pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "programs/create_db_helpers.py":265
+    /* "programs/create_db_helpers.py":273
  *     # ###for each input dataset, need to
  *     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
- *         get_stem_data(data_source)             # <<<<<<<<<<<<<<
- *         ####what the fuck is going on here?
- *         ####now index the tables
+ *         if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:             # <<<<<<<<<<<<<<
+ *             #print(data_source)
+ *             get_stem_data(data_source)
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_get_stem_data); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 265, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_os); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-        __Pyx_INCREF(__pyx_t_3);
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_path); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_isfile); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_csv_2, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_projectPath); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_t_7 = NULL;
+    __pyx_t_9 = 0;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_7)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_7);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_1, function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+        __pyx_t_9 = 1;
       }
     }
-    __pyx_t_6 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, __pyx_v_data_source) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_data_source);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 265, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-    /* "programs/create_db_helpers.py":268
- *         ####what the fuck is going on here?
- *         ####now index the tables
- *         db=get_db_connection(CONFIG)             # <<<<<<<<<<<<<<
- *         cur=db.cursor()
- *         for i in global_vars.blocks:
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_get_db_connection); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 268, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(__pyx_t_2)) {
+      PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_t_5, __pyx_v_data_source};
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    } else
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
+      PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_t_5, __pyx_v_data_source};
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    } else
+    #endif
+    {
+      __pyx_t_10 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      if (__pyx_t_7) {
+        __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_7); __pyx_t_7 = NULL;
+      }
+      __Pyx_GIVEREF(__pyx_t_5);
+      PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_t_5);
+      __Pyx_INCREF(__pyx_v_data_source);
+      __Pyx_GIVEREF(__pyx_v_data_source);
+      PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_v_data_source);
+      __pyx_t_5 = 0;
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    }
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_t_2 = NULL;
-    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
       __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
       if (likely(__pyx_t_2)) {
         PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
@@ -7297,237 +7558,761 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
     __pyx_t_6 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3);
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 268, __pyx_L1_error)
+    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 273, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_XDECREF_SET(__pyx_v_db, __pyx_t_6);
-    __pyx_t_6 = 0;
-
-    /* "programs/create_db_helpers.py":269
- *         ####now index the tables
- *         db=get_db_connection(CONFIG)
- *         cur=db.cursor()             # <<<<<<<<<<<<<<
- *         for i in global_vars.blocks:
- *             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = NULL;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-      if (likely(__pyx_t_3)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-        __Pyx_INCREF(__pyx_t_3);
-        __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_1, function);
-      }
-    }
-    __pyx_t_6 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
-    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 269, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_XDECREF_SET(__pyx_v_cur, __pyx_t_6);
-    __pyx_t_6 = 0;
-
-    /* "programs/create_db_helpers.py":270
- *         db=get_db_connection(CONFIG)
- *         cur=db.cursor()
- *         for i in global_vars.blocks:             # <<<<<<<<<<<<<<
- *             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
- *             ###additional index on id
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 270, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_blocks); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_1 = PyObject_RichCompare(__pyx_t_6, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
-      __pyx_t_6 = __pyx_t_1; __Pyx_INCREF(__pyx_t_6); __pyx_t_9 = 0;
-      __pyx_t_10 = NULL;
-    } else {
-      __pyx_t_9 = -1; __pyx_t_6 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 270, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_10 = Py_TYPE(__pyx_t_6)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 270, __pyx_L1_error)
-    }
+    __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 273, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    for (;;) {
-      if (likely(!__pyx_t_10)) {
-        if (likely(PyList_CheckExact(__pyx_t_6))) {
-          if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_6)) break;
-          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_6, __pyx_t_9); __Pyx_INCREF(__pyx_t_1); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 270, __pyx_L1_error)
-          #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          #endif
-        } else {
-          if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_6)) break;
-          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_6, __pyx_t_9); __Pyx_INCREF(__pyx_t_1); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 270, __pyx_L1_error)
-          #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_6, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_1);
-          #endif
+    if (__pyx_t_11) {
+
+      /* "programs/create_db_helpers.py":275
+ *         if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:
+ *             #print(data_source)
+ *             get_stem_data(data_source)             # <<<<<<<<<<<<<<
+ *             ####now index the tables
+ *             db=get_db_connection(CONFIG)
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_get_stem_data); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 275, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_3 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_3)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_3);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
         }
-      } else {
-        __pyx_t_1 = __pyx_t_10(__pyx_t_6);
-        if (unlikely(!__pyx_t_1)) {
-          PyObject* exc_type = PyErr_Occurred();
-          if (exc_type) {
-            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 270, __pyx_L1_error)
-          }
-          break;
-        }
-        __Pyx_GOTREF(__pyx_t_1);
       }
-      __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_1);
+      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_3, __pyx_v_data_source) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_data_source);
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "programs/create_db_helpers.py":277
+ *             get_stem_data(data_source)
+ *             ####now index the tables
+ *             db=get_db_connection(CONFIG)             # <<<<<<<<<<<<<<
+ *             cur=db.cursor()
+ *             for i in global_vars.blocks:
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_get_db_connection); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 277, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 277, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_2 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_2)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3);
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 277, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_db, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":271
- *         cur=db.cursor()
- *         for i in global_vars.blocks:
- *             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))             # <<<<<<<<<<<<<<
+      /* "programs/create_db_helpers.py":278
+ *             ####now index the tables
+ *             db=get_db_connection(CONFIG)
+ *             cur=db.cursor()             # <<<<<<<<<<<<<<
+ *             for i in global_vars.blocks:
+ *                 cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
+ */
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 278, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_3 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_3)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_3);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_cur, __pyx_t_1);
+      __pyx_t_1 = 0;
+
+      /* "programs/create_db_helpers.py":279
+ *             db=get_db_connection(CONFIG)
+ *             cur=db.cursor()
+ *             for i in global_vars.blocks:             # <<<<<<<<<<<<<<
+ *                 cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
+ *             ###additional index on id
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_global_vars); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_blocks); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 279, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (likely(PyList_CheckExact(__pyx_t_6)) || PyTuple_CheckExact(__pyx_t_6)) {
+        __pyx_t_1 = __pyx_t_6; __Pyx_INCREF(__pyx_t_1); __pyx_t_12 = 0;
+        __pyx_t_13 = NULL;
+      } else {
+        __pyx_t_12 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_6); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __pyx_t_13 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 279, __pyx_L1_error)
+      }
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      for (;;) {
+        if (likely(!__pyx_t_13)) {
+          if (likely(PyList_CheckExact(__pyx_t_1))) {
+            if (__pyx_t_12 >= PyList_GET_SIZE(__pyx_t_1)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_6 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_6); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 279, __pyx_L1_error)
+            #else
+            __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 279, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_6);
+            #endif
+          } else {
+            if (__pyx_t_12 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_12); __Pyx_INCREF(__pyx_t_6); __pyx_t_12++; if (unlikely(0 < 0)) __PYX_ERR(0, 279, __pyx_L1_error)
+            #else
+            __pyx_t_6 = PySequence_ITEM(__pyx_t_1, __pyx_t_12); __pyx_t_12++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 279, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_6);
+            #endif
+          }
+        } else {
+          __pyx_t_6 = __pyx_t_13(__pyx_t_1);
+          if (unlikely(!__pyx_t_6)) {
+            PyObject* exc_type = PyErr_Occurred();
+            if (exc_type) {
+              if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+              else __PYX_ERR(0, 279, __pyx_L1_error)
+            }
+            break;
+          }
+          __Pyx_GOTREF(__pyx_t_6);
+        }
+        __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_6);
+        __pyx_t_6 = 0;
+
+        /* "programs/create_db_helpers.py":280
+ *             cur=db.cursor()
+ *             for i in global_vars.blocks:
+ *                 cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))             # <<<<<<<<<<<<<<
  *             ###additional index on id
  *             cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
  */
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_index_source___variable, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_7 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_data_source, __pyx_n_s_split); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __pyx_t_12 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_11))) {
-        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_11);
-        if (likely(__pyx_t_12)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_11);
-          __Pyx_INCREF(__pyx_t_12);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_11, function);
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_index_source___variable, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __pyx_t_10 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_10);
+        __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_v_data_source, __pyx_n_s_split); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __pyx_t_14 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+          __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_7);
+          if (likely(__pyx_t_14)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+            __Pyx_INCREF(__pyx_t_14);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_7, function);
+          }
         }
-      }
-      __pyx_t_5 = (__pyx_t_12) ? __Pyx_PyObject_Call2Args(__pyx_t_11, __pyx_t_12, __pyx_n_s_training) : __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_n_s_training);
-      __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_11 = __Pyx_GetItemInt(__pyx_t_5, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_i, __pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_variable, __pyx_t_5) < 0) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (PyDict_SetItem(__pyx_t_7, __pyx_n_s_source, __pyx_v_data_source) < 0) __PYX_ERR(0, 271, __pyx_L1_error)
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_7)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_7);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
+        __pyx_t_5 = (__pyx_t_14) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_14, __pyx_n_s_training) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_n_s_training);
+        __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+        if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __pyx_t_7 = __Pyx_GetItemInt(__pyx_t_5, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_v_i, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+        if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_variable, __pyx_t_5) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        if (PyDict_SetItem(__pyx_t_10, __pyx_n_s_source, __pyx_v_data_source) < 0) __PYX_ERR(0, 280, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_empty_tuple, __pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __pyx_t_10 = NULL;
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_10)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_10);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
         }
+        __pyx_t_6 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_10, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5);
+        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 280, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+
+        /* "programs/create_db_helpers.py":279
+ *             db=get_db_connection(CONFIG)
+ *             cur=db.cursor()
+ *             for i in global_vars.blocks:             # <<<<<<<<<<<<<<
+ *                 cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
+ *             ###additional index on id
+ */
       }
-      __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 271, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":273
- *             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
+      /* "programs/create_db_helpers.py":282
+ *                 cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
  *             ###additional index on id
  *             cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))             # <<<<<<<<<<<<<<
  *             ###clerical_review_candidates and the two matched pairs table
  *             db.commit()
  */
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_index__id_idx_on_id, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 273, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_2 = NULL;
-      __pyx_t_13 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_2)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_2);
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 282, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_index__id_idx_on_id, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 282, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_10 = NULL;
+      __pyx_t_9 = 0;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+        __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_5);
+        if (likely(__pyx_t_10)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+          __Pyx_INCREF(__pyx_t_10);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_13 = 1;
+          __Pyx_DECREF_SET(__pyx_t_5, function);
+          __pyx_t_9 = 1;
         }
       }
       #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_data_source, __pyx_v_data_source};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
+      if (PyFunction_Check(__pyx_t_5)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_data_source, __pyx_v_data_source};
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 282, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_GOTREF(__pyx_t_3);
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_data_source, __pyx_v_data_source};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_data_source, __pyx_v_data_source};
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 282, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+        __Pyx_GOTREF(__pyx_t_3);
       } else
       #endif
       {
-        __pyx_t_11 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_2) {
-          __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2); __pyx_t_2 = NULL;
+        __pyx_t_2 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 282, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        if (__pyx_t_10) {
+          __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_10); __pyx_t_10 = NULL;
         }
         __Pyx_INCREF(__pyx_v_data_source);
         __Pyx_GIVEREF(__pyx_v_data_source);
-        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_13, __pyx_v_data_source);
+        PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_9, __pyx_v_data_source);
         __Pyx_INCREF(__pyx_v_data_source);
         __Pyx_GIVEREF(__pyx_v_data_source);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_13, __pyx_v_data_source);
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 273, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_9, __pyx_v_data_source);
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 282, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_7)) {
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_5)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_5);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3);
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 282, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "programs/create_db_helpers.py":284
+ *             cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
+ *             ###clerical_review_candidates and the two matched pairs table
+ *             db.commit()             # <<<<<<<<<<<<<<
+ *         else:
+ *             logger.info('File {} does not exist.  Passing'.format(data_source))
+ */
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 284, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_3 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_3)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_3);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
+      __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+      /* "programs/create_db_helpers.py":273
+ *     # ###for each input dataset, need to
+ *     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
+ *         if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:             # <<<<<<<<<<<<<<
+ *             #print(data_source)
+ *             get_stem_data(data_source)
+ */
+      goto __pyx_L5;
+    }
+
+    /* "programs/create_db_helpers.py":286
+ *             db.commit()
+ *         else:
+ *             logger.info('File {} does not exist.  Passing'.format(data_source))             # <<<<<<<<<<<<<<
+ *                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+ *     for table in ['clerical_review_candidates','matched_pairs']:
+ */
+    /*else*/ {
+      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_logger); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 286, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_info); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 286, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_File_does_not_exist_Passing, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_2 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_5);
+        if (likely(__pyx_t_2)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_5, function);
+        }
+      }
+      __pyx_t_6 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_2, __pyx_v_data_source) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_data_source);
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 286, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __pyx_t_5 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_5)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_7);
+          __Pyx_INCREF(__pyx_t_5);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_3, function);
         }
       }
-      __pyx_t_1 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_7, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_t_6) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_6);
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    }
+    __pyx_L5:;
+
+    /* "programs/create_db_helpers.py":272
+ *     # create individual data tables
+ *     # ###for each input dataset, need to
+ *     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:             # <<<<<<<<<<<<<<
+ *         if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:
+ *             #print(data_source)
+ */
+  }
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+
+  /* "programs/create_db_helpers.py":288
+ *             logger.info('File {} does not exist.  Passing'.format(data_source))
+ *                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+ *     for table in ['clerical_review_candidates','matched_pairs']:             # <<<<<<<<<<<<<<
+ *         if CONFIG['sql_flavor']=='sqlite':
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+ */
+  __pyx_t_4 = __pyx_tuple__5; __Pyx_INCREF(__pyx_t_4); __pyx_t_8 = 0;
+  for (;;) {
+    if (__pyx_t_8 >= 2) break;
+    #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 288, __pyx_L1_error)
+    #else
+    __pyx_t_1 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 288, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    #endif
+    __Pyx_XDECREF_SET(__pyx_v_table, __pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "programs/create_db_helpers.py":289
+ *                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+ *     for table in ['clerical_review_candidates','matched_pairs']:
+ *         if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+ *         elif CONFIG['sql_flavor']=='postgres':
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 289, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 289, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_sqlite, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 289, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (__pyx_t_11) {
+
+      /* "programs/create_db_helpers.py":290
+ *     for table in ['clerical_review_candidates','matched_pairs']:
+ *         if CONFIG['sql_flavor']=='sqlite':
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)             # <<<<<<<<<<<<<<
+ *         elif CONFIG['sql_flavor']=='postgres':
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 290, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_SELECT_name_FROM_sqlite_master_W, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 290, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_2 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_5);
+        if (likely(__pyx_t_2)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
+          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_5, function);
+        }
+      }
+      __pyx_t_6 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_2, __pyx_v_table) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_table);
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 290, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
+      if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 290, __pyx_L1_error) }
+      __pyx_t_5 = NULL;
+      __pyx_t_9 = 0;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_1);
+        if (likely(__pyx_t_5)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+          __Pyx_INCREF(__pyx_t_5);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_1, function);
+          __pyx_t_9 = 1;
+        }
+      }
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_1)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_6, __pyx_v_db};
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_6, __pyx_v_db};
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_2 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        if (__pyx_t_5) {
+          __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_5); __pyx_t_5 = NULL;
+        }
+        __Pyx_GIVEREF(__pyx_t_6);
+        PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_9, __pyx_t_6);
+        __Pyx_INCREF(__pyx_v_db);
+        __Pyx_GIVEREF(__pyx_v_db);
+        PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_9, __pyx_v_db);
+        __pyx_t_6 = 0;
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      }
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_ret, __pyx_t_3);
+      __pyx_t_3 = 0;
+
+      /* "programs/create_db_helpers.py":289
+ *                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+ *     for table in ['clerical_review_candidates','matched_pairs']:
+ *         if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+ *         elif CONFIG['sql_flavor']=='postgres':
+ */
+      goto __pyx_L10;
+    }
+
+    /* "programs/create_db_helpers.py":291
+ *         if CONFIG['sql_flavor']=='sqlite':
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+ *         elif CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
+ *         if len(ret) > 0:
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 291, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 291, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_11 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_postgres, Py_EQ)); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 291, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (__pyx_t_11) {
+
+      /* "programs/create_db_helpers.py":292
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+ *         elif CONFIG['sql_flavor']=='postgres':
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)             # <<<<<<<<<<<<<<
+ *         if len(ret) > 0:
+ *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
+ */
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 292, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_SELECT_tablename_FROM_pg_catalog, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 292, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __pyx_t_5 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
+        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
+        if (likely(__pyx_t_5)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+          __Pyx_INCREF(__pyx_t_5);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_6, function);
+        }
+      }
+      __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_5, __pyx_v_table) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_v_table);
+      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 292, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 292, __pyx_L1_error) }
+      __pyx_t_6 = NULL;
+      __pyx_t_9 = 0;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_6)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          __Pyx_INCREF(__pyx_t_6);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+          __pyx_t_9 = 1;
+        }
+      }
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_2, __pyx_v_db};
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_2, __pyx_v_db};
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_5 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        if (__pyx_t_6) {
+          __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6); __pyx_t_6 = NULL;
+        }
+        __Pyx_GIVEREF(__pyx_t_2);
+        PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_9, __pyx_t_2);
+        __Pyx_INCREF(__pyx_v_db);
+        __Pyx_GIVEREF(__pyx_v_db);
+        PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_9, __pyx_v_db);
+        __pyx_t_2 = 0;
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 292, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      }
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_XDECREF_SET(__pyx_v_ret, __pyx_t_1);
+      __pyx_t_1 = 0;
+
+      /* "programs/create_db_helpers.py":291
+ *         if CONFIG['sql_flavor']=='sqlite':
+ *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+ *         elif CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
+ *         if len(ret) > 0:
+ */
+    }
+    __pyx_L10:;
+
+    /* "programs/create_db_helpers.py":293
+ *         elif CONFIG['sql_flavor']=='postgres':
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
+ *         if len(ret) > 0:             # <<<<<<<<<<<<<<
+ *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
+ *             db.commit()
+ */
+    if (unlikely(!__pyx_v_ret)) { __Pyx_RaiseUnboundLocalError("ret"); __PYX_ERR(0, 293, __pyx_L1_error) }
+    __pyx_t_12 = PyObject_Length(__pyx_v_ret); if (unlikely(__pyx_t_12 == ((Py_ssize_t)-1))) __PYX_ERR(0, 293, __pyx_L1_error)
+    __pyx_t_11 = ((__pyx_t_12 > 0) != 0);
+    if (__pyx_t_11) {
+
+      /* "programs/create_db_helpers.py":294
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
+ *         if len(ret) > 0:
+ *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))             # <<<<<<<<<<<<<<
+ *             db.commit()
+ *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+ */
+      if (unlikely(!__pyx_v_cur)) { __Pyx_RaiseUnboundLocalError("cur"); __PYX_ERR(0, 294, __pyx_L1_error) }
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_alter_table_rename_to, __pyx_n_s_format); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_dt); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_datetime); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_14);
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_14, __pyx_n_s_now); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
+      __pyx_t_14 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+        __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_7);
+        if (likely(__pyx_t_14)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+          __Pyx_INCREF(__pyx_t_14);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_7, function);
+        }
+      }
+      __pyx_t_10 = (__pyx_t_14) ? __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_14) : __Pyx_PyObject_CallNoArg(__pyx_t_7);
+      __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+      if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_10, __pyx_n_s_strftime); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      __pyx_t_10 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
+        __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_7);
+        if (likely(__pyx_t_10)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+          __Pyx_INCREF(__pyx_t_10);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_7, function);
+        }
+      }
+      __pyx_t_6 = (__pyx_t_10) ? __Pyx_PyObject_Call2Args(__pyx_t_7, __pyx_t_10, __pyx_kp_s_Y__M__d__H__m) : __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_kp_s_Y__M__d__H__m);
+      __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 294, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __pyx_t_7 = NULL;
+      __pyx_t_9 = 0;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_2);
+        if (likely(__pyx_t_7)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+          __Pyx_INCREF(__pyx_t_7);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_2, function);
+          __pyx_t_9 = 1;
+        }
+      }
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_2)) {
+        PyObject *__pyx_temp[4] = {__pyx_t_7, __pyx_v_table, __pyx_v_table, __pyx_t_6};
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
+        PyObject *__pyx_temp[4] = {__pyx_t_7, __pyx_v_table, __pyx_v_table, __pyx_t_6};
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_9, 3+__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_10 = PyTuple_New(3+__pyx_t_9); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_10);
+        if (__pyx_t_7) {
+          __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_7); __pyx_t_7 = NULL;
+        }
+        __Pyx_INCREF(__pyx_v_table);
+        __Pyx_GIVEREF(__pyx_v_table);
+        PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_9, __pyx_v_table);
+        __Pyx_INCREF(__pyx_v_table);
+        __Pyx_GIVEREF(__pyx_v_table);
+        PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_9, __pyx_v_table);
+        __Pyx_GIVEREF(__pyx_t_6);
+        PyTuple_SET_ITEM(__pyx_t_10, 2+__pyx_t_9, __pyx_t_6);
+        __pyx_t_6 = 0;
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 294, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      }
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __pyx_t_2 = NULL;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_2)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          __Pyx_INCREF(__pyx_t_2);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+        }
+      }
+      __pyx_t_1 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5);
+      __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 294, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":275
- *             cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
- *             ###clerical_review_candidates and the two matched pairs table
+      /* "programs/create_db_helpers.py":295
+ *         if len(ret) > 0:
+ *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
  *             db.commit()             # <<<<<<<<<<<<<<
- *             ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
- *     for table in ['clerical_review_candidates','matched_pairs']:
+ *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+ *     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
  */
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 275, __pyx_L1_error)
+      if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 295, __pyx_L1_error) }
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 295, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_5 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -7541,428 +8326,23 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
       }
       __pyx_t_1 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 295, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":270
- *         db=get_db_connection(CONFIG)
- *         cur=db.cursor()
- *         for i in global_vars.blocks:             # <<<<<<<<<<<<<<
- *             cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
- *             ###additional index on id
- */
-    }
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-    /* "programs/create_db_helpers.py":264
- *     # create individual data tables
- *     # ###for each input dataset, need to
- *     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:             # <<<<<<<<<<<<<<
- *         get_stem_data(data_source)
- *         ####what the fuck is going on here?
- */
-  }
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-
-  /* "programs/create_db_helpers.py":277
- *             db.commit()
- *             ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
- *     for table in ['clerical_review_candidates','matched_pairs']:             # <<<<<<<<<<<<<<
- *         if CONFIG['sql_flavor']=='sqlite':
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
- */
-  __pyx_t_4 = __pyx_tuple__5; __Pyx_INCREF(__pyx_t_4); __pyx_t_8 = 0;
-  for (;;) {
-    if (__pyx_t_8 >= 2) break;
-    #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-    __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_8); __Pyx_INCREF(__pyx_t_6); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 277, __pyx_L1_error)
-    #else
-    __pyx_t_6 = PySequence_ITEM(__pyx_t_4, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 277, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    #endif
-    __Pyx_XDECREF_SET(__pyx_v_table, __pyx_t_6);
-    __pyx_t_6 = 0;
-
-    /* "programs/create_db_helpers.py":278
- *             ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
- *     for table in ['clerical_review_candidates','matched_pairs']:
- *         if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+      /* "programs/create_db_helpers.py":293
  *         elif CONFIG['sql_flavor']=='postgres':
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 278, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 278, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_t_14 = (__Pyx_PyString_Equals(__pyx_t_1, __pyx_n_s_sqlite, Py_EQ)); if (unlikely(__pyx_t_14 < 0)) __PYX_ERR(0, 278, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (__pyx_t_14) {
-
-      /* "programs/create_db_helpers.py":279
- *     for table in ['clerical_review_candidates','matched_pairs']:
- *         if CONFIG['sql_flavor']=='sqlite':
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)             # <<<<<<<<<<<<<<
- *         elif CONFIG['sql_flavor']=='postgres':
- *             ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
- */
-      __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_SELECT_name_FROM_sqlite_master_W, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
-        if (likely(__pyx_t_7)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-          __Pyx_INCREF(__pyx_t_7);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_5, function);
-        }
-      }
-      __pyx_t_3 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_7, __pyx_v_table) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_v_table);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 279, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 279, __pyx_L1_error) }
-      __pyx_t_5 = NULL;
-      __pyx_t_13 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
-        if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-          __Pyx_INCREF(__pyx_t_5);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_6, function);
-          __pyx_t_13 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_6)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, __pyx_v_db};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_5, __pyx_t_3, __pyx_v_db};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_7 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 279, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_7);
-        if (__pyx_t_5) {
-          __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_5); __pyx_t_5 = NULL;
-        }
-        __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_13, __pyx_t_3);
-        __Pyx_INCREF(__pyx_v_db);
-        __Pyx_GIVEREF(__pyx_v_db);
-        PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_13, __pyx_v_db);
-        __pyx_t_3 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_7, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 279, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-      __Pyx_XDECREF_SET(__pyx_v_ret, __pyx_t_1);
-      __pyx_t_1 = 0;
-
-      /* "programs/create_db_helpers.py":278
- *             ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
- *     for table in ['clerical_review_candidates','matched_pairs']:
- *         if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
- *         elif CONFIG['sql_flavor']=='postgres':
- */
-      goto __pyx_L9;
-    }
-
-    /* "programs/create_db_helpers.py":280
- *         if CONFIG['sql_flavor']=='sqlite':
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
- *         elif CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
- *             ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
- * 
- */
-    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 280, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 280, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_6);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_14 = (__Pyx_PyString_Equals(__pyx_t_6, __pyx_n_s_postgres, Py_EQ)); if (unlikely(__pyx_t_14 < 0)) __PYX_ERR(0, 280, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    if (__pyx_t_14) {
-
-      /* "programs/create_db_helpers.py":281
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
- *         elif CONFIG['sql_flavor']=='postgres':
- *             ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)             # <<<<<<<<<<<<<<
- * 
- *         if len(ret) > 0:
- */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 281, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_SELECT_name_FROM_pg_catalog_pg_t, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 281, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
-        if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-          __Pyx_INCREF(__pyx_t_5);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_3, function);
-        }
-      }
-      __pyx_t_7 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_v_table) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_table);
-      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 281, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 281, __pyx_L1_error) }
-      __pyx_t_3 = NULL;
-      __pyx_t_13 = 0;
-      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-        __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_1);
-        if (likely(__pyx_t_3)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-          __Pyx_INCREF(__pyx_t_3);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_1, function);
-          __pyx_t_13 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_1)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_t_7, __pyx_v_db};
-        __pyx_t_6 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 281, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_t_7, __pyx_v_db};
-        __pyx_t_6 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 281, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_5 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 281, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        if (__pyx_t_3) {
-          __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
-        }
-        __Pyx_GIVEREF(__pyx_t_7);
-        PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_13, __pyx_t_7);
-        __Pyx_INCREF(__pyx_v_db);
-        __Pyx_GIVEREF(__pyx_v_db);
-        PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_13, __pyx_v_db);
-        __pyx_t_7 = 0;
-        __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 281, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
-        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_XDECREF_SET(__pyx_v_ret, __pyx_t_6);
-      __pyx_t_6 = 0;
-
-      /* "programs/create_db_helpers.py":280
- *         if CONFIG['sql_flavor']=='sqlite':
- *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
- *         elif CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
- *             ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
- * 
- */
-    }
-    __pyx_L9:;
-
-    /* "programs/create_db_helpers.py":283
- *             ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
- * 
- *         if len(ret) > 0:             # <<<<<<<<<<<<<<
- *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
- *             db.commit()
- */
-    if (unlikely(!__pyx_v_ret)) { __Pyx_RaiseUnboundLocalError("ret"); __PYX_ERR(0, 283, __pyx_L1_error) }
-    __pyx_t_9 = PyObject_Length(__pyx_v_ret); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 283, __pyx_L1_error)
-    __pyx_t_14 = ((__pyx_t_9 > 0) != 0);
-    if (__pyx_t_14) {
-
-      /* "programs/create_db_helpers.py":284
- * 
- *         if len(ret) > 0:
- *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))             # <<<<<<<<<<<<<<
- *             db.commit()
- *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
- */
-      if (unlikely(!__pyx_v_cur)) { __Pyx_RaiseUnboundLocalError("cur"); __PYX_ERR(0, 284, __pyx_L1_error) }
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_alter_table_rename_to, __pyx_n_s_format); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_7);
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_dt); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_datetime); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_12);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_12, __pyx_n_s_now); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      __pyx_t_12 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_12 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_12)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_12);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_11 = (__pyx_t_12) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_12) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
-      __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
-      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_11);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_strftime); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_2);
-      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      __pyx_t_11 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_2);
-        if (likely(__pyx_t_11)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-          __Pyx_INCREF(__pyx_t_11);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_2, function);
-        }
-      }
-      __pyx_t_3 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_11, __pyx_kp_s_Y__M__d__H__m) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_kp_s_Y__M__d__H__m);
-      __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = NULL;
-      __pyx_t_13 = 0;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
-        __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_7);
-        if (likely(__pyx_t_2)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
-          __Pyx_INCREF(__pyx_t_2);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_7, function);
-          __pyx_t_13 = 1;
-        }
-      }
-      #if CYTHON_FAST_PYCALL
-      if (PyFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[4] = {__pyx_t_2, __pyx_v_table, __pyx_v_table, __pyx_t_3};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_13, 3+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 284, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else
-      #endif
-      #if CYTHON_FAST_PYCCALL
-      if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
-        PyObject *__pyx_temp[4] = {__pyx_t_2, __pyx_v_table, __pyx_v_table, __pyx_t_3};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_13, 3+__pyx_t_13); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 284, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      } else
-      #endif
-      {
-        __pyx_t_11 = PyTuple_New(3+__pyx_t_13); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 284, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_11);
-        if (__pyx_t_2) {
-          __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_2); __pyx_t_2 = NULL;
-        }
-        __Pyx_INCREF(__pyx_v_table);
-        __Pyx_GIVEREF(__pyx_v_table);
-        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_13, __pyx_v_table);
-        __Pyx_INCREF(__pyx_v_table);
-        __Pyx_GIVEREF(__pyx_v_table);
-        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_13, __pyx_v_table);
-        __Pyx_GIVEREF(__pyx_t_3);
-        PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_13, __pyx_t_3);
-        __pyx_t_3 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 284, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_5);
-        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-      }
-      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __pyx_t_7 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-        __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_1);
-        if (likely(__pyx_t_7)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-          __Pyx_INCREF(__pyx_t_7);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_1, function);
-        }
-      }
-      __pyx_t_6 = (__pyx_t_7) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_7, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5);
-      __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 284, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-      /* "programs/create_db_helpers.py":285
- *         if len(ret) > 0:
- *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
- *             db.commit()             # <<<<<<<<<<<<<<
- *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
- *     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
- */
-      if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 285, __pyx_L1_error) }
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 285, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_5 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-        __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_1);
-        if (likely(__pyx_t_5)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-          __Pyx_INCREF(__pyx_t_5);
-          __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_1, function);
-        }
-      }
-      __pyx_t_6 = (__pyx_t_5) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
-      __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 285, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-
-      /* "programs/create_db_helpers.py":283
- *             ret=get_table_noconn('''SELECT name FROM pg_catalog.pg_tables WHERE type='table' AND name='{}' '''.format(table), db)
- * 
+ *             ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
  *         if len(ret) > 0:             # <<<<<<<<<<<<<<
  *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
  *             db.commit()
  */
     }
 
-    /* "programs/create_db_helpers.py":277
- *             db.commit()
- *             ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+    /* "programs/create_db_helpers.py":288
+ *             logger.info('File {} does not exist.  Passing'.format(data_source))
+ *                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
  *     for table in ['clerical_review_candidates','matched_pairs']:             # <<<<<<<<<<<<<<
  *         if CONFIG['sql_flavor']=='sqlite':
  *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
@@ -7970,173 +8350,173 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "programs/create_db_helpers.py":286
+  /* "programs/create_db_helpers.py":296
  *             cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
  *             db.commit()
- *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))             # <<<<<<<<<<<<<<
+ *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))             # <<<<<<<<<<<<<<
  *     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
  *     db.commit()
  */
-  if (unlikely(!__pyx_v_cur)) { __Pyx_RaiseUnboundLocalError("cur"); __PYX_ERR(0, 286, __pyx_L1_error) }
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_table_clerical_review_can, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L1_error)
+  if (unlikely(!__pyx_v_cur)) { __Pyx_RaiseUnboundLocalError("cur"); __PYX_ERR(0, 296, __pyx_L1_error) }
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_table_clerical_review_can, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 296, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_11);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 286, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_t_7 = NULL;
-  __pyx_t_13 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_10);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = NULL;
+  __pyx_t_9 = 0;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_5);
-    if (likely(__pyx_t_7)) {
+    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_5);
+    if (likely(__pyx_t_2)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-      __Pyx_INCREF(__pyx_t_7);
+      __Pyx_INCREF(__pyx_t_2);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_5, function);
-      __pyx_t_13 = 1;
+      __pyx_t_9 = 1;
     }
   }
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_5)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_t_11, __pyx_t_3};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_t_10, __pyx_t_6};
+    __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_7, __pyx_t_11, __pyx_t_3};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_13, 2+__pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_t_10, __pyx_t_6};
+    __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_9, 2+__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   } else
   #endif
   {
-    __pyx_t_2 = PyTuple_New(2+__pyx_t_13); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 286, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    if (__pyx_t_7) {
-      __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_7); __pyx_t_7 = NULL;
+    __pyx_t_7 = PyTuple_New(2+__pyx_t_9); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_7);
+    if (__pyx_t_2) {
+      __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_2); __pyx_t_2 = NULL;
     }
-    __Pyx_GIVEREF(__pyx_t_11);
-    PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_13, __pyx_t_11);
-    __Pyx_GIVEREF(__pyx_t_3);
-    PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_13, __pyx_t_3);
-    __pyx_t_11 = 0;
-    __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 286, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __Pyx_GIVEREF(__pyx_t_10);
+    PyTuple_SET_ITEM(__pyx_t_7, 0+__pyx_t_9, __pyx_t_10);
+    __Pyx_GIVEREF(__pyx_t_6);
+    PyTuple_SET_ITEM(__pyx_t_7, 1+__pyx_t_9, __pyx_t_6);
+    __pyx_t_10 = 0;
+    __pyx_t_6 = 0;
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_1);
     if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
       __Pyx_INCREF(__pyx_t_5);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
     }
   }
-  __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_1);
+  __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 296, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "programs/create_db_helpers.py":287
+  /* "programs/create_db_helpers.py":297
  *             db.commit()
- *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+ *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
  *     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))             # <<<<<<<<<<<<<<
  *     db.commit()
  * 
  */
-  if (unlikely(!__pyx_v_cur)) { __Pyx_RaiseUnboundLocalError("cur"); __PYX_ERR(0, 287, __pyx_L1_error) }
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_table_matched_pairs_data1, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 287, __pyx_L1_error)
+  if (unlikely(!__pyx_v_cur)) { __Pyx_RaiseUnboundLocalError("cur"); __PYX_ERR(0, 297, __pyx_L1_error) }
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_create_table_matched_pairs_data1, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_data1, __pyx_t_3) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_7, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_7, __pyx_n_s_data1_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_data1, __pyx_t_6) < 0) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyObject_Dict_GetItem(__pyx_t_6, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_data2, __pyx_t_7) < 0) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_5); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_data2_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_data2, __pyx_t_2) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_empty_tuple, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 287, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_t_5 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_6);
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_1);
     if (likely(__pyx_t_5)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
       __Pyx_INCREF(__pyx_t_5);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
     }
   }
-  __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_6, __pyx_t_5, __pyx_t_2) : __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_2);
+  __pyx_t_4 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_5, __pyx_t_7) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_7);
   __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 287, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 297, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "programs/create_db_helpers.py":288
- *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+  /* "programs/create_db_helpers.py":298
+ *     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
  *     cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
  *     db.commit()             # <<<<<<<<<<<<<<
  * 
  * def update_batch_summary(batch_summary):
  */
-  if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 288, __pyx_L1_error) }
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 288, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_2 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_2)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_2);
+  if (unlikely(!__pyx_v_db)) { __Pyx_RaiseUnboundLocalError("db"); __PYX_ERR(0, 298, __pyx_L1_error) }
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 298, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_7 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_7)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_7);
       __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
     }
   }
-  __pyx_t_4 = (__pyx_t_2) ? __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_2) : __Pyx_PyObject_CallNoArg(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 288, __pyx_L1_error)
+  __pyx_t_4 = (__pyx_t_7) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_7) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 298, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "programs/create_db_helpers.py":261
+  /* "programs/create_db_helpers.py":269
  *                 break
  * 
  * def createDatabase(databaseName):             # <<<<<<<<<<<<<<
@@ -8155,8 +8535,8 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
   __Pyx_XDECREF(__pyx_t_7);
-  __Pyx_XDECREF(__pyx_t_11);
-  __Pyx_XDECREF(__pyx_t_12);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_XDECREF(__pyx_t_14);
   __Pyx_AddTraceback("programs.create_db_helpers.createDatabase", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -8171,7 +8551,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_10createDatabase(CYTHON_
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":290
+/* "programs/create_db_helpers.py":300
  *     db.commit()
  * 
  * def update_batch_summary(batch_summary):             # <<<<<<<<<<<<<<
@@ -8195,7 +8575,7 @@ static PyObject *__pyx_pw_8programs_17create_db_helpers_13update_batch_summary(P
 }
 static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-/* "programs/create_db_helpers.py":327
+/* "programs/create_db_helpers.py":337
  *             columns = batch_summary.keys()
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
  *             values = [tuple(batch_summary[key] for key in batch_summary)]             # <<<<<<<<<<<<<<
@@ -8215,7 +8595,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_20update_batch_summary_g
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 327, __pyx_L1_error)
+    __PYX_ERR(0, 337, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -8223,7 +8603,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_20update_batch_summary_g
   __Pyx_INCREF(((PyObject *)__pyx_cur_scope->__pyx_outer_scope));
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_outer_scope);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_update_batch_summary_locals_gene, __pyx_n_s_programs_create_db_helpers); if (unlikely(!gen)) __PYX_ERR(0, 327, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2generator, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_update_batch_summary_locals_gene, __pyx_n_s_programs_create_db_helpers); if (unlikely(!gen)) __PYX_ERR(0, 337, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -8260,32 +8640,32 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 327, __pyx_L1_error)
-  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 327, __pyx_L1_error) }
+  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 337, __pyx_L1_error)
+  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 337, __pyx_L1_error) }
   if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) {
     __pyx_t_1 = __pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 327, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 327, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 337, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 327, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 327, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 327, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 327, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -8295,7 +8675,7 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 327, __pyx_L1_error)
+          else __PYX_ERR(0, 337, __pyx_L1_error)
         }
         break;
       }
@@ -8305,8 +8685,8 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2
     __Pyx_XDECREF_SET(__pyx_cur_scope->__pyx_v_key, __pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_4);
     __pyx_t_4 = 0;
-    if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 327, __pyx_L1_error) }
-    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary, __pyx_cur_scope->__pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 327, __pyx_L1_error)
+    if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 337, __pyx_L1_error) }
+    __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary, __pyx_cur_scope->__pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_r = __pyx_t_4;
     __pyx_t_4 = 0;
@@ -8326,7 +8706,7 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2
     __Pyx_XGOTREF(__pyx_t_1);
     __pyx_t_2 = __pyx_cur_scope->__pyx_t_1;
     __pyx_t_3 = __pyx_cur_scope->__pyx_t_2;
-    if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 327, __pyx_L1_error)
+    if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 337, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   CYTHON_MAYBE_UNUSED_VAR(__pyx_cur_scope);
@@ -8350,11 +8730,11 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_2
 }
 static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5generator1(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
-/* "programs/create_db_helpers.py":339
+/* "programs/create_db_helpers.py":349
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]             # <<<<<<<<<<<<<<
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(
  *                 columns_statement, batch_summary['batch_id'])
  */
 
@@ -8370,7 +8750,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_20update_batch_summary_3
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct_2_genexpr *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 339, __pyx_L1_error)
+    __PYX_ERR(0, 349, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -8378,7 +8758,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_20update_batch_summary_3
   __Pyx_INCREF(((PyObject *)__pyx_cur_scope->__pyx_outer_scope));
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_outer_scope);
   {
-    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5generator1, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_update_batch_summary_locals_gene, __pyx_n_s_programs_create_db_helpers); if (unlikely(!gen)) __PYX_ERR(0, 339, __pyx_L1_error)
+    __pyx_CoroutineObject *gen = __Pyx_Generator_New((__pyx_coroutine_body_t) __pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5generator1, NULL, (PyObject *) __pyx_cur_scope, __pyx_n_s_genexpr, __pyx_n_s_update_batch_summary_locals_gene, __pyx_n_s_programs_create_db_helpers); if (unlikely(!gen)) __PYX_ERR(0, 349, __pyx_L1_error)
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -8416,32 +8796,32 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 339, __pyx_L1_error)
-  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 339, __pyx_L1_error) }
+  if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 349, __pyx_L1_error)
+  if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 349, __pyx_L1_error) }
   if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) {
     __pyx_t_1 = __pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary; __Pyx_INCREF(__pyx_t_1); __pyx_t_2 = 0;
     __pyx_t_3 = NULL;
   } else {
-    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 339, __pyx_L1_error)
+    __pyx_t_2 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 349, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L1_error)
+    __pyx_t_3 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 349, __pyx_L1_error)
   }
   for (;;) {
     if (likely(!__pyx_t_3)) {
       if (likely(PyList_CheckExact(__pyx_t_1))) {
         if (__pyx_t_2 >= PyList_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 339, __pyx_L1_error)
+        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 349, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 339, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 349, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       } else {
         if (__pyx_t_2 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 339, __pyx_L1_error)
+        __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_2); __Pyx_INCREF(__pyx_t_4); __pyx_t_2++; if (unlikely(0 < 0)) __PYX_ERR(0, 349, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 339, __pyx_L1_error)
+        __pyx_t_4 = PySequence_ITEM(__pyx_t_1, __pyx_t_2); __pyx_t_2++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 349, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         #endif
       }
@@ -8451,7 +8831,7 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 339, __pyx_L1_error)
+          else __PYX_ERR(0, 349, __pyx_L1_error)
         }
         break;
       }
@@ -8461,10 +8841,10 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5
     __Pyx_XDECREF_SET(__pyx_cur_scope->__pyx_v_key, __pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_4);
     __pyx_t_4 = 0;
-    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_cur_scope->__pyx_v_key, __pyx_n_s_batch_id, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 339, __pyx_L1_error)
+    __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_cur_scope->__pyx_v_key, __pyx_n_s_batch_id, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 349, __pyx_L1_error)
     if (__pyx_t_5) {
-      if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 339, __pyx_L1_error) }
-      __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary, __pyx_cur_scope->__pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 339, __pyx_L1_error)
+      if (unlikely(!__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary)) { __Pyx_RaiseClosureNameError("batch_summary"); __PYX_ERR(0, 349, __pyx_L1_error) }
+      __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_outer_scope->__pyx_v_batch_summary, __pyx_cur_scope->__pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 349, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __pyx_r = __pyx_t_4;
       __pyx_t_4 = 0;
@@ -8484,7 +8864,7 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5
       __Pyx_XGOTREF(__pyx_t_1);
       __pyx_t_2 = __pyx_cur_scope->__pyx_t_1;
       __pyx_t_3 = __pyx_cur_scope->__pyx_t_2;
-      if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 339, __pyx_L1_error)
+      if (unlikely(!__pyx_sent_value)) __PYX_ERR(0, 349, __pyx_L1_error)
     }
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8508,7 +8888,7 @@ static PyObject *__pyx_gb_8programs_17create_db_helpers_20update_batch_summary_5
   return __pyx_r;
 }
 
-/* "programs/create_db_helpers.py":290
+/* "programs/create_db_helpers.py":300
  *     db.commit()
  * 
  * def update_batch_summary(batch_summary):             # <<<<<<<<<<<<<<
@@ -8544,10 +8924,12 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   int __pyx_t_7;
   int __pyx_t_8;
   Py_ssize_t __pyx_t_9;
-  PyObject *(*__pyx_t_10)(PyObject *);
+  PyObject *__pyx_t_10 = NULL;
   PyObject *__pyx_t_11 = NULL;
-  PyObject *__pyx_t_12 = NULL;
+  PyObject *(*__pyx_t_12)(PyObject *);
   PyObject *__pyx_t_13 = NULL;
+  PyObject *__pyx_t_14 = NULL;
+  PyObject *__pyx_t_15 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -8556,7 +8938,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   if (unlikely(!__pyx_cur_scope)) {
     __pyx_cur_scope = ((struct __pyx_obj_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary *)Py_None);
     __Pyx_INCREF(Py_None);
-    __PYX_ERR(0, 290, __pyx_L1_error)
+    __PYX_ERR(0, 300, __pyx_L1_error)
   } else {
     __Pyx_GOTREF(__pyx_cur_scope);
   }
@@ -8564,16 +8946,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   __Pyx_INCREF(__pyx_cur_scope->__pyx_v_batch_summary);
   __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_batch_summary);
 
-  /* "programs/create_db_helpers.py":296
+  /* "programs/create_db_helpers.py":306
  *     :return:
  *     '''
  *     db=get_db_connection(CONFIG)             # <<<<<<<<<<<<<<
  *     cur=db.cursor()
  *     ###two cases...this is a new batch (so batch id doesn't exist) or the batch already exists
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_get_db_connection); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_get_db_connection); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 306, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -8588,20 +8970,20 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   __pyx_t_1 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 296, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 306, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_db = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "programs/create_db_helpers.py":297
+  /* "programs/create_db_helpers.py":307
  *     '''
  *     db=get_db_connection(CONFIG)
  *     cur=db.cursor()             # <<<<<<<<<<<<<<
  *     ###two cases...this is a new batch (so batch id doesn't exist) or the batch already exists
  *     batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 297, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_cursor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 307, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -8615,24 +8997,24 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   }
   __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 297, __pyx_L1_error)
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 307, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_cur = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "programs/create_db_helpers.py":299
+  /* "programs/create_db_helpers.py":309
  *     cur=db.cursor()
  *     ###two cases...this is a new batch (so batch id doesn't exist) or the batch already exists
  *     batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)             # <<<<<<<<<<<<<<
  *     if CONFIG['sql_flavor']=='sqlite':
  *         if len(batch_exists)==0:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_get_table_noconn); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 309, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_select_from_batch_summary_where, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_select_from_batch_summary_where, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 309, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 309, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -8647,7 +9029,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   __pyx_t_3 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_6, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 299, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 309, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_4 = NULL;
@@ -8665,7 +9047,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_3, __pyx_v_db};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -8674,14 +9056,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_3, __pyx_v_db};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 299, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 309, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (__pyx_t_4) {
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -8692,7 +9074,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
     __Pyx_GIVEREF(__pyx_v_db);
     PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_7, __pyx_v_db);
     __pyx_t_3 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 299, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -8700,49 +9082,102 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   __pyx_v_batch_exists = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "programs/create_db_helpers.py":300
+  /* "programs/create_db_helpers.py":310
  *     ###two cases...this is a new batch (so batch id doesn't exist) or the batch already exists
  *     batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)
  *     if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
  *         if len(batch_exists)==0:
  *             # create individual data tables
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_sqlite, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_sqlite, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 310, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_8) {
 
-    /* "programs/create_db_helpers.py":301
+    /* "programs/create_db_helpers.py":311
  *     batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)
  *     if CONFIG['sql_flavor']=='sqlite':
  *         if len(batch_exists)==0:             # <<<<<<<<<<<<<<
  *             # create individual data tables
- *             diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
+ *             diskEngine = create_engine('sqlite:///{}/{}.db'.format(CONFIG['projectPath'],CONFIG['db_name']))
  */
-    __pyx_t_9 = PyObject_Length(__pyx_v_batch_exists); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 301, __pyx_L1_error)
+    __pyx_t_9 = PyObject_Length(__pyx_v_batch_exists); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 311, __pyx_L1_error)
     __pyx_t_8 = ((__pyx_t_9 == 0) != 0);
     if (__pyx_t_8) {
 
-      /* "programs/create_db_helpers.py":303
+      /* "programs/create_db_helpers.py":313
  *         if len(batch_exists)==0:
  *             # create individual data tables
- *             diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])             # <<<<<<<<<<<<<<
+ *             diskEngine = create_engine('sqlite:///{}/{}.db'.format(CONFIG['projectPath'],CONFIG['db_name']))             # <<<<<<<<<<<<<<
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             pd.DataFrame(batch_summary, index=[0]).to_sql('batch_summary', diskEngine, if_exists='append', index=False)
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_create_engine); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 303, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_create_engine); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 313, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 303, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_5, __pyx_n_s_db_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 303, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_sqlite_db, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 313, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = PyNumber_Add(__pyx_kp_s_sqlite_2, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 303, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_5);
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 313, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_6 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_projectPath); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 313, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_6);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 313, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_10 = __Pyx_PyObject_Dict_GetItem(__pyx_t_4, __pyx_n_s_db_name); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 313, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_10);
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __pyx_t_4 = NULL;
+      __pyx_t_7 = 0;
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_4)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          __Pyx_INCREF(__pyx_t_4);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+          __pyx_t_7 = 1;
+        }
+      }
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_6, __pyx_t_10};
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 313, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_t_6, __pyx_t_10};
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 313, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_11 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 313, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        if (__pyx_t_4) {
+          __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_4); __pyx_t_4 = NULL;
+        }
+        __Pyx_GIVEREF(__pyx_t_6);
+        PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_7, __pyx_t_6);
+        __Pyx_GIVEREF(__pyx_t_10);
+        PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_7, __pyx_t_10);
+        __pyx_t_6 = 0;
+        __pyx_t_10 = 0;
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 313, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_t_3 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
@@ -8757,47 +9192,47 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       __pyx_t_2 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_3, __pyx_t_5) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_5);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 303, __pyx_L1_error)
+      if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 313, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_diskEngine = __pyx_t_2;
       __pyx_t_2 = 0;
 
-      /* "programs/create_db_helpers.py":305
- *             diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
+      /* "programs/create_db_helpers.py":315
+ *             diskEngine = create_engine('sqlite:///{}/{}.db'.format(CONFIG['projectPath'],CONFIG['db_name']))
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             pd.DataFrame(batch_summary, index=[0]).to_sql('batch_summary', diskEngine, if_exists='append', index=False)             # <<<<<<<<<<<<<<
  *             db.commit()
  *         else:
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_pd); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_pd); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_INCREF(__pyx_cur_scope->__pyx_v_batch_summary);
       __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_batch_summary);
       PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_cur_scope->__pyx_v_batch_summary);
-      __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_int_0);
       __Pyx_GIVEREF(__pyx_int_0);
       PyList_SET_ITEM(__pyx_t_3, 0, __pyx_int_0);
-      if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_index, __pyx_t_3) < 0) __PYX_ERR(0, 305, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_index, __pyx_t_3) < 0) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_to_sql); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_to_sql); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_INCREF(__pyx_n_s_batch_summary);
       __Pyx_GIVEREF(__pyx_n_s_batch_summary);
@@ -8805,25 +9240,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       __Pyx_INCREF(__pyx_v_diskEngine);
       __Pyx_GIVEREF(__pyx_v_diskEngine);
       PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_v_diskEngine);
-      __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 305, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
-      if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_if_exists, __pyx_n_s_append) < 0) __PYX_ERR(0, 305, __pyx_L1_error)
-      if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_index, Py_False) < 0) __PYX_ERR(0, 305, __pyx_L1_error)
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 305, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_if_exists, __pyx_n_s_append) < 0) __PYX_ERR(0, 315, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_index, Py_False) < 0) __PYX_ERR(0, 315, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 315, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":306
+      /* "programs/create_db_helpers.py":316
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             pd.DataFrame(batch_summary, index=[0]).to_sql('batch_summary', diskEngine, if_exists='append', index=False)
  *             db.commit()             # <<<<<<<<<<<<<<
  *         else:
  *             ##First check for any json and do a json.dumps
  */
-      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 306, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 316, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_3 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -8837,63 +9272,63 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       }
       __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_2);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 306, __pyx_L1_error)
+      if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 316, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "programs/create_db_helpers.py":301
+      /* "programs/create_db_helpers.py":311
  *     batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)
  *     if CONFIG['sql_flavor']=='sqlite':
  *         if len(batch_exists)==0:             # <<<<<<<<<<<<<<
  *             # create individual data tables
- *             diskEngine = create_engine('sqlite:///' + CONFIG['db_name'])
+ *             diskEngine = create_engine('sqlite:///{}/{}.db'.format(CONFIG['projectPath'],CONFIG['db_name']))
  */
       goto __pyx_L4;
     }
 
-    /* "programs/create_db_helpers.py":309
+    /* "programs/create_db_helpers.py":319
  *         else:
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:             # <<<<<<<<<<<<<<
  *                 if batch_summary[key].__class__==dt.datetime:
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  */
     /*else*/ {
       if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_v_batch_summary)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_v_batch_summary)) {
         __pyx_t_1 = __pyx_cur_scope->__pyx_v_batch_summary; __Pyx_INCREF(__pyx_t_1); __pyx_t_9 = 0;
-        __pyx_t_10 = NULL;
+        __pyx_t_12 = NULL;
       } else {
-        __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 309, __pyx_L1_error)
+        __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 319, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 309, __pyx_L1_error)
+        __pyx_t_12 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 319, __pyx_L1_error)
       }
       for (;;) {
-        if (likely(!__pyx_t_10)) {
+        if (likely(!__pyx_t_12)) {
           if (likely(PyList_CheckExact(__pyx_t_1))) {
             if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 319, __pyx_L1_error)
             #else
-            __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 319, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
             #endif
           } else {
             if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_2); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 319, __pyx_L1_error)
             #else
-            __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 309, __pyx_L1_error)
+            __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 319, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_2);
             #endif
           }
         } else {
-          __pyx_t_2 = __pyx_t_10(__pyx_t_1);
+          __pyx_t_2 = __pyx_t_12(__pyx_t_1);
           if (unlikely(!__pyx_t_2)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 309, __pyx_L1_error)
+              else __PYX_ERR(0, 319, __pyx_L1_error)
             }
             break;
           }
@@ -8902,40 +9337,40 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
         __Pyx_XDECREF_SET(__pyx_v_key, __pyx_t_2);
         __pyx_t_2 = 0;
 
-        /* "programs/create_db_helpers.py":310
+        /* "programs/create_db_helpers.py":320
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:
  *                 if batch_summary[key].__class__==dt.datetime:             # <<<<<<<<<<<<<<
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  *                 if batch_summary[key].__class__==dict:
  */
-        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 320, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_class); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_class); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_dt); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_dt); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 320, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_datetime); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_datetime); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 320, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, __pyx_t_5, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, __pyx_t_5, Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 320, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 310, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 320, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         if (__pyx_t_8) {
 
-          /* "programs/create_db_helpers.py":311
+          /* "programs/create_db_helpers.py":321
  *             for key in batch_summary:
  *                 if batch_summary[key].__class__==dt.datetime:
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')             # <<<<<<<<<<<<<<
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')             # <<<<<<<<<<<<<<
  *                 if batch_summary[key].__class__==dict:
  *                     batch_summary[key]=json.dumps(batch_summary[key])
  */
-          __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
-          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_strftime); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 311, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_strftime); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 321, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
           __pyx_t_5 = NULL;
@@ -8948,122 +9383,122 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
               __Pyx_DECREF_SET(__pyx_t_3, function);
             }
           }
-          __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_kp_s_Y_m_D_H_M_S) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s_Y_m_D_H_M_S);
+          __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_5, __pyx_kp_s_Y_m_d_H_M_S) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_kp_s_Y_m_d_H_M_S);
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 311, __pyx_L1_error)
+          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 321, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(PyObject_SetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key, __pyx_t_2) < 0)) __PYX_ERR(0, 311, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key, __pyx_t_2) < 0)) __PYX_ERR(0, 321, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "programs/create_db_helpers.py":310
+          /* "programs/create_db_helpers.py":320
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:
  *                 if batch_summary[key].__class__==dt.datetime:             # <<<<<<<<<<<<<<
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  *                 if batch_summary[key].__class__==dict:
  */
         }
 
-        /* "programs/create_db_helpers.py":312
+        /* "programs/create_db_helpers.py":322
  *                 if batch_summary[key].__class__==dt.datetime:
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  *                 if batch_summary[key].__class__==dict:             # <<<<<<<<<<<<<<
  *                     batch_summary[key]=json.dumps(batch_summary[key])
  *                 if batch_summary[key]!=batch_exists[0][key]:
  */
-        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 312, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_class); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 312, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_class); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 322, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-        __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, ((PyObject *)(&PyDict_Type)), Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 312, __pyx_L1_error)
+        __pyx_t_2 = PyObject_RichCompare(__pyx_t_3, ((PyObject *)(&PyDict_Type)), Py_EQ); __Pyx_XGOTREF(__pyx_t_2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 322, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 312, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_2); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 322, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         if (__pyx_t_8) {
 
-          /* "programs/create_db_helpers.py":313
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+          /* "programs/create_db_helpers.py":323
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  *                 if batch_summary[key].__class__==dict:
  *                     batch_summary[key]=json.dumps(batch_summary[key])             # <<<<<<<<<<<<<<
  *                 if batch_summary[key]!=batch_exists[0][key]:
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 313, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_json); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 323, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dumps); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 313, __pyx_L1_error)
+          __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_dumps); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 323, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 313, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 323, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_4 = NULL;
+          __pyx_t_11 = NULL;
           if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
-            __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
-            if (likely(__pyx_t_4)) {
+            __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_5);
+            if (likely(__pyx_t_11)) {
               PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-              __Pyx_INCREF(__pyx_t_4);
+              __Pyx_INCREF(__pyx_t_11);
               __Pyx_INCREF(function);
               __Pyx_DECREF_SET(__pyx_t_5, function);
             }
           }
-          __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_4, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3);
-          __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+          __pyx_t_2 = (__pyx_t_11) ? __Pyx_PyObject_Call2Args(__pyx_t_5, __pyx_t_11, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3);
+          __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 313, __pyx_L1_error)
+          if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 323, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-          if (unlikely(PyObject_SetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key, __pyx_t_2) < 0)) __PYX_ERR(0, 313, __pyx_L1_error)
+          if (unlikely(PyObject_SetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key, __pyx_t_2) < 0)) __PYX_ERR(0, 323, __pyx_L1_error)
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-          /* "programs/create_db_helpers.py":312
+          /* "programs/create_db_helpers.py":322
  *                 if batch_summary[key].__class__==dt.datetime:
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  *                 if batch_summary[key].__class__==dict:             # <<<<<<<<<<<<<<
  *                     batch_summary[key]=json.dumps(batch_summary[key])
  *                 if batch_summary[key]!=batch_exists[0][key]:
  */
         }
 
-        /* "programs/create_db_helpers.py":314
+        /* "programs/create_db_helpers.py":324
  *                 if batch_summary[key].__class__==dict:
  *                     batch_summary[key]=json.dumps(batch_summary[key])
  *                 if batch_summary[key]!=batch_exists[0][key]:             # <<<<<<<<<<<<<<
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
  *                     try:
  */
-        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 314, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 324, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
-        __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_batch_exists, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 314, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_GetItemInt(__pyx_v_batch_exists, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 324, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 314, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_GetItem(__pyx_t_5, __pyx_v_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 324, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-        __pyx_t_5 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_NE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 314, __pyx_L1_error)
+        __pyx_t_5 = PyObject_RichCompare(__pyx_t_2, __pyx_t_3, Py_NE); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 324, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 314, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 324, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         if (__pyx_t_8) {
 
-          /* "programs/create_db_helpers.py":315
+          /* "programs/create_db_helpers.py":325
  *                     batch_summary[key]=json.dumps(batch_summary[key])
  *                 if batch_summary[key]!=batch_exists[0][key]:
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])             # <<<<<<<<<<<<<<
  *                     try:
- *                         cur.execute(update_statement, batch_summary[key])
+ *                         cur.execute(update_statement, (batch_summary[key],))
  */
-          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_update_batch_summary_set_where_b, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_update_batch_summary_set_where_b, __pyx_n_s_format); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
-          __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 315, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 325, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
-          __pyx_t_4 = NULL;
+          __pyx_t_11 = NULL;
           __pyx_t_7 = 0;
           if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-            __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-            if (likely(__pyx_t_4)) {
+            __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_3);
+            if (likely(__pyx_t_11)) {
               PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-              __Pyx_INCREF(__pyx_t_4);
+              __Pyx_INCREF(__pyx_t_11);
               __Pyx_INCREF(function);
               __Pyx_DECREF_SET(__pyx_t_3, function);
               __pyx_t_7 = 1;
@@ -9071,76 +9506,81 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
           }
           #if CYTHON_FAST_PYCALL
           if (PyFunction_Check(__pyx_t_3)) {
-            PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_key, __pyx_t_2};
-            __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 315, __pyx_L1_error)
-            __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+            PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_key, __pyx_t_2};
+            __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           } else
           #endif
           #if CYTHON_FAST_PYCCALL
           if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-            PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_key, __pyx_t_2};
-            __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 315, __pyx_L1_error)
-            __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+            PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_key, __pyx_t_2};
+            __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
+            __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           } else
           #endif
           {
-            __pyx_t_6 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 315, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_6);
-            if (__pyx_t_4) {
-              __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
+            __pyx_t_10 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 325, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_10);
+            if (__pyx_t_11) {
+              __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_11); __pyx_t_11 = NULL;
             }
             __Pyx_INCREF(__pyx_v_key);
             __Pyx_GIVEREF(__pyx_v_key);
-            PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_7, __pyx_v_key);
+            PyTuple_SET_ITEM(__pyx_t_10, 0+__pyx_t_7, __pyx_v_key);
             __Pyx_GIVEREF(__pyx_t_2);
-            PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_7, __pyx_t_2);
+            PyTuple_SET_ITEM(__pyx_t_10, 1+__pyx_t_7, __pyx_t_2);
             __pyx_t_2 = 0;
-            __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 315, __pyx_L1_error)
+            __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_10, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_5);
-            __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+            __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
           }
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __Pyx_XDECREF_SET(__pyx_v_update_statement, __pyx_t_5);
           __pyx_t_5 = 0;
 
-          /* "programs/create_db_helpers.py":316
+          /* "programs/create_db_helpers.py":326
  *                 if batch_summary[key]!=batch_exists[0][key]:
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
  *                     try:             # <<<<<<<<<<<<<<
- *                         cur.execute(update_statement, batch_summary[key])
+ *                         cur.execute(update_statement, (batch_summary[key],))
  *                         db.commit()
  */
           {
             __Pyx_PyThreadState_declare
             __Pyx_PyThreadState_assign
-            __Pyx_ExceptionSave(&__pyx_t_11, &__pyx_t_12, &__pyx_t_13);
-            __Pyx_XGOTREF(__pyx_t_11);
-            __Pyx_XGOTREF(__pyx_t_12);
+            __Pyx_ExceptionSave(&__pyx_t_13, &__pyx_t_14, &__pyx_t_15);
             __Pyx_XGOTREF(__pyx_t_13);
+            __Pyx_XGOTREF(__pyx_t_14);
+            __Pyx_XGOTREF(__pyx_t_15);
             /*try:*/ {
 
-              /* "programs/create_db_helpers.py":317
+              /* "programs/create_db_helpers.py":327
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
  *                     try:
- *                         cur.execute(update_statement, batch_summary[key])             # <<<<<<<<<<<<<<
+ *                         cur.execute(update_statement, (batch_summary[key],))             # <<<<<<<<<<<<<<
  *                         db.commit()
  *                     except Exception as err:
  */
-              __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 317, __pyx_L10_error)
+              __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 327, __pyx_L10_error)
               __Pyx_GOTREF(__pyx_t_3);
-              __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 317, __pyx_L10_error)
-              __Pyx_GOTREF(__pyx_t_6);
-              __pyx_t_2 = NULL;
+              __pyx_t_10 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 327, __pyx_L10_error)
+              __Pyx_GOTREF(__pyx_t_10);
+              __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 327, __pyx_L10_error)
+              __Pyx_GOTREF(__pyx_t_2);
+              __Pyx_GIVEREF(__pyx_t_10);
+              PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_10);
+              __pyx_t_10 = 0;
+              __pyx_t_10 = NULL;
               __pyx_t_7 = 0;
               if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-                __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
-                if (likely(__pyx_t_2)) {
+                __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_3);
+                if (likely(__pyx_t_10)) {
                   PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-                  __Pyx_INCREF(__pyx_t_2);
+                  __Pyx_INCREF(__pyx_t_10);
                   __Pyx_INCREF(function);
                   __Pyx_DECREF_SET(__pyx_t_3, function);
                   __pyx_t_7 = 1;
@@ -9148,88 +9588,90 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
               }
               #if CYTHON_FAST_PYCALL
               if (PyFunction_Check(__pyx_t_3)) {
-                PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_update_statement, __pyx_t_6};
-                __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 317, __pyx_L10_error)
-                __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+                PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_update_statement, __pyx_t_2};
+                __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 327, __pyx_L10_error)
+                __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
                 __Pyx_GOTREF(__pyx_t_5);
-                __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+                __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
               } else
               #endif
               #if CYTHON_FAST_PYCCALL
               if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
-                PyObject *__pyx_temp[3] = {__pyx_t_2, __pyx_v_update_statement, __pyx_t_6};
-                __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 317, __pyx_L10_error)
-                __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+                PyObject *__pyx_temp[3] = {__pyx_t_10, __pyx_v_update_statement, __pyx_t_2};
+                __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 327, __pyx_L10_error)
+                __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
                 __Pyx_GOTREF(__pyx_t_5);
-                __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+                __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
               } else
               #endif
               {
-                __pyx_t_4 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 317, __pyx_L10_error)
-                __Pyx_GOTREF(__pyx_t_4);
-                if (__pyx_t_2) {
-                  __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2); __pyx_t_2 = NULL;
+                __pyx_t_11 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 327, __pyx_L10_error)
+                __Pyx_GOTREF(__pyx_t_11);
+                if (__pyx_t_10) {
+                  __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_10); __pyx_t_10 = NULL;
                 }
                 __Pyx_INCREF(__pyx_v_update_statement);
                 __Pyx_GIVEREF(__pyx_v_update_statement);
-                PyTuple_SET_ITEM(__pyx_t_4, 0+__pyx_t_7, __pyx_v_update_statement);
-                __Pyx_GIVEREF(__pyx_t_6);
-                PyTuple_SET_ITEM(__pyx_t_4, 1+__pyx_t_7, __pyx_t_6);
-                __pyx_t_6 = 0;
-                __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 317, __pyx_L10_error)
+                PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_7, __pyx_v_update_statement);
+                __Pyx_GIVEREF(__pyx_t_2);
+                PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_7, __pyx_t_2);
+                __pyx_t_2 = 0;
+                __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 327, __pyx_L10_error)
                 __Pyx_GOTREF(__pyx_t_5);
-                __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+                __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
               }
               __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
               __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-              /* "programs/create_db_helpers.py":318
+              /* "programs/create_db_helpers.py":328
  *                     try:
- *                         cur.execute(update_statement, batch_summary[key])
+ *                         cur.execute(update_statement, (batch_summary[key],))
  *                         db.commit()             # <<<<<<<<<<<<<<
  *                     except Exception as err:
  *                         print(err)
  */
-              __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 318, __pyx_L10_error)
+              __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 328, __pyx_L10_error)
               __Pyx_GOTREF(__pyx_t_3);
-              __pyx_t_4 = NULL;
+              __pyx_t_11 = NULL;
               if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
-                __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-                if (likely(__pyx_t_4)) {
+                __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_3);
+                if (likely(__pyx_t_11)) {
                   PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-                  __Pyx_INCREF(__pyx_t_4);
+                  __Pyx_INCREF(__pyx_t_11);
                   __Pyx_INCREF(function);
                   __Pyx_DECREF_SET(__pyx_t_3, function);
                 }
               }
-              __pyx_t_5 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-              __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-              if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 318, __pyx_L10_error)
+              __pyx_t_5 = (__pyx_t_11) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_11) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+              __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
+              if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 328, __pyx_L10_error)
               __Pyx_GOTREF(__pyx_t_5);
               __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
               __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-              /* "programs/create_db_helpers.py":316
+              /* "programs/create_db_helpers.py":326
  *                 if batch_summary[key]!=batch_exists[0][key]:
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
  *                     try:             # <<<<<<<<<<<<<<
- *                         cur.execute(update_statement, batch_summary[key])
+ *                         cur.execute(update_statement, (batch_summary[key],))
  *                         db.commit()
  */
             }
-            __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
-            __Pyx_XDECREF(__pyx_t_12); __pyx_t_12 = 0;
             __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
+            __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
+            __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
             goto __pyx_L17_try_end;
             __pyx_L10_error:;
+            __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
+            __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
             __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
             __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
             __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
             __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
             __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-            /* "programs/create_db_helpers.py":319
- *                         cur.execute(update_statement, batch_summary[key])
+            /* "programs/create_db_helpers.py":329
+ *                         cur.execute(update_statement, (batch_summary[key],))
  *                         db.commit()
  *                     except Exception as err:             # <<<<<<<<<<<<<<
  *                         print(err)
@@ -9238,62 +9680,62 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
             __pyx_t_7 = __Pyx_PyErr_ExceptionMatches(((PyObject *)(&((PyTypeObject*)PyExc_Exception)[0])));
             if (__pyx_t_7) {
               __Pyx_AddTraceback("programs.create_db_helpers.update_batch_summary", __pyx_clineno, __pyx_lineno, __pyx_filename);
-              if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_3, &__pyx_t_4) < 0) __PYX_ERR(0, 319, __pyx_L12_except_error)
+              if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_3, &__pyx_t_11) < 0) __PYX_ERR(0, 329, __pyx_L12_except_error)
               __Pyx_GOTREF(__pyx_t_5);
               __Pyx_GOTREF(__pyx_t_3);
-              __Pyx_GOTREF(__pyx_t_4);
+              __Pyx_GOTREF(__pyx_t_11);
               __Pyx_INCREF(__pyx_t_3);
               __Pyx_XDECREF_SET(__pyx_v_err, __pyx_t_3);
 
-              /* "programs/create_db_helpers.py":320
+              /* "programs/create_db_helpers.py":330
  *                         db.commit()
  *                     except Exception as err:
  *                         print(err)             # <<<<<<<<<<<<<<
  *                         print(batch_summary[key])
  *     elif CONFIG['sql_flavor']=='postgres':
  */
-              if (__Pyx_PrintOne(0, __pyx_v_err) < 0) __PYX_ERR(0, 320, __pyx_L12_except_error)
+              if (__Pyx_PrintOne(0, __pyx_v_err) < 0) __PYX_ERR(0, 330, __pyx_L12_except_error)
 
-              /* "programs/create_db_helpers.py":321
+              /* "programs/create_db_helpers.py":331
  *                     except Exception as err:
  *                         print(err)
  *                         print(batch_summary[key])             # <<<<<<<<<<<<<<
  *     elif CONFIG['sql_flavor']=='postgres':
  *         if len(batch_exists) == 0:
  */
-              __pyx_t_6 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 321, __pyx_L12_except_error)
-              __Pyx_GOTREF(__pyx_t_6);
-              if (__Pyx_PrintOne(0, __pyx_t_6) < 0) __PYX_ERR(0, 321, __pyx_L12_except_error)
-              __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+              __pyx_t_2 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 331, __pyx_L12_except_error)
+              __Pyx_GOTREF(__pyx_t_2);
+              if (__Pyx_PrintOne(0, __pyx_t_2) < 0) __PYX_ERR(0, 331, __pyx_L12_except_error)
+              __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
               __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
               __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-              __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+              __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
               goto __pyx_L11_exception_handled;
             }
             goto __pyx_L12_except_error;
             __pyx_L12_except_error:;
 
-            /* "programs/create_db_helpers.py":316
+            /* "programs/create_db_helpers.py":326
  *                 if batch_summary[key]!=batch_exists[0][key]:
  *                     update_statement='update batch_summary set {}=? where batch_id={}'.format(key, batch_summary['batch_id'])
  *                     try:             # <<<<<<<<<<<<<<
- *                         cur.execute(update_statement, batch_summary[key])
+ *                         cur.execute(update_statement, (batch_summary[key],))
  *                         db.commit()
  */
-            __Pyx_XGIVEREF(__pyx_t_11);
-            __Pyx_XGIVEREF(__pyx_t_12);
             __Pyx_XGIVEREF(__pyx_t_13);
-            __Pyx_ExceptionReset(__pyx_t_11, __pyx_t_12, __pyx_t_13);
+            __Pyx_XGIVEREF(__pyx_t_14);
+            __Pyx_XGIVEREF(__pyx_t_15);
+            __Pyx_ExceptionReset(__pyx_t_13, __pyx_t_14, __pyx_t_15);
             goto __pyx_L1_error;
             __pyx_L11_exception_handled:;
-            __Pyx_XGIVEREF(__pyx_t_11);
-            __Pyx_XGIVEREF(__pyx_t_12);
             __Pyx_XGIVEREF(__pyx_t_13);
-            __Pyx_ExceptionReset(__pyx_t_11, __pyx_t_12, __pyx_t_13);
+            __Pyx_XGIVEREF(__pyx_t_14);
+            __Pyx_XGIVEREF(__pyx_t_15);
+            __Pyx_ExceptionReset(__pyx_t_13, __pyx_t_14, __pyx_t_15);
             __pyx_L17_try_end:;
           }
 
-          /* "programs/create_db_helpers.py":314
+          /* "programs/create_db_helpers.py":324
  *                 if batch_summary[key].__class__==dict:
  *                     batch_summary[key]=json.dumps(batch_summary[key])
  *                 if batch_summary[key]!=batch_exists[0][key]:             # <<<<<<<<<<<<<<
@@ -9302,19 +9744,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
  */
         }
 
-        /* "programs/create_db_helpers.py":309
+        /* "programs/create_db_helpers.py":319
  *         else:
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:             # <<<<<<<<<<<<<<
  *                 if batch_summary[key].__class__==dt.datetime:
- *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%D %H:%M:%S')
+ *                     batch_summary[key] = batch_summary[key].strftime('%Y-%m-%d %H:%M:%S')
  */
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
     __pyx_L4:;
 
-    /* "programs/create_db_helpers.py":300
+    /* "programs/create_db_helpers.py":310
  *     ###two cases...this is a new batch (so batch id doesn't exist) or the batch already exists
  *     batch_exists=get_table_noconn('''select * from batch_summary where batch_id={}'''.format(batch_summary['batch_id']), db)
  *     if CONFIG['sql_flavor']=='sqlite':             # <<<<<<<<<<<<<<
@@ -9324,41 +9766,41 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
     goto __pyx_L3;
   }
 
-  /* "programs/create_db_helpers.py":322
+  /* "programs/create_db_helpers.py":332
  *                         print(err)
  *                         print(batch_summary[key])
  *     elif CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
  *         if len(batch_exists) == 0:
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 322, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 332, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 322, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 332, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_11);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_t_4, __pyx_n_s_postgres, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 322, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_t_11, __pyx_n_s_postgres, Py_EQ)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 332, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
   if (__pyx_t_8) {
 
-    /* "programs/create_db_helpers.py":323
+    /* "programs/create_db_helpers.py":333
  *                         print(batch_summary[key])
  *     elif CONFIG['sql_flavor']=='postgres':
  *         if len(batch_exists) == 0:             # <<<<<<<<<<<<<<
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             columns = batch_summary.keys()
  */
-    __pyx_t_9 = PyObject_Length(__pyx_v_batch_exists); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 323, __pyx_L1_error)
+    __pyx_t_9 = PyObject_Length(__pyx_v_batch_exists); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 333, __pyx_L1_error)
     __pyx_t_8 = ((__pyx_t_9 == 0) != 0);
     if (__pyx_t_8) {
 
-      /* "programs/create_db_helpers.py":325
+      /* "programs/create_db_helpers.py":335
  *         if len(batch_exists) == 0:
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             columns = batch_summary.keys()             # <<<<<<<<<<<<<<
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
  *             values = [tuple(batch_summary[key] for key in batch_summary)]
  */
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_keys); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 325, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_keys); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 335, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __pyx_t_3 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
@@ -9370,57 +9812,57 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
           __Pyx_DECREF_SET(__pyx_t_1, function);
         }
       }
-      __pyx_t_4 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
+      __pyx_t_11 = (__pyx_t_3) ? __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_t_3) : __Pyx_PyObject_CallNoArg(__pyx_t_1);
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 335, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_v_columns = __pyx_t_4;
-      __pyx_t_4 = 0;
+      __pyx_v_columns = __pyx_t_11;
+      __pyx_t_11 = 0;
 
-      /* "programs/create_db_helpers.py":326
+      /* "programs/create_db_helpers.py":336
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             columns = batch_summary.keys()
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")             # <<<<<<<<<<<<<<
  *             values = [tuple(batch_summary[key] for key in batch_summary)]
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',
  */
-      __pyx_t_4 = PyList_New(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 326, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_11 = PyList_New(0); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 336, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       if (likely(PyList_CheckExact(__pyx_v_columns)) || PyTuple_CheckExact(__pyx_v_columns)) {
         __pyx_t_1 = __pyx_v_columns; __Pyx_INCREF(__pyx_t_1); __pyx_t_9 = 0;
-        __pyx_t_10 = NULL;
+        __pyx_t_12 = NULL;
       } else {
-        __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_columns); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
+        __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_columns); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 326, __pyx_L1_error)
+        __pyx_t_12 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 336, __pyx_L1_error)
       }
       for (;;) {
-        if (likely(!__pyx_t_10)) {
+        if (likely(!__pyx_t_12)) {
           if (likely(PyList_CheckExact(__pyx_t_1))) {
             if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 326, __pyx_L1_error)
+            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 336, __pyx_L1_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 326, __pyx_L1_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 336, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           } else {
             if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 326, __pyx_L1_error)
+            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 336, __pyx_L1_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 326, __pyx_L1_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 336, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           }
         } else {
-          __pyx_t_3 = __pyx_t_10(__pyx_t_1);
+          __pyx_t_3 = __pyx_t_12(__pyx_t_1);
           if (unlikely(!__pyx_t_3)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 326, __pyx_L1_error)
+              else __PYX_ERR(0, 336, __pyx_L1_error)
             }
             break;
           }
@@ -9428,93 +9870,93 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
         }
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 326, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_v_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 336, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_4, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 326, __pyx_L1_error)
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_11, (PyObject*)__pyx_t_3))) __PYX_ERR(0, 336, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       }
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = PyList_AsTuple(((PyObject*)__pyx_t_4)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
+      __pyx_t_1 = PyList_AsTuple(((PyObject*)__pyx_t_11)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 326, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __pyx_t_11 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 336, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_replace); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 326, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_replace); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 326, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 336, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_v_columns_list = __pyx_t_4;
-      __pyx_t_4 = 0;
+      __pyx_v_columns_list = __pyx_t_11;
+      __pyx_t_11 = 0;
 
-      /* "programs/create_db_helpers.py":327
+      /* "programs/create_db_helpers.py":337
  *             columns = batch_summary.keys()
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
  *             values = [tuple(batch_summary[key] for key in batch_summary)]             # <<<<<<<<<<<<<<
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',
  *                                                                                 collist=columns_list)
  */
-      __pyx_t_4 = __pyx_pf_8programs_17create_db_helpers_20update_batch_summary_genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 327, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_1 = __Pyx_PySequence_Tuple(__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 327, __pyx_L1_error)
+      __pyx_t_11 = __pyx_pf_8programs_17create_db_helpers_20update_batch_summary_genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 337, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_1 = __Pyx_PySequence_Tuple(__pyx_t_11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 337, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __pyx_t_4 = PyList_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 327, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __pyx_t_11 = PyList_New(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 337, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_GIVEREF(__pyx_t_1);
-      PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
+      PyList_SET_ITEM(__pyx_t_11, 0, __pyx_t_1);
       __pyx_t_1 = 0;
-      __pyx_v_values = ((PyObject*)__pyx_t_4);
-      __pyx_t_4 = 0;
+      __pyx_v_values = ((PyObject*)__pyx_t_11);
+      __pyx_t_11 = 0;
 
-      /* "programs/create_db_helpers.py":328
+      /* "programs/create_db_helpers.py":338
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
  *             values = [tuple(batch_summary[key] for key in batch_summary)]
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',             # <<<<<<<<<<<<<<
  *                                                                                 collist=columns_list)
  *             execute_values(cur, insert_statement, values, page_size=len(values))
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_insert_into_table_collist_values, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 328, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 328, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_insert_into_table_collist_values, __pyx_n_s_format); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 338, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 338, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_table, __pyx_n_s_batch_summary) < 0) __PYX_ERR(0, 328, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_table, __pyx_n_s_batch_summary) < 0) __PYX_ERR(0, 338, __pyx_L1_error)
 
-      /* "programs/create_db_helpers.py":329
+      /* "programs/create_db_helpers.py":339
  *             values = [tuple(batch_summary[key] for key in batch_summary)]
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',
  *                                                                                 collist=columns_list)             # <<<<<<<<<<<<<<
  *             execute_values(cur, insert_statement, values, page_size=len(values))
  *             db.commit()
  */
-      if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_collist, __pyx_v_columns_list) < 0) __PYX_ERR(0, 328, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_collist, __pyx_v_columns_list) < 0) __PYX_ERR(0, 338, __pyx_L1_error)
 
-      /* "programs/create_db_helpers.py":328
+      /* "programs/create_db_helpers.py":338
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")
  *             values = [tuple(batch_summary[key] for key in batch_summary)]
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',             # <<<<<<<<<<<<<<
  *                                                                                 collist=columns_list)
  *             execute_values(cur, insert_statement, values, page_size=len(values))
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 328, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_11, __pyx_empty_tuple, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 338, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_insert_statement = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":330
+      /* "programs/create_db_helpers.py":340
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',
  *                                                                                 collist=columns_list)
  *             execute_values(cur, insert_statement, values, page_size=len(values))             # <<<<<<<<<<<<<<
  *             db.commit()
  *         else:
  */
-      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_execute_values); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 330, __pyx_L1_error)
+      __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_execute_values); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 340, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 330, __pyx_L1_error)
+      __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 340, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_v_cur);
       __Pyx_GIVEREF(__pyx_v_cur);
@@ -9525,47 +9967,47 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       __Pyx_INCREF(__pyx_v_values);
       __Pyx_GIVEREF(__pyx_v_values);
       PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_v_values);
-      __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 330, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
-      __pyx_t_9 = PyList_GET_SIZE(__pyx_v_values); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 330, __pyx_L1_error)
-      __pyx_t_5 = PyInt_FromSsize_t(__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 330, __pyx_L1_error)
+      __pyx_t_11 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 340, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
+      __pyx_t_9 = PyList_GET_SIZE(__pyx_v_values); if (unlikely(__pyx_t_9 == ((Py_ssize_t)-1))) __PYX_ERR(0, 340, __pyx_L1_error)
+      __pyx_t_5 = PyInt_FromSsize_t(__pyx_t_9); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 340, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_page_size, __pyx_t_5) < 0) __PYX_ERR(0, 330, __pyx_L1_error)
+      if (PyDict_SetItem(__pyx_t_11, __pyx_n_s_page_size, __pyx_t_5) < 0) __PYX_ERR(0, 340, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 330, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_1, __pyx_t_11); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 340, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":331
+      /* "programs/create_db_helpers.py":341
  *                                                                                 collist=columns_list)
  *             execute_values(cur, insert_statement, values, page_size=len(values))
  *             db.commit()             # <<<<<<<<<<<<<<
  *         else:
  *             ##First check for any json and do a json.dumps
  */
-      __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 331, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_11 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 341, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_1 = NULL;
-      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-        __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_4);
+      if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_11))) {
+        __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_11);
         if (likely(__pyx_t_1)) {
-          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_11);
           __Pyx_INCREF(__pyx_t_1);
           __Pyx_INCREF(function);
-          __Pyx_DECREF_SET(__pyx_t_4, function);
+          __Pyx_DECREF_SET(__pyx_t_11, function);
         }
       }
-      __pyx_t_5 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_4);
+      __pyx_t_5 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_11, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_11);
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 331, __pyx_L1_error)
+      if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 341, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":323
+      /* "programs/create_db_helpers.py":333
  *                         print(batch_summary[key])
  *     elif CONFIG['sql_flavor']=='postgres':
  *         if len(batch_exists) == 0:             # <<<<<<<<<<<<<<
@@ -9575,7 +10017,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       goto __pyx_L20;
     }
 
-    /* "programs/create_db_helpers.py":334
+    /* "programs/create_db_helpers.py":344
  *         else:
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:             # <<<<<<<<<<<<<<
@@ -9585,98 +10027,98 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
     /*else*/ {
       if (likely(PyList_CheckExact(__pyx_cur_scope->__pyx_v_batch_summary)) || PyTuple_CheckExact(__pyx_cur_scope->__pyx_v_batch_summary)) {
         __pyx_t_5 = __pyx_cur_scope->__pyx_v_batch_summary; __Pyx_INCREF(__pyx_t_5); __pyx_t_9 = 0;
-        __pyx_t_10 = NULL;
+        __pyx_t_12 = NULL;
       } else {
-        __pyx_t_9 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 334, __pyx_L1_error)
+        __pyx_t_9 = -1; __pyx_t_5 = PyObject_GetIter(__pyx_cur_scope->__pyx_v_batch_summary); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 344, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
-        __pyx_t_10 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 334, __pyx_L1_error)
+        __pyx_t_12 = Py_TYPE(__pyx_t_5)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 344, __pyx_L1_error)
       }
       for (;;) {
-        if (likely(!__pyx_t_10)) {
+        if (likely(!__pyx_t_12)) {
           if (likely(PyList_CheckExact(__pyx_t_5))) {
             if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_5)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_4 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_9); __Pyx_INCREF(__pyx_t_4); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 334, __pyx_L1_error)
+            __pyx_t_11 = PyList_GET_ITEM(__pyx_t_5, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 344, __pyx_L1_error)
             #else
-            __pyx_t_4 = PySequence_ITEM(__pyx_t_5, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 334, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_4);
+            __pyx_t_11 = PySequence_ITEM(__pyx_t_5, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 344, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_11);
             #endif
           } else {
             if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_5)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_9); __Pyx_INCREF(__pyx_t_4); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 334, __pyx_L1_error)
+            __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_5, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 344, __pyx_L1_error)
             #else
-            __pyx_t_4 = PySequence_ITEM(__pyx_t_5, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 334, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_4);
+            __pyx_t_11 = PySequence_ITEM(__pyx_t_5, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 344, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_11);
             #endif
           }
         } else {
-          __pyx_t_4 = __pyx_t_10(__pyx_t_5);
-          if (unlikely(!__pyx_t_4)) {
+          __pyx_t_11 = __pyx_t_12(__pyx_t_5);
+          if (unlikely(!__pyx_t_11)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 334, __pyx_L1_error)
+              else __PYX_ERR(0, 344, __pyx_L1_error)
             }
             break;
           }
-          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_GOTREF(__pyx_t_11);
         }
-        __Pyx_XDECREF_SET(__pyx_v_key, __pyx_t_4);
-        __pyx_t_4 = 0;
+        __Pyx_XDECREF_SET(__pyx_v_key, __pyx_t_11);
+        __pyx_t_11 = 0;
 
-        /* "programs/create_db_helpers.py":335
+        /* "programs/create_db_helpers.py":345
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:
  *                 if batch_summary[key].__class__ == dict:             # <<<<<<<<<<<<<<
  *                     batch_summary[key] = json.dumps(batch_summary[key])
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']
  */
-        __pyx_t_4 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 335, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
-        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_class); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 335, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 345, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_11, __pyx_n_s_class); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 345, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-        __pyx_t_4 = PyObject_RichCompare(__pyx_t_1, ((PyObject *)(&PyDict_Type)), Py_EQ); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 335, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+        __pyx_t_11 = PyObject_RichCompare(__pyx_t_1, ((PyObject *)(&PyDict_Type)), Py_EQ); __Pyx_XGOTREF(__pyx_t_11); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 345, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 335, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __pyx_t_8 = __Pyx_PyObject_IsTrue(__pyx_t_11); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 345, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
         if (__pyx_t_8) {
 
-          /* "programs/create_db_helpers.py":336
+          /* "programs/create_db_helpers.py":346
  *             for key in batch_summary:
  *                 if batch_summary[key].__class__ == dict:
  *                     batch_summary[key] = json.dumps(batch_summary[key])             # <<<<<<<<<<<<<<
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
  */
-          __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_json); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_json); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 346, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_dumps); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 336, __pyx_L1_error)
+          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_dumps); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 346, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 336, __pyx_L1_error)
+          __pyx_t_1 = __Pyx_PyObject_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 346, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_6 = NULL;
+          __pyx_t_2 = NULL;
           if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-            __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_3);
-            if (likely(__pyx_t_6)) {
+            __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_3);
+            if (likely(__pyx_t_2)) {
               PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-              __Pyx_INCREF(__pyx_t_6);
+              __Pyx_INCREF(__pyx_t_2);
               __Pyx_INCREF(function);
               __Pyx_DECREF_SET(__pyx_t_3, function);
             }
           }
-          __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_6, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1);
-          __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+          __pyx_t_11 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_2, __pyx_t_1) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1);
+          __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-          if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 336, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_4);
+          if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 346, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_11);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(PyObject_SetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key, __pyx_t_4) < 0)) __PYX_ERR(0, 336, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+          if (unlikely(PyObject_SetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_v_key, __pyx_t_11) < 0)) __PYX_ERR(0, 346, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
 
-          /* "programs/create_db_helpers.py":335
+          /* "programs/create_db_helpers.py":345
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:
  *                 if batch_summary[key].__class__ == dict:             # <<<<<<<<<<<<<<
@@ -9685,7 +10127,7 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
  */
         }
 
-        /* "programs/create_db_helpers.py":334
+        /* "programs/create_db_helpers.py":344
  *         else:
  *             ##First check for any json and do a json.dumps
  *             for key in batch_summary:             # <<<<<<<<<<<<<<
@@ -9695,16 +10137,16 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       }
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":337
+      /* "programs/create_db_helpers.py":347
  *                 if batch_summary[key].__class__ == dict:
  *                     batch_summary[key] = json.dumps(batch_summary[key])
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']             # <<<<<<<<<<<<<<
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]
  */
-      __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 337, __pyx_L1_error)
+      __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 347, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_keys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 337, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_keys); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 347, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_1 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -9716,122 +10158,122 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
           __Pyx_DECREF_SET(__pyx_t_3, function);
         }
       }
-      __pyx_t_4 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+      __pyx_t_11 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 347, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      if (likely(PyList_CheckExact(__pyx_t_4)) || PyTuple_CheckExact(__pyx_t_4)) {
-        __pyx_t_3 = __pyx_t_4; __Pyx_INCREF(__pyx_t_3); __pyx_t_9 = 0;
-        __pyx_t_10 = NULL;
+      if (likely(PyList_CheckExact(__pyx_t_11)) || PyTuple_CheckExact(__pyx_t_11)) {
+        __pyx_t_3 = __pyx_t_11; __Pyx_INCREF(__pyx_t_3); __pyx_t_9 = 0;
+        __pyx_t_12 = NULL;
       } else {
-        __pyx_t_9 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 337, __pyx_L1_error)
+        __pyx_t_9 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_11); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 347, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_10 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 337, __pyx_L1_error)
+        __pyx_t_12 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 347, __pyx_L1_error)
       }
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       for (;;) {
-        if (likely(!__pyx_t_10)) {
+        if (likely(!__pyx_t_12)) {
           if (likely(PyList_CheckExact(__pyx_t_3))) {
             if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_3)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_4 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_4); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
+            __pyx_t_11 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 347, __pyx_L1_error)
             #else
-            __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_4);
+            __pyx_t_11 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 347, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_11);
             #endif
           } else {
             if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_4 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_4); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
+            __pyx_t_11 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 347, __pyx_L1_error)
             #else
-            __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_4);
+            __pyx_t_11 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 347, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_11);
             #endif
           }
         } else {
-          __pyx_t_4 = __pyx_t_10(__pyx_t_3);
-          if (unlikely(!__pyx_t_4)) {
+          __pyx_t_11 = __pyx_t_12(__pyx_t_3);
+          if (unlikely(!__pyx_t_11)) {
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 337, __pyx_L1_error)
+              else __PYX_ERR(0, 347, __pyx_L1_error)
             }
             break;
           }
-          __Pyx_GOTREF(__pyx_t_4);
+          __Pyx_GOTREF(__pyx_t_11);
         }
-        __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_4);
-        __pyx_t_4 = 0;
-        __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_v_i, __pyx_n_s_batch_id, Py_NE)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
+        __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_11);
+        __pyx_t_11 = 0;
+        __pyx_t_8 = (__Pyx_PyString_Equals(__pyx_v_i, __pyx_n_s_batch_id, Py_NE)); if (unlikely(__pyx_t_8 < 0)) __PYX_ERR(0, 347, __pyx_L1_error)
         if (__pyx_t_8) {
-          if (unlikely(__Pyx_ListComp_Append(__pyx_t_5, (PyObject*)__pyx_v_i))) __PYX_ERR(0, 337, __pyx_L1_error)
+          if (unlikely(__Pyx_ListComp_Append(__pyx_t_5, (PyObject*)__pyx_v_i))) __PYX_ERR(0, 347, __pyx_L1_error)
         }
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_v_columns = __pyx_t_5;
       __pyx_t_5 = 0;
 
-      /* "programs/create_db_helpers.py":338
+      /* "programs/create_db_helpers.py":348
  *                     batch_summary[key] = json.dumps(batch_summary[key])
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])             # <<<<<<<<<<<<<<
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(
  */
-      __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 338, __pyx_L1_error)
+      __pyx_t_5 = PyList_New(0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 348, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_3 = __pyx_v_columns; __Pyx_INCREF(__pyx_t_3); __pyx_t_9 = 0;
       for (;;) {
         if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_4 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_4); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 338, __pyx_L1_error)
+        __pyx_t_11 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_9); __Pyx_INCREF(__pyx_t_11); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 348, __pyx_L1_error)
         #else
-        __pyx_t_4 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_11 = PySequence_ITEM(__pyx_t_3, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 348, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         #endif
-        __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_4);
-        __pyx_t_4 = 0;
-        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_s, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 338, __pyx_L1_error)
+        __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_11);
+        __pyx_t_11 = 0;
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_s, __pyx_n_s_format); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 348, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_6 = NULL;
+        __pyx_t_2 = NULL;
         if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
-          __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_1);
-          if (likely(__pyx_t_6)) {
+          __pyx_t_2 = PyMethod_GET_SELF(__pyx_t_1);
+          if (likely(__pyx_t_2)) {
             PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-            __Pyx_INCREF(__pyx_t_6);
+            __Pyx_INCREF(__pyx_t_2);
             __Pyx_INCREF(function);
             __Pyx_DECREF_SET(__pyx_t_1, function);
           }
         }
-        __pyx_t_4 = (__pyx_t_6) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_6, __pyx_v_i) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_i);
-        __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
-        if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_4);
+        __pyx_t_11 = (__pyx_t_2) ? __Pyx_PyObject_Call2Args(__pyx_t_1, __pyx_t_2, __pyx_v_i) : __Pyx_PyObject_CallOneArg(__pyx_t_1, __pyx_v_i);
+        __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
+        if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 348, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_11);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        if (unlikely(__Pyx_ListComp_Append(__pyx_t_5, (PyObject*)__pyx_t_4))) __PYX_ERR(0, 338, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(__Pyx_ListComp_Append(__pyx_t_5, (PyObject*)__pyx_t_11))) __PYX_ERR(0, 348, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyString_Join(__pyx_kp_s_, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 338, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyString_Join(__pyx_kp_s_, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 348, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_columns_statement = ((PyObject*)__pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":339
+      /* "programs/create_db_helpers.py":349
  *             columns = [i for i in batch_summary.keys() if i != 'batch_id']
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]             # <<<<<<<<<<<<<<
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(
  *                 columns_statement, batch_summary['batch_id'])
  */
-      __pyx_t_3 = __pyx_pf_8programs_17create_db_helpers_20update_batch_summary_3genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L1_error)
+      __pyx_t_3 = __pyx_pf_8programs_17create_db_helpers_20update_batch_summary_3genexpr(((PyObject*)__pyx_cur_scope)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 349, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = __Pyx_PySequence_Tuple(__pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 339, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PySequence_Tuple(__pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 349, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L1_error)
+      __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 349, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_GIVEREF(__pyx_t_5);
       PyList_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
@@ -9839,25 +10281,25 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       __pyx_v_values = ((PyObject*)__pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":340
+      /* "programs/create_db_helpers.py":350
  *             columns_statement = ', '.join(['{}=%s'.format(i) for i in columns])
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(             # <<<<<<<<<<<<<<
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(             # <<<<<<<<<<<<<<
  *                 columns_statement, batch_summary['batch_id'])
  *             cur.execute(update_statement, values[0])
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_update_batch_summaries_set_where, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 340, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_update_batch_summary_set_where_b_2, __pyx_n_s_format); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 350, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
 
-      /* "programs/create_db_helpers.py":341
+      /* "programs/create_db_helpers.py":351
  *             values = [tuple(batch_summary[key] for key in batch_summary if key != 'batch_id')]
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(
  *                 columns_statement, batch_summary['batch_id'])             # <<<<<<<<<<<<<<
  *             cur.execute(update_statement, values[0])
  *             db.commit()
  */
-      __pyx_t_4 = __Pyx_PyObject_Dict_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 341, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_4);
+      __pyx_t_11 = __Pyx_PyObject_Dict_GetItem(__pyx_cur_scope->__pyx_v_batch_summary, __pyx_n_s_batch_id); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 351, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_11);
       __pyx_t_1 = NULL;
       __pyx_t_7 = 0;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -9872,60 +10314,60 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_v_columns_statement, __pyx_t_4};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 340, __pyx_L1_error)
+        PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_v_columns_statement, __pyx_t_11};
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 350, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_v_columns_statement, __pyx_t_4};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 340, __pyx_L1_error)
+        PyObject *__pyx_temp[3] = {__pyx_t_1, __pyx_v_columns_statement, __pyx_t_11};
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 350, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 340, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_6);
+        __pyx_t_2 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 350, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
         if (__pyx_t_1) {
-          __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_1); __pyx_t_1 = NULL;
+          __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1); __pyx_t_1 = NULL;
         }
         __Pyx_INCREF(__pyx_v_columns_statement);
         __Pyx_GIVEREF(__pyx_v_columns_statement);
-        PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_7, __pyx_v_columns_statement);
-        __Pyx_GIVEREF(__pyx_t_4);
-        PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_7, __pyx_t_4);
-        __pyx_t_4 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 340, __pyx_L1_error)
+        PyTuple_SET_ITEM(__pyx_t_2, 0+__pyx_t_7, __pyx_v_columns_statement);
+        __Pyx_GIVEREF(__pyx_t_11);
+        PyTuple_SET_ITEM(__pyx_t_2, 1+__pyx_t_7, __pyx_t_11);
+        __pyx_t_11 = 0;
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 350, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       }
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __pyx_v_update_statement = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":342
- *             update_statement = 'update batch_summaries set {} where batch_id={}'.format(
+      /* "programs/create_db_helpers.py":352
+ *             update_statement = 'update batch_summary set {} where batch_id={}'.format(
  *                 columns_statement, batch_summary['batch_id'])
  *             cur.execute(update_statement, values[0])             # <<<<<<<<<<<<<<
  *             db.commit()
  *     cur.close()
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 342, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_execute); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 352, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_6 = __Pyx_GetItemInt_List(__pyx_v_values, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 342, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_4 = NULL;
+      __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_values, 0, long, 1, __Pyx_PyInt_From_long, 1, 0, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 352, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_2);
+      __pyx_t_11 = NULL;
       __pyx_t_7 = 0;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
-        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_5);
-        if (likely(__pyx_t_4)) {
+        __pyx_t_11 = PyMethod_GET_SELF(__pyx_t_5);
+        if (likely(__pyx_t_11)) {
           PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_5);
-          __Pyx_INCREF(__pyx_t_4);
+          __Pyx_INCREF(__pyx_t_11);
           __Pyx_INCREF(function);
           __Pyx_DECREF_SET(__pyx_t_5, function);
           __pyx_t_7 = 1;
@@ -9933,49 +10375,49 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       }
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_update_statement, __pyx_t_6};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 342, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_update_statement, __pyx_t_2};
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 352, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
-        PyObject *__pyx_temp[3] = {__pyx_t_4, __pyx_v_update_statement, __pyx_t_6};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 342, __pyx_L1_error)
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        PyObject *__pyx_temp[3] = {__pyx_t_11, __pyx_v_update_statement, __pyx_t_2};
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 352, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_11); __pyx_t_11 = 0;
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       } else
       #endif
       {
-        __pyx_t_1 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 342, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 352, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        if (__pyx_t_4) {
-          __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_4); __pyx_t_4 = NULL;
+        if (__pyx_t_11) {
+          __Pyx_GIVEREF(__pyx_t_11); PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_11); __pyx_t_11 = NULL;
         }
         __Pyx_INCREF(__pyx_v_update_statement);
         __Pyx_GIVEREF(__pyx_v_update_statement);
         PyTuple_SET_ITEM(__pyx_t_1, 0+__pyx_t_7, __pyx_v_update_statement);
-        __Pyx_GIVEREF(__pyx_t_6);
-        PyTuple_SET_ITEM(__pyx_t_1, 1+__pyx_t_7, __pyx_t_6);
-        __pyx_t_6 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 342, __pyx_L1_error)
+        __Pyx_GIVEREF(__pyx_t_2);
+        PyTuple_SET_ITEM(__pyx_t_1, 1+__pyx_t_7, __pyx_t_2);
+        __pyx_t_2 = 0;
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 352, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       }
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-      /* "programs/create_db_helpers.py":343
+      /* "programs/create_db_helpers.py":353
  *                 columns_statement, batch_summary['batch_id'])
  *             cur.execute(update_statement, values[0])
  *             db.commit()             # <<<<<<<<<<<<<<
  *     cur.close()
  *     db.close()
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 343, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_commit); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 353, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __pyx_t_1 = NULL;
       if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -9989,14 +10431,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
       }
       __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 343, __pyx_L1_error)
+      if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 353, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
     __pyx_L20:;
 
-    /* "programs/create_db_helpers.py":322
+    /* "programs/create_db_helpers.py":332
  *                         print(err)
  *                         print(batch_summary[key])
  *     elif CONFIG['sql_flavor']=='postgres':             # <<<<<<<<<<<<<<
@@ -10006,14 +10448,14 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   }
   __pyx_L3:;
 
-  /* "programs/create_db_helpers.py":344
+  /* "programs/create_db_helpers.py":354
  *             cur.execute(update_statement, values[0])
  *             db.commit()
  *     cur.close()             # <<<<<<<<<<<<<<
  *     db.close()
  * 
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_close); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 344, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_cur, __pyx_n_s_close); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_1 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -10027,19 +10469,19 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   }
   __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 344, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 354, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "programs/create_db_helpers.py":345
+  /* "programs/create_db_helpers.py":355
  *             db.commit()
  *     cur.close()
  *     db.close()             # <<<<<<<<<<<<<<
  * 
  * if __name__=='__main__':
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_close); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 345, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_v_db, __pyx_n_s_close); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 355, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_1 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -10053,12 +10495,12 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   }
   __pyx_t_3 = (__pyx_t_1) ? __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_1) : __Pyx_PyObject_CallNoArg(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 345, __pyx_L1_error)
+  if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 355, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "programs/create_db_helpers.py":290
+  /* "programs/create_db_helpers.py":300
  *     db.commit()
  * 
  * def update_batch_summary(batch_summary):             # <<<<<<<<<<<<<<
@@ -10076,6 +10518,8 @@ static PyObject *__pyx_pf_8programs_17create_db_helpers_12update_batch_summary(C
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_XDECREF(__pyx_t_11);
   __Pyx_AddTraceback("programs.create_db_helpers.update_batch_summary", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -10628,17 +11072,18 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_DataFrame, __pyx_k_DataFrame, sizeof(__pyx_k_DataFrame), 0, 0, 1, 1},
   {&__pyx_kp_s_Failed_to_Create_DB_Table_error, __pyx_k_Failed_to_Create_DB_Table_error, sizeof(__pyx_k_Failed_to_Create_DB_Table_error), 0, 0, 1, 0},
   {&__pyx_kp_s_Failed_to_write_data_to_database, __pyx_k_Failed_to_write_data_to_database, sizeof(__pyx_k_Failed_to_write_data_to_database), 0, 0, 1, 0},
+  {&__pyx_kp_s_File_does_not_exist_Passing, __pyx_k_File_does_not_exist_Passing, sizeof(__pyx_k_File_does_not_exist_Passing), 0, 0, 1, 0},
   {&__pyx_n_s_NULL, __pyx_k_NULL, sizeof(__pyx_k_NULL), 0, 0, 1, 1},
   {&__pyx_n_s_O, __pyx_k_O, sizeof(__pyx_k_O), 0, 0, 1, 1},
-  {&__pyx_kp_s_SELECT_name_FROM_pg_catalog_pg_t, __pyx_k_SELECT_name_FROM_pg_catalog_pg_t, sizeof(__pyx_k_SELECT_name_FROM_pg_catalog_pg_t), 0, 0, 1, 0},
   {&__pyx_kp_s_SELECT_name_FROM_sqlite_master_W, __pyx_k_SELECT_name_FROM_sqlite_master_W, sizeof(__pyx_k_SELECT_name_FROM_sqlite_master_W), 0, 0, 1, 0},
+  {&__pyx_kp_s_SELECT_tablename_FROM_pg_catalog, __pyx_k_SELECT_tablename_FROM_pg_catalog, sizeof(__pyx_k_SELECT_tablename_FROM_pg_catalog), 0, 0, 1, 0},
   {&__pyx_kp_s_Variable_for_data_is_likely_to_b, __pyx_k_Variable_for_data_is_likely_to_b, sizeof(__pyx_k_Variable_for_data_is_likely_to_b), 0, 0, 1, 0},
   {&__pyx_kp_s_Y__M__d__H__m, __pyx_k_Y__M__d__H__m, sizeof(__pyx_k_Y__M__d__H__m), 0, 0, 1, 0},
-  {&__pyx_kp_s_Y_m_D_H_M_S, __pyx_k_Y_m_D_H_M_S, sizeof(__pyx_k_Y_m_D_H_M_S), 0, 0, 1, 0},
+  {&__pyx_kp_s_Y_m_d_H_M_S, __pyx_k_Y_m_d_H_M_S, sizeof(__pyx_k_Y_m_d_H_M_S), 0, 0, 1, 0},
   {&__pyx_n_s_ZipCode, __pyx_k_ZipCode, sizeof(__pyx_k_ZipCode), 0, 0, 1, 1},
   {&__pyx_kp_s_ZipCode_0_9, __pyx_k_ZipCode_0_9, sizeof(__pyx_k_ZipCode_0_9), 0, 0, 1, 0},
-  {&__pyx_kp_s__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 1, 0},
   {&__pyx_kp_s__11, __pyx_k__11, sizeof(__pyx_k__11), 0, 0, 1, 0},
+  {&__pyx_kp_s__12, __pyx_k__12, sizeof(__pyx_k__12), 0, 0, 1, 0},
   {&__pyx_kp_s__2, __pyx_k__2, sizeof(__pyx_k__2), 0, 0, 1, 0},
   {&__pyx_kp_s__4, __pyx_k__4, sizeof(__pyx_k__4), 0, 0, 1, 0},
   {&__pyx_kp_s__6, __pyx_k__6, sizeof(__pyx_k__6), 0, 0, 1, 0},
@@ -10656,11 +11101,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_astype, __pyx_k_astype, sizeof(__pyx_k_astype), 0, 0, 1, 1},
   {&__pyx_n_s_batch_exists, __pyx_k_batch_exists, sizeof(__pyx_k_batch_exists), 0, 0, 1, 1},
   {&__pyx_n_s_batch_id, __pyx_k_batch_id, sizeof(__pyx_k_batch_id), 0, 0, 1, 1},
-  {&__pyx_kp_s_batch_id_integer_primary_key_aut, __pyx_k_batch_id_integer_primary_key_aut, sizeof(__pyx_k_batch_id_integer_primary_key_aut), 0, 0, 1, 0},
   {&__pyx_n_s_batch_info_qry, __pyx_k_batch_info_qry, sizeof(__pyx_k_batch_info_qry), 0, 0, 1, 1},
   {&__pyx_n_s_batch_summary, __pyx_k_batch_summary, sizeof(__pyx_k_batch_summary), 0, 0, 1, 1},
   {&__pyx_n_s_bigint, __pyx_k_bigint, sizeof(__pyx_k_bigint), 0, 0, 1, 1},
-  {&__pyx_kp_s_bigint_primary_key_DEFAULT_nextv, __pyx_k_bigint_primary_key_DEFAULT_nextv, sizeof(__pyx_k_bigint_primary_key_DEFAULT_nextv), 0, 0, 1, 0},
   {&__pyx_n_s_block, __pyx_k_block, sizeof(__pyx_k_block), 0, 0, 1, 1},
   {&__pyx_n_s_block_name, __pyx_k_block_name, sizeof(__pyx_k_block_name), 0, 0, 1, 1},
   {&__pyx_n_s_blocks, __pyx_k_blocks, sizeof(__pyx_k_blocks), 0, 0, 1, 1},
@@ -10741,21 +11184,24 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_get_stem_data, __pyx_k_get_stem_data, sizeof(__pyx_k_get_stem_data), 0, 0, 1, 1},
   {&__pyx_n_s_get_stem_data_locals_lambda, __pyx_k_get_stem_data_locals_lambda, sizeof(__pyx_k_get_stem_data_locals_lambda), 0, 0, 1, 1},
   {&__pyx_n_s_get_table_noconn, __pyx_k_get_table_noconn, sizeof(__pyx_k_get_table_noconn), 0, 0, 1, 1},
+  {&__pyx_n_s_glob, __pyx_k_glob, sizeof(__pyx_k_glob), 0, 0, 1, 1},
   {&__pyx_n_s_global_vars, __pyx_k_global_vars, sizeof(__pyx_k_global_vars), 0, 0, 1, 1},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
+  {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_if_exists, __pyx_k_if_exists, sizeof(__pyx_k_if_exists), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_index, __pyx_k_index, sizeof(__pyx_k_index), 0, 0, 1, 1},
   {&__pyx_n_s_info, __pyx_k_info, sizeof(__pyx_k_info), 0, 0, 1, 1},
-  {&__pyx_n_s_inputPath, __pyx_k_inputPath, sizeof(__pyx_k_inputPath), 0, 0, 1, 1},
   {&__pyx_kp_s_insert_into_table_collist_values, __pyx_k_insert_into_table_collist_values, sizeof(__pyx_k_insert_into_table_collist_values), 0, 0, 1, 0},
   {&__pyx_n_s_insert_statement, __pyx_k_insert_statement, sizeof(__pyx_k_insert_statement), 0, 0, 1, 1},
   {&__pyx_n_s_int, __pyx_k_int, sizeof(__pyx_k_int), 0, 0, 1, 1},
   {&__pyx_n_s_int64, __pyx_k_int64, sizeof(__pyx_k_int64), 0, 0, 1, 1},
   {&__pyx_n_s_intersect, __pyx_k_intersect, sizeof(__pyx_k_intersect), 0, 0, 1, 1},
   {&__pyx_n_s_intersection, __pyx_k_intersection, sizeof(__pyx_k_intersection), 0, 0, 1, 1},
+  {&__pyx_n_s_isfile, __pyx_k_isfile, sizeof(__pyx_k_isfile), 0, 0, 1, 1},
   {&__pyx_n_s_isna, __pyx_k_isna, sizeof(__pyx_k_isna), 0, 0, 1, 1},
   {&__pyx_n_s_item, __pyx_k_item, sizeof(__pyx_k_item), 0, 0, 1, 1},
+  {&__pyx_n_s_items, __pyx_k_items, sizeof(__pyx_k_items), 0, 0, 1, 1},
   {&__pyx_n_s_j, __pyx_k_j, sizeof(__pyx_k_j), 0, 0, 1, 1},
   {&__pyx_n_s_join, __pyx_k_join, sizeof(__pyx_k_join), 0, 0, 1, 1},
   {&__pyx_n_s_json, __pyx_k_json, sizeof(__pyx_k_json), 0, 0, 1, 1},
@@ -10779,6 +11225,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_now, __pyx_k_now, sizeof(__pyx_k_now), 0, 0, 1, 1},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
+  {&__pyx_n_s_os, __pyx_k_os, sizeof(__pyx_k_os), 0, 0, 1, 1},
   {&__pyx_n_s_out, __pyx_k_out, sizeof(__pyx_k_out), 0, 0, 1, 1},
   {&__pyx_n_s_outcome, __pyx_k_outcome, sizeof(__pyx_k_outcome), 0, 0, 1, 1},
   {&__pyx_n_s_p, __pyx_k_p, sizeof(__pyx_k_p), 0, 0, 1, 1},
@@ -10788,18 +11235,21 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_parsed_address, __pyx_k_parsed_address, sizeof(__pyx_k_parsed_address), 0, 0, 1, 1},
   {&__pyx_n_s_parsed_block, __pyx_k_parsed_block, sizeof(__pyx_k_parsed_block), 0, 0, 1, 1},
   {&__pyx_n_s_parsed_variable, __pyx_k_parsed_variable, sizeof(__pyx_k_parsed_variable), 0, 0, 1, 1},
+  {&__pyx_n_s_path, __pyx_k_path, sizeof(__pyx_k_path), 0, 0, 1, 1},
   {&__pyx_n_s_pd, __pyx_k_pd, sizeof(__pyx_k_pd), 0, 0, 1, 1},
   {&__pyx_n_s_platform, __pyx_k_platform, sizeof(__pyx_k_platform), 0, 0, 1, 1},
   {&__pyx_n_s_postgres, __pyx_k_postgres, sizeof(__pyx_k_postgres), 0, 0, 1, 1},
   {&__pyx_n_s_prediction, __pyx_k_prediction, sizeof(__pyx_k_prediction), 0, 0, 1, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
+  {&__pyx_kp_s_programs, __pyx_k_programs, sizeof(__pyx_k_programs), 0, 0, 1, 0},
   {&__pyx_n_s_programs_address_standardizer_st, __pyx_k_programs_address_standardizer_st, sizeof(__pyx_k_programs_address_standardizer_st), 0, 0, 1, 1},
   {&__pyx_n_s_programs_connect_db, __pyx_k_programs_connect_db, sizeof(__pyx_k_programs_connect_db), 0, 0, 1, 1},
   {&__pyx_n_s_programs_create_db_helpers, __pyx_k_programs_create_db_helpers, sizeof(__pyx_k_programs_create_db_helpers), 0, 0, 1, 1},
   {&__pyx_n_s_programs_global_vars, __pyx_k_programs_global_vars, sizeof(__pyx_k_programs_global_vars), 0, 0, 1, 1},
   {&__pyx_n_s_programs_logger_setup, __pyx_k_programs_logger_setup, sizeof(__pyx_k_programs_logger_setup), 0, 0, 1, 1},
-  {&__pyx_n_s_programs_usaddress_usaddress, __pyx_k_programs_usaddress_usaddress, sizeof(__pyx_k_programs_usaddress_usaddress), 0, 0, 1, 1},
+  {&__pyx_kp_s_programs_usaddress, __pyx_k_programs_usaddress, sizeof(__pyx_k_programs_usaddress), 0, 0, 1, 0},
   {&__pyx_n_s_programs_write_to_db, __pyx_k_programs_write_to_db, sizeof(__pyx_k_programs_write_to_db), 0, 0, 1, 1},
+  {&__pyx_n_s_projectPath, __pyx_k_projectPath, sizeof(__pyx_k_projectPath), 0, 0, 1, 1},
   {&__pyx_n_s_psycopg2_extras, __pyx_k_psycopg2_extras, sizeof(__pyx_k_psycopg2_extras), 0, 0, 1, 1},
   {&__pyx_n_s_r, __pyx_k_r, sizeof(__pyx_k_r), 0, 0, 1, 1},
   {&__pyx_n_s_r1, __pyx_k_r1, sizeof(__pyx_k_r1), 0, 0, 1, 1},
@@ -10816,10 +11266,10 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_row_seq, __pyx_k_row_seq, sizeof(__pyx_k_row_seq), 0, 0, 1, 1},
   {&__pyx_kp_s_s, __pyx_k_s, sizeof(__pyx_k_s), 0, 0, 1, 0},
   {&__pyx_n_s_sample, __pyx_k_sample, sizeof(__pyx_k_sample), 0, 0, 1, 1},
+  {&__pyx_kp_s_select_coalesce_max_batch_id_1_1, __pyx_k_select_coalesce_max_batch_id_1_1, sizeof(__pyx_k_select_coalesce_max_batch_id_1_1), 0, 0, 1, 0},
   {&__pyx_kp_s_select_count_cnt_from_sqlite_mas, __pyx_k_select_count_cnt_from_sqlite_mas, sizeof(__pyx_k_select_count_cnt_from_sqlite_mas), 0, 0, 1, 0},
   {&__pyx_kp_s_select_from_batch_summary_where, __pyx_k_select_from_batch_summary_where, sizeof(__pyx_k_select_from_batch_summary_where), 0, 0, 1, 0},
   {&__pyx_kp_s_select_max_batch_id_1_batch_id_f, __pyx_k_select_max_batch_id_1_batch_id_f, sizeof(__pyx_k_select_max_batch_id_1_batch_id_f), 0, 0, 1, 0},
-  {&__pyx_kp_s_select_max_batch_id_1_batch_id_f_2, __pyx_k_select_max_batch_id_1_batch_id_f_2, sizeof(__pyx_k_select_max_batch_id_1_batch_id_f_2), 0, 0, 1, 0},
   {&__pyx_n_s_send, __pyx_k_send, sizeof(__pyx_k_send), 0, 0, 1, 1},
   {&__pyx_n_s_seq_query, __pyx_k_seq_query, sizeof(__pyx_k_seq_query), 0, 0, 1, 1},
   {&__pyx_n_s_source, __pyx_k_source, sizeof(__pyx_k_source), 0, 0, 1, 1},
@@ -10828,7 +11278,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_sql_trans, __pyx_k_sql_trans, sizeof(__pyx_k_sql_trans), 0, 0, 1, 1},
   {&__pyx_n_s_sqlalchemy, __pyx_k_sqlalchemy, sizeof(__pyx_k_sqlalchemy), 0, 0, 1, 1},
   {&__pyx_n_s_sqlite, __pyx_k_sqlite, sizeof(__pyx_k_sqlite), 0, 0, 1, 1},
-  {&__pyx_kp_s_sqlite_2, __pyx_k_sqlite_2, sizeof(__pyx_k_sqlite_2), 0, 0, 1, 0},
+  {&__pyx_kp_s_sqlite_db, __pyx_k_sqlite_db, sizeof(__pyx_k_sqlite_db), 0, 0, 1, 0},
   {&__pyx_n_s_standardize, __pyx_k_standardize, sizeof(__pyx_k_standardize), 0, 0, 1, 1},
   {&__pyx_n_s_stem, __pyx_k_stem, sizeof(__pyx_k_stem), 0, 0, 1, 1},
   {&__pyx_n_s_stem_fuzzy, __pyx_k_stem_fuzzy, sizeof(__pyx_k_stem_fuzzy), 0, 0, 1, 1},
@@ -10852,13 +11302,14 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_tolist, __pyx_k_tolist, sizeof(__pyx_k_tolist), 0, 0, 1, 1},
   {&__pyx_n_s_training, __pyx_k_training, sizeof(__pyx_k_training), 0, 0, 1, 1},
   {&__pyx_kp_s_training_2, __pyx_k_training_2, sizeof(__pyx_k_training_2), 0, 0, 1, 0},
-  {&__pyx_kp_s_update_batch_summaries_set_where, __pyx_k_update_batch_summaries_set_where, sizeof(__pyx_k_update_batch_summaries_set_where), 0, 0, 1, 0},
   {&__pyx_n_s_update_batch_summary, __pyx_k_update_batch_summary, sizeof(__pyx_k_update_batch_summary), 0, 0, 1, 1},
   {&__pyx_n_s_update_batch_summary_locals_gene, __pyx_k_update_batch_summary_locals_gene, sizeof(__pyx_k_update_batch_summary_locals_gene), 0, 0, 1, 1},
   {&__pyx_kp_s_update_batch_summary_set_where_b, __pyx_k_update_batch_summary_set_where_b, sizeof(__pyx_k_update_batch_summary_set_where_b), 0, 0, 1, 0},
+  {&__pyx_kp_s_update_batch_summary_set_where_b_2, __pyx_k_update_batch_summary_set_where_b_2, sizeof(__pyx_k_update_batch_summary_set_where_b_2), 0, 0, 1, 0},
   {&__pyx_n_s_update_statement, __pyx_k_update_statement, sizeof(__pyx_k_update_statement), 0, 0, 1, 1},
   {&__pyx_n_s_upper, __pyx_k_upper, sizeof(__pyx_k_upper), 0, 0, 1, 1},
   {&__pyx_n_s_usadd, __pyx_k_usadd, sizeof(__pyx_k_usadd), 0, 0, 1, 1},
+  {&__pyx_n_s_usaddress, __pyx_k_usaddress, sizeof(__pyx_k_usaddress), 0, 0, 1, 1},
   {&__pyx_n_s_use_remaining_parsed_address, __pyx_k_use_remaining_parsed_address, sizeof(__pyx_k_use_remaining_parsed_address), 0, 0, 1, 1},
   {&__pyx_n_s_v, __pyx_k_v, sizeof(__pyx_k_v), 0, 0, 1, 1},
   {&__pyx_n_s_values, __pyx_k_values, sizeof(__pyx_k_values), 0, 0, 1, 1},
@@ -10880,9 +11331,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 65, __pyx_L1_error)
-  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 90, __pyx_L1_error)
-  __pyx_builtin_max = __Pyx_GetBuiltinName(__pyx_n_s_max); if (!__pyx_builtin_max) __PYX_ERR(0, 219, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 95, __pyx_L1_error)
+  __pyx_builtin_max = __Pyx_GetBuiltinName(__pyx_n_s_max); if (!__pyx_builtin_max) __PYX_ERR(0, 225, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -10892,136 +11343,144 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "programs/create_db_helpers.py":125
+  /* "programs/create_db_helpers.py":130
  *         col_stmt = ', '.join(['{} {}'.format(k, sql_trans[k]) for k in sql_trans])
  *         if CONFIG['sql_flavor']=='postgres':
  *             col_stmt = col_stmt.replace('int','bigint')             # <<<<<<<<<<<<<<
  *         full_statement = 'create table {} ({})'.format(dataname, col_stmt)
  *         cur.execute(full_statement)
  */
-  __pyx_tuple__3 = PyTuple_Pack(2, __pyx_n_s_int, __pyx_n_s_bigint); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(2, __pyx_n_s_int, __pyx_n_s_bigint); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "programs/create_db_helpers.py":277
- *             db.commit()
- *             ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
+  /* "programs/create_db_helpers.py":288
+ *             logger.info('File {} does not exist.  Passing'.format(data_source))
+ *                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
  *     for table in ['clerical_review_candidates','matched_pairs']:             # <<<<<<<<<<<<<<
  *         if CONFIG['sql_flavor']=='sqlite':
  *             ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
  */
-  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_n_s_clerical_review_candidates, __pyx_n_s_matched_pairs); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 277, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_n_s_clerical_review_candidates, __pyx_n_s_matched_pairs); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 288, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "programs/create_db_helpers.py":326
+  /* "programs/create_db_helpers.py":336
  *             ###IF the batch doesn't exist, make the row (it's just the batch status and batch_id)
  *             columns = batch_summary.keys()
  *             columns_list = str(tuple([str(i) for i in columns])).replace("'", "")             # <<<<<<<<<<<<<<
  *             values = [tuple(batch_summary[key] for key in batch_summary)]
  *             insert_statement = 'insert into {table} {collist} values %s'.format(table='batch_summary',
  */
-  __pyx_tuple__8 = PyTuple_Pack(2, __pyx_kp_s__6, __pyx_kp_s__7); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 326, __pyx_L1_error)
+  __pyx_tuple__8 = PyTuple_Pack(2, __pyx_kp_s__6, __pyx_kp_s__7); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(0, 336, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "programs/create_db_helpers.py":54
+  /* "programs/create_db_helpers.py":18
+ * ###check if we have local usaddress or a proper version
+ * if ast.literal_eval(CONFIG['parse_address'])==True:
+ *     if 'programs/usaddress' in glob("programs/[inserted by cython to avoid comment start]*[inserted by cython to avoid comment closer]/"):             # <<<<<<<<<<<<<<
+ *         import usaddress as usadd
+ *     else:
+ */
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_programs); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 18, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
+
+  /* "programs/create_db_helpers.py":59
  * ###Alter if we aren't dealing with an sqlite database
  * if CONFIG['sql_flavor']!='sqlite':
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')             # <<<<<<<<<<<<<<
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')             # <<<<<<<<<<<<<<
  * 
  * def intersect(x0, x1, y0, y1):
  */
-  __pyx_tuple__12 = PyTuple_Pack(2, __pyx_kp_s__10, __pyx_kp_s__11); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 54, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
-  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_kp_s_batch_id_integer_primary_key_aut, __pyx_kp_s_bigint_primary_key_DEFAULT_nextv); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 54, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(2, __pyx_kp_s__11, __pyx_kp_s__12); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__13);
   __Pyx_GIVEREF(__pyx_tuple__13);
 
-  /* "programs/create_db_helpers.py":56
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+  /* "programs/create_db_helpers.py":61
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
  * 
  * def intersect(x0, x1, y0, y1):             # <<<<<<<<<<<<<<
  *     '''
  *     This function generates  a true or false flag for the intersection
  */
-  __pyx_tuple__14 = PyTuple_Pack(7, __pyx_n_s_x0, __pyx_n_s_x1, __pyx_n_s_y0, __pyx_n_s_y1, __pyx_n_s_r1, __pyx_n_s_r2, __pyx_n_s_intersect); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_tuple__14 = PyTuple_Pack(7, __pyx_n_s_x0, __pyx_n_s_x1, __pyx_n_s_y0, __pyx_n_s_y1, __pyx_n_s_r1, __pyx_n_s_r2, __pyx_n_s_intersect); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__14);
   __Pyx_GIVEREF(__pyx_tuple__14);
-  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_intersect, 56, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_codeobj__15 = (PyObject*)__Pyx_PyCode_New(4, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__14, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_intersect, 61, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__15)) __PYX_ERR(0, 61, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":73
+  /* "programs/create_db_helpers.py":78
  *         return False
  * 
  * def generate_batch_id(db):             # <<<<<<<<<<<<<<
  *     '''
  *     This function will query the central mojo db to generate our new batch number.
  */
-  __pyx_tuple__16 = PyTuple_Pack(7, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_out, __pyx_n_s_columns, __pyx_n_s_last_batch, __pyx_n_s_i, __pyx_n_s_row); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_tuple__16 = PyTuple_Pack(7, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_out, __pyx_n_s_columns, __pyx_n_s_last_batch, __pyx_n_s_i, __pyx_n_s_row); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 78, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__16);
   __Pyx_GIVEREF(__pyx_tuple__16);
-  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_generate_batch_id, 73, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 73, __pyx_L1_error)
+  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_generate_batch_id, 78, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 78, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":96
+  /* "programs/create_db_helpers.py":101
  *         return 1
  * 
  * def stem_fuzzy(x):             # <<<<<<<<<<<<<<
  *     if x=='NULL':
  *         return None
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_n_s_x); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_n_s_x); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 101, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__18);
   __Pyx_GIVEREF(__pyx_tuple__18);
-  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_stem_fuzzy, 96, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 96, __pyx_L1_error)
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_stem_fuzzy, 101, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 101, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":102
+  /* "programs/create_db_helpers.py":107
  *         return stemmer.stem(x)
  * 
  * def create_table(dataname,column_types):             # <<<<<<<<<<<<<<
  *     '''
  *     Create a table given the data snippet
  */
-  __pyx_tuple__20 = PyTuple_Pack(11, __pyx_n_s_dataname, __pyx_n_s_column_types, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_col_dict, __pyx_n_s_sql_trans, __pyx_n_s_c, __pyx_n_s_col_stmt, __pyx_n_s_full_statement, __pyx_n_s_error, __pyx_n_s_k); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(11, __pyx_n_s_dataname, __pyx_n_s_column_types, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_col_dict, __pyx_n_s_sql_trans, __pyx_n_s_c, __pyx_n_s_col_stmt, __pyx_n_s_full_statement, __pyx_n_s_error, __pyx_n_s_k); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__20);
   __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(2, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_create_table_2, 102, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 102, __pyx_L1_error)
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(2, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_create_table_2, 107, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 107, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":134
+  /* "programs/create_db_helpers.py":139
  *         return 'fail'
  * 
  * def get_stem_data(data_source):             # <<<<<<<<<<<<<<
  *     '''
  *     This function loads and then stems the data
  */
-  __pyx_tuple__22 = PyTuple_Pack(30, __pyx_n_s_data_source, __pyx_n_s_dataname, __pyx_n_s_str_dict, __pyx_n_s_date_columns, __pyx_n_s_col, __pyx_n_s_fuzzy_vars, __pyx_n_s_csvname, __pyx_n_s_table_exists, __pyx_n_s_row_number, __pyx_n_s_data, __pyx_n_s_cols, __pyx_n_s_block, __pyx_n_s_row_seq, __pyx_n_s_row, __pyx_n_s_parsed_address, __pyx_n_s_parsed_block, __pyx_n_s_variable, __pyx_n_s_p, __pyx_n_s_r, __pyx_n_s_out, __pyx_n_s_maxlen, __pyx_n_s_var, __pyx_n_s_to_stem, __pyx_n_s_k, __pyx_n_s_i, __pyx_n_s_outcome, __pyx_n_s_write_out, __pyx_n_s_item, __pyx_n_s_v, __pyx_n_s_j); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(33, __pyx_n_s_data_source, __pyx_n_s_dataname, __pyx_n_s_str_dict, __pyx_n_s_date_columns, __pyx_n_s_col, __pyx_n_s_fuzzy_vars, __pyx_n_s_csvname, __pyx_n_s_table_exists, __pyx_n_s_row_number, __pyx_n_s_data, __pyx_n_s_cols, __pyx_n_s_block, __pyx_n_s_row_seq, __pyx_n_s_row, __pyx_n_s_parsed_address, __pyx_n_s_parsed_block, __pyx_n_s_variable, __pyx_n_s_p, __pyx_n_s_r, __pyx_n_s_out, __pyx_n_s_maxlen, __pyx_n_s_var, __pyx_n_s_to_stem, __pyx_n_s_k, __pyx_n_s_i, __pyx_n_s_outcome, __pyx_n_s_write_out, __pyx_n_s_item, __pyx_n_s_v, __pyx_n_s_j, __pyx_n_s_x, __pyx_n_s_k, __pyx_n_s_v); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(1, 0, 30, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_get_stem_data, 134, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(1, 0, 33, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_get_stem_data, 139, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 139, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":261
+  /* "programs/create_db_helpers.py":269
  *                 break
  * 
  * def createDatabase(databaseName):             # <<<<<<<<<<<<<<
  *     # create individual data tables
  *     # ###for each input dataset, need to
  */
-  __pyx_tuple__24 = PyTuple_Pack(7, __pyx_n_s_databaseName, __pyx_n_s_data_source, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_i, __pyx_n_s_table, __pyx_n_s_ret); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 261, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(7, __pyx_n_s_databaseName, __pyx_n_s_data_source, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_i, __pyx_n_s_table, __pyx_n_s_ret); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 269, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_createDatabase, 261, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 261, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(1, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_createDatabase, 269, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 269, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":290
+  /* "programs/create_db_helpers.py":300
  *     db.commit()
  * 
  * def update_batch_summary(batch_summary):             # <<<<<<<<<<<<<<
  *     '''
  *     This function will update the batch summary as we go for each value in batch_summary
  */
-  __pyx_tuple__26 = PyTuple_Pack(17, __pyx_n_s_batch_summary, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_batch_exists, __pyx_n_s_diskEngine, __pyx_n_s_key, __pyx_n_s_update_statement, __pyx_n_s_err, __pyx_n_s_columns, __pyx_n_s_columns_list, __pyx_n_s_values, __pyx_n_s_insert_statement, __pyx_n_s_columns_statement, __pyx_n_s_i, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_tuple__26 = PyTuple_Pack(17, __pyx_n_s_batch_summary, __pyx_n_s_db, __pyx_n_s_cur, __pyx_n_s_batch_exists, __pyx_n_s_diskEngine, __pyx_n_s_key, __pyx_n_s_update_statement, __pyx_n_s_err, __pyx_n_s_columns, __pyx_n_s_columns_list, __pyx_n_s_values, __pyx_n_s_insert_statement, __pyx_n_s_columns_statement, __pyx_n_s_i, __pyx_n_s_genexpr, __pyx_n_s_genexpr, __pyx_n_s_genexpr); if (unlikely(!__pyx_tuple__26)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__26);
   __Pyx_GIVEREF(__pyx_tuple__26);
-  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(1, 0, 17, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_update_batch_summary, 290, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 290, __pyx_L1_error)
+  __pyx_codeobj__27 = (PyObject*)__Pyx_PyCode_New(1, 0, 17, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__26, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_create_db_helpers_py, __pyx_n_s_update_batch_summary, 300, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__27)) __PYX_ERR(0, 300, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -11079,7 +11538,7 @@ static int __Pyx_modinit_type_init_code(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__Pyx_modinit_type_init_code", 0);
   /*--- Type init code ---*/
-  if (PyType_Ready(&__pyx_type_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary) < 0) __PYX_ERR(0, 290, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary) < 0) __PYX_ERR(0, 300, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary.tp_print = 0;
   #endif
@@ -11087,7 +11546,7 @@ static int __Pyx_modinit_type_init_code(void) {
     __pyx_type_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary.tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
   }
   __pyx_ptype_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary = &__pyx_type_8programs_17create_db_helpers___pyx_scope_struct__update_batch_summary;
-  if (PyType_Ready(&__pyx_type_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr) < 0) __PYX_ERR(0, 327, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr) < 0) __PYX_ERR(0, 337, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr.tp_print = 0;
   #endif
@@ -11095,7 +11554,7 @@ static int __Pyx_modinit_type_init_code(void) {
     __pyx_type_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr.tp_getattro = __Pyx_PyObject_GenericGetAttrNoDict;
   }
   __pyx_ptype_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr = &__pyx_type_8programs_17create_db_helpers___pyx_scope_struct_1_genexpr;
-  if (PyType_Ready(&__pyx_type_8programs_17create_db_helpers___pyx_scope_struct_2_genexpr) < 0) __PYX_ERR(0, 339, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_8programs_17create_db_helpers___pyx_scope_struct_2_genexpr) < 0) __PYX_ERR(0, 349, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
   __pyx_type_8programs_17create_db_helpers___pyx_scope_struct_2_genexpr.tp_print = 0;
   #endif
@@ -11232,6 +11691,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_create_db_helpers(PyObject *__pyx_
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   int __pyx_t_4;
+  int __pyx_t_5;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -11462,7 +11922,7 @@ if (!__Pyx_RefNanny) {
  * import numpy as np
  * from sqlalchemy import create_engine             # <<<<<<<<<<<<<<
  * logger=logger_setup(CONFIG['log_file_name'])
- * if ast.literal_eval(CONFIG['parse_address'])==True:
+ * from glob import glob
  */
   __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -11482,8 +11942,8 @@ if (!__Pyx_RefNanny) {
  * import numpy as np
  * from sqlalchemy import create_engine
  * logger=logger_setup(CONFIG['log_file_name'])             # <<<<<<<<<<<<<<
- * if ast.literal_eval(CONFIG['parse_address'])==True:
- *     import programs.usaddress.usaddress as usadd
+ * from glob import glob
+ * ###check if we have local usaddress or a proper version
  */
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_logger_setup); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -11502,255 +11962,306 @@ if (!__Pyx_RefNanny) {
   /* "programs/create_db_helpers.py":15
  * from sqlalchemy import create_engine
  * logger=logger_setup(CONFIG['log_file_name'])
- * if ast.literal_eval(CONFIG['parse_address'])==True:             # <<<<<<<<<<<<<<
- *     import programs.usaddress.usaddress as usadd
- *     from programs.address_standardizer.standardizer import *
+ * from glob import glob             # <<<<<<<<<<<<<<
+ * ###check if we have local usaddress or a proper version
+ * if ast.literal_eval(CONFIG['parse_address'])==True:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_ast); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_INCREF(__pyx_n_s_glob);
+  __Pyx_GIVEREF(__pyx_n_s_glob);
+  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_glob);
+  __pyx_t_3 = __Pyx_Import(__pyx_n_s_glob, __pyx_t_2, -1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_3, __pyx_n_s_glob); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_2, __pyx_n_s_parse_address); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_glob, __pyx_t_2) < 0) __PYX_ERR(0, 15, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "programs/create_db_helpers.py":17
+ * from glob import glob
+ * ###check if we have local usaddress or a proper version
+ * if ast.literal_eval(CONFIG['parse_address'])==True:             # <<<<<<<<<<<<<<
+ *     if 'programs/usaddress' in glob("programs/[inserted by cython to avoid comment start]*[inserted by cython to avoid comment closer]/"):
+ *         import usaddress as usadd
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_ast); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_literal_eval); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyObject_RichCompare(__pyx_t_2, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_t_3, __pyx_n_s_parse_address); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 15, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyObject_RichCompare(__pyx_t_3, Py_True, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_4) {
 
-    /* "programs/create_db_helpers.py":16
- * logger=logger_setup(CONFIG['log_file_name'])
+    /* "programs/create_db_helpers.py":18
+ * ###check if we have local usaddress or a proper version
  * if ast.literal_eval(CONFIG['parse_address'])==True:
- *     import programs.usaddress.usaddress as usadd             # <<<<<<<<<<<<<<
+ *     if 'programs/usaddress' in glob("programs/[inserted by cython to avoid comment start]*[inserted by cython to avoid comment closer]/"):             # <<<<<<<<<<<<<<
+ *         import usaddress as usadd
+ *     else:
+ */
+    __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_glob); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 18, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_4 = (__Pyx_PySequence_ContainsTF(__pyx_kp_s_programs_usaddress, __pyx_t_3, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 18, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_5 = (__pyx_t_4 != 0);
+    if (__pyx_t_5) {
+
+      /* "programs/create_db_helpers.py":19
+ * if ast.literal_eval(CONFIG['parse_address'])==True:
+ *     if 'programs/usaddress' in glob("programs/[inserted by cython to avoid comment start]*[inserted by cython to avoid comment closer]/"):
+ *         import usaddress as usadd             # <<<<<<<<<<<<<<
+ *     else:
+ *         import usaddress as usadd
+ */
+      __pyx_t_3 = __Pyx_Import(__pyx_n_s_usaddress, 0, -1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 19, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_usadd, __pyx_t_3) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "programs/create_db_helpers.py":18
+ * ###check if we have local usaddress or a proper version
+ * if ast.literal_eval(CONFIG['parse_address'])==True:
+ *     if 'programs/usaddress' in glob("programs/[inserted by cython to avoid comment start]*[inserted by cython to avoid comment closer]/"):             # <<<<<<<<<<<<<<
+ *         import usaddress as usadd
+ *     else:
+ */
+      goto __pyx_L3;
+    }
+
+    /* "programs/create_db_helpers.py":21
+ *         import usaddress as usadd
+ *     else:
+ *         import usaddress as usadd             # <<<<<<<<<<<<<<
  *     from programs.address_standardizer.standardizer import *
  * ###a query to create the batch_summary and batch_statistics tables
  */
-    __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 16, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_INCREF(__pyx_n_s__9);
-    __Pyx_GIVEREF(__pyx_n_s__9);
-    PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s__9);
-    __pyx_t_2 = __Pyx_Import(__pyx_n_s_programs_usaddress_usaddress, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 16, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_usadd, __pyx_t_2) < 0) __PYX_ERR(0, 16, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    /*else*/ {
+      __pyx_t_3 = __Pyx_Import(__pyx_n_s_usaddress, 0, -1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 21, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_usadd, __pyx_t_3) < 0) __PYX_ERR(0, 21, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    }
+    __pyx_L3:;
 
-    /* "programs/create_db_helpers.py":17
- * if ast.literal_eval(CONFIG['parse_address'])==True:
- *     import programs.usaddress.usaddress as usadd
+    /* "programs/create_db_helpers.py":22
+ *     else:
+ *         import usaddress as usadd
  *     from programs.address_standardizer.standardizer import *             # <<<<<<<<<<<<<<
  * ###a query to create the batch_summary and batch_statistics tables
  * batch_info_qry='''
  */
-    __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 17, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 22, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_n_s__9);
     __Pyx_GIVEREF(__pyx_n_s__9);
-    PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s__9);
-    __pyx_t_1 = __Pyx_Import(__pyx_n_s_programs_address_standardizer_st, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 17, __pyx_L1_error)
+    PyList_SET_ITEM(__pyx_t_3, 0, __pyx_n_s__9);
+    __pyx_t_1 = __Pyx_Import(__pyx_n_s_programs_address_standardizer_st, __pyx_t_3, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 22, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (__pyx_import_star(__pyx_t_1) < 0) __PYX_ERR(0, 17, __pyx_L1_error);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (__pyx_import_star(__pyx_t_1) < 0) __PYX_ERR(0, 22, __pyx_L1_error);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "programs/create_db_helpers.py":15
- * from sqlalchemy import create_engine
- * logger=logger_setup(CONFIG['log_file_name'])
+    /* "programs/create_db_helpers.py":17
+ * from glob import glob
+ * ###check if we have local usaddress or a proper version
  * if ast.literal_eval(CONFIG['parse_address'])==True:             # <<<<<<<<<<<<<<
- *     import programs.usaddress.usaddress as usadd
- *     from programs.address_standardizer.standardizer import *
+ *     if 'programs/usaddress' in glob("programs/[inserted by cython to avoid comment start]*[inserted by cython to avoid comment closer]/"):
+ *         import usaddress as usadd
  */
   }
 
-  /* "programs/create_db_helpers.py":19
+  /* "programs/create_db_helpers.py":24
  *     from programs.address_standardizer.standardizer import *
  * ###a query to create the batch_summary and batch_statistics tables
  * batch_info_qry='''             # <<<<<<<<<<<<<<
  * create table batch_summary(
  * batch_id integer primary key autoincrement,
  */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_batch_info_qry, __pyx_kp_s_create_table_batch_summary_batc) < 0) __PYX_ERR(0, 19, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_batch_info_qry, __pyx_kp_s_create_table_batch_summary_batc) < 0) __PYX_ERR(0, 24, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":45
+  /* "programs/create_db_helpers.py":50
  * '''
  * 
  * seq_query='''CREATE SEQUENCE batch_summary_query             # <<<<<<<<<<<<<<
  * INCREMENT 1
  * START 1
  */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_seq_query, __pyx_kp_s_CREATE_SEQUENCE_batch_summary_qu) < 0) __PYX_ERR(0, 45, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_seq_query, __pyx_kp_s_CREATE_SEQUENCE_batch_summary_qu) < 0) __PYX_ERR(0, 50, __pyx_L1_error)
 
-  /* "programs/create_db_helpers.py":53
+  /* "programs/create_db_helpers.py":58
  * 
  * ###Alter if we aren't dealing with an sqlite database
  * if CONFIG['sql_flavor']!='sqlite':             # <<<<<<<<<<<<<<
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_CONFIG); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_t_1, __pyx_n_s_sql_flavor); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_sqlite, Py_NE)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 53, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (__pyx_t_4) {
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_sqlite, Py_NE)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 58, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (__pyx_t_5) {
 
-    /* "programs/create_db_helpers.py":54
+    /* "programs/create_db_helpers.py":59
  * ###Alter if we aren't dealing with an sqlite database
  * if CONFIG['sql_flavor']!='sqlite':
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')             # <<<<<<<<<<<<<<
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')             # <<<<<<<<<<<<<<
  * 
  * def intersect(x0, x1, y0, y1):
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_seq_query); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_1 = PyNumber_Add(__pyx_t_2, __pyx_kp_s__10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_seq_query); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 59, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_kp_s__11); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_batch_info_qry); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_replace); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_batch_info_qry); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_replace); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_replace); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 54, __pyx_L1_error)
+    __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 59, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 54, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    if (PyDict_SetItem(__pyx_d, __pyx_n_s_batch_info_qry, __pyx_t_3) < 0) __PYX_ERR(0, 54, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (PyDict_SetItem(__pyx_d, __pyx_n_s_batch_info_qry, __pyx_t_2) < 0) __PYX_ERR(0, 59, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "programs/create_db_helpers.py":53
+    /* "programs/create_db_helpers.py":58
  * 
  * ###Alter if we aren't dealing with an sqlite database
  * if CONFIG['sql_flavor']!='sqlite':             # <<<<<<<<<<<<<<
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
  * 
  */
   }
 
-  /* "programs/create_db_helpers.py":56
- *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ').replace('batch_id integer primary key autoincrement','''bigint primary key DEFAULT nextval('hermes_central.regional_goals_id_seq'::regclass)''')
+  /* "programs/create_db_helpers.py":61
+ *     batch_info_qry = seq_query + '\n' + batch_info_qry.replace('\n',' ')
  * 
  * def intersect(x0, x1, y0, y1):             # <<<<<<<<<<<<<<
  *     '''
  *     This function generates  a true or false flag for the intersection
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_1intersect, 0, __pyx_n_s_intersect, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__15)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_intersect, __pyx_t_3) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_1intersect, 0, __pyx_n_s_intersect, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__15)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_intersect, __pyx_t_2) < 0) __PYX_ERR(0, 61, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":73
+  /* "programs/create_db_helpers.py":78
  *         return False
  * 
  * def generate_batch_id(db):             # <<<<<<<<<<<<<<
  *     '''
  *     This function will query the central mojo db to generate our new batch number.
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_3generate_batch_id, 0, __pyx_n_s_generate_batch_id, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__17)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 73, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_generate_batch_id, __pyx_t_3) < 0) __PYX_ERR(0, 73, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_3generate_batch_id, 0, __pyx_n_s_generate_batch_id, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__17)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_generate_batch_id, __pyx_t_2) < 0) __PYX_ERR(0, 78, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":96
+  /* "programs/create_db_helpers.py":101
  *         return 1
  * 
  * def stem_fuzzy(x):             # <<<<<<<<<<<<<<
  *     if x=='NULL':
  *         return None
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_5stem_fuzzy, 0, __pyx_n_s_stem_fuzzy, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__19)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 96, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_stem_fuzzy, __pyx_t_3) < 0) __PYX_ERR(0, 96, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_5stem_fuzzy, 0, __pyx_n_s_stem_fuzzy, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__19)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 101, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_stem_fuzzy, __pyx_t_2) < 0) __PYX_ERR(0, 101, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":102
+  /* "programs/create_db_helpers.py":107
  *         return stemmer.stem(x)
  * 
  * def create_table(dataname,column_types):             # <<<<<<<<<<<<<<
  *     '''
  *     Create a table given the data snippet
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_7create_table, 0, __pyx_n_s_create_table_2, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 102, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_create_table_2, __pyx_t_3) < 0) __PYX_ERR(0, 102, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_7create_table, 0, __pyx_n_s_create_table_2, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_create_table_2, __pyx_t_2) < 0) __PYX_ERR(0, 107, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":134
+  /* "programs/create_db_helpers.py":139
  *         return 'fail'
  * 
  * def get_stem_data(data_source):             # <<<<<<<<<<<<<<
  *     '''
  *     This function loads and then stems the data
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_9get_stem_data, 0, __pyx_n_s_get_stem_data, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 134, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_stem_data, __pyx_t_3) < 0) __PYX_ERR(0, 134, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_9get_stem_data, 0, __pyx_n_s_get_stem_data, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_stem_data, __pyx_t_2) < 0) __PYX_ERR(0, 139, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":261
+  /* "programs/create_db_helpers.py":269
  *                 break
  * 
  * def createDatabase(databaseName):             # <<<<<<<<<<<<<<
  *     # create individual data tables
  *     # ###for each input dataset, need to
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_11createDatabase, 0, __pyx_n_s_createDatabase, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 261, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_createDatabase, __pyx_t_3) < 0) __PYX_ERR(0, 261, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_11createDatabase, 0, __pyx_n_s_createDatabase, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 269, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_createDatabase, __pyx_t_2) < 0) __PYX_ERR(0, 269, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":290
+  /* "programs/create_db_helpers.py":300
  *     db.commit()
  * 
  * def update_batch_summary(batch_summary):             # <<<<<<<<<<<<<<
  *     '''
  *     This function will update the batch summary as we go for each value in batch_summary
  */
-  __pyx_t_3 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_13update_batch_summary, 0, __pyx_n_s_update_batch_summary, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 290, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_update_batch_summary, __pyx_t_3) < 0) __PYX_ERR(0, 290, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_8programs_17create_db_helpers_13update_batch_summary, 0, __pyx_n_s_update_batch_summary, NULL, __pyx_n_s_programs_create_db_helpers, __pyx_d, ((PyObject *)__pyx_codeobj__27)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 300, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_update_batch_summary, __pyx_t_2) < 0) __PYX_ERR(0, 300, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "programs/create_db_helpers.py":347
+  /* "programs/create_db_helpers.py":357
  *     db.close()
  * 
  * if __name__=='__main__':             # <<<<<<<<<<<<<<
  *     print('why did you do this?')
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_name); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 347, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = (__Pyx_PyString_Equals(__pyx_t_3, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 347, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (__pyx_t_4) {
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_name); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 357, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_5 = (__Pyx_PyString_Equals(__pyx_t_2, __pyx_n_s_main, Py_EQ)); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 357, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (__pyx_t_5) {
 
-    /* "programs/create_db_helpers.py":348
+    /* "programs/create_db_helpers.py":358
  * 
  * if __name__=='__main__':
  *     print('why did you do this?')             # <<<<<<<<<<<<<<
  */
-    if (__Pyx_PrintOne(0, __pyx_kp_s_why_did_you_do_this) < 0) __PYX_ERR(0, 348, __pyx_L1_error)
+    if (__Pyx_PrintOne(0, __pyx_kp_s_why_did_you_do_this) < 0) __PYX_ERR(0, 358, __pyx_L1_error)
 
-    /* "programs/create_db_helpers.py":347
+    /* "programs/create_db_helpers.py":357
  *     db.close()
  * 
  * if __name__=='__main__':             # <<<<<<<<<<<<<<
@@ -11763,10 +12274,10 @@ if (!__Pyx_RefNanny) {
  * 
  * '''
  */
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_3) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /*--- Wrapped vars code ---*/
 

@@ -4,19 +4,17 @@
 from __future__ import division
 import copy
 import os
+import sys
+sys.path.append(os.getcwd())
 from copy import deepcopy as dcpy
-
-import programs.soundex
 from programs.write_to_db import write_to_db
+from programs.create_db_helpers import get_db_connection, get_table_noconn
 import numpy as np
 from scipy.stats import randint as sp_randint
-from programs.global_vars import *
 from programs.logger_setup import *
 from  sklearn.model_selection import RandomizedSearchCV
 from multiprocessing import Pool
 from sklearn.feature_selection import RFECV
-import warnings
-from sklearn.model_selection import StratifiedKFold
 import programs.custom_scoring_methods as cust_scoring
 from inspect import getmembers, isfunction
 logger=logger_setup(CONFIG['log_file_name'])
@@ -108,19 +106,164 @@ def nominal_impute(values, header_names, header_types, nominal_info):
     :param nominal_info: A dictionary with the format {variable:{'min':xxx,'max':yyy}} for each of the datatypes
     :return:
     '''
-    for i in range(len(values)):
-        if header_types[i]=='fuzzy':
-            if np.isnan(values[i]).all()==True:
-                values[i] = -1
-            else:
-                values[i] = np.round(values[i],1)
-        elif header_types[i]=='numeric':
-            if np.isnan(values[i]).all()==True:
-                my_dims = nominal_info[header_names[i]]
-                ##sub with 10 times the largest possible difference for the variable
-                values[i] = 10 * (my_dims['max'] - my_dims['min'])
+    for i in range(len(header_types)):
+        if np.isnan(values[i]).any() == True:
+            if header_types[i] == 'fuzzy':
+                ###check if there are any nulls
+                for k in range(len(values[i])):
+                    if np.isnan(values[i][k]) == True:
+                        values[i][k] = -1
+                    else:
+                        values[i][k] = np.round(values[i][k], 1)
+            elif header_types[i] == 'numeric':
+                for k in range(len(values[i])):
+                    if np.isnan(values[i][k]) == True:
+                        my_dims = nominal_info[header_names[i]]
+                        ##sub with 10 times the largest possible difference for the variable
+                        values[i][k] = 10 * (my_dims['max'] - my_dims['min'])
     return values
 
+###generic function to get target data
+def get_target_data(input_data, varlist, method='full', comp_type='normal'):
+    ###If we are using truth/training data, use those table names.  Otherwise use the main tables
+    if method=='truth':
+        table_1_name='{}_training'.format(CONFIG['data1_name'])
+        table_2_name='{}_training'.format(CONFIG['data2_name'])
+    else:
+        table_1_name=CONFIG['data1_name']
+        table_2_name=CONFIG['data2_name']
+    db=get_db_connection(CONFIG)
+    ###get the datai
+    data1_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+    data2_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
+    ###create an indexed list of the id pairs to serve as the core of our dictionary
+    my_input_data = dcpy(input_data)
+    my_input_data.reset_index(inplace=True, drop=False)
+    ####now make the standard name IDs for ease
+    my_input_data.rename(columns={'{}_id'.format(CONFIG['data1_name']):'data1_id','{}_id'.format(CONFIG['data2_name']):'data2_id'}, inplace=True)
+    core_dict = my_input_data[
+        ['index', 'data1_id','data2_id']].to_dict('records')
+    ###now get the values from the database
+    data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+    data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
+    ###get the values
+    if comp_type=='normal':
+        data1_values = get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,
+                                                                                      table_name=table_1_name,
+                                                                                      id_list=data1_ids), db)
+        data2_values = get_table_noconn(
+            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,
+                                                                                      table_name=table_2_name,
+                                                                                      id_list=data2_ids), db)
+    else:
+        data1_values = get_table_noconn(
+            '''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(
+                                                                                      table_name=table_1_name,
+                                                                                      id_list=data1_ids), db)
+        data1_values = [{'id': x['id'], 'coords':(x['latitude'],x['longitude'])} for x in data1_values]
+        data2_values = get_table_noconn(
+            '''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(names=data2_names,
+                                                                                      table_name=table_2_name,
+                                                                                      id_list=data2_ids), db)
+        data2_values = [{'id': x['id'], 'coords':(x['latitude'],x['longitude'])} for x in data2_values]
+    ###give the data values the name for each searching
+    data1_values = {str(item['id']): item for item in data1_values}
+    data2_values = {str(item['id']): item for item in data2_values}
+    db.close()
+    ###now create the output array
+    return core_dict, data1_values, data2_values
+
+def create_fuzzy_scores(core_dict, data1_values, data2_values, target_function):
+    '''function to create the fuzzy scores'''
+    ###now create the output array
+    vals = [(data1_values[x['data1_id']][target_function['variable_name']], data2_values[x['data2_id']][target_function['variable_name']]) for x in core_dict]
+    scores=[]
+    for val in vals:
+        if val[0]!='NULL' and val[1]!='NULL':
+                try:
+                    scores.append(target_function['function'](val[0],val[1]))
+                except:
+                    scores.append(np.nan)
+        else:
+            scores.append(np.nan)
+    return scores
+
+###now the numeric_distance functions
+def numeric_distance(x):
+    '''
+    Little function to come in
+    :param x: pair of tuples
+    :return: an array
+    '''
+    if x[0] and x[1]:
+        return x[0] - x[1]
+    else:
+        return  np.nan
+
+def exact_match(x):
+    '''
+    do the items match exactly?
+    :param x: pair of tuples
+    :return: an array
+    '''
+    if x[0] and x[1] and x[0]==x[1]:
+        return 1
+    else:
+        return 0
+
+def date_match(x):
+    '''
+    function for date matching
+    :param x: tuple of dates
+    :return:
+    '''
+    if x[0] and x[1]:
+        return feb.editdist(x[0],x[1])
+    else:
+        return 0
+
+def geo_match(x):
+    '''
+    How to run the geo_match function.  Is fed a pair of tuples
+    [(data1_lat, data1_lon), (data2_lat, data2_lon)]
+    :param x:
+    :return:
+    '''
+    if x[0][0] is not None and x[0][1] is not None and x[1][0] is not None and x[1][1] is not None:
+        return haversine(x[0],x[1])
+    else:
+        ###otherwise, negative times the entire radius of the earth.  Future iterations should impute from here using other info?
+        return -12742
+
+def get_soundex(x):
+    '''function to compare soundex codes'''
+    if x[0] and x[1]:
+        return feb.editdist(soundex(x[0]),soundex(x[1]))
+    else:
+        return 0
+
+def get_nysiis(x):
+    '''same for nysiis'''
+    if x[0] and x[1]:
+        return feb.editdist(nysiis(x[0]),nysiis(x[1]))
+    else:
+        return 0
+
+def create_custom_scores(core_dict, data1_values, data2_values, target_function):
+    '''function to create the fuzzy scores'''
+    ###now create the output array
+    vals = [(data1_values[x['data1_id']][target_function['variable_name'].lower()], data2_values[x['data2_id']][target_function['variable_name'].lower()]) for x in core_dict]
+    scores=[]
+    for val in vals:
+        if val[0]!='NULL' and val[1]!='NULL':
+                try:
+                    scores.append(target_function['function'](val))
+                except:
+                    scores.append(np.nan)
+        else:
+            scores.append(np.nan)
+    return scores
 
 def create_scores(input_data, score_type, varlist, headers, method='full'):
     '''
@@ -130,313 +273,106 @@ def create_scores(input_data, score_type, varlist, headers, method='full'):
     :param score_type;: the type of score to calculate
     :param varlist: the variable list
     :param headers: the list of headers
-    :param method: eithe r'training' or 'full' (the default).  if 'training', pull from the _training database tables
+    :param method: either 'training' or 'full' (the default).  if 'training', pull from the _training database tables
     NOTE FOR FUTURE SELF: IN NORMAL FUNCTIONS (MODEL_TRAINING=FALSE) THIS WILL ALREADY BE RUN IN A SUB-PROCESS
     SO YOU HAVE TO SINGLE-THREAD THE CALCULATIONS, SO THE WHOLE THING IS SINGLE-THREADED
     return: an array of values for each pair to match/variable and a list of headers
     '''
-    ###If we are using truth/training data, use those table names.  Otherwise use the main tables
-    if method=='truth':
-        table_1_name='{}_training'.format(CONFIG['data1_name'])
-        table_2_name='{}_training'.format(CONFIG['data2_name'])
-    else:
-        table_1_name=CONFIG['data1_name']
-        table_2_name=CONFIG['data2_name']
+    ###get the target data
     db=get_db_connection(CONFIG)
+    if score_type not in ['geo_distance','custom']:
+        core_dict, data1_values, data2_values = get_target_data(input_data, varlist, method, 'normal')
     if score_type=='fuzzy':
-        ##first, let's see if we need to hit the data at all
-        method_names=[i.__name__ for i in methods]
-        to_run=[]
+        ##Now assemble the list of variables we need to generate
+        method_names = [i.__name__ for i in methods]
+        to_run = []
         out_headers = []
         #####if we aren't using all variables
-        if headers!='all':
+        if headers != 'all':
             for header in headers:
-                    if '_' in header: ####only fuzzy variables have a _
-                        my_name=header.rsplit('_',1)
-                        ###see if the name is in the method names
-                        if my_name[1] in method_names:
-                            to_run.append({'variable_name':my_name[0], 'function':[meth for meth in methods if meth.__name__==my_name[1]][0]})
-                            out_headers.append('{}_{}'.format(my_name[0], my_name[1]))
+                if '_' in header:  ####only fuzzy variables have a _
+                    my_name = header.rsplit('_', 1)
+                    ###see if the name is in the method names
+                    if my_name[1] in method_names:
+                        to_run.append({'variable_name': my_name[0],
+                                       'function': [meth for meth in methods if meth.__name__ == my_name[1]][0]})
+                        out_headers.append('{}_{}'.format(my_name[0], my_name[1]))
         else:
-            to_run = [{'variable_name': i['variable_name'], 'function':m} for i in varlist for m in methods]
-            out_headers=['{}_{}'.format(i['variable_name'], i['function'].__name__) for i in to_run]
-        ###get the datai
-        data1_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids=','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
-        ###create an indexed list of the id pairs to serve as the core of our dictionary
-        input_data=dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict=input_data[['index','{}_id'.format(CONFIG['data1_name']),'{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        ###now get the values from the database
-        data1_names=','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names=','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
-        ###get the values
-        data1_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names, table_name=table_1_name, id_list=data1_ids), db)
-        data2_values=get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names, table_name=table_2_name, id_list=data2_ids), db)
-        ###give the data values the name for each searching
-        data1_values = {str(item['id']):item for item in data1_values}
-        data2_values = {str(item['id']):item for item in data2_values}
-        ###now create the output array
-        out_arr = np.zeros(shape=(len(core_dict), len(to_run)))
-        for i in range(len(core_dict)):
-            i_scores=[]
-            for k in to_run:
-                ####get the fuzzy var info
-                fuzzy_var_info=[var for var in varlist if var['variable_name']==k['variable_name']][0]
-                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][k['variable_name']]!='NULL' and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][k['variable_name']]!='NULL':
-                    try:
-                        i_scores.append(k['function'](data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][
-                                                          fuzzy_var_info['variable_name']],
-                                                      data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][
-                                                          fuzzy_var_info['variable_name']]))
-                    except:
-                        i_scores.append(np.nan)
-                else:
-                    i_scores.append(np.nan)
-            out_arr[i,]=i_scores
-        ####Now return a dictionary of the input array and the names
-        return {'output':out_arr, 'names':out_headers}
+            to_run = [{'variable_name': i['variable_name'].lower(), 'function': m} for i in varlist for m in methods]
+            out_headers = ['{}_{}'.format(i['variable_name'], i['function'].__name__) for i in to_run]
+        out_arr = np.vstack([create_fuzzy_scores(core_dict, data1_values, data2_values, x) for x in to_run])
+        return {'output': out_arr, 'names': out_headers}
     elif score_type=='numeric_dist':
-        ###numeric distance variables
-        data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
-        ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
-        ###get the values
-        data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
-        data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name,id_list=data2_ids), db)
-        ###give the data values the name for each searching
-        data1_values = {str(item['id']): item for item in data1_values}
-        data2_values = {str(item['id']): item for item in data2_values}
-        ####now for each pair, get the value for each variable
-        ###create an indexed list of the id pairs to serve as the core of our dictionary
-        input_data = dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        numeric_distance_vars = [i['variable_name'] for i in varlist]
-        ##convert fuzzy vars to a list
-        ###now create the dictionary with the list of names and the array
-        out_arr = np.zeros(shape=(len(core_dict), len(numeric_distance_vars)))
-        for i in range(len(core_dict)):
-            ###
-            i_scores = []
-            for j in range(len(numeric_distance_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][numeric_distance_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][numeric_distance_vars[j]]:
-                    i_scores.append(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][numeric_distance_vars[j]]-data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][numeric_distance_vars[j]])
-                else:
-                    i_scores.append(np.nan)
-            out_arr[i,] = i_scores
-        ####Now return a dictionary of the input array and the names
-        return {'output': out_arr, 'names': numeric_distance_vars}
+        out_arr = np.stack([np.apply_along_axis(numeric_distance, 1, [(data1_values[x['data1_id']][y['variable_name']],
+                 data2_values[x['data2_id']][y['variable_name']]) for x in core_dict]) for y in varlist], axis=1)
+        return {'output': out_arr, 'names': [i['variable_name'] for i in varlist]}
     elif score_type=='exact':
-        ###If we are running a training data model
-        data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
-        ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
-        ###get the values
-        data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
-        data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name, id_list=data2_ids), db)
-        ###give the data values the name for each searching
-        data1_values = {str(item['id']): item for item in data1_values}
-        data2_values = {str(item['id']): item for item in data2_values}
-        ####now for each pair, get the value for each variable
-        ###create an indexed list of the id pairs to serve as the core of our dictionary
-        input_data = dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        exact_vars = [i['variable_name'] for i in varlist]
-        ##convert fuzzy vars to a list
-        ###now create the dictionary with the list of names and the array
-        out_arr = np.zeros(shape=(len(core_dict), len(exact_vars)))
-        for i in range(len(core_dict)):
-            i_scores = []
-            for j in range(len(exact_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]]:
-                    if str(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][exact_vars[j]]).upper()==str(data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][exact_vars[j]]).upper():
-                        i_scores.append(1)
-                    else:
-                        i_scores.append(0)
-                else:
-                    i_scores.append(-1)
-            out_arr[i,] = i_scores
-        ####Now return a dictionary of the input array and the names
-        return {'output': out_arr, 'names': exact_vars}
+        out_arr = np.stack([np.apply_along_axis(exact_match, 1, [(data1_values[x['data1_id']][y['variable_name']],
+                 data2_values[x['data2_id']][y['variable_name']]) for x in core_dict]) for y in varlist], axis=1)
+        return {'output': out_arr, 'names': [i['variable_name'] for i in varlist]}
     elif score_type=='geo_distance':
-        data1_ids = ','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
-        ###now get the values from the database
-        ###get the values
-        data1_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=table_1_name, id_list=data1_ids), db)
-        data2_values = get_table_noconn('''select id, latitude, longitude from {table_name} where id in ({id_list})'''.format(table_name=table_2_name,id_list=data2_ids), db)
-        input_data = dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        out_arr = np.zeros(shape=(len(core_dict), 1))
-        for i in range(len(core_dict)):
-            data1_target=[k for k in data1_values if str(k['id'])==str(core_dict[i]['{}_id'.format(CONFIG['data1_name'])])][0]
-            data2_target=[k for k in data2_values if str(k['id'])==str(core_dict[i]['{}_id'.format(CONFIG['data2_name'])])][0]
-            if data1_target['latitude'] is not None and data1_target['longitude'] is not None and data2_target['latitude'] is not None and data2_target['longitude'] is not None:
-                    out_arr[i]=haversine(tuple([data1_target['latitude'],data1_target['longitude']]),
-                                  tuple([data2_target['latitude'], data2_target['longitude']]))
-            else:
-                ####if it's missing, make it the entire diameter of the earth away (but negative to ensure the model can differentiate)
-                out_arr[i]= - 12742
+        core_dict, data1_values, data2_values = get_target_data(input_data, varlist, method, 'geo')
+        out_arr = np.array([[geo_match(a)] for a in [(data1_values[b['data1_id']]['coords'],data2_values[b['data2_id']]['coords']) for b in core_dict]])
         ####Now return a dictionary of the input array and the names
         return {'output': out_arr, 'names': ['geo_distance']}
     elif score_type=='date':
-        ###If we are running a training data model
-        data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
-        ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
-        ###get the values
-        data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
-        data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name,id_list=data2_ids), db)
-        ###give the data values the name for each searching
-        data1_values = {str(item['id']): item for item in data1_values}
-        data2_values = {str(item['id']): item for item in data2_values}
-        ####now for each pair, get the value for each variable
-        ###create an indexed list of the id pairs to serve as the core of our dictionary
-        input_data = dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        date_vars = [i['variable_name'] for i in varlist]
-        ##convert fuzzy vars to a list
-        ###now create the dictionary with the list of names and the array
-        out_arr = np.zeros(shape=(len(core_dict), len(date_vars)))
-        for i in range(len(core_dict)):
-            i_scores = []
-            for j in range(len(date_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][date_vars[j]] and data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][date_vars[j]] :
-                    i_scores.append(
-                        feb.editdist(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][date_vars[j]],
-                          data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][date_vars[j]]))
-                else:
-                    i_scores.append(0)
-            out_arr[i,] = i_scores
-        ####Now return a dictionary of the input array and the names
-        return {'output': out_arr, 'names': date_vars}
+        out_arr = np.stack([np.apply_along_axis(date_match, 1, [(data1_values[x['data1_id']][y['variable_name']],
+                                                                  data2_values[x['data2_id']][y['variable_name']]) for x
+                                                                 in core_dict]) for y in varlist], axis=1)
+        return {'output': out_arr, 'names': [i['variable_name'] for i in varlist]}
     elif score_type=='custom':
+        ###If we are using truth/training data, use those table names.  Otherwise use the main tables
+        if method == 'truth':
+            table_1_name = '{}_training'.format(CONFIG['data1_name'])
+            table_2_name = '{}_training'.format(CONFIG['data2_name'])
+        else:
+            table_1_name = CONFIG['data1_name']
+            table_2_name = CONFIG['data2_name']
         ###If we are running a training data model
-        data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
+        data1_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+        data2_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
-        data1_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data1_name']],
-                                                                                               i[CONFIG['data1_name']],
-                                                                                               i['variable_name']) for i
-                                in varlist])
-        data2_names = ','.join(['''(case when {}='NULL' then NULL else {} end) as {}'''.format(i[CONFIG['data2_name']],
-                                                                                               i[CONFIG['data2_name']],
-                                                                                               i['variable_name']) for i
+        data1_names = ','.join(['''{} as {}'''.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
+        data2_names = ','.join(['''{} as {}'''.format(i[CONFIG['data2_name']], i['variable_name']) for i
                                 in varlist])
         ###get the values
-        data1_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,
-                                                                                      table_name=table_1_name,
-                                                                                      id_list=data1_ids), db)
-        data2_values = get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,
-                                                                                      table_name=table_2_name,
-                                                                                      id_list=data2_ids), db)
+        data1_values = get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
+        data2_values = get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name,id_list=data2_ids), db)
         ###give the data values the name for each searching
         data1_values = {str(item['id']): item for item in data1_values}
         data2_values = {str(item['id']): item for item in data2_values}
-        ####now for each pair, get the value for each variable
         ###create an indexed list of the id pairs to serve as the core of our dictionary
-        input_data = dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        custom_vars = [i['variable_name'] for i in varlist]
+        my_input_data = dcpy(input_data)
+        my_input_data.reset_index(inplace=True, drop=False)
+        ####now make the standard name IDs for ease
+        my_input_data.rename(columns={'{}_id'.format(CONFIG['data1_name']): 'data1_id',
+                                      '{}_id'.format(CONFIG['data2_name']): 'data2_id'}, inplace=True)
+        core_dict = my_input_data[
+            ['index', 'data1_id', 'data2_id']].to_dict('records')
         ##convert fuzzy vars to a list
-        ###now create the dictionary with the list of names and the array
-        ####get the right arrangement of custom functions and targets
-        custom_scoring_functions=[{'name':i[0],'function':i[1]} for i in getmembers(cust_scoring,isfunction)]
         ###get the corresponding function attached to the var list
         for i in varlist:
             m = [m for m in getmembers(cust_scoring, isfunction) if i['custom_variable_name'] == m[0]][0]
             if m:
                 i['function']= m[1]
-        out_arr = np.zeros(shape=(len(core_dict), len(custom_vars)))
-        for i in range(len(core_dict)):
-            i_scores = []
-            for j in range(len(varlist)):
-                #####NOTE HERE.  YOU MUST FIGURE OUT HOW TO RETURN NULL VALUES IN YOUR FUNCTION
-                #####I know this seems lazy on my part, BUT there's too many alternatives (impute? just 0?)
-                #####that vary with what you're trying to do. (Also yes, it's lazy on my part)
-                i_scores.append(varlist[j]['function'](data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][varlist[j]['variable_name']],
-                                                       data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][varlist[j]['variable_name']]))
-            out_arr[i,] = i_scores
+        out_arr = np.vstack([create_custom_scores(core_dict, data1_values, data2_values, x) for x in varlist])
         ####Now return a dictionary of the input array and the names
-        return {'output': out_arr, 'names': custom_vars}
+        return {'output': out_arr, 'names': [i['variable_name'] for i in varlist]}
     elif score_type=='phoenetic':
-        ###If we are running a training data model
-        data1_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-        data2_ids = ','.join(
-            str(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
-        ###now get the values from the database
-        data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
-        ###get the values
-        data1_values = pd.DataFrame(get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db))
-        data2_values = pd.DataFrame(get_table_noconn(
-            '''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name, id_list=data2_ids), db))
         ###give the data values the name for each soundex code
-        for mydata in [data1_values,data2_values]:
-            for col in mydata.columns:
-                if 'soundex' in col:
-                    mydata[col] = mydata.apply(lambda x: soundex(x[col]), axis=1)
-                if 'nysiis' in col:
-                    mydata[col] = mydata.apply(lambda x: nysiis(x[col]), axis=1)
-        ##Return to list of dicts
-        data1_values=data1_values.to_dict('records')
-        data2_values=data2_values.to_dict('records')
-        ###give the data values the name for each searching
-        data1_values = {str(item['id']): item for item in data1_values}
-        data2_values = {str(item['id']): item for item in data2_values}
-        ###create an indexed list of the id pairs to serve as the core of our dictionary
-        input_data = dcpy(input_data)
-        input_data.reset_index(inplace=True, drop=False)
-        core_dict = input_data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]].to_dict('records')
-        phoenetic_vars = [i['variable_name'] for i in varlist]
-        ##convert fuzzy vars to a list
-        ###now create the dictionary with the list of names and the array
-        out_arr = np.zeros(shape=(len(core_dict), len(phoenetic_vars)))
-        for i in range(len(core_dict)):
-            i_scores = []
-            for j in range(len(phoenetic_vars)):
-                if data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][phoenetic_vars[j]] and \
-                        data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][phoenetic_vars[j]]:
-                    i_scores.append(
-                        feb.editdist(data1_values[core_dict[i]['{}_id'.format(CONFIG['data1_name'])]][phoenetic_vars[j]],
-                                     data2_values[core_dict[i]['{}_id'.format(CONFIG['data2_name'])]][phoenetic_vars[j]]))
-                else:
-                    i_scores.append(0)
-            out_arr[i,] = i_scores
+        for f in varlist:
+            if 'soundex' in f['match_type']:
+                f['function']=get_soundex
+            if 'nysiis' in f['match_type']:
+                f['function']=get_nysiis
+        out_arr = np.stack(
+            [np.apply_along_axis(y['function'], 1, [(data1_values[x['data1_id']][y['variable_name'].lower()],
+                                                   data2_values[x['data2_id']][y['variable_name'].lower()]) for x
+                                                  in core_dict]) for y in varlist], axis=1)
         ####Now return a dictionary of the input array and the names
-        return {'output': out_arr, 'names': phoenetic_vars}
+        return {'output': out_arr, 'names': [i['variable_name'] for i in varlist]}
 
-
-def create_all_scores(input_data, method, headers='all'):
+def create_all_scores(input_data, method,headers='all'):
     '''
     This function takes input data and creates all the scores needed
     :param input_data: the data we want to generate scores for
@@ -444,12 +380,11 @@ def create_all_scores(input_data, method, headers='all'):
     :return: y, X_imputed, and X_hdrs
     '''
     ###get the varible types
-    var_rec=pd.read_csv('{}/mamba_variable_types.csv'.format(CONFIG['projectPath']), keep_default_na=False).replace({'':None}).to_dict('records')
-    ###add possible headers
+    var_rec = copy.deepcopy(var_types)
     for v in var_rec:
         if v['match_type']=='fuzzy':
             v['possible_headers'] = ['{}_{}'.format(v['variable_name'], meth.__name__) for meth in methods]
-        ###We have three types of variables.
+    ###We have three types of variables.
     #1) First, identify all the variables we are going to need.  Fuzzy, exact, numeric_dist
     if headers=='all':
         fuzzy_vars=[i for i in var_rec if i['match_type']=='fuzzy']
@@ -457,7 +392,7 @@ def create_all_scores(input_data, method, headers='all'):
         exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact']
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance']
         date_vars = [i for i in var_rec if i['match_type'] == 'date']
-        custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None]
+        custom_vars = [i for i in var_rec if i['custom_variable_name'] is not None]
         phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis']]
     else:
         ###If we are running with recursive feature elimination, just find the features we are going to use
@@ -466,7 +401,7 @@ def create_all_scores(input_data, method, headers='all'):
         exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'] in headers]
         geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and 'geo_distance' in headers]
         date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
-        custom_vars = [i for i in var_rec if i['custom_variable_name'] if i['custom_variable_name'] is not None and i['variable_name'] in headers]
+        custom_vars = [i for i in var_rec if i['custom_variable_name'] is not None and i['variable_name'] in headers]
         phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis'] and i['variable_name'] in headers]
     ### fuzzy vars
     if len(fuzzy_vars) > 0:
@@ -476,44 +411,46 @@ def create_all_scores(input_data, method, headers='all'):
     ### num_distance: get the numeric distance between the two values, with a score of -9999 if missing
     if len(numeric_dist_vars) > 0:
         numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars, headers, method)
-        X=np.hstack((X, numeric_dist_values['output']))
+        X=np.vstack((X, numeric_dist_values['output'].T))
         X_hdrs.extend(numeric_dist_values['names'])
     ### exact: if they match, 1, else 0
     if len(exact_match_vars) > 0:
         exact_match_values=create_scores(input_data, 'exact', exact_match_vars, headers, method)
-        X=np.hstack((X, exact_match_values['output']))
+        X=np.vstack((X, exact_match_values['output'].T))
         X_hdrs.extend(exact_match_values['names'])
     ###Geo Distance
     if len(geo_distance) > 0:
-        geo_distance_values = create_scores(input_data, 'geo_distance', 'lat', headers, method)
+        geo_distance_values = create_scores(input_data, 'geo_distance', geo_distance, headers, method)
         if type(geo_distance_values['output']) != str:
-            X = np.hstack((X, geo_distance_values['output']))
+            X = np.vstack((X, geo_distance_values['output'].T))
             X_hdrs.extend(geo_distance_values['names'])
     #### date vars
     if len(date_vars) > 0:
         date_values = create_scores(input_data,'date',date_vars, headers, method)
         if type(date_values['output']) != str:
-            X = np.hstack((X, date_values['output']))
+            X = np.vstack((X, date_values['output'].T))
             X_hdrs.extend(date_values['names'])
     ###custom values
     if len(custom_vars) > 0:
         custom_values = create_scores(input_data,'custom',custom_vars, headers, method)
         if type(custom_values['output']) != str:
-            X = np.hstack((X, custom_values['output']))
+            X = np.vstack((X, custom_values['output']))
             X_hdrs.extend(custom_values['names'])
     ### phonetic values:
     if len(phoenetic_vars) > 0:
-        phoenetic_vars = create_scores(input_data, 'phoenetic', custom_vars, headers, method)
-        if type(phoenetic_vars['output']) != str:
-            X = np.hstack((X, phoenetic_vars['output']))
-            X_hdrs.extend(phoenetic_vars['names'])
+        phoenetic_values = create_scores(input_data, 'phoenetic', phoenetic_vars, headers, method)
+        if type(phoenetic_values['output']) != str:
+            X = np.vstack((X, phoenetic_values['output'].T))
+            X_hdrs.extend(phoenetic_values['names'])
     ##Impute the missing data
+    ##first transpose
+    #X=X.T
     ####Options for missing data: Impute, or Interval:
     ##Imputation: Just impute the scores based on an iterative imputer
     if CONFIG['imputation_method'] == 'Imputer':
         imp = IterativeImputer(max_iter=10, random_state=0)
-        ###fit the imputation
-        imp.fit(X)
+        ###fit the imputation, note the tranpsose
+        imp.fit(X.T)
         X = imp.transform(X)
         ###making the dependent variable array
         if method == 'truth':
@@ -548,7 +485,7 @@ def create_all_scores(input_data, method, headers='all'):
             else:
                 header_types.append('other')
         ###Apply the nominal imputation function to each row
-        X=np.apply_along_axis(nominal_impute, 1, X, header_names=X_hdrs, header_types=header_types, nominal_info=nominal_boundaries)
+        X=nominal_impute(X, X_hdrs, header_types, nominal_boundaries).T
         ###making the dependent variable array
         if method == 'truth':
             y = input_data['match'].values
@@ -565,33 +502,36 @@ def filter_data(data):
     '''
     ####first get the data
     db=get_db_connection(CONFIG)
-    data1_ids = ','.join(str(v) for v in data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
-    data2_ids = ','.join(str(v) for v in data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
+    data1_ids = ','.join("'{}'".format(v) for v in data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
+    data2_ids = ','.join("'{}'".format(v) for v in data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
     ###create an indexed list of the id pairs to serve as the core of our dictionary
     data.reset_index(inplace=True, drop=False)
     data = data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]]
     ###get the values
-    myvar=[i for i in var_types if i['variable_name'].lower()==CONFIG['variable_filter_info']['variable_name'].lower()][0]
+    try:
+        myvar=[i for i in var_types if i['variable_name'].lower()==CONFIG['variable_filter_info']['variable_name'].lower()][0]
+    except Exception as error:
+        logger.info('No records found for filter.  Check your variable_filter_info matches your variable types file.')
+        return 'fail'
     if myvar['match_type']!='geo_distance':
         data1_values = pd.DataFrame(get_table_noconn(
-            '''select cast(id as character) id, {var_name} data1_target from {table_name} where id in ({id_list})'''.format(var_name=myvar[CONFIG['data1_name']],
+            '''select id, {var_name} as data1_target from {table_name} where id in ({id_list})'''.format(var_name=myvar[CONFIG['data1_name']],
                                                                                       table_name=CONFIG['data1_name'],
                                                                                       id_list=data1_ids), db))
         data2_values = pd.DataFrame(get_table_noconn(
-            '''select cast(id as character) id, {var_name} 
-            data2_target from {table_name} where id in ({id_list})'''.format(var_name=myvar[CONFIG['data2_name']],
+            '''select id, {var_name} as data2_target from {table_name} where id in ({id_list})'''.format(var_name=myvar[CONFIG['data2_name']],
                                                                                       table_name=CONFIG['data2_name'],
                                                                                       id_list=data2_ids), db))
     else:
         data1_values = pd.DataFrame(get_table_noconn(
-            '''select cast(id as character) id, 
-            latitude data1_latitude,
-             longitude data1_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data1_name'],
+            '''select id, 
+            latitude as data1_latitude,
+             longitude as data1_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data1_name'],
                                                                                       id_list=data1_ids), db))
         data2_values = pd.DataFrame(get_table_noconn(
-            '''select cast(id as character) id, 
-            latitude data2_latitude,
-             longitude data2_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data2_name'],
+            '''select id, 
+            latitude as data2_latitude,
+             longitude as data2_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data2_name'],
                                                                                       id_list=data2_ids), db))
     ###merge the three dataframes
     data = data.merge(data1_values, left_on='{}_id'.format(CONFIG['data1_name']), right_on='id')
@@ -953,7 +893,6 @@ def match_fun(arg):
     This function runs the match.  
     arg is a dictionary.  
     target: the block we are targeting  
-    var_rec: the variable records, showing what type of match to perform on each variable
     '''
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
     start = time.time()
@@ -982,7 +921,7 @@ def match_fun(arg):
         logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
         stats_dat={'batch_id':CONFIG['batch_id'],
                                  'block_level':arg['block_info']['block_name'],
-                                 'block_id': arg['target'],
+                                 'block_id': str(arg['target']),
                                  'block_time': end,
                                  'block_size': 0,
                                  'block_matches': 0,
@@ -1004,12 +943,15 @@ def match_fun(arg):
             logger.info('Filtering for block {}'.format(arg['target']))
             ###if we are filtering, return the input data that meets the criteria
             input_data = filter_data(input_data)
-        if len(input_data)==0:
+        if type(input_data)==str == True:
+            if input_data=='fail':
+                return 'fail'
+        elif len(input_data)==0 and type(input_data)!=str:
             end = time.time() - start
             logger.info('After filtering, there were no valid matches to attempt for block {}'.format(arg['target']))
             stats_dat={'batch_id':CONFIG['batch_id'],
                              'block_level':arg['block_info']['block_name'],
-                             'block_id': arg['target'],
+                             'block_id': str(arg['target']),
                              'block_time': end,
                              'block_size': 0,
                              'block_matches': 0,
@@ -1017,74 +959,83 @@ def match_fun(arg):
                              'block_non_matches': 0,
                              'block_non_matches_avg_score': 0,
                              'match_pairs_removed_filter':orig_len-len(input_data)}
+            stats_out = write_to_db(stats_dat, 'batch_statistics')
         else:
             logger.info('Creating Scores for block {}'.format(arg['target']))
             X, X_hdrs = create_all_scores(input_data, 'prediction', arg['model']['variable_headers'])
-            ###Mean Center
-            if arg['model']['type']=='Logistic Regression':
-                X=pd.DataFrame(X, columns=X_hdrs)-arg['model']['means']
-                X=np.array(X)
-            logger.info('Predicting for block {}'.format(arg['target']))
-            myprediction=probsfunc(arg['model']['model'].predict_proba(X))
-            ####don't need the scores anymore
-            del X
-            del data1
-            del data2
-            input_data['predicted_probability']=myprediction
-            ###keep only the data above the certain thresholds
-            if ast.literal_eval(CONFIG['clerical_review_candidates'])==True:
-                keep_thresh=min(float(CONFIG['clerical_review_threshold']),float(CONFIG['match_threshold']))
-            else:
-                keep_thresh=float(CONFIG['match_threshold'])
-            stats_dat = copy.deepcopy(input_data)
-            input_data=input_data.loc[input_data['predicted_probability'] >= keep_thresh].to_dict('records')
             ####Now write to the DB
             if len(input_data) > 0:
-                ###try to write to db, if not return and then we will dump later
+                del data1
+                del data2
                 cur=db.cursor()
+                if ast.literal_eval(CONFIG['prediction']) == True:
+                    ###Mean Center
+                    if arg['model']['type'] == 'Logistic Regression':
+                        X = pd.DataFrame(X, columns=X_hdrs) - arg['model']['means']
+                        X = np.array(X)
+                    logger.info('Predicting for block {}'.format(arg['target']))
+                    input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X))
+                    stats_dat = copy.deepcopy(input_data)
+                    ####Now add in any matches
+                    matches = pd.DataFrame([i for i in input_data.to_dict('records') if i['predicted_probability'] >= float(CONFIG['match_threshold'])])
+                    if len(matches) > 0:
+                        ###ranks
+                        matches['{}_rank'.format(CONFIG['data1_name'])] = \
+                        matches.groupby('{}_id'.format(CONFIG['data1_name']))[
+                            'predicted_probability'].rank('dense')
+                        matches['{}_rank'.format(CONFIG['data2_name'])] = \
+                        matches.groupby('{}_id'.format(CONFIG['data2_name']))[
+                            'predicted_probability'].rank('dense')
+                        ##convert back to dict
+                        matches = matches.to_dict('records')
+                        ###write to DB
+                        write_out = write_to_db(matches, 'matched_pairs')
+                        ###if the write to db has returned anything (i.e. it failed), then return the matches
+                        if write_out:
+                            to_return['matches'] = matches
+                        if ast.literal_eval(CONFIG['chatty_logger']) == True:
+                            logger.info('''{} matches added in block {}'''.format(len(matches), arg['target']))
+                ###otherwise, make sure stats dat has a zero
+                else:
+                    stats_dat = copy.deepcopy(input_data)
+                    stats_dat['predicted_probability'] = 0
+                ###try to write to db, if not return and then we will dump later
                 if ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
-                    if len(input_data) >= 10:
-                        clerical_review_dict = dcpy(random.sample(input_data,int(np.round(.3*len(input_data),0))))
+                    ###If we are predicting, we will ONLY use the predicted probability from the model
+                    if ast.literal_eval(CONFIG['prediction']) == False:
+                        target_column = [k for k in range(len(X_hdrs)) if X_hdrs[k]==CONFIG['clerical_review_threshold']['variable'].lower()][0]
+                        ####find where this is true
+                        clerical_values = np.where(X[:,target_column] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
+                        input_data['threshold_value'] = X[:,target_column]
+                        clerical_candidates = input_data[clerical_values==True]
                     else:
-                        clerical_review_dict = dcpy(input_data)
+                        clerical_values = np.where(input_data['predicted_probability'] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
+                        clerical_candidates = input_data[clerical_values==True]
+                    ###if there are more than 10, select 10% of them
+                    if len(clerical_candidates) >= 10:
+                        clerical_review_dict = dcpy(random.sample(clerical_candidates.to_dict('records'),int(np.round(.1*len(clerical_candidates),0))))
+                    else:
+                        clerical_review_dict = dcpy(clerical_candidates.to_dict('records'))
                     clerical_out = write_to_db(clerical_review_dict, 'clerical_review_candidates')
                     if clerical_out:
                         to_return['clerical_review_candidates']=clerical_out
                     ###if it's a chatty logger, log.
                     if ast.literal_eval(CONFIG['chatty_logger']) == True:
                         logger.info('''{} clerical review candidates added from block {}'''.format(len(clerical_review_dict), arg['target']))
-                ####Now add in any matches
-                matches = pd.DataFrame(
-                    [i for i in input_data if i['predicted_probability'] >= float(CONFIG['match_threshold'])])
-                if len(matches) > 0:
-                    ###ranks
-                    matches['{}_rank'.format(CONFIG['data1_name'])] = matches.groupby('{}_id'.format(CONFIG['data1_name']))[
-                    'predicted_probability'].rank('dense')
-                    matches['{}_rank'.format(CONFIG['data2_name'])] = matches.groupby('{}_id'.format(CONFIG['data2_name']))[
-                    'predicted_probability'].rank('dense')
-                    ##convert back to dict
-                    matches = matches.to_dict('records')
-                    ###write to DB
-                    write_out = write_to_db(matches, 'matched_pairs')
-                    ###if the write to db has returned anything (i.e. it failed), then return the matches
-                    if write_out:
-                        to_return['matches'] = matches
-                    if ast.literal_eval(CONFIG['chatty_logger']) == True:
-                        logger.info('''{} matches added in block {}'''.format(len(matches), arg['block_info']['block_name']))
                 cur.close()
                 db.close()
-            ###do the block statistics
-            end = time.time() - start
-            stats_dat = {'batch_id': CONFIG['batch_id'],
-                                       'block_level': str(arg['block_info']['block_name']),
-                                       'block_id': str(arg['target']),
-                                       'block_time': end,
-                                       'block_size': len(stats_dat),
-                                       'block_matches': np.sum(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),1,0)),
-                                       'block_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
-                                       'block_non_matches': np.sum(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),1,0)),
-                                       'block_non_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
-                                       'match_pairs_removed_filter':orig_len-len(input_data)}
+                ###do the block statistics
+                end = time.time() - start
+                stats_dat = {'batch_id': CONFIG['batch_id'],
+                                           'block_level': str(arg['block_info']['block_name']),
+                                           'block_id': str(arg['target']),
+                                           'block_time': end,
+                                           'block_size': len(stats_dat),
+                                           'block_matches': int(np.sum(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),1,0))),
+                                           'block_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
+                                           'block_non_matches': int(np.sum(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),1,0))),
+                                           'block_non_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
+                                           'match_pairs_removed_filter':orig_len-len(input_data)}
             logger.info('main match complete for block {}'.format(arg['target']))
         stats_out = write_to_db(stats_dat, 'batch_statistics')
         if stats_out:
@@ -1117,13 +1068,10 @@ def run_block(block, model):
         ###otherwise it's a list of tuples of all of the possible combinations of the blocks
         block_list=[(x, y) for x in data1_blocks for y in data2_blocks]
     logger.info('We have {} blocks to run for {}'.format(len(block_list), block['block_name']))
-    ###get the list of variables we are trying to match
-    var_rec = pd.read_csv('mamba_variable_types.csv').to_dict('records')
-    ###Create and kick off the runner
+    ###Create list to kick to workers
     arg_list=[]
     for k in range(len(block_list)):
         my_arg={}
-        my_arg['var_rec']=var_rec
         my_arg['model']=model
         my_arg['X_hdrs']=model['variable_headers']
         my_arg['target']=block_list[k]
@@ -1136,9 +1084,14 @@ def run_block(block, model):
         else:
             my_arg['logging_flag']=int(k)
         arg_list.append(my_arg)
-    logger.info('STARTING TO MATCH  FOR {}'.format(block['block_name']))
+    logger.info('STARTING TO MATCH FOR {}'.format(block['block_name']))
     pool=Pool(numWorkers)
     out=pool.map(match_fun, arg_list)
+    ###check for any failures
+    for o in out:
+        if o=='fail':
+            logger.info('Failed for {}, see log for details'.format(block['block_name']))
+            os._exit(0)
     ###Once that is done, need to
         ##push the remaining items in out to the db
     db=get_db_connection(CONFIG)

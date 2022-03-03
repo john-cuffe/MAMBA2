@@ -3,21 +3,16 @@ This program is where you will store your custom scoring methods.  See readme fo
 '''
 import os
 
-def first_char(s1, s2):
+def sub_custom(x):
     '''
     A quick demo function
-    :param s1: first string
-    :param s2: second string
+    :param x: tuple
     :return:
     '''
-    if s1 is not None and s2 is not None:
-        if s1[0] == s2[0]:
-            return 1
-        else:
-            return 0
+    if (x[0] is None and x[1] is None) or (x[0]==x[1]):
+        return 1
     else:
         return 0
-
 
 if __name__=='__main__':
     os.exit(0)
