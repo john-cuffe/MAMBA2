@@ -1,0 +1,5 @@
+variable_name,data1,data2,match_type,parsed_variable,custom_variable_name
+first_name,first_name,first_name,fuzzy,,
+last_name,last_name,last_name,fuzzy,,
+Dob,dob,dob,date,,
+

@@ -11,7 +11,6 @@ mamba_test_log
 *.pyc
 *.gz
 setup_envs_python.py
-*.csv
 setup_envs_python.py
 mamba_test_log
 programs/address_standardizer/comparator.py
