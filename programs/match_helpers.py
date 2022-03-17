@@ -894,32 +894,68 @@ def match_fun(arg):
     arg is a dictionary.  
     target: the block we are targeting  
     '''
+    '''
+    This function runs the match.  
+    arg is a dictionary.  
+    target: the block we are targeting  
+    '''
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
-    start = time.time()
-    ###setup the to_return
-    to_return = {}
-    logger.info('starting block {}'.format(arg['target']))
-    db=get_db_connection(CONFIG, timeout=1)
-    ###get the two dataframes
-    ##if we aren't doing a chunked block
-    if arg['block_info']['chunk_size']==-1:
-        data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
-        data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
-    else:
-        ###if we are chunking out the block, this identifies the block using the appropriate target element (remember, arg['target'] in this case is a tuple)
-        data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target'][0]), db)
-        data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target'][1]), db)
-    ###get the data
-    ###If we are running in deduplication mode, take only the input records that the IDs don't match
-    if ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True:
-        input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
-    else:
-        input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2])
-    ####Nif the length, skip
-    if len(input_data)==0:
-        end = time.time() - start
-        logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
-        stats_dat={'batch_id':CONFIG['batch_id'],
+    try:
+        start = time.time()
+        ###setup the to_return
+        to_return = {}
+        logger.info('starting block {}'.format(arg['target']))
+        db=get_db_connection(CONFIG, timeout=1)
+        ###get the two dataframes
+        ##if we aren't doing a chunked block
+        if arg['block_info']['chunk_size']==-1:
+            data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
+            data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
+        else:
+            ###if we are chunking out the block, this identifies the block using the appropriate target element (remember, arg['target'] in this case is a tuple)
+            data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target'][0]), db)
+            data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target'][1]), db)
+        ###get the data
+        ###If we are running in deduplication mode, take only the input records that the IDs don't match
+        if ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True:
+            input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
+        else:
+            input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2])
+        ####Nif the length, skip
+        if len(input_data)==0:
+            end = time.time() - start
+            logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
+            stats_dat={'batch_id':CONFIG['batch_id'],
+                                     'block_level':arg['block_info']['block_name'],
+                                     'block_id': str(arg['target']),
+                                     'block_time': end,
+                                     'block_size': 0,
+                                     'block_matches': 0,
+                                     'block_matches_avg_score': 0,
+                                     'block_non_matches': 0,
+                                     'block_non_matches_avg_score': 0}
+            db = get_db_connection(CONFIG)
+            cur = db.cursor()
+            columns_list = str(tuple([str(j) for j in stats_dat.keys()])).replace("'", '')
+            values = tuple(stats_dat[column] for column in stats_dat.keys())
+            vals_len = ','.join(['?' for _ in range(len(stats_dat.keys()))])
+            insert_statement = '''insert into batch_statistics {} VALUES({})'''.format(columns_list, vals_len)
+            cur.execute(insert_statement, values)
+            db.commit()
+            db.close()
+        else:
+            orig_len = len(input_data)
+            if ast.literal_eval(CONFIG['use_variable_filter'])==True:
+                logger.info('Filtering for block {}'.format(arg['target']))
+                ###if we are filtering, return the input data that meets the criteria
+                input_data = filter_data(input_data)
+            if type(input_data)==str == True:
+                if input_data=='fail':
+                    return 'fail'
+            elif len(input_data)==0 and type(input_data)!=str:
+                end = time.time() - start
+                logger.info('After filtering, there were no valid matches to attempt for block {}'.format(arg['target']))
+                stats_dat={'batch_id':CONFIG['batch_id'],
                                  'block_level':arg['block_info']['block_name'],
                                  'block_id': str(arg['target']),
                                  'block_time': end,
@@ -927,125 +963,99 @@ def match_fun(arg):
                                  'block_matches': 0,
                                  'block_matches_avg_score': 0,
                                  'block_non_matches': 0,
-                                 'block_non_matches_avg_score': 0}
-        db = get_db_connection(CONFIG)
-        cur = db.cursor()
-        columns_list = str(tuple([str(j) for j in stats_dat.keys()])).replace("'", '')
-        values = tuple(stats_dat[column] for column in stats_dat.keys())
-        vals_len = ','.join(['?' for _ in range(len(stats_dat.keys()))])
-        insert_statement = '''insert into batch_statistics {} VALUES({})'''.format(columns_list, vals_len)
-        cur.execute(insert_statement, values)
-        db.commit()
-        db.close()
-    else:
-        orig_len = len(input_data)
-        if ast.literal_eval(CONFIG['use_variable_filter'])==True:
-            logger.info('Filtering for block {}'.format(arg['target']))
-            ###if we are filtering, return the input data that meets the criteria
-            input_data = filter_data(input_data)
-        if type(input_data)==str == True:
-            if input_data=='fail':
-                return 'fail'
-        elif len(input_data)==0 and type(input_data)!=str:
-            end = time.time() - start
-            logger.info('After filtering, there were no valid matches to attempt for block {}'.format(arg['target']))
-            stats_dat={'batch_id':CONFIG['batch_id'],
-                             'block_level':arg['block_info']['block_name'],
-                             'block_id': str(arg['target']),
-                             'block_time': end,
-                             'block_size': 0,
-                             'block_matches': 0,
-                             'block_matches_avg_score': 0,
-                             'block_non_matches': 0,
-                             'block_non_matches_avg_score': 0,
-                             'match_pairs_removed_filter':orig_len-len(input_data)}
-            stats_out = write_to_db(stats_dat, 'batch_statistics')
-        else:
-            logger.info('Creating Scores for block {}'.format(arg['target']))
-            X, X_hdrs = create_all_scores(input_data, 'prediction', arg['model']['variable_headers'])
-            ####Now write to the DB
-            if len(input_data) > 0:
-                del data1
-                del data2
-                cur=db.cursor()
-                if ast.literal_eval(CONFIG['prediction']) == True:
-                    ###Mean Center
-                    if arg['model']['type'] == 'Logistic Regression':
-                        X = pd.DataFrame(X, columns=X_hdrs) - arg['model']['means']
-                        X = np.array(X)
-                    logger.info('Predicting for block {}'.format(arg['target']))
-                    input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X))
-                    stats_dat = copy.deepcopy(input_data)
-                    ####Now add in any matches
-                    matches = pd.DataFrame([i for i in input_data.to_dict('records') if i['predicted_probability'] >= float(CONFIG['match_threshold'])])
-                    if len(matches) > 0:
-                        ###ranks
-                        matches['{}_rank'.format(CONFIG['data1_name'])] = \
-                        matches.groupby('{}_id'.format(CONFIG['data1_name']))[
-                            'predicted_probability'].rank('dense')
-                        matches['{}_rank'.format(CONFIG['data2_name'])] = \
-                        matches.groupby('{}_id'.format(CONFIG['data2_name']))[
-                            'predicted_probability'].rank('dense')
-                        ##convert back to dict
-                        matches = matches.to_dict('records')
-                        ###write to DB
-                        write_out = write_to_db(matches, 'matched_pairs')
-                        ###if the write to db has returned anything (i.e. it failed), then return the matches
-                        if write_out:
-                            to_return['matches'] = matches
+                                 'block_non_matches_avg_score': 0,
+                                 'match_pairs_removed_filter':orig_len-len(input_data)}
+                stats_out = write_to_db(stats_dat, 'batch_statistics')
+            else:
+                logger.info('Creating Scores for block {}'.format(arg['target']))
+                X, X_hdrs = create_all_scores(input_data, 'prediction', arg['model']['variable_headers'])
+                ####Now write to the DB
+                if len(input_data) > 0:
+                    del data1
+                    del data2
+                    cur=db.cursor()
+                    if ast.literal_eval(CONFIG['prediction']) == True:
+                        ###Mean Center
+                        if arg['model']['type'] == 'Logistic Regression':
+                            X = pd.DataFrame(X, columns=X_hdrs) - arg['model']['means']
+                            X = np.array(X)
+                        logger.info('Predicting for block {}'.format(arg['target']))
+                        input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X))
+                        stats_dat = copy.deepcopy(input_data)
+                        ####Now add in any matches
+                        matches = pd.DataFrame([i for i in input_data.to_dict('records') if i['predicted_probability'] >= float(CONFIG['match_threshold'])])
+                        if len(matches) > 0:
+                            ###ranks
+                            matches['{}_rank'.format(CONFIG['data1_name'])] = \
+                            matches.groupby('{}_id'.format(CONFIG['data1_name']))[
+                                'predicted_probability'].rank('dense')
+                            matches['{}_rank'.format(CONFIG['data2_name'])] = \
+                            matches.groupby('{}_id'.format(CONFIG['data2_name']))[
+                                'predicted_probability'].rank('dense')
+                            ##convert back to dict
+                            matches = matches.to_dict('records')
+                            ###write to DB
+                            write_out = write_to_db(matches, 'matched_pairs')
+                            ###if the write to db has returned anything (i.e. it failed), then return the matches
+                            if write_out:
+                                to_return['matches'] = matches
+                            if ast.literal_eval(CONFIG['chatty_logger']) == True:
+                                logger.info('''{} matches added in block {}'''.format(len(matches), arg['target']))
+                    ###otherwise, make sure stats dat has a zero
+                    else:
+                        stats_dat = copy.deepcopy(input_data)
+                        stats_dat['predicted_probability'] = 0
+                    ###try to write to db, if not return and then we will dump later
+                    if ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
+                        ###If we are predicting, we will ONLY use the predicted probability from the model
+                        if ast.literal_eval(CONFIG['prediction']) == False:
+                            target_column = [k for k in range(len(X_hdrs)) if X_hdrs[k]==CONFIG['clerical_review_threshold']['variable'].lower()][0]
+                            ####find where this is true
+                            clerical_values = np.where(X[:,target_column] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
+                            input_data['threshold_value'] = X[:,target_column]
+                            clerical_candidates = input_data[clerical_values==True]
+                        else:
+                            clerical_values = np.where(input_data['predicted_probability'] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
+                            clerical_candidates = input_data[clerical_values==True]
+                        ###if there are more than 10, select 10% of them
+                        if len(clerical_candidates) >= 10:
+                            clerical_review_dict = dcpy(random.sample(clerical_candidates.to_dict('records'),int(np.round(.1*len(clerical_candidates),0))))
+                        else:
+                            clerical_review_dict = dcpy(clerical_candidates.to_dict('records'))
+                        if len(clerical_review_dict) > 0:
+                            clerical_out = write_to_db(clerical_review_dict, 'clerical_review_candidates')
+                        if clerical_out:
+                            to_return['clerical_review_candidates']=clerical_out
+                        ###if it's a chatty logger, log.
                         if ast.literal_eval(CONFIG['chatty_logger']) == True:
-                            logger.info('''{} matches added in block {}'''.format(len(matches), arg['target']))
-                ###otherwise, make sure stats dat has a zero
-                else:
-                    stats_dat = copy.deepcopy(input_data)
-                    stats_dat['predicted_probability'] = 0
-                ###try to write to db, if not return and then we will dump later
-                if ast.literal_eval(CONFIG['clerical_review_candidates']) == True:
-                    ###If we are predicting, we will ONLY use the predicted probability from the model
-                    if ast.literal_eval(CONFIG['prediction']) == False:
-                        target_column = [k for k in range(len(X_hdrs)) if X_hdrs[k]==CONFIG['clerical_review_threshold']['variable'].lower()][0]
-                        ####find where this is true
-                        clerical_values = np.where(X[:,target_column] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
-                        input_data['threshold_value'] = X[:,target_column]
-                        clerical_candidates = input_data[clerical_values==True]
-                    else:
-                        clerical_values = np.where(input_data['predicted_probability'] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
-                        clerical_candidates = input_data[clerical_values==True]
-                    ###if there are more than 10, select 10% of them
-                    if len(clerical_candidates) >= 10:
-                        clerical_review_dict = dcpy(random.sample(clerical_candidates.to_dict('records'),int(np.round(.1*len(clerical_candidates),0))))
-                    else:
-                        clerical_review_dict = dcpy(clerical_candidates.to_dict('records'))
-                    clerical_out = write_to_db(clerical_review_dict, 'clerical_review_candidates')
-                    if clerical_out:
-                        to_return['clerical_review_candidates']=clerical_out
-                    ###if it's a chatty logger, log.
-                    if ast.literal_eval(CONFIG['chatty_logger']) == True:
-                        logger.info('''{} clerical review candidates added from block {}'''.format(len(clerical_review_dict), arg['target']))
-                cur.close()
-                db.close()
-                ###do the block statistics
-                end = time.time() - start
-                stats_dat = {'batch_id': CONFIG['batch_id'],
-                                           'block_level': str(arg['block_info']['block_name']),
-                                           'block_id': str(arg['target']),
-                                           'block_time': end,
-                                           'block_size': len(stats_dat),
-                                           'block_matches': int(np.sum(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),1,0))),
-                                           'block_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
-                                           'block_non_matches': int(np.sum(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),1,0))),
-                                           'block_non_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
-                                           'match_pairs_removed_filter':orig_len-len(input_data)}
-            logger.info('main match complete for block {}'.format(arg['target']))
-        stats_out = write_to_db(stats_dat, 'batch_statistics')
-        if stats_out:
-            logger.info('Unable to write batch statistics for batch {}, continuing'.format(arg['target']))
-        if arg['logging_flag']!=-1:
-            logger.info('{}% complete with block'.format(arg['logging_flag']))
-        if 'clerical_review_candidates' in to_return.keys() or 'matches' in to_return.keys():
-            return to_return
-        else:
-            return None
+                            logger.info('''{} clerical review candidates added from block {}'''.format(len(clerical_review_dict), arg['target']))
+                    cur.close()
+                    db.close()
+                    ###do the block statistics
+                    end = time.time() - start
+                    stats_dat = {'batch_id': CONFIG['batch_id'],
+                                               'block_level': str(arg['block_info']['block_name']),
+                                               'block_id': str(arg['target']),
+                                               'block_time': end,
+                                               'block_size': len(stats_dat),
+                                               'block_matches': int(np.sum(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),1,0))),
+                                               'block_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] >= float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
+                                               'block_non_matches': int(np.sum(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),1,0))),
+                                               'block_non_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
+                                               'match_pairs_removed_filter':orig_len-len(input_data)}
+                logger.info('main match complete for block {}'.format(arg['target']))
+            stats_out = write_to_db(stats_dat, 'batch_statistics')
+            if stats_out:
+                logger.info('Unable to write batch statistics for batch {}, continuing'.format(arg['target']))
+            if arg['logging_flag']!=-1:
+                logger.info('{}% complete with block'.format(arg['logging_flag']))
+            if 'clerical_review_candidates' in to_return.keys() or 'matches' in to_return.keys():
+                return to_return
+            else:
+                return None
+    except Exception as error:
+        logger.info('Error for Block {}, error {}'.format(arg['target'], error))
+        return 'fail'
 
 ####The block function
 def run_block(block, model):
