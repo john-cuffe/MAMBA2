@@ -69,7 +69,7 @@ numWorkers=int(CONFIG['numWorkers'])
 ###import the blocks and variable types
 var_types = pd.read_csv('{}/mamba_variable_types.csv'.format(projectPath),keep_default_na=False).replace({'':None}).to_dict('records')
 for k in var_types:
-    for key in [CONFIG['data1_name'],CONFIG['data2_name']]:
+    for key in [CONFIG['data1_name'],CONFIG['data2_name'],'variable_name']:
         k[key] = k[key].lower()
 
 
@@ -78,7 +78,7 @@ blocks = pd.read_csv('{}/{}'.format(projectPath,CONFIG['block_file_name'])).fill
 for block in blocks:
     for key in block.keys():
         if type(block[key])==str:
-            block[key] = block[key].replace(' ','')
+            block[key] = block[key].replace(' ','').lower()
 ###create the address_component_tag_mapping
 address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('records')
 ###makte the address component mapping.
