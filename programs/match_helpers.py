@@ -925,7 +925,7 @@ def match_fun(arg):
         if len(input_data)==0:
             end = time.time() - start
             logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
-            stats_dat={'batch_id':CONFIG['batch_id'],
+            stats_dat={'batch_id':arg['batch_id'],
                                      'block_level':arg['block_info']['block_name'],
                                      'block_id': str(arg['target']),
                                      'block_time': end,
