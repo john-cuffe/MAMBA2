@@ -18,7 +18,7 @@ def dump_model(model_dict, config_dict):
    :return:
    '''
    ##Dump the model
-   dump(model_dict['model'], '{}/{}',format(config_dict['projectPath'],config_dict['saved_model_target']))
+   dump(model_dict['model'], '{}/{}'.format(config_dict['projectPath'],config_dict['saved_model_target']))
    out_dict = copy.deepcopy(model_dict)
    out_dict.pop('model')
    ##now the imputer if we didn't use a nominal method
