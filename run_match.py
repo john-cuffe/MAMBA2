@@ -93,7 +93,7 @@ if __name__=='__main__':
         ##run
         for block in blocks:
             logger.info('### Starting Block {}'.format(block['block_name']))
-            run_block(block, mod)
+            run_block(block, mod, batch_summary['batch_id'])
             logger.info('### Completed Block {}'.format(block['block_name']))
     except Exception as error:
         logger.info('Error in running block {} . Error: {}'.format(block['block_name'],''.join(traceback.format_tb(error.__traceback__))))

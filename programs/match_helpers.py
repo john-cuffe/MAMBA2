@@ -955,7 +955,7 @@ def match_fun(arg):
             elif len(input_data)==0 and type(input_data)!=str:
                 end = time.time() - start
                 logger.info('After filtering, there were no valid matches to attempt for block {}'.format(arg['target']))
-                stats_dat={'batch_id':CONFIG['batch_id'],
+                stats_dat={'batch_id':arg['batch_id'],
                                  'block_level':arg['block_info']['block_name'],
                                  'block_id': str(arg['target']),
                                  'block_time': end,
@@ -1033,7 +1033,7 @@ def match_fun(arg):
                     db.close()
                     ###do the block statistics
                     end = time.time() - start
-                    stats_dat = {'batch_id': CONFIG['batch_id'],
+                    stats_dat = {'batch_id': arg['batch_id'],
                                                'block_level': str(arg['block_info']['block_name']),
                                                'block_id': str(arg['target']),
                                                'block_time': end,
@@ -1058,11 +1058,12 @@ def match_fun(arg):
         return 'fail'
 
 ####The block function
-def run_block(block, model):
+def run_block(block, model, batch_id):
     '''
     This function creates the list of blocks to use for comparison and then runs the matches
     :param block: the dict of the block we are running
-    :param rf_mod; the random forest model we are using
+    :param model; the model we are using
+    :param batch_id: the batch ID.  Not sure why it's not getting pulled through via CONFIG
     :return:
     '''
     ####If we are running the 'full' block
@@ -1086,6 +1087,7 @@ def run_block(block, model):
         my_arg['X_hdrs']=model['variable_headers']
         my_arg['target']=block_list[k]
         my_arg['block_info']=block
+        my_arg['batch_id']=batch_id
         if len(block_list) > 10:
             if k % (len(block_list)/10)==0:
                 my_arg['logging_flag']=int(np.round(100*(k/len(block_list)),0))
