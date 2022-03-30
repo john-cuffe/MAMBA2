@@ -182,7 +182,7 @@ def get_stem_data(data_source):
             ###than to deal with later when we dn't want to pull the entire DB and have SQL-dependencies
             ###And yes I mean it's easier for me. Sue me.
             if block['block_name'].lower()=='full':
-                row_seq = [np.floor(i/block['chunk_size']) for i in list(range(row_number, row_number+len(data)))]
+                row_seq = [np.floor(i/int(block['chunk_size'])) for i in list(range(row_number, row_number+len(data)))]
                 data['full'] = row_seq
                 row_number += len(data)
         ###convert to dictionary
@@ -196,20 +196,21 @@ def get_stem_data(data_source):
             for row in data:
                 parsed_address = usadd.tag(row[CONFIG['address_column_{}'.format(dataname)]],
                                            tag_mapping=global_vars.address_component_mapping)
+                parsed_address = {k.lower(): v for k, v in parsed_address[0].items()}
+                ###convert all the keys to lower
                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
-                    if len(re.findall('ZipCode[0-9]', parsed_block['block_name'])) > 0:
-                        row[parsed_block['block_name']] = parsed_address[0]['ZipCode'][
-                                                          0:int(parsed_block['block_name'][-1])]
+                    if len(re.findall('zipcode[0-9]', parsed_block['block_name'])) > 0:
+                        row[parsed_block['block_name']] = parsed_address['zipcode'][0:int(parsed_block['block_name'][-1])]
                     else:
-                        row[parsed_block['block_name']] = parsed_address[0][parsed_block['block_name']]
-                for variable in [var for var in global_vars.var_types if var['parsed_variable'] == 1]:
-                    if variable['variable_name'] in parsed_address[0].keys():
-                        row[variable['variable_name']] = parsed_address[0][variable['variable_name']]
+                        row[parsed_block['block_name']] = parsed_address[parsed_block['block_name']]
+                for variable in [var for var in global_vars.var_types if var['parsed_variable'] == '1']:
+                    if variable['variable_name'] in parsed_address.keys():
+                        row[variable['variable_name']] = parsed_address[variable['variable_name']]
                     else:
                         row[variable['variable_name']] = None
                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
-                    if 'address1' in parsed_address[0].keys():
-                        row['address1'] = parsed_address[0]['address1']
+                    if 'address1' in parsed_address.keys():
+                        row['address1'] = parsed_address['address1']
                     else:
                         row['address1'] = None
         for p in fuzzy_vars:

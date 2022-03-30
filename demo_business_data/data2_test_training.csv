@@ -1,4 +1,4 @@
-id,address,City,state,ZipCode,zip_3,name,year,BusinessType,latitude,longitude,founding_date,address_raw
+id,address,cit,state,zipcode,zip_3,name,year,businesstype,latitude,longitude,founding_date,address_raw
 1,2125 Stark Hollow Road,Mountain View,CO,82939,829,Buehler Food,2019,Food,39.77568,-105.056127,2014-08-04,2125 Stark Hollow Road Mountain View CO 82939
 2,1909 Freshour Circle,Mountain View,CO,82939,829,Thriftway Food,,Services,39.775686,-105.056127,2018-11-01,1909 Freshour Circle Mountain View CO 82939
 3,3413 Don Jackson Lane,Mountain View,CO,82939,829,Starship Records,2019,Food,39.775692,-105.056127,2011-01-13,3413 Don Jackson Lane Mountain View CO 82939

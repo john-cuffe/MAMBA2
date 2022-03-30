@@ -81,10 +81,11 @@ for block in blocks:
             block[key] = block[key].replace(' ','').lower()
 ###create the address_component_tag_mapping
 address_components = pd.read_csv('Documentation/address_component_mapping.csv').to_dict('records')
-###makte the address component mapping.
+###makte the address component mapping.###lower on blocks is the issue here
 address_component_mapping={}
 for component in [add['address_component'] for add in address_components]:
-    if component in [block['block_name'] for block in blocks] or component in [var['variable_name'] for var in var_types]:
+    component_lower=component.lower()
+    if component_lower in [block['block_name'] for block in blocks] or component_lower in [var['variable_name'] for var in var_types]:
         address_component_mapping[component] = component
     else:
         address_component_mapping[component] = 'address1'

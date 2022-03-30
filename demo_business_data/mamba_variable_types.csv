@@ -6,4 +6,4 @@ year,year,year,num_distance,,
 businesstype,BusinessType,BusinessType,exact,,
 geo_coord,latlong,LatLong,geom_distance,,
 founding_date,date_founded,founding_date,date,,
-AddressNumber,AddressNumber,AddressNumber,custom,1,first_char
+AddressNumber,AddressNumber,AddressNumber,custom,1,demo_func

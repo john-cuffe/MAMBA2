@@ -3,7 +3,7 @@ This program is where you will store your custom scoring methods.  See readme fo
 '''
 import os
 
-def sub_custom(x):
+def demo_func(x):
     '''
     A quick demo function
     :param x: tuple

@@ -1,7 +1,7 @@
 order,block_name,data1_test,data2_test,parsed_block,chunk_size
-1,ZipCode,ZipCode,ZipCode,1,
+1,ZipCode,zipcode,zipcode,,
 2,ZipCode3,ZipCode3,ZipCode3,1,
 3,PlaceName,PlaceName,PlaceName,1,
-4,StateName,StateName,StateName,1,
-5,BusinessType,BusinessType,BusinessType,0,
+4,StateName,StateName,StateName,1,å
+5,BusinessType,businesstype,businesstype,0,
 6,Full,full,full,0,1000
