@@ -32,3 +32,6 @@ newmod.joblib.txt
 data/readme.txt
 r10000_db
 R10000_Log
+*.so
+*.so
+*.c

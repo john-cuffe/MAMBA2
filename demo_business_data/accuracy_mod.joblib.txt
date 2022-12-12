@@ -1,0 +1,1 @@
+{"type": "Random Forest", "score": 1.0, "variable_headers": ["name_posqgram3", "name_lcs2", "name_charhistogram", "name_sortwinkler", "geo_distance", "founding_date", "name_nysiis"]}

@@ -1,66 +1,41 @@
 '''
-This is a demo on how to run custom in MAMBA.  Note, that you
-must have the inputs and setup self-contained in this program in order to run.
+This is an exmaple of a custom model.  The custom model for MAMBA MUST have the following a 'predict_proba' method.
 
-For each function, put a dictionary entry (demo below) into the models list.
+If you want to have MAMBA create your own model on the fly, then you MUST also include all of the associated
+needs for the class (so fit, a cost function etc).
 
+If you are using a more simplistic deterministic model, merely a predict_proba function that returns
+an array of length X in either of these formats:
+In this format, the entry is just the score from a deterministic model
+arr = [[1],
+       [2]]
 
-my_model_name: the name you want to have it appear on the logger.
-Also must be the first entry in the return for the model
-model_function:
-model_type: either supervised or unsupervised (unsupervised not currently used)
+OR
 
-###model dictionary demo
-def bar(data):
-    return 'baf'
+If you a returning a model that gives predicted probabilities of a match or other categories, give the 'match' probability first
+arr = [[.25,.75],
+       [.75,.25]]
 
+This is a really simple model that just returns the sum of X,so the predict_proba function
+is just the addition of the two columns. You would then change the match threshold to whatever value you wanted.
 
-def baz(data):
-    return bof
-
-[
-{
-'my_model_name':'foo',
-'model_function':bar,
-'model_type':'supervised'
-},
-{
-'my_model_name':'baz'
-'model_function':baz,
-'model_type':'unsupervised'
-}
-]
-
-
+For a more complicated logisitic regression class, see https://q-viper.github.io/2020/08/10/writing-a-logistic-regression-class-from-scratch/
 '''
-import os
 
-
-def my_custom_model(y, X, X_hdrs):
+class uhe_deterministic_model:
     '''
-    This is a demo of how to implement a custom regression model.
-    :param y: the truth data column showing the real values.
-    :param X: the indepdent variables for the model
-    :param X_hdrs: the headers of X
-    :return: Dictionay with type, score, model, and means if applicable.
+    Simple deterministic class
     '''
-    ####import
-    from sklearn.linear_model import LinearRegression
-    mod = LinearRegression().fit(X, y)
-    score = mod.score(X, y)
-    return {'type': 'Demo Linear Regression Model', 'score': score, 'model': mod}
+    def __init__(self):
+        self.X = None
+        self.y = None
 
-
-models = [
-    {
-        'my_model_name': 'Demo Linear Regression Model',
-        'model_function': my_custom_model,
-        'model_type': 'supervised'
-    }
-
-]
-
-
-if __name__=='__main__':
-    print('foo bar')
-    os._exit(0)
+    ###predict_proba function
+    def predict_proba(self, X):
+        '''
+        Just return the sum of X
+        :param X:
+        :return:
+        '''
+        ###calculate the DPI sum
+        return(np.sum(X))

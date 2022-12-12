@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import os
+import re
 sys.path.append(os.getcwd())
 import time
 import pandas as pd
@@ -67,10 +68,36 @@ date = dt.datetime.now().date()
 numWorkers=int(CONFIG['numWorkers'])
 
 ###import the blocks and variable types
-var_types = pd.read_csv('{}/mamba_variable_types.csv'.format(projectPath),keep_default_na=False).replace({'':None}).to_dict('records')
-for k in var_types:
-    for key in [CONFIG['data1_name'],CONFIG['data2_name'],'variable_name']:
-        k[key] = k[key].lower()
+file = open('{}/mamba_variable_types.csv'.format(projectPath), mode='r', newline='\n')
+var_types=[]
+lines = file.readlines()
+###Set up the keys
+keys = lines[0].replace('\n','').split(',')
+###little function to figure out if number is all digits, negative, or a .
+def number_finder(s):
+    return all(c in '0123456789.-' for c in s)
+
+for line in lines[1:]:
+    if len(line.replace('\n','')) > 0:
+        ###get the first bit of the line
+        line_split = re.split(',\s*(?![^{}]*\})', line.replace('\n',''))
+        out_dict={}
+        for key in range(len(keys)):
+            if line_split[key]=='':
+                out_dict[keys[key]] = None
+            else:
+                out_dict[keys[key]]=line_split[key]
+        for key in [CONFIG['data1_name'], CONFIG['data2_name'], 'variable_name']:
+            out_dict[key] = out_dict[key].lower()
+        ###finally, do the json check
+        if out_dict['custom_variable_kwargs'] is not None:
+            out_dict['custom_variable_kwargs']=json.loads(out_dict['custom_variable_kwargs'])
+            ###now, for each key, if it's only got +/- and number codes, convert to a float
+            for mykey in out_dict['custom_variable_kwargs'].keys():
+                if number_finder(out_dict['custom_variable_kwargs'][mykey])==True:
+                    out_dict['custom_variable_kwargs'][mykey] = float(out_dict['custom_variable_kwargs'][mykey])
+        var_types.append(out_dict)
+
 
 
 blocks = pd.read_csv('{}/{}'.format(projectPath,CONFIG['block_file_name'])).fillna(-1).to_dict('records')

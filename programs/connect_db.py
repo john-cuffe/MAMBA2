@@ -45,6 +45,5 @@ def get_table_noconn(qry, db):
     return results
 
 
-
 if __name__=='__main__':
     print('boo')

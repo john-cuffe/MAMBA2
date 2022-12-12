@@ -3,7 +3,6 @@
 '''
 This is a list of helper functions to create our database
 '''
-from psycopg2.extras import execute_values
 import programs.global_vars as global_vars
 from programs.connect_db import *
 from programs.logger_setup import *
@@ -12,6 +11,8 @@ import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
 logger=logger_setup(CONFIG['log_file_name'])
+if CONFIG['sql_flavor']=='postgres':
+    from psycopg2.extras import execute_values
 from glob import glob
 ###check if we have local usaddress or a proper version
 if ast.literal_eval(CONFIG['parse_address'])==True:
@@ -41,10 +42,18 @@ block_size bigint,
 block_matches bigint,
 block_matches_avg_score float,
 block_non_matches bigint,
-block_non_matches_avg_score bigint,
+block_non_matches_avg_score float,
 match_pairs_removed_filter bigint);
 
-create index batch_stat_idx on batch_statistics(batch_id)
+create index batch_stat_idx on batch_statistics(batch_id);
+
+create table block_model_mapping(
+batch_id bigint,
+block_id text,
+model_name text
+);
+
+create index block_mapping_idx on block_model_mapping(block_id);
 '''
 
 seq_query='''CREATE SEQUENCE batch_summary_query
@@ -200,7 +209,8 @@ def get_stem_data(data_source):
                 ###convert all the keys to lower
                 for parsed_block in [v for v in global_vars.blocks if v['parsed_block'] == 1]:
                     if len(re.findall('zipcode[0-9]', parsed_block['block_name'])) > 0:
-                        row[parsed_block['block_name']] = parsed_address['zipcode'][0:int(parsed_block['block_name'][-1])]
+                        row[parsed_block['block_name']] = parsed_address['zipcode'][
+                                                          0:int(parsed_block['block_name'][-1])]
                     else:
                         row[parsed_block['block_name']] = parsed_address[parsed_block['block_name']]
                 for variable in [var for var in global_vars.var_types if var['parsed_variable'] == '1']:
@@ -209,8 +219,8 @@ def get_stem_data(data_source):
                     else:
                         row[variable['variable_name']] = None
                 if ast.literal_eval(CONFIG['use_remaining_parsed_address']) == True:
-                    if 'address1' in parsed_address.keys():
-                        row['address1'] = parsed_address['address1']
+                    if 'address1' in parsed_address[0].keys():
+                        row['address1'] = parsed_address[0]['address1']
                     else:
                         row['address1'] = None
         for p in fuzzy_vars:
@@ -271,31 +281,50 @@ def createDatabase(databaseName):
     # create individual data tables
     # ###for each input dataset, need to
     for data_source in [CONFIG['data1_name'],CONFIG['data2_name'], '{}_training'.format(CONFIG['data1_name']), '{}_training'.format(CONFIG['data2_name'])]:
-        if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:
-            #print(data_source)
-            get_stem_data(data_source)
-            ####now index the tables
-            db=get_db_connection(CONFIG)
-            cur=db.cursor()
-            for i in global_vars.blocks:
-                cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
-            ###additional index on id
-            cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
-            ###clerical_review_candidates and the two matched pairs table
-            db.commit()
-        else:
-            logger.info('File {} does not exist.  Passing'.format(data_source))
+        try:
+            if os.path.isfile('{}/{}.csv'.format(CONFIG['projectPath'],data_source))==True:
+                #print(data_source)
+                get_stem_data(data_source)
+                ####now index the tables
+                db=get_db_connection(CONFIG)
+                cur=db.cursor()
+                for i in global_vars.blocks:
+                    cur.execute('''create index {source}_{variable}_idx on {source} ({variable});'''.format(variable=i[data_source.split('_training')[0]], source=data_source))
+                ###additional index on id
+                cur.execute('''create index {}_id_idx on {} (id)'''.format(data_source, data_source))
+                ###clerical_review_candidates and the two matched pairs table
+                db.commit()
+            else:
+                logger.info('File {} does not exist.  Passing'.format(data_source))
                 ###Handbreak--if clerical review candidates/matched pairs exist, change their names to the current date/time
-    for table in ['clerical_review_candidates','matched_pairs']:
-        if CONFIG['sql_flavor']=='sqlite':
-            ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
-        elif CONFIG['sql_flavor']=='postgres':
-            ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
-        if len(ret) > 0:
-            cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
-            db.commit()
-    cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
-    cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
+        except Exception as error:
+            logger.info("Error creating table {}, error {}".format(data_source, error))
+    '''
+    Removing this: From now on, will just attach the batch_id to the inputs
+    '''
+    # for table in ['clerical_review_candidates','matched_pairs']:
+    #     if CONFIG['sql_flavor']=='sqlite':
+    #         ret=get_table_noconn('''SELECT name FROM sqlite_master WHERE type='table' AND name='{}' '''.format(table), db)
+    #     elif CONFIG['sql_flavor']=='postgres':
+    #         ret=get_table_noconn('''SELECT tablename FROM pg_catalog.pg_tables WHERE schemaname='{}' '''.format(table), db)
+    #     if len(ret) > 0:
+    #         cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
+    #         db.commit()
+    cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float, batch_id float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+    cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float, batch_id float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
+    ###Finally, if the project path has a 'block_model_mapping.csv' file, dump that into the database with a batch identifier.
+    if os.path.exists('{}/block_model_mapping.csv'.format(CONFIG['projectPath'])):
+        ###load it
+        mapping_dat = pd.read_csv('{}/block_model_mapping.csv'.format(CONFIG['projectPath']), engine='c', dtype={'block_id':str}).to_dict('records')
+        if len(mapping_dat) > 0:
+            for k in mapping_dat:
+                k['batch_id'] = CONFIG['batch_id']
+                if k['model_name'][-7:]!='.joblib':
+                    k['model_name']=k['model_name']+'.joblib'
+            ###dump into database
+            write_out=write_to_db(mapping_dat,'block_model_mapping')
+        else:
+            logger.info('block_model_mapping.csv file present but no data found.  Skipping.')
     db.commit()
 
 def update_batch_summary(batch_summary):
