@@ -6,10 +6,6 @@ from joblib import dump, load
 import copy
 import json
 
-def logTime():
-    t = time.time() - t0
-    logging.info('Minutes lapsed: {0}'.format(round(t/60, 2)))
-
 
 def dump_model(model_dict, config_dict):
    '''
@@ -32,15 +28,15 @@ def dump_model(model_dict, config_dict):
        with open('{}/{}.txt'.format(config_dict['projectPath'],config_dict['saved_model_target']), 'w') as file:
            file.write(json.dumps(out_dict))
 
-def load_model(config_dict):
-    '''This function loads a model
+def load_model(config_dict, model_name):
+    '''This function loads a model given the CONFIG and the particular model name
     '''
     ##load the base
-    f = open('{}/{}.txt'.format(config_dict['projectPath'],config_dict['saved_model_target']))
+    f = open('{}/{}.txt'.format(config_dict['projectPath'],model_name))
     out_dict=json.load(f)
-    out_dict['model'] = load('{}/{}'.format(config_dict['projectPath'],config_dict['saved_model_target']))
+    out_dict['model'] = load('{}/{}'.format(config_dict['projectPath'],model_name))
     if config_dict['imputation_method']=='Imputer':
-        out_dict['imputer'] = load('{}/{}.imp'.format(config_dict['projectPath'],config_dict['saved_model_target']))
+        out_dict['imputer'] = load('{}/{}.imp'.format(config_dict['projectPath'],model_name))
     return out_dict
 
 if __name__=='__main__':

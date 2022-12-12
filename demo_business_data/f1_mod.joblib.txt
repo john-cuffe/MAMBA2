@@ -1,0 +1,1 @@
+{"type": "Random Forest", "score": 1.0, "variable_headers": ["name_swdist", "name_sortwinkler", "geo_distance"]}

@@ -1,4 +1,4 @@
-id,street_address,city,state_abb,zipcode,zip_3,name,year,businesstype,latitude,longitude,date_founded,address_unparsed
+id,street_address,City,state_abb,ZipCode,zip_3,name,year,BusinessType,latitude,longitude,date_founded,address_unparsed
 1,2125 Stark Hollow Road,Mountain View,CO,82939,829,,2019,Food,39.77568,-105.056127,2014-08-01,"2125 Stark Hollow Road, Mountain View, CO 82939"
 2,1909 Freshour Circle,Mountain View,CO,82939,829,Thriftway Food Mart,2019,Services,39.775686,-105.056127,2018-08-28,"1909 Freshour Circle, Mountain View, CO 82939"
 3,3413 Don Jackson Lane,Mountain View,CO,82939,829,Starship Tapes & Records,2019,Food,39.775692,-105.056127,2010-10-17,"3413 Don Jackson Lane, Mountain View, CO 82939"

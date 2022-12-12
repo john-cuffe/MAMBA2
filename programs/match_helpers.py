@@ -9,19 +9,22 @@ sys.path.append(os.getcwd())
 from copy import deepcopy as dcpy
 from programs.write_to_db import write_to_db
 from programs.create_db_helpers import get_db_connection, get_table_noconn
+from programs.general_helpers import load_model
 import numpy as np
 from scipy.stats import randint as sp_randint
 from programs.logger_setup import *
-from  sklearn.model_selection import RandomizedSearchCV
+from sklearn.model_selection import RandomizedSearchCV
 from multiprocessing import Pool
 from sklearn.feature_selection import RFECV
-import programs.custom_scoring_methods as cust_scoring
+if 'custom' in [k['match_type'] for k in var_types]:
+    import custom_scoring_methods as cust_scoring
 from inspect import getmembers, isfunction
 logger=logger_setup(CONFIG['log_file_name'])
 from sklearn.ensemble import RandomForestClassifier
 import random
 from programs.soundex import soundex
 from programs.soundex import nysiis
+import traceback
 
 ##Run the Classifier
 def runRFClassifier(y, X, nT, nE, mD):
@@ -57,15 +60,24 @@ def calc_vif(X, headers):
     return(vif)
 
 ###Function to grab the predicted probabilities that are retruened from predict_proba as a tuple
-def probsfunc(x):
+def probsfunc(x, model_type):
     '''
     This function generates a single arrary of predicted probabilities  of a match
     inputs:
-    probs: an array of predicted probabilites form an RF Classifier
+    probs: an array of predicted probabilites form an Classifier
     '''
-    ith = np.zeros(shape=(len(x), 1))
-    for i in range(len(x)):
-        ith[i] = x[i][1]
+    if model_type!='custom':
+        ith = np.zeros(shape=(len(x), 1))
+        for i in range(len(x)):
+            ith[i] = x[i][1]
+    else:
+        ####flag if
+        if all([i[0].isnumeric() for i in x])==True:
+            ith = np.zeros(shape=(len(x), 1))
+            for i in range(len(x)):
+                ith[i] = x[i][0]
+        else:
+            return np.array([i[0] for i in x])
     return ith
 
 
@@ -253,16 +265,16 @@ def get_nysiis(x):
 def create_custom_scores(core_dict, data1_values, data2_values, target_function):
     '''function to create the fuzzy scores'''
     ###now create the output array
+    if type(target_function['custom_variable_kwargs'])!=dict:
+        target_function['custom_variable_kwargs']={}
     vals = [(data1_values[x['data1_id']][target_function['variable_name'].lower()], data2_values[x['data2_id']][target_function['variable_name'].lower()]) for x in core_dict]
     scores=[]
     for val in vals:
-        if val[0]!='NULL' and val[1]!='NULL':
-                try:
-                    scores.append(target_function['function'](val))
-                except:
-                    scores.append(np.nan)
-        else:
-            scores.append(np.nan)
+            try:
+                scores.append(target_function['function'](val, **target_function['custom_variable_kwargs']))
+            except Exception as error:
+                logger.info('Warning: Exception in creating custom score.  Function {}, error {}, values: {}.  This is going to break stuff.'.format(target_function['variable_name'], error, str(val)))
+                scores.append('FAIL')
     return scores
 
 def create_scores(input_data, score_type, varlist, headers, method='full'):
@@ -280,7 +292,7 @@ def create_scores(input_data, score_type, varlist, headers, method='full'):
     '''
     ###get the target data
     db=get_db_connection(CONFIG)
-    if score_type not in ['geo_distance','custom']:
+    if score_type not in ['geo_distance']:
         core_dict, data1_values, data2_values = get_target_data(input_data, varlist, method, 'normal')
     if score_type=='fuzzy':
         ##Now assemble the list of variables we need to generate
@@ -408,40 +420,67 @@ def create_all_scores(input_data, method,headers='all'):
         fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers, method)
         X=fuzzy_values['output']
         X_hdrs=copy.deepcopy(fuzzy_values['names'])
+    else:
+        #####if we don't have fuzzy values, need this a bit later on
+        fuzzy_values={'names':[]}
     ### num_distance: get the numeric distance between the two values, with a score of -9999 if missing
     if len(numeric_dist_vars) > 0:
         numeric_dist_values=create_scores(input_data, 'numeric_dist', numeric_dist_vars, headers, method)
-        X=np.vstack((X, numeric_dist_values['output'].T))
-        X_hdrs.extend(numeric_dist_values['names'])
+        if 'X' in locals():
+            X=np.vstack((X, numeric_dist_values['output'].T))
+            X_hdrs.extend(numeric_dist_values['names'])
+        else:
+            X = numeric_dist_values['output']
+            X_hdrs = copy.deepcopy(numeric_dist_values['names'])
     ### exact: if they match, 1, else 0
     if len(exact_match_vars) > 0:
         exact_match_values=create_scores(input_data, 'exact', exact_match_vars, headers, method)
-        X=np.vstack((X, exact_match_values['output'].T))
-        X_hdrs.extend(exact_match_values['names'])
+        if 'X' in locals():
+            X=np.vstack((X, exact_match_values['output'].T))
+            X_hdrs.extend(exact_match_values['names'])
+        else:
+            X = exact_match_values['output']
+            X_hdrs = copy.deepcopy(exact_match_values['names'])
     ###Geo Distance
     if len(geo_distance) > 0:
         geo_distance_values = create_scores(input_data, 'geo_distance', geo_distance, headers, method)
         if type(geo_distance_values['output']) != str:
-            X = np.vstack((X, geo_distance_values['output'].T))
-            X_hdrs.extend(geo_distance_values['names'])
+            if 'X' in locals():
+                X = np.vstack((X, geo_distance_values['output'].T))
+                X_hdrs.extend(geo_distance_values['names'])
+            else:
+                X = geo_distance_values['output']
+                X_hdrs = copy.deepcopy(geo_distance_values['names'])
     #### date vars
     if len(date_vars) > 0:
         date_values = create_scores(input_data,'date',date_vars, headers, method)
         if type(date_values['output']) != str:
-            X = np.vstack((X, date_values['output'].T))
-            X_hdrs.extend(date_values['names'])
+            if 'X' in locals():
+                X = np.vstack((X, date_values['output'].T))
+                X_hdrs.extend(date_values['names'])
+            else:
+                X = date_values['output']
+                X_hdrs = copy.deepcopy(date_values['names'])
     ###custom values
     if len(custom_vars) > 0:
         custom_values = create_scores(input_data,'custom',custom_vars, headers, method)
         if type(custom_values['output']) != str:
-            X = np.vstack((X, custom_values['output']))
-            X_hdrs.extend(custom_values['names'])
+            if 'X' in locals():
+                X = np.vstack((X, custom_values['output']))
+                X_hdrs.extend(custom_values['names'])
+            else:
+                X = custom_values['output']
+                X_hdrs = copy.deepcopy(custom_values['names'])
     ### phonetic values:
     if len(phoenetic_vars) > 0:
         phoenetic_values = create_scores(input_data, 'phoenetic', phoenetic_vars, headers, method)
         if type(phoenetic_values['output']) != str:
-            X = np.vstack((X, phoenetic_values['output'].T))
-            X_hdrs.extend(phoenetic_values['names'])
+            if 'X' in locals():
+                X = np.vstack((X, phoenetic_values['output'].T))
+                X_hdrs.extend(phoenetic_values['names'])
+            else:
+                X = phoenetic_values['output']
+                X_hdrs = copy.deepcopy(phoenetic_values['names'])
     ##Impute the missing data
     ##first transpose
     #X=X.T
@@ -490,6 +529,13 @@ def create_all_scores(input_data, method,headers='all'):
         if method == 'truth':
             y = input_data['match'].values
             return y, X, X_hdrs, 'Nominal'
+        else:
+            return X, X_hdrs
+    else:
+        ####if there is no imputation method
+        if method == 'truth':
+            y = input_data['match'].values
+            return y, X, X_hdrs, 'None'
         else:
             return X, X_hdrs
 
@@ -665,7 +711,7 @@ def generate_rf_mod(y, X, X_hdrs):
     if ast.literal_eval(CONFIG['debugmode'])==True:
         niter = 1
     else:
-        niter = 200
+        niter = 50
     if ast.literal_eval(CONFIG['feature_elimination_mode']) == False:
         cv_rfc = RandomizedSearchCV(estimator=rf, param_distributions=myparams, cv=5, scoring=scoringcriteria,n_iter=niter)
         cv_rfc.fit(X, y)
@@ -841,6 +887,7 @@ def choose_model(truthdat):
     y, X, X_hdrs, imputer = create_all_scores(truthdat, method='truth')
     ####if we are running the full MAMBA model suite:
     if ast.literal_eval(CONFIG['use_mamba_models'])==True:
+        '''
         if ast.literal_eval(CONFIG['use_logit'])==True:
             logit=generate_logit(y, X, X_hdrs)
             if logit!='fail':
@@ -848,6 +895,7 @@ def choose_model(truthdat):
         else:
             logit={'score':0}
         models.append(logit)
+        '''
         rf=generate_rf_mod(y, X, X_hdrs)
         models.append(rf)
         #svn=generate_svn_mod(truthdat)
@@ -860,6 +908,7 @@ def choose_model(truthdat):
             import programs.custom_model as cust
             logger.info('\n\n######CREATE CUSTOM MODEL {}######\n\n'.format(cust.my_model_name))
             custom_model = cust.my_custom_model(y, X, X_hdrs)
+            custom_model['type'] = 'custom'
             models.append(custom_model)
         ###ID the best score
         best_score=max([i['score'] for i in models])
@@ -868,9 +917,10 @@ def choose_model(truthdat):
         return best_model
     else:
         ###Otherwise, just run the custom model
-        import programs.custom_model as cust
-        logger.info('\n\n######CREATE CUSTOM MODEL {}######\n\n'.format(cust.my_model_name))
+        import custom_model as cust
+        logger.info('\n\n######CREATE CUSTOM MODEL {}######\n\n'.format(cust.__name__))
         custom_model = cust.my_custom_model(y, X, X_hdrs)
+        custom_model['type'] = 'custom'
         models.append(custom_model)
         best_score=max([i['score'] for i in models])
         best_model=[i for i in models if i['score']==best_score][0]
@@ -894,17 +944,12 @@ def match_fun(arg):
     arg is a dictionary.  
     target: the block we are targeting  
     '''
-    '''
-    This function runs the match.  
-    arg is a dictionary.  
-    target: the block we are targeting  
-    '''
     ###Sometimes, the arg will have a logging flag if we are 10% of the way through
     try:
         start = time.time()
         ###setup the to_return
         to_return = {}
-        logger.info('starting block {}'.format(arg['target']))
+        logger.info('starting block {}, using model {}'.format(arg['target'], arg['model_name']))
         db=get_db_connection(CONFIG, timeout=1)
         ###get the two dataframes
         ##if we aren't doing a chunked block
@@ -921,29 +966,25 @@ def match_fun(arg):
             input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
         else:
             input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2])
+    except Exception:
+        logger.info('Error generating input data for block {}, error {}'.format(arg['target'], traceback.format_exc()))
+        return 'fail'
         ####Nif the length, skip
-        if len(input_data)==0:
-            end = time.time() - start
-            logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
-            stats_dat={'batch_id':arg['batch_id'],
-                                     'block_level':arg['block_info']['block_name'],
-                                     'block_id': str(arg['target']),
-                                     'block_time': end,
-                                     'block_size': 0,
-                                     'block_matches': 0,
-                                     'block_matches_avg_score': 0,
-                                     'block_non_matches': 0,
-                                     'block_non_matches_avg_score': 0}
-            db = get_db_connection(CONFIG)
-            cur = db.cursor()
-            columns_list = str(tuple([str(j) for j in stats_dat.keys()])).replace("'", '')
-            values = tuple(stats_dat[column] for column in stats_dat.keys())
-            vals_len = ','.join(['?' for _ in range(len(stats_dat.keys()))])
-            insert_statement = '''insert into batch_statistics {} VALUES({})'''.format(columns_list, vals_len)
-            cur.execute(insert_statement, values)
-            db.commit()
-            db.close()
-        else:
+    if len(input_data)==0:
+        end = time.time() - start
+        logger.info('There were no valid matches to attempt for block {}'.format(arg['target']))
+        stats_dat={'batch_id':arg['batch_id'],
+                                 'block_level':arg['block_info']['block_name'],
+                                 'block_id': str(arg['target']),
+                                 'block_time': end,
+                                 'block_size': 0,
+                                 'block_matches': 0,
+                                 'block_matches_avg_score': 0,
+                                 'block_non_matches': 0,
+                                 'block_non_matches_avg_score': 0}
+        stats_out = write_to_db(stats_dat, 'batch_statistics')
+    else:
+        try:
             orig_len = len(input_data)
             if ast.literal_eval(CONFIG['use_variable_filter'])==True:
                 logger.info('Filtering for block {}'.format(arg['target']))
@@ -966,9 +1007,11 @@ def match_fun(arg):
                                  'block_non_matches_avg_score': 0,
                                  'match_pairs_removed_filter':orig_len-len(input_data)}
                 stats_out = write_to_db(stats_dat, 'batch_statistics')
+                if stats_out:
+                    logger.info('Unable to write batch statistics for batch {}, continuing'.format(arg['target']))
             else:
                 logger.info('Creating Scores for block {}'.format(arg['target']))
-                X, X_hdrs = create_all_scores(input_data, 'prediction', arg['model']['variable_headers'])
+                X, X_hdrs = create_all_scores(input_data, 'prediction', arg['X_hdrs'])
                 ####Now write to the DB
                 if len(input_data) > 0:
                     del data1
@@ -980,18 +1023,27 @@ def match_fun(arg):
                             X = pd.DataFrame(X, columns=X_hdrs) - arg['model']['means']
                             X = np.array(X)
                         logger.info('Predicting for block {}'.format(arg['target']))
-                        input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X))
+                        input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X), arg['model']['type'])
                         stats_dat = copy.deepcopy(input_data)
                         ####Now add in any matches
-                        matches = pd.DataFrame([i for i in input_data.to_dict('records') if i['predicted_probability'] >= float(CONFIG['match_threshold'])])
+                        #####If the predicted probability is a string (so someone is storing JSON or other criteria, log it, then move on
+                        if input_data['predicted_probability'].dtype == 'O':
+                            ####So we have an object that isn't meant to be filtered. Log it
+                            logger.info('Custom model has returned a string.  All values will be returned.')
+                            matches = input_data
+                        else:
+                            ##Otherwise, restrict the the match threshold
+                            matches = input_data[input_data['predicted_probability'] >= float(CONFIG['match_threshold'])]
                         if len(matches) > 0:
                             ###ranks
+                            #####Note here that if you have an object, this will rank them alphabetically. Feel free to ignore them!
                             matches['{}_rank'.format(CONFIG['data1_name'])] = \
-                            matches.groupby('{}_id'.format(CONFIG['data1_name']))[
-                                'predicted_probability'].rank('dense')
+                            matches.groupby('{}_id'.format(CONFIG['data1_name']))['predicted_probability'].rank('dense')
                             matches['{}_rank'.format(CONFIG['data2_name'])] = \
                             matches.groupby('{}_id'.format(CONFIG['data2_name']))[
                                 'predicted_probability'].rank('dense')
+                            ###add the batch_id
+                            matches['batch_id']=arg['batch_id']
                             ##convert back to dict
                             matches = matches.to_dict('records')
                             ###write to DB
@@ -1017,6 +1069,8 @@ def match_fun(arg):
                         else:
                             clerical_values = np.where(input_data['predicted_probability'] >= float(CONFIG['clerical_review_threshold']['value']), True, False)
                             clerical_candidates = input_data[clerical_values==True]
+                        ###add in the batch id to each row
+                        clerical_candidates['batch_id']=arg['batch_id']
                         ###if there are more than 10, select 10% of them
                         if len(clerical_candidates) >= 10:
                             clerical_review_dict = dcpy(random.sample(clerical_candidates.to_dict('records'),int(np.round(.1*len(clerical_candidates),0))))
@@ -1024,8 +1078,8 @@ def match_fun(arg):
                             clerical_review_dict = dcpy(clerical_candidates.to_dict('records'))
                         if len(clerical_review_dict) > 0:
                             clerical_out = write_to_db(clerical_review_dict, 'clerical_review_candidates')
-                        if clerical_out:
-                            to_return['clerical_review_candidates']=clerical_out
+                            if clerical_out:
+                                to_return['clerical_review_candidates']=clerical_out
                         ###if it's a chatty logger, log.
                         if ast.literal_eval(CONFIG['chatty_logger']) == True:
                             logger.info('''{} clerical review candidates added from block {}'''.format(len(clerical_review_dict), arg['target']))
@@ -1044,6 +1098,10 @@ def match_fun(arg):
                                                'block_non_matches_avg_score': np.nanmean(np.where(stats_dat['predicted_probability'] < float(CONFIG['match_threshold']),stats_dat['predicted_probability'],np.nan)),
                                                'match_pairs_removed_filter':orig_len-len(input_data)}
                 logger.info('main match complete for block {}'.format(arg['target']))
+        except Exception:
+            logger.info('Error generating scores for block {}, error {}'.format(arg['target'], traceback.format_exc()))
+            return 'fail'
+        try:
             stats_out = write_to_db(stats_dat, 'batch_statistics')
             if stats_out:
                 logger.info('Unable to write batch statistics for batch {}, continuing'.format(arg['target']))
@@ -1053,17 +1111,17 @@ def match_fun(arg):
                 return to_return
             else:
                 return None
-    except Exception as error:
-        logger.info('Error for Block {}, error {}'.format(arg['target'], error))
-        return 'fail'
+        except Exception:
+            logger.info('Error for return stats dat for block {}, error {}'.format(arg['target'], traceback.format_exc()))
+            return 'fail'
 
 ####The block function
 def run_block(block, model, batch_id):
     '''
     This function creates the list of blocks to use for comparison and then runs the matches
     :param block: the dict of the block we are running
-    :param model; the model we are using
-    :param batch_id: the batch ID.  Not sure why it's not getting pulled through via CONFIG
+    :param model: the model we are using
+    :param batch_id: for whatever reason, the CONFIG['batch_id'] call is inconsistent, so putting that directly here
     :return:
     '''
     ####If we are running the 'full' block
@@ -1079,12 +1137,25 @@ def run_block(block, model, batch_id):
         ###otherwise it's a list of tuples of all of the possible combinations of the blocks
         block_list=[(x, y) for x in data1_blocks for y in data2_blocks]
     logger.info('We have {} blocks to run for {}'.format(len(block_list), block['block_name']))
+    ###load any mapped models
+    mapped_models = get_table_noconn('''select * from block_model_mapping where batch_id={}'''.format(batch_id), db)
     ###Create list to kick to workers
     arg_list=[]
     for k in range(len(block_list)):
         my_arg={}
-        my_arg['model']=model
-        my_arg['X_hdrs']=model['variable_headers']
+        if len(mapped_models) > 0 and str(block_list[k]) in [b['block_id'] for b in mapped_models]:
+            ###get the target filename
+            target_mapping = [b for b in mapped_models if b['block_id']==str(block_list[k])][0]
+            target_model = load_model(CONFIG,target_mapping['model_name'])
+            my_arg['model'] = target_model
+            my_arg['X_hdrs'] = target_model['variable_headers']
+            my_arg['model_name'] = target_mapping['model_name']
+            logger.info('Block {} will use model {}'.format(block_list[k],target_mapping['model_name']))
+        else:
+            ###Otherwise, use the default model
+            my_arg['model']=model
+            my_arg['X_hdrs'] = model['variable_headers']
+            my_arg['model_name'] = CONFIG['saved_model']
         my_arg['target']=block_list[k]
         my_arg['block_info']=block
         my_arg['batch_id']=batch_id
@@ -1100,19 +1171,15 @@ def run_block(block, model, batch_id):
     pool=Pool(numWorkers)
     out=pool.map(match_fun, arg_list)
     ###check for any failures
-    for o in out:
-        if o=='fail':
-            logger.info('Failed for {}, see log for details'.format(block['block_name']))
+    for o in range(len(out)):
+        if out[0]=='fail':
+            logger.info('Failed for {}, block {}, see log for details'.format(block['block_name'], arg_list[o]['target']))
             os._exit(0)
     ###Once that is done, need to
         ##push the remaining items in out to the db
     db=get_db_connection(CONFIG)
     cur=db.cursor()
     logger.info('Dumping remaining matches to DB for block {}'.format(block['block_name']))
-    clerical_review_sql = '''insert into clerical_review_candidates({}_id, {}_id, predicted_probability) values (?,?,?) '''.format(
-        CONFIG['data1_name'], CONFIG['data2_name'])
-    match_sql = '''insert into matched_pairs({data1}_id, {data2}_id, predicted_probability, {data1}_rank, {data2}_rank) values (?,?,?,?,?) '''.format(
-        data1=CONFIG['data1_name'], data2=CONFIG['data2_name'])
     for i in out:
         if i!=None:
             if 'clerical_review_candidates' in i.keys():
