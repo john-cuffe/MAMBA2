@@ -1,0 +1,21 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: osx-64
+aes-cipher=1.0.4=pypi_0
+brotli-bin=1.0.9=hca72f7f_7
+ca-certificates=2022.10.11=hecd8cb5_0
+charset-normalizer=2.0.4=pyhd3eb1b0_0
+conda-package-handling=1.9.0=py38hca72f7f_0
+importlib-metadata=4.11.3=py38hecd8cb5_0
+intel-openmp=2021.4.0=hecd8cb5_3538
+libwebp-base=1.2.2=hca72f7f_0
+llvm-openmp=14.0.6=h0dcd299_0
+lz4-c=1.9.3=h23ab428_1
+matplotlib-base=3.4.3=py38h0a11d32_0
+mkl-service=2.4.0=py38h9ed2024_0
+numpy-base=1.23.1=py38h3b1a694_0
+python-crfsuite=0.9.7=py38h23ab428_1
+python-dateutil=2.8.2=pyhd3eb1b0_0
+python-stdnum=1.17=pypi_0
+redshift-connector=2.0.909=pypi_0
+scikit-learn=0.24.2=py38hb2f4e1b_0

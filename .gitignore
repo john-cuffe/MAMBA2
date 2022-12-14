@@ -35,3 +35,5 @@ R10000_Log
 *.so
 *.so
 *.c
+demo_business_data_to_run
+demo_business_data_to_run/*
