@@ -311,7 +311,7 @@ def createDatabase(databaseName):
     #         cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
     #         db.commit()
     cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float, batch_id float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
-    cur.execute('''create table matched_pairs ({data1}_id text, {data2}_id text, predicted_probability float, {data1}_rank float, {data2}_rank float, batch_id float);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
+    cur.execute('''create table matched_pairs ({data1}_id bigint, {data2}_id bigint, predicted_probability float, {data1}_rank float, {data2}_rank float, batch_id float, match_pair_info json);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
     ###Finally, if the project path has a 'block_model_mapping.csv' file, dump that into the database with a batch identifier.
     if os.path.exists('{}/block_model_mapping.csv'.format(CONFIG['projectPath'])):
         ###load it

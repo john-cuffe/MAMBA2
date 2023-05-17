@@ -1,4 +1,4 @@
-order,block_name,data1_test,data2_test,parsed_block,chunk_size
-1,ZipCode,ZipCode,ZipCode,0,
-2,City,City,City,0,
-3,Full,full,full,0,1000
+order,block_name,data1_test,data2_test,parsed_block,chunk_size,variable_filter_info
+1,ZipCode,ZipCode,ZipCode,0,,"{""variable_name"": ""State"", ""test"": ""=="",  ""data1_test"": ""State"", ""data2_test"": ""State, ""match_type"": ""exact""}"
+2,City,City,City,0,,
+3,Full,full,full,0,1000,"{""variable_name"": ""name"", ""test"": ""=="", ""filter_value"": "".8"", ""data1_test"": ""name"", ""data2_test"": ""name, ""match_type"": ""fuzzy"", ""fuzzy_name"":""jaro""}"

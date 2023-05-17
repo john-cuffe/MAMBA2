@@ -13,7 +13,7 @@ logger=logger_setup(CONFIG['log_file_name'])
 def write_to_db(the_data, target_table):
     '''
     This is the function to write to the database
-    :param the_data: either a dictionary or list of dictionaries
+    :param the_data: either a dictionary, pandas dataframe, or list of dictionaries
     :param target_table: the table to target
     :param exists: What to do if the table is alredy present (for sqlite only)
     :return:
@@ -24,11 +24,28 @@ def write_to_db(the_data, target_table):
     try:
         ####now set up the list of columns
         if isinstance(the_data, list)==True:
+            for k in the_data:
+                for key in k.keys():
+                    if isinstance(k[key], dict):
+                        k[key] = json.dumps(k[key])
+            ##remove any index column, assemble into a list
+            columns = [k for k in the_data[0].keys() if k!='index']
+            columns_list = tuple(column for column in columns)
+            values = [tuple(i[column] for column in columns) for i in the_data]
+        elif isinstance(the_data, pd.DataFrame)==True:
+            the_data = the_data.to_dict('records')
+            for k in the_data:
+                for key in k.keys():
+                    if isinstance(k[key], dict):
+                        k[key] = json.dumps(k[key])
             ##remove any index column, assemble into a list
             columns = [k for k in the_data[0].keys() if k!='index']
             columns_list = tuple(column for column in columns)
             values = [tuple(i[column] for column in columns) for i in the_data]
         else:
+            for key in the_data.keys():
+                if isinstance(the_data[key], dict):
+                    the_data[key] = json.dumps(the_data[key])
             columns_list = str(tuple([str(j) for j in the_data.keys() if j != 'index'])).replace("'", '')
             values = [tuple([the_data[key] for key in the_data if key in columns_list])]
         ###now write to the individual types of database

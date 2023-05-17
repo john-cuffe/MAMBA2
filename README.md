@@ -12,7 +12,6 @@ MAMBA2 User Guide
 
 [Setting Up](#settingup)
 
-[Parsing Addresses](#parsingaddresses)
 
 [Custom Matching Models](#custom_models)
 
@@ -73,13 +72,13 @@ This file is going to tell MAMBA which variables in your dataset serve as 'block
  - \*data2_name\*: This column header should be your data1_name in your run_match.bash file. This is the name of the variable that corresponds to the block in the second dataset you wish to match.
  - Parsed_block: See below. 1 if the block comes from a parsed variable, 0 otherwise.
  - chunk_size: If you expect very large blocks, or want to do an unblocked match but still want multiprocessing, enter a max block size here.  Leave blank otherwise.  See Note for details.
-
+ - variable_filter_info: If you want to have a particular filter for the block, enter a json dictionary here (see below for details)
 #### NOTES
 
  - If you want to do a full cross product with no blocking, include a row with 'full' as the entry for the block name and 'full_block'.  
 - If you are using the parse_address function and want to include outputs from the parsed addresses as block (e.g. you want to use the city and zip code) you must use the exact names from the _address_component_matching.csv_ file or the [usaddress docs](https://usaddress.readthedocs.io/en/latest/) for the block name, \*data1_name\* and \*data2_name\* column.
 - You can reduce the ZipCode variable to any number of digits by including the digit at the end of ZipCode. For example, to block by 3-digit zip code, include a block that has 'ZipCode3' as its name.
-- The chunk_size parameter is only avazxvvilable on 'full' blocks.
+- The chunk_size parameter is only available on 'full' blocks.
 
 #### Figure 1. Demonstration of block_names.csv file.
 
@@ -172,6 +171,8 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - If True, then python generates clerical review candidates for you to do further training data creation. These candidates will be a sample of all matches with a predicted probability greater than the clerical review threshold below.
  - clerical_review_threshold:
       - A dictionary that shows the variable and value you want clerical review candidates based on.  See below for details 
+ - custom_selection_statement:
+   - Sometimes we want to have a customized selection statement to narrow down what we want to match. Here, include an sql statement to limit the observations you want to match.  WARNING: if you enter this, then the default behavior of matched observations not being considered for matches in later blocks will disappear.
  - match_threshold:
       - what is the threshold you want to consider a 'match'.
  - chatty_logger:
@@ -184,6 +185,10 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - Do you want MAMBA to predict matches. If set to False, then you can generate clerical review candidates only (if clerical_review_candidates=True)
  - Scoringcriteria:
       - A scoring criteria selected from scikit-learn's list. See [https://scikit-learn.org/stable/modules/model_evaluation.html](https://scikit-learn.org/stable/modules/model_evaluation.html)
+ - mode
+   - can be deduplication, in which case we are targeting a single table (and target table needs to be filled) or normal
+ - target_table
+   - if in deduplication mode, what's the table we are targeting?
  - Ignore_duplicate_ids:
       - If True, assumes that you are attempting to de-duplicate the same file, and thus does not compare records with matching ID variables. If False, then compares all records as normal.
  - Use_logit:
@@ -211,8 +216,8 @@ This is the file you will edit to run MAMBA.  After setting your configurations,
       - If this is set to True, the models generated will be fitted with recursive feature elimination.  
  - use_variable_filter:
       - If this is set to True, MAMBA will use a filter to pre-sort any match candidates.
- - variable_filter_info:
-      - json dictionary required details if use_variable_filter is set to True.  See below for details.
+ - global_selection_filter:
+   - If this is anything other than 'False', this tells MAMBA to only select a specific subset of possible matches using the SQL statement provided.  See below for details.
  - use_mamba_models:
       - If True, use the mamba machine learning built-in models to find the best model.  If False, you must have a custom model in place, and this will be used to make predictions.
 
@@ -240,8 +245,12 @@ Some Notes:
      - run the command _python setup.py build_ext --inplace_
        - This will cythonize the helper functions. 
  - CD into the main MAMBA directory
- - Run run_match.py *your projectPath here*
-   - example: "python run_match.py /home/users/foo/foo_matching_project/bar"
+ - export your projectPath 
+   - example: export projectPath=/home/users/foo/
+ - Then given an encryption path if you're using encryption (this is where your .bin and .pw keys live)
+     - example: export encryptionPath=/home/users/foo/conf
+ - Run run_match
+   - example: "python run_match.py"
  _ Watch MAMBA go!
 
 ## Clerical Review Candidates
@@ -274,6 +283,7 @@ As described above, to use this feature, ensure _parse_address_ is set to True i
   - Must return a model-like object that has the same features (predicts, predict_proba, scoring etc.) as a standard scikit-learn model.
   - Turn _use_mamba_models_ to 'False' to only use the custom model and none of the MAMBA built-in models.
   - Note that this file must be in your PROJECT directory, not the main MAMBA directories.
+  - If you want to return a JSON object from your model, the JSON MUST have a 'predicted_probability' element.
 
 ## Imputation Methods
  <a id="imputation_methods"/>
@@ -300,27 +310,39 @@ Imputation of missing data is a major element of record linkage problems.  MAMBA
 ## Manual Filter Selection
 <a id="manual_filter_selection"/>
 
-- In general, the MAMBA philosophy for matching is to let the model do all of the work, which should result in less human-generated bias in any matches.  However, MAMBA does offer a feature where the user can introduce a filter for matches, where no candidate pair with a score below a certain threshold can possibly be a match.  If this feature is used, MAMBA takes the following steps:
-  1) Generate a score, for each match candidate pair, on the variable chosen
-  2) Retain only those match candidate pairs that have a score exceeding the chosen threshold
-  3) Generate full scores/model predictions for remaining pairs
-- The intent behind this metric is to allow users some level of control. For example, SMEs may determine that an entity names that score less than .75 on a Jaro comparator will _never_ result in a match.  This feature then allows MAMBA to skip those matches.  The additional benefit is that by only calculating one single score, and then deleting a subset, this makes MAMBA run substantially faster.
-- To implement, turn the use_variable_filter parameter to True in your mamba properties file.
-- Then edit the variable_filter_info json
-- Keys:
-    - variable_name: name of the variable as it appears in mamba_variable_types.csv
-    - fuzzy_name: IF the variable is a fuzzy variable, which particular character do you want to use 
-      - Options:'jaro', 'winkler', 'bagdist', 'seqmatch', 'qgram2', 'qgram3', 'posqgram3', 'editdist', 'lcs2', 'lcs3', 'charhistogram', 'swdist', 'sortwinkler'
-    - test: the test you want to apply.
-      - Options: =, !=, >, >=, <, <=
-    - filter_value: the value you want to compare.
+- In general, the MAMBA philosophy for matching is to let the model do all of the work, which should result in less human-generated bias in any matches.  However, MAMBA does offer two features where the user can introduce a filter for matches, one before matches are selected, and another where no candidate pair with a score below a certain threshold can possibly be a match. This section discusses each in turn.
+- global_selection_filter:
+  - This feature allows MAMBA to select, for ALL blocks, a certain filter to apply to any candidate match pair.  For example, if you are running a match iteratively, it doesn't make sense to run previously attempted matches.  You can thus use this feature to only select new or updated candidates. 
+  - You will need to use 'a' in place of *data1.name* and b in place of *data2_name*.
+  - Leave this as 'False' otherwise.
+  - Example:
+    - a.create_date = current_date --this selects only *data1_name* created on the current_date
+    - b.id > 2000 --this selects *data2_name* rows where the ID is above 2000
+- use_variable_filter:
+  - This feature tells MAMBA to filter model matches for candidate pairs below a certain threshold.
+    - If this feature is used, MAMBA takes the following steps:
+      1) Generate a score, for each match candidate pair, on the variable chosen
+      2) Retain only those match candidate pairs that have a score exceeding the chosen threshold
+      3) Generate full scores/model predictions for remaining pairs.
+  - The intent behind this metric is to allow users some level of control. For example, SMEs may determine that an entity names that score less than .75 on a Jaro comparator will _never_ result in a match.  This feature then allows MAMBA to skip those matches.  The additional benefit is that by only calculating one single score, and then deleting a subset, this makes MAMBA run substantially faster.
+  - To implement, _for each block you want to have a variable filter for_, enter a json dictionary with the following keys, with all values enclosed in double quotes:
+  - Keys:
+      - variable_name: name of the variable as it appears in mamba_variable_types.csv
+      - *data1_name*: the name of the filter on the data1 dataset
+      - *data2_name*: the name of the filter on the data2 dataset
+      - match_type: the type of match (same as the usual variable list)
+        - NOTE: If you utilize an 'exact' match, the filtering will be done on the DB.  Otherwise it will be done by python
+      - fuzzy_name: IF the variable is a fuzzy variable, which particular character do you want to use 
+        - Options:'jaro', 'winkler', 'bagdist', 'seqmatch', 'qgram2', 'qgram3', 'posqgram3', 'editdist', 'lcs2', 'lcs3', 'charhistogram', 'swdist', 'sortwinkler'
+      - test: the test you want to apply.
+        - Options: ==, !=, >, >=, <, <=
+      - filter_value: the value you want to compare. Not needed for exact matches.
 - Demos:
   - fuzzy {'variable_name': name, 'fuzzy_name': 'jaro', 'test':'>', 'filter_value':.75}
   - custom {'variable_name': first_char, 'fuzzy_name': '', 'test':'=', 'filter_value':1}
   - date {'variable_name': year, 'fuzzy_name':'', 'test':'>=', 'filter_value':.5}
 
 - Notes:
-  - For exact matches, user still must select either 1 or 0 for the filter value.  You can select something other than '=' as the test but isn't this complicated enough already?
   - For date variables, filter_value is given as the score on the Editdist command, which is limited between 0 and 1.
   - The logs and stats for the run will show how many observations were cut by the filter.
 

@@ -37,3 +37,6 @@ R10000_Log
 *.c
 demo_business_data_to_run
 demo_business_data_to_run/*
+*.so
+programs/timing_by_block.py
+R10000/output/all_matches_batch_1.csv

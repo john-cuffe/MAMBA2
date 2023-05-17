@@ -13,7 +13,7 @@ def get_db_connection(db_info, timeout=1):
                               host=db_info['db_host'],
                               port=db_info['db_port'],
                               user=db_info['db_user'],
-                              password=os.environ['db_password'],
+                              password=db_info['db_password'],
                               options='-c search_path={}'.format(db_info['db_schema']),
                               connect_timeout=10)
     return db

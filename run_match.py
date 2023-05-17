@@ -1,7 +1,7 @@
 import os
 import sys
 sys.path.append(os.getcwd())
-sys.path.append(sys.argv[1])
+sys.path.append(os.environ['projectPath'])
 from programs.global_vars import *
 from programs.create_db_helpers import *
 from programs.match_helpers import *
@@ -14,8 +14,9 @@ import traceback
 if __name__=='__main__':
     ###start up by printing out the full config file
     for key in CONFIG:
-        logger.info('#############')
-        logger.info('''{}: {}'''.format(key, CONFIG[key]))
+        if 'password' not in key:
+            logger.info('#############')
+            logger.info('''{}: {}'''.format(key, CONFIG[key]))
     batch_summary={}
     ###set the start time
     batch_summary['batch_started'] = dt.datetime.now()
@@ -63,7 +64,7 @@ if __name__=='__main__':
     logger.info('''Batch ID: {}'''.format(CONFIG['batch_id']))
     ###update the batch summary
     update_batch_summary(batch_summary)
-###create the database
+    ###create the database
     try:
         if CONFIG['database_creation_mode']=='create':
             createDatabase(CONFIG['db_name'])
@@ -76,11 +77,19 @@ if __name__=='__main__':
     ####Either create or find our model
     try:
         if ast.literal_eval(CONFIG['prediction'])==True:
-            training_data=pd.read_csv('{}/training_data_key.csv'.format(CONFIG['projectPath']), engine='c', dtype={'{}_id'.format(CONFIG['data1_name']):str,'{}_id'.format(CONFIG['data2_name']):str})
             if '.joblib' in CONFIG['saved_model']:
                 mod = load_model(CONFIG, CONFIG['saved_model'])
+            elif ast.literal_eval(CONFIG['use_custom_model'])==True:
+                import custom_model as cust_model
+                import inspect
+                ###gets the any class from
+                mymodel = [obj for name, obj in inspect.getmembers(cust_model, inspect.isclass)][0]
+                mod = {'model':mymodel(), 'variable_headers':'all', 'type':'custom'}
             ###generate the rf_mod
             else:
+                training_data = pd.read_csv('{}/training_data_key.csv'.format(CONFIG['projectPath']), engine='c',
+                                            dtype={'{}_id'.format(CONFIG['data1_name']): str,
+                                                   '{}_id'.format(CONFIG['data2_name']): str})
                 mod=choose_model(training_data)
                 ###Dump it
                 dump_model(mod, CONFIG)

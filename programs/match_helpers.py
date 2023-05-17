@@ -139,11 +139,11 @@ def nominal_impute(values, header_names, header_types, nominal_info):
 def get_target_data(input_data, varlist, method='full', comp_type='normal'):
     ###If we are using truth/training data, use those table names.  Otherwise use the main tables
     if method=='truth':
-        table_1_name='{}_training'.format(CONFIG['data1_name'])
-        table_2_name='{}_training'.format(CONFIG['data2_name'])
+        table_1_name='{}_training'.format(CONFIG['data1_table_name'])
+        table_2_name='{}_training'.format(CONFIG['data2_table_name'])
     else:
-        table_1_name=CONFIG['data1_name']
-        table_2_name=CONFIG['data2_name']
+        table_1_name=CONFIG['data1_table_name']
+        table_2_name=CONFIG['data2_table_name']
     db=get_db_connection(CONFIG)
     ###get the datai
     data1_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
@@ -153,8 +153,7 @@ def get_target_data(input_data, varlist, method='full', comp_type='normal'):
     my_input_data.reset_index(inplace=True, drop=False)
     ####now make the standard name IDs for ease
     my_input_data.rename(columns={'{}_id'.format(CONFIG['data1_name']):'data1_id','{}_id'.format(CONFIG['data2_name']):'data2_id'}, inplace=True)
-    core_dict = my_input_data[
-        ['index', 'data1_id','data2_id']].to_dict('records')
+    core_dict = my_input_data[['index', 'data1_id','data2_id']].to_dict('records')
     ###now get the values from the database
     data1_names = ','.join(['{} as {}'.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
     data2_names = ','.join(['{} as {}'.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
@@ -335,18 +334,17 @@ def create_scores(input_data, score_type, varlist, headers, method='full'):
     elif score_type=='custom':
         ###If we are using truth/training data, use those table names.  Otherwise use the main tables
         if method == 'truth':
-            table_1_name = '{}_training'.format(CONFIG['data1_name'])
-            table_2_name = '{}_training'.format(CONFIG['data2_name'])
+            table_1_name = '{}_training'.format(CONFIG['data1_table_name'])
+            table_2_name = '{}_training'.format(CONFIG['data2_table_name'])
         else:
-            table_1_name = CONFIG['data1_name']
-            table_2_name = CONFIG['data2_name']
+            table_1_name = CONFIG['data1_table_name']
+            table_2_name = CONFIG['data2_table_name']
         ###If we are running a training data model
         data1_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data1_name'])].drop_duplicates().tolist())
         data2_ids = ','.join("'{}'".format(v) for v in input_data['{}_id'.format(CONFIG['data2_name'])].drop_duplicates().tolist())
         ###now get the values from the database
         data1_names = ','.join(['''{} as {}'''.format(i[CONFIG['data1_name']], i['variable_name']) for i in varlist])
-        data2_names = ','.join(['''{} as {}'''.format(i[CONFIG['data2_name']], i['variable_name']) for i
-                                in varlist])
+        data2_names = ','.join(['''{} as {}'''.format(i[CONFIG['data2_name']], i['variable_name']) for i in varlist])
         ###get the values
         data1_values = get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data1_names,table_name=table_1_name,id_list=data1_ids), db)
         data2_values = get_table_noconn('''select id, {names} from {table_name} where id in ({id_list})'''.format(names=data2_names,table_name=table_2_name,id_list=data2_ids), db)
@@ -359,12 +357,11 @@ def create_scores(input_data, score_type, varlist, headers, method='full'):
         ####now make the standard name IDs for ease
         my_input_data.rename(columns={'{}_id'.format(CONFIG['data1_name']): 'data1_id',
                                       '{}_id'.format(CONFIG['data2_name']): 'data2_id'}, inplace=True)
-        core_dict = my_input_data[
-            ['index', 'data1_id', 'data2_id']].to_dict('records')
+        core_dict = my_input_data[['index', 'data1_id', 'data2_id']].to_dict('records')
         ##convert fuzzy vars to a list
         ###get the corresponding function attached to the var list
         for i in varlist:
-            m = [m for m in getmembers(cust_scoring, isfunction) if i['custom_variable_name'] == m[0]][0]
+            m = [m for m in getmembers(cust_scoring) if i['custom_variable_name'] == m[0]][0]
             if m:
                 i['function']= m[1]
         out_arr = np.vstack([create_custom_scores(core_dict, data1_values, data2_values, x) for x in varlist])
@@ -407,14 +404,15 @@ def create_all_scores(input_data, method,headers='all'):
         custom_vars = [i for i in var_rec if i['custom_variable_name'] is not None]
         phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis']]
     else:
+        target_headers = [i.lower() for i in headers]
         ###If we are running with recursive feature elimination, just find the features we are going to use
-        fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy' and any(item in headers for item in i['possible_headers'])==True]
-        numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance' and i['variable_name'] in headers]
-        exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'] in headers]
-        geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and 'geo_distance' in headers]
-        date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'] in headers]
-        custom_vars = [i for i in var_rec if i['custom_variable_name'] is not None and i['variable_name'] in headers]
-        phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis'] and i['variable_name'] in headers]
+        fuzzy_vars = [i for i in var_rec if i['match_type'] == 'fuzzy' and any(item.lower() in target_headers for item in i['possible_headers'])==True]
+        numeric_dist_vars = [i for i in var_rec if i['match_type'] == 'num_distance' and i['variable_name'].lower() in target_headers]
+        exact_match_vars = [i for i in var_rec if i['match_type'] == 'exact' and i['variable_name'].lower() in target_headers]
+        geo_distance = [i for i in var_rec if i['match_type'] == 'geom_distance' and 'geo_distance' in target_headers]
+        date_vars = [i for i in var_rec if i['match_type'] == 'date' and i['variable_name'].lower() in target_headers]
+        custom_vars = [i for i in var_rec if i['custom_variable_name'] is not None and i['variable_name'].lower() in target_headers]
+        phoenetic_vars = [i for i in var_rec if i['match_type'].lower() in ['soundex','nysiis'] and i['variable_name'].lower() in target_headers]
     ### fuzzy vars
     if len(fuzzy_vars) > 0:
         fuzzy_values=create_scores(input_data, 'fuzzy', fuzzy_vars, headers, method)
@@ -466,10 +464,10 @@ def create_all_scores(input_data, method,headers='all'):
         custom_values = create_scores(input_data,'custom',custom_vars, headers, method)
         if type(custom_values['output']) != str:
             if 'X' in locals():
-                X = np.vstack((X, custom_values['output']))
+                X = np.hstack((X, custom_values['output'].T))
                 X_hdrs.extend(custom_values['names'])
             else:
-                X = custom_values['output']
+                X = custom_values['output'].T
                 X_hdrs = copy.deepcopy(custom_values['names'])
     ### phonetic values:
     if len(phoenetic_vars) > 0:
@@ -539,7 +537,7 @@ def create_all_scores(input_data, method,headers='all'):
         else:
             return X, X_hdrs
 
-def filter_data(data):
+def filter_data(data, arg):
     '''
     This function takes a customized filter and applies to to the input data, basically limited the number
     of observations we want to consider
@@ -554,58 +552,53 @@ def filter_data(data):
     data.reset_index(inplace=True, drop=False)
     data = data[['index', '{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]]
     ###get the values
-    try:
-        myvar=[i for i in var_types if i['variable_name'].lower()==CONFIG['variable_filter_info']['variable_name'].lower()][0]
-    except Exception as error:
-        logger.info('No records found for filter.  Check your variable_filter_info matches your variable types file.')
-        return 'fail'
-    if myvar['match_type']!='geo_distance':
+    if arg['block_info']['variable_filter_info']['match_type']!='geo_distance':
         data1_values = pd.DataFrame(get_table_noconn(
-            '''select id, {var_name} as data1_target from {table_name} where id in ({id_list})'''.format(var_name=myvar[CONFIG['data1_name']],
-                                                                                      table_name=CONFIG['data1_name'],
+            '''select cast(id as text), {var_name} as data1_target from {table_name} where id in ({id_list})'''.format(var_name=arg['block_info']['variable_filter_info'][CONFIG['data1_name']],
+                                                                                      table_name=CONFIG['data1_table_name'],
                                                                                       id_list=data1_ids), db))
         data2_values = pd.DataFrame(get_table_noconn(
-            '''select id, {var_name} as data2_target from {table_name} where id in ({id_list})'''.format(var_name=myvar[CONFIG['data2_name']],
-                                                                                      table_name=CONFIG['data2_name'],
+            '''select cast(id as text), {var_name} as data2_target from {table_name} where id in ({id_list})'''.format(var_name=arg['block_info']['variable_filter_info'][CONFIG['data2_name']],
+                                                                                      table_name=CONFIG['data2_table_name'],
                                                                                       id_list=data2_ids), db))
     else:
         data1_values = pd.DataFrame(get_table_noconn(
-            '''select id, 
+            '''select cast(id as text), 
             latitude as data1_latitude,
-             longitude as data1_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data1_name'],
+             longitude as data1_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data1_table_name'],
                                                                                       id_list=data1_ids), db))
         data2_values = pd.DataFrame(get_table_noconn(
-            '''select id, 
+            '''select cast(id as text), 
             latitude as data2_latitude,
-             longitude as data2_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data2_name'],
+             longitude as data2_longitude from {table_name} where id in ({id_list})'''.format(table_name=CONFIG['data2_table_name'],
                                                                                       id_list=data2_ids), db))
     ###merge the three dataframes
     data = data.merge(data1_values, left_on='{}_id'.format(CONFIG['data1_name']), right_on='id')
     data = data.merge(data2_values, left_on='{}_id'.format(CONFIG['data2_name']), right_on='id')
     ###identify the function we need to run:
-    if myvar['match_type']=='fuzzy':
-       target_fun=[i for i in methods if i.__name__==CONFIG['variable_filter_info']['fuzzy_name']][0]
+    if arg['block_info']['variable_filter_info']['match_type']=='fuzzy':
+       target_fun=[i for i in methods if i.__name__==arg['block_info']['variable_filter_info']['fuzzy_name']][0]
        data['score'] = data.apply(lambda x: target_fun(x['data1_target'], x['data2_target']) if x['data1_target']!='NULL' and x['data2_target']!='NULL'
                                                      else 0, axis=1)
     ###Now the exact matches##
-    elif myvar['match_type']=='exact':
+    elif arg['block_info']['variable_filter_info']['match_type']=='exact':
         data['score'] = np.where(data['data1_target']==data['data2_target'], 1, 0)
-    elif myvar['match_type']=='num_distance':
+    elif arg['block_info']['variable_filter_info']['match_type']=='num_distance':
         data['score'] = data['data1_target'] - data['data2_target']
-    elif myvar['match_type']=='geo_distance':
+    elif arg['block_info']['variable_filter_info']['match_type']=='geo_distance':
         data['score'] = data.apply(lambda x: haversine((x['data1_latitude'], x['data1_longitude']),(x['data2_latitude'],x['data2_longitude'])), axis=1)
-    elif myvar['match_type']=='date':
+    elif arg['block_info']['variable_filter_info']['match_type']=='date':
         data['score'] = data.apply(lambda x: feb.editdist(x['data1_target'], x['data2_target']), axis=1)
-    elif myvar['match_type']=='custom':
+    elif arg['block_info']['variable_filter_info']['match_type']=='custom':
         ####get the right arrangement of custom functions and targets
         custom_scoring_functions = [{'name': i[0], 'function': i[1]} for i in getmembers(cust_scoring, isfunction)]
         ###get the corresponding function attached to the var list
-        my_function = [k for k in custom_scoring_functions if k['name'].lower()==myvar['variable_name'].lower()][0]
+        my_function = [k for k in custom_scoring_functions if k['name'].lower()==arg['block_info']['variable_filter_info']['variable_name'].lower()][0]
         data['score'] = data.apply(lambda x: my_function['function'](x['data1_target'], x['data2_target']) if x['data1_target']!='NULL' and x['data2_target']!='NULL'
                                                      else 0, axis=1)
     ####now return the columns needed with just the rows that meet the criteria
-    qry = '''score {} {}'''.format( CONFIG['variable_filter_info']['test'],
-                                  CONFIG['variable_filter_info']['filter_value'])
+    qry = '''score {} {}'''.format( arg['block_info']['variable_filter_info']['test'],
+                                  arg['block_info']['variable_filter_info']['filter_value'])
     data=data.query(qry)
     if len(data) > 0:
         return data[['index','{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]]
@@ -896,12 +889,20 @@ def choose_model(truthdat):
             logit={'score':0}
         models.append(logit)
         '''
-        rf=generate_rf_mod(y, X, X_hdrs)
+        if ast.literal_eval(CONFIG['use_rf'])==True:
+            rf=generate_rf_mod(y, X, X_hdrs)
+        else:
+            rf={'score':0}
         models.append(rf)
-        #svn=generate_svn_mod(truthdat)
-        svn={'score':0}
+        if ast.literal_eval(CONFIG['use_svn'])==True:
+            svn=generate_svn_mod(truthdat)
+        else:
+            svn={'score':0}
         models.append(svn)
-        ada=generate_ada_boost(y, X, X_hdrs)
+        if ast.literal_eval(CONFIG['use_ada'])==True:
+            ada=generate_ada_boost(y, X, X_hdrs)
+        else:
+            ada={'score':0}
         models.append(ada)
         ###Are we using the custom model?
         if ast.literal_eval(CONFIG['use_custom_model'])==True:
@@ -949,23 +950,93 @@ def match_fun(arg):
         start = time.time()
         ###setup the to_return
         to_return = {}
-        logger.info('starting block {}, using model {}'.format(arg['target'], arg['model_name']))
+        if arg['model_name']!='False':
+            logger.info('starting block {}, using model {}'.format(arg['target'], arg['model_name']))
+        else:
+            logger.info('starting block {}'.format(arg['target']))
         db=get_db_connection(CONFIG, timeout=1)
-        ###get the two dataframes
+        ###The query we are going to use
+        ####Note the select * here, means we can have a 'global' filter variable
+        input_qry = """select cast(a.id as text) {data1_name}_id, cast(b.id as text) {data2_name}_id from
+                (select *, {data1_block_name} as block{data1_selection_statement_variable} from {data1_name} where {data1_block_name} = '{target}' {selection_statement}) a
+                inner join
+                (select *, {data2_block_name} as block{data2_selection_statement_variable} from {data2_name} where {data2_block_name} = '{target}' {selection_statement}) b
+                on a.block = b.block
+                {filter_statement}"""
         ##if we aren't doing a chunked block
         if arg['block_info']['chunk_size']==-1:
-            data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target']), db)
-            data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target']), db)
+            if ast.literal_eval(CONFIG['custom_selection_statement']) == False:
+                input_qry_args = {'data1_name': CONFIG['data1_name'], 'data2_name': CONFIG['data2_name'],
+                                  'data1_block_name': arg['block_info'][CONFIG['data1_name']],
+                                  'data2_block_name': arg['block_info'][CONFIG['data2_name']],
+                                  'target': arg['target'],
+                                  'selection_statement': ''}
+            else:
+                input_qry_args = {'data1_name': CONFIG['data1_name'], 'data2_name': CONFIG['data2_name'],
+                                  'data1_block_name': arg['block_info'][CONFIG['data1_name']],
+                                  'data2_block_name': arg['block_info'][CONFIG['data2_name']],
+                                  'target': arg['target'],
+                                  'selection_statement': 'and ' + CONFIG['custom_selection_statement'].replace("'",'')}
         else:
             ###if we are chunking out the block, this identifies the block using the appropriate target element (remember, arg['target'] in this case is a tuple)
-            data1=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data1_name'], arg['block_info'][CONFIG['data1_name']], arg['target'][0]), db)
-            data2=get_table_noconn('''select id from {} where {}='{}' and matched=0'''.format(CONFIG['data2_name'], arg['block_info'][CONFIG['data2_name']], arg['target'][1]), db)
-        ###get the data
-        ###If we are running in deduplication mode, take only the input records that the IDs don't match
-        if ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True:
-            input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2 if str(k['id'])!=str(y['id'])])
+            if ast.literal_eval(CONFIG['custom_selection_statement']) == False:
+                input_qry_args = {'data1_name': CONFIG['data1_name'], 'data2_name': CONFIG['data2_name'],
+                                  'data1_block_name': arg['block_info'][CONFIG['data1_name']],
+                                  'data2_block_name': arg['block_info'][CONFIG['data2_name']],
+                                  'target': arg['target'][0],
+                                  'selection_statement': ''}
+            else:
+                input_qry_args = {'data1_name': CONFIG['data1_name'], 'data2_name': CONFIG['data2_name'],
+                                  'data1_block_name': arg['block_info'][CONFIG['data1_name']],
+                                  'data2_block_name': arg['block_info'][CONFIG['data2_name']],
+                                  'target': arg['target'][0],
+                                  'selection_statement': 'and ' + CONFIG['custom_selection_statement'].replace("'",
+                                                                                                               '')}        ###get the data
+        ###Now fix the filter statement
+        ###If we are in deduplication mode and we have a global filter statement:
+        if CONFIG['mode']=='deduplication' and ast.literal_eval(CONFIG['global_filter_statement'])!=False:
+            input_qry_args['filter_statement'] = 'where a.id < b.id and {}'.format(CONFIG['global_filter_statement'])
+        ###if we are in deduplication mode and we do not have a global filter statement
+        elif CONFIG['mode']=='deduplication' and ast.literal_eval(CONFIG['global_filter_statement'])==False:
+            input_qry_args['filter_statement'] = 'where a.id < b.id'
+        ###If we are ignoring duplicate IDs but aren't in deduplication mode and have a global filter
+        elif ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True and CONFIG['mode']!='deduplication' and ast.literal_eval(CONFIG['global_filter_statement'])!=False:
+            ###So if we are ignoring duplicate IDs
+            input_qry_args['filter_statement'] = 'where a.id!=b.id and {}'.format(CONFIG['global_filter_statement'])
+        ###if we are ignorning duplciate IDS but aren't in deduplication mode but DO NOT have a global filter
+        elif ast.literal_eval(CONFIG['ignore_duplicate_ids'])==True and CONFIG['mode']!='deduplication' and ast.literal_eval(CONFIG['global_filter_statement'])==False:
+            ###So if we are ignoring duplicate IDs
+            input_qry_args['filter_statement'] = 'where a.id!=b.id and {}'.format(CONFIG['global_filter_statement'])
+        ###So in all other circumstances this is its own thing
         else:
-            input_data = pd.DataFrame([{'{}_id'.format(CONFIG['data1_name']): str(k['id']),'{}_id'.format(CONFIG['data2_name']): str(y['id'])} for k in data1 for y in data2])
+            if ast.literal_eval(CONFIG['global_filter_statement'])!=False:
+                input_qry_args['filter_statement'] = 'where {}'.format(CONFIG['global_filter_statement'])
+            else:
+                ###otherwise a blank statement
+                input_qry_args['filter_statement'] = ''
+        ###Ok.  Now add in the variable filter args if present
+        if arg['block_info']['variable_filter_info']!=-1:
+            ###this means we are using a variable filter
+            ###three possible cases:
+            # 1.  using a fuzzy or geometric filter, so we ignore
+            if arg['block_info']['variable_filter_info']['match_type'] !='exact':
+                input_qry_args['data1_selection_statement_variable'] = ''
+                input_qry_args['data2_selection_statement_variable'] = ''
+                ###we don't make any change to the filter statement
+            # 2.  using json to define
+            else:
+                input_qry_args['data1_selection_statement_variable'] = ',{} as a_filter_target'.format(arg['block_info']['variable_filter_info'][CONFIG['data1_name']])
+                input_qry_args['data2_selection_statement_variable'] = ',{} as b_filter_target'.format(arg['block_info']['variable_filter_info'][CONFIG['data2_name']])
+                ###if there's already a statement, add to it
+                if ast.literal_eval(CONFIG['ignore_duplicate_ids']) == True:
+                    input_qry_args['filter_statement'] = input_qry_args['filter_statement'] + ' and a_filter_target {} b_filter_target'.format(arg['block_info']['variable_filter_info']['test']).replace("==","=")
+                else:
+                    input_qry_args['filter_statement'] = 'where a_filter_target {} b_filter_target'.format(arg['block_info']['variable_filter_info']['test']).replace("==","=")
+        else:
+            input_qry_args['data1_selection_statement_variable'] = ''
+            input_qry_args['data2_selection_statement_variable'] = ''
+        ###retrieve the data
+        input_data = pd.DataFrame(get_table_noconn(input_qry.format(**input_qry_args), db))
     except Exception:
         logger.info('Error generating input data for block {}, error {}'.format(arg['target'], traceback.format_exc()))
         return 'fail'
@@ -986,7 +1057,7 @@ def match_fun(arg):
     else:
         try:
             orig_len = len(input_data)
-            if ast.literal_eval(CONFIG['use_variable_filter'])==True:
+            if arg['block_info']['variable_filter_info']!=-1 and arg['block_info']['variable_filter_info']['match_type'] in ['fuzzy','geo_distance']:
                 logger.info('Filtering for block {}'.format(arg['target']))
                 ###if we are filtering, return the input data that meets the criteria
                 input_data = filter_data(input_data)
@@ -1014,8 +1085,6 @@ def match_fun(arg):
                 X, X_hdrs = create_all_scores(input_data, 'prediction', arg['X_hdrs'])
                 ####Now write to the DB
                 if len(input_data) > 0:
-                    del data1
-                    del data2
                     cur=db.cursor()
                     if ast.literal_eval(CONFIG['prediction']) == True:
                         ###Mean Center
@@ -1023,17 +1092,20 @@ def match_fun(arg):
                             X = pd.DataFrame(X, columns=X_hdrs) - arg['model']['means']
                             X = np.array(X)
                         logger.info('Predicting for block {}'.format(arg['target']))
-                        input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X), arg['model']['type'])
-                        stats_dat = copy.deepcopy(input_data)
+                        if ast.literal_eval(CONFIG['use_custom_model'])==True:
+                            input_data['predicted_probability'] = arg['model']['model'].predict_proba(X, X_hdrs)
+                        else:
+                            input_data['predicted_probability'] = probsfunc(arg['model']['model'].predict_proba(X), arg['model']['type'])
                         ####Now add in any matches
-                        #####If the predicted probability is a string (so someone is storing JSON or other criteria, log it, then move on
+                        #####If the predicted probability is a string (so someone returned a JSON)
                         if input_data['predicted_probability'].dtype == 'O':
                             ####So we have an object that isn't meant to be filtered. Log it
-                            logger.info('Custom model has returned a string.  All values will be returned.')
-                            matches = input_data
-                        else:
-                            ##Otherwise, restrict the the match threshold
-                            matches = input_data[input_data['predicted_probability'] >= float(CONFIG['match_threshold'])]
+                            ####Return predicted probability
+                            input_data['match_info'] = input_data['predicted_probability']
+                            input_data['predicted_probability'] = input_data.match_info.str['predicted_probability'].astype(float)
+                        ##Now to the match threshold
+                        stats_dat = copy.deepcopy(input_data)
+                        matches = input_data[input_data['predicted_probability'] >= float(CONFIG['match_threshold'])]
                         if len(matches) > 0:
                             ###ranks
                             #####Note here that if you have an object, this will rank them alphabetically. Feel free to ignore them!
@@ -1044,6 +1116,10 @@ def match_fun(arg):
                                 'predicted_probability'].rank('dense')
                             ###add the batch_id
                             matches['batch_id']=arg['batch_id']
+                            ###convert the IDs into integers
+                            for col in ['left_id','right_id','{}_id'.format(CONFIG['data1_name']), '{}_id'.format(CONFIG['data2_name'])]:
+                                if col in matches.columns:
+                                    matches[col] = matches[col].astype(int)
                             ##convert back to dict
                             matches = matches.to_dict('records')
                             ###write to DB
@@ -1126,9 +1202,9 @@ def run_block(block, model, batch_id):
     '''
     ####If we are running the 'full' block
     db = get_db_connection(CONFIG)
-    data1_blocks = get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data1_name']], CONFIG['data1_name']), db)
+    data1_blocks = get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data1_name']], CONFIG['data1_table_name']), db)
     data1_blocks = [i['block'] for i in data1_blocks]
-    data2_blocks = get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data2_name']], CONFIG['data2_name']), db)
+    data2_blocks = get_table_noconn('''select distinct {} as block from {}'''.format(block[CONFIG['data2_name']], CONFIG['data2_table_name']), db)
     data2_blocks = [i['block'] for i in data2_blocks]
     if block['chunk_size']==-1:
         ###So if we ARE NOT doing a chunked out block, the block list is the intersection (ie all the blocks that match)
@@ -1136,6 +1212,8 @@ def run_block(block, model, batch_id):
     else:
         ###otherwise it's a list of tuples of all of the possible combinations of the blocks
         block_list=[(x, y) for x in data1_blocks for y in data2_blocks]
+    if CONFIG.get('debug_block', None) is not None:
+        block_list = [CONFIG['debug_block']]
     logger.info('We have {} blocks to run for {}'.format(len(block_list), block['block_name']))
     ###load any mapped models
     mapped_models = get_table_noconn('''select * from block_model_mapping where batch_id={}'''.format(batch_id), db)
@@ -1189,8 +1267,13 @@ def run_block(block, model, batch_id):
     db.commit()
     ##then change the matched flags on the data tables to 1 where it's been matched
     ###updating the matched flags
-    cur.execute('''update {data1_name} set matched=1 where id in (select distinct {data1_name}_id from matched_pairs)'''.format(data1_name=CONFIG['data1_name']))
-    cur.execute('''update {data2_name} set matched=1 where id in (select distinct {data2_name}_id from matched_pairs)'''.format(data2_name=CONFIG['data2_name']))
+    if CONFIG['mode']!='deduplication':
+        cur.execute('''update {data1_name} set matched=1 where id in (select distinct {data1_name}_id from matched_pairs)'''.format(data1_name=CONFIG['data1_name']))
+        cur.execute('''update {data2_name} set matched=1 where id in (select distinct {data2_name}_id from matched_pairs)'''.format(data2_name=CONFIG['data2_name']))
+    else:
+        cur.execute('''update processing_per set matched=1 where id in (select distinct right_id from matched_pairs)'''.format(data1_name=CONFIG['data1_name']))
+        cur.execute('''update processing_per set matched=1 where id in (select distinct left_id from matched_pairs)'''.format(data2_name=CONFIG['data2_name']))
+    ##commit and close the DB
     db.commit()
     db.close()
     logger.info('Block {} Complete'.format(block['block_name']))

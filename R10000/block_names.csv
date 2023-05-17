@@ -1,3 +1,2 @@
-order,block_name,data1,data2,parsed_block,chunk_size
-1,FirstLetter,block,block,,
-2,Full,full,full,,1000
+order,block_name,data1,data2,parsed_block,chunk_size,variable_filter_info
+1,FirstLetter,block,block,,,
