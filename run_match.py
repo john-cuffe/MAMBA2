@@ -6,8 +6,8 @@ from programs.global_vars import *
 from programs.create_db_helpers import *
 from programs.match_helpers import *
 from programs.logger_setup import *
-from programs.general_helpers import *
-logger=logger_setup('{}/{}'.format(CONFIG['projectPath'],CONFIG['log_file_name']))
+from programs.model_load_save_helpers import *
+logger=logger_setup('{}/{}.log'.format(CONFIG['projectPath'],CONFIG['log_file_name']))
 import datetime as dt
 import traceback
 
@@ -17,6 +17,9 @@ if __name__=='__main__':
         if 'password' not in key:
             logger.info('#############')
             logger.info('''{}: {}'''.format(key, CONFIG[key]))
+    if ast.literal_eval(CONFIG['prediction'])==False and ast.literal_eval(CONFIG['clerical_review_candidates'])==False:
+        logger.info('###########')
+        logger.info('Just FYI, both prediction and clerical review candidates are set to False.  Do not be surprised when you get nothing back.')
     batch_summary={}
     ###set the start time
     batch_summary['batch_started'] = dt.datetime.now()
@@ -51,10 +54,8 @@ if __name__=='__main__':
                 cur.execute('''create database {} owner='{}' '''.format(CONFIG['db_name'], CONFIG['db_user']))
             test_conn.close()
             db=psycopg2.connect(host=CONFIG['db_host'],dbname=CONFIG['db_name'],
-                                  port=CONFIG['db_port'],
-                                  user=CONFIG['db_user'],
-                                  password=os.environ['db_password'],
-                                  connect_timeout=10)
+                                  port=CONFIG['db_port'], user=CONFIG['db_user'],
+                                  password=os.environ['db_password'], connect_timeout=10)
             ###now create the schema
             cur=db.cursor()
             cur.execute('''create schema if not exists {} authorization {} '''.format(CONFIG['db_schema'], CONFIG['db_user']))
@@ -74,7 +75,23 @@ if __name__=='__main__':
         batch_summary['failure_message'] = 'Failed to create database tables.  See logs for information'
         update_batch_summary(batch_summary)
         os._exit(0)
-    ####Either create or find our model
+    ####Now check if the matched pairs and clerical review tables we want exist
+    for table_name in ['matched_pairs_table_name','clerical_review_candidates_table_name']:
+        if CONFIG.get(table_name, None) is not None:
+            exists = get_table_noconn('''select exists (select * from information_schema.tables where table_name='{}' and table_schema='{}') '''.format(CONFIG[table_name], CONFIG['db_schema']), db)[0]['exists']
+            if exists == False:
+                logger.info('''You have selected destination table {} but that table doesn't exist on your schema.  Please add it and try again'''.format(table_name))
+                batch_summary['batch_status'] = 'failed'
+                batch_summary['failure_message'] = 'Specified a matched pair/clerical review table that does not exist.'
+                update_batch_summary(batch_summary)
+                os._exit(0)
+        else:
+            ###Otherwise, we add this as a query
+            if table_name=='matched_pairs_table_name':
+                CONFIG['matched_pairs_table_name'] = 'matched_pairs'
+            else:
+                CONFIG['clerical_review_candidates_table_name'] = 'clerical_review_candidates'
+     ####Either create or find our model
     try:
         if ast.literal_eval(CONFIG['prediction'])==True:
             if '.joblib' in CONFIG['saved_model']:
@@ -87,26 +104,51 @@ if __name__=='__main__':
                 mod = {'model':mymodel(), 'variable_headers':'all', 'type':'custom'}
             ###generate the rf_mod
             else:
-                training_data = pd.read_csv('{}/training_data_key.csv'.format(CONFIG['projectPath']), engine='c',
+                training_data = pd.read_csv('{}/{}.csv'.format(CONFIG['projectPath'], CONFIG['training_data_name']), engine='c',
                                             dtype={'{}_id'.format(CONFIG['data1_name']): str,
                                                    '{}_id'.format(CONFIG['data2_name']): str})
                 mod=choose_model(training_data)
                 ###Dump it
                 dump_model(mod, CONFIG)
+                if CONFIG.get('model_only', None) is not None and ast.literal_eval(CONFIG['model_only'])==True:
+                    logger.info('Run set to only produce a model.  Terminating')
+                    batch_summary['batch_status'] = 'complete - model only'
+                    batch_summary['batch_completed'] = dt.datetime.now()
+                    update_batch_summary(batch_summary)
+                    os._exit(0)
         else:
-            mod = {'model':'Just Candidates', 'variable_headers':'all'}
+            if 'listed_variable_names' in CONFIG['clerical_review_threshold'].keys():
+                mod = {'model':'Just Candidates', 'variable_headers':[i['variable'] for i in CONFIG['clerical_review_threshold']['listed_variable_names']]}
+            else:
+                mod = {'model':'Just Candidates', 'variable_headers':'all'}
     except Exception as error:
-        logger.info('Error in selecting . Error: {}'.format(''.join(traceback.format_tb(error.__traceback__))))
+        logger.info('Error in selecting model.  Check your .joblib file exists and is sset up for your version of sklearn. Error: {}'.format(''.join(traceback.format_tb(error.__traceback__))))
         batch_summary['batch_status'] = 'failed'
         batch_summary['failure_message'] = 'Failed to select a model.  See logs for information'
         update_batch_summary(batch_summary)
         os._exit(0)
+    ###quick check on if there are clerical review threshold variables not in the models' variable list
+    if ast.literal_eval(CONFIG['clerical_review_candidates']) == True and ast.literal_eval(CONFIG['prediction']) == True:
+        if 'listed_variable_names' in CONFIG['clerical_review_threshold'].keys():
+            ###this means we are running a list
+            clerical_var_list = [k['variable'] for k in CONFIG['clerical_review_threshold']['listed_variable_names']]
+        else:
+            clerical_var_list = [CONFIG['clerical_review_threshold']['variable']]
+        ####now print each, if it fails, kill the process
+        for c in clerical_var_list:
+            if c!='predicted_probability':
+                if c not in mod['variable_headers']:
+                    logger.warning('''Variable {} is listed in the clerical review candidates list but is not in the model.  This score will not be calculated.  Ending Program'''.format(c))
+                    batch_summary['batch_status'] = 'failed'
+                    batch_summary['failure_message'] = 'Failed -- Incorrectly specified clerical review candidates.  See logs for information'
+                    update_batch_summary(batch_summary)
+                    os._exit(0)
     ###get the list of blocks
     try:
         ##run
         for block in blocks:
             logger.info('### Starting Block {}'.format(block['block_name']))
-            run_block(block, mod, batch_summary['batch_id'])
+            run_block(block, mod, batch_summary['batch_id'], batch_summary)
             logger.info('### Completed Block {}'.format(block['block_name']))
     except Exception as error:
         logger.info('Error in running block {} . Error: {}'.format(block['block_name'],''.join(traceback.format_tb(error.__traceback__))))
@@ -120,11 +162,12 @@ if __name__=='__main__':
         logger.info('Creating Output Directory')
         os.makedirs('{}/output/'.format(CONFIG['projectPath']))
     db=get_db_connection(CONFIG)
-    pd.DataFrame(get_table_noconn('''select * from matched_pairs where batch_id={} '''.format(batch_summary['batch_id']), db)).to_csv('{}/output/all_matches_batch_{}.csv'.format(CONFIG['projectPath'],batch_summary['batch_id']), index=False)
-    pd.DataFrame(get_table_noconn('''select * from clerical_review_candidates where batch_id={} '''.format(batch_summary['batch_id']), db)).to_csv('{}/output/clerical_review_candidates_batch_{}.csv'.format(CONFIG['projectPath'],batch_summary['batch_id']), index=False)
+    pd.DataFrame(get_table_noconn('''select * from {} where batch_id={} '''.format(CONFIG['matched_pairs_table_name'],batch_summary['batch_id']), db)).to_csv('{}/output/all_matches_batch_{}.csv'.format(CONFIG['projectPath'],batch_summary['batch_id']), index=False)
+    if ast.literal_eval(CONFIG['clerical_review_candidates'])==True:
+        pd.DataFrame(get_table_noconn('''select * from {} where batch_id={} '''.format(CONFIG['clerical_review_candidates_table_name'], batch_summary['batch_id']), db)).to_csv('{}/output/clerical_review_candidates_batch_{}.csv'.format(CONFIG['projectPath'],batch_summary['batch_id']), index=False)
     logger.info('Match Complete')
     if ast.literal_eval(CONFIG['prediction'])==True:
-        summstats=get_table_noconn('''select count(distinct {}_id) data1_matched, count(distinct {}_id) data2_matched, count(*) total_pairs from matched_pairs'''.format(CONFIG['data1_name'], CONFIG['data2_name']), db)[0]
+        summstats=get_table_noconn('''select count(distinct {}_id) data1_matched, count(distinct {}_id) data2_matched, count(*) total_pairs from {} where batch_id={}'''.format(CONFIG['data1_name'], CONFIG['data2_name'], CONFIG['matched_pairs_table_name'], batch_summary['batch_id']), db)[0]
         logger.info('Matched {} records for {}'.format(summstats['data1_matched'], CONFIG['data1_name']))
         logger.info('Matched {} records for {}'.format(summstats['data2_matched'], CONFIG['data2_name']))
         logger.info('{} Total matched pairs'.format(summstats['total_pairs']))

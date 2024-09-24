@@ -11,5 +11,9 @@ def read_properties( props_file, dict):
             ###detect a json payload
             if v[0]=='{':
                 dict[k]=json.loads(v)
+            elif v[0:2] == '[{':
+                dict[k]=json.loads(v)
+            elif v[0] == '[':
+                dict[k] = v.split(',')
             else:
                 dict[k] = v

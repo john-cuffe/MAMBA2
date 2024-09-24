@@ -54,6 +54,9 @@ model_name text
 );
 
 create index block_mapping_idx on block_model_mapping(block_id);
+
+create sequence clerical_review_candidates_seq;
+create sequence matched_pairs_seq;
 '''
 
 seq_query='''CREATE SEQUENCE batch_summary_query
@@ -310,8 +313,8 @@ def createDatabase(databaseName):
     #     if len(ret) > 0:
     #         cur.execute('''alter table {} rename to {}{}'''.format(table,table,dt.datetime.now().strftime('%Y_%M_%d_%H_%m')))
     #         db.commit()
-    cur.execute('''create table clerical_review_candidates ({}_id text, {}_id text, predicted_probability float, threshold_value float, batch_id float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
-    cur.execute('''create table matched_pairs ({data1}_id bigint, {data2}_id bigint, predicted_probability float, {data1}_rank float, {data2}_rank float, batch_id float, match_pair_info json);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
+    cur.execute('''create table clerical_review_candidates (id bigint default nextval(clerical_review_candidates_seq), {}_id text, {}_id text, predicted_probability float, threshold_values json batch_id float);'''.format(CONFIG['data1_name'], CONFIG['data2_name']))
+    cur.execute('''create table matched_pairs (id bigint default nextval(matched_pairs_seq), {data1}_id bigint, {data2}_id bigint, predicted_probability float, {data1}_rank float, {data2}_rank float, batch_id float, match_pair_info json);'''.format(data1=CONFIG['data1_name'], data2=CONFIG['data2_name']))
     ###Finally, if the project path has a 'block_model_mapping.csv' file, dump that into the database with a batch identifier.
     if os.path.exists('{}/block_model_mapping.csv'.format(CONFIG['projectPath'])):
         ###load it

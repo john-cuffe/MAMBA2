@@ -12,6 +12,18 @@ from programs.address_standardizer.constants import (
 )
 import programs.address_standardizer.number_processing as number_processing
 import re
+
+class InputError(Error):
+    """Exception raised for errors in the input.
+
+    Attributes:
+        expression -- input expression in which the error occurred
+        message -- explanation of the error
+    """
+
+    def __init__(self, expression, message):
+        self.expression = expression
+        self.message = message
 ## It seems that we aren't using STREET_NAME_ABBR as its own category
 STREET_NAME_POST_ABBREVIATIONS.update(STREET_NAME_ABBREVIATIONS) 
 

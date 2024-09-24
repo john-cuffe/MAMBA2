@@ -2,6 +2,8 @@ from programs.global_vars import *
 #from programs.psql_logging_handler import postgresqlLoggingHandler
 
 def logger_setup(log_file):
+    if log_file[-4:]!='.log':
+        log_file = log_file+'.log'
     root = logging.getLogger()
     handlers = root.handlers
 

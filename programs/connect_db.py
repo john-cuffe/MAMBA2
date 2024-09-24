@@ -15,7 +15,7 @@ def get_db_connection(db_info, timeout=1):
                               user=db_info['db_user'],
                               password=db_info['db_password'],
                               options='-c search_path={}'.format(db_info['db_schema']),
-                              connect_timeout=10)
+                              connect_timeout=100)
     return db
 
 

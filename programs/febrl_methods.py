@@ -1440,7 +1440,7 @@ def ontolcs(string1, string2, min_common_len = 2, common_divisor = 'average',
   assert (w_lcs >= 0.0) and (w_lcs <= 1.0), 'Basic LCS similarity weight outside 0-1: %f' % (w_lcs)
   assert (h_diff >= 0.0) and (h_diff <= 1.0), 'Hamacher product difference outside 0-1: %f' % (h_diff)
 
-  w_lcs_wink = winklermod((str1, str2), w_lcs)
+  w_lcs_wink = winklermod(str1, str2, w_lcs)
 
   w = w_lcs_wink - h_diff  # A weight in interval [-1,1]
 

@@ -22,17 +22,17 @@ def dump_model(model_dict, config_dict):
        dump(model_dict['imputer'], '{}.imp'.format(config_dict['saved_model_target']))
        out_dict.pop('imputer')
        ###dump the remaining to the file
-       with open('{}/{}.txt'.format(config_dict['projectPath'],config_dict['saved_model_target']), 'w') as file:
+       with open('{}/{}.txt'.format(config_dict['projectPath'],config_dict['saved_model_target'].replace('.joblib','')), 'w') as file:
            file.write(json.dumps(out_dict))
    else:
-       with open('{}/{}.txt'.format(config_dict['projectPath'],config_dict['saved_model_target']), 'w') as file:
+       with open('{}/{}.txt'.format(config_dict['projectPath'],config_dict['saved_model_target'].replace('.joblib','')), 'w') as file:
            file.write(json.dumps(out_dict))
 
 def load_model(config_dict, model_name):
     '''This function loads a model given the CONFIG and the particular model name
     '''
     ##load the base
-    f = open('{}/{}.txt'.format(config_dict['projectPath'],model_name))
+    f = open('{}/{}.txt'.format(config_dict['projectPath'],model_name.replace('.joblib','')))
     out_dict=json.load(f)
     out_dict['model'] = load('{}/{}'.format(config_dict['projectPath'],model_name))
     if config_dict['imputation_method']=='Imputer':

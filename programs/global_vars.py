@@ -60,7 +60,9 @@ starttime = time.time()
 start = time.time()
 ###This list of methods we will use
 methods = [feb.jaro, feb.winkler, feb.bagdist, feb.seqmatch, feb.qgram2, feb.qgram3, feb.posqgram3, feb.editdist,
-           feb.lcs2, feb.lcs3, feb.charhistogram, feb.swdist, feb.sortwinkler]
+           feb.lcs2, feb.lcs3, feb.charhistogram, feb.swdist, feb.ontolcs3,feb.ontolcs2,feb.sortwinkler,feb.editex]
+if 'used_fuzzy_metrics' in CONFIG.keys():
+    methods = [k for k in methods if k.__name__ in CONFIG['used_fuzzy_metrics'].split(',')]
 ###The list of names for those methods
 namelist = [i.__name__ for i in methods]
 ##date and time
@@ -72,7 +74,7 @@ file = open('{}/mamba_variable_types.csv'.format(projectPath), mode='r', newline
 var_types=[]
 lines = file.readlines()
 ###Set up the keys
-keys = lines[0].replace('\n','').split(',')
+keys = lines[0].replace('\n','').replace('\r','').split(',')
 ###little function to figure out if number is all digits, negative, or a .
 def number_finder(s):
     return all(c in '0123456789.-' for c in s)
@@ -90,13 +92,28 @@ for line in lines[1:]:
         for key in [CONFIG['data1_name'], CONFIG['data2_name'], 'variable_name']:
             out_dict[key] = out_dict[key].lower()
         ###finally, do the json check
+        ##first, empty dictionary if not included for a custom variable
+        if out_dict['match_type']=='custom' and out_dict['custom_variable_kwargs'] is None:
+            out_dict['custom_variable_kwargs'] = {}
+        ###now convert to a dictionary
         if out_dict['custom_variable_kwargs'] is not None:
             out_dict['custom_variable_kwargs']=json.loads(out_dict['custom_variable_kwargs'])
             ###now, for each key, if it's only got +/- and number codes, convert to a float
             for mykey in out_dict['custom_variable_kwargs'].keys():
                 if number_finder(out_dict['custom_variable_kwargs'][mykey])==True:
                     out_dict['custom_variable_kwargs'][mykey] = float(out_dict['custom_variable_kwargs'][mykey])
+        ####assume that a blank filter_only value means we don't want to use that variable only as a filter
+        if 'filter_only' not in out_dict.keys() or out_dict['filter_only']=='{}' or out_dict['filter_only'] is None:
+            out_dict['filter_only'] = {}
+        else:
+            out_dict['filter_only'] = json.loads(out_dict['filter_only'])
         var_types.append(out_dict)
+
+for i in range(len(var_types)):
+    for key in ['match_type','variable_name',CONFIG['data1_name'],CONFIG['data2_name']]:
+        if var_types[i][key] is None:
+            print('Error: mamba_variable_types row {} has blank key {}.  Cannot continue. Exiting'.format(i, key))
+            os._exit(0)
 
 ###if we are in deduplication mode, need to change CONFIG['data1_name'] and CONFIG['data2_name'] appropriately
 if CONFIG['mode']=='deduplication':
@@ -153,6 +170,15 @@ for line in lines[1:]:
                 out_dict[keys[key]] = line_split[key].replace("$$",",")
         for key in [CONFIG['data1_name'], CONFIG['data2_name'], 'block_name']:
             out_dict[key] = out_dict[key].lower()
+        ##check if there are semi-colons and they match
+        if any([';' in i for i in [out_dict[CONFIG['data1_name']],out_dict[CONFIG['data2_name']]]])==True:
+            if out_dict[CONFIG['data1_name']] != out_dict[CONFIG['data2_name']]:
+                logging.error('Variable names for blocks separated by semi-colons do not match.  Please correct, order matters.  Shutting down')
+                os._exit(0)
+        ###now check if the data1_name and data2_name files need to be converted to lists
+        for key in [CONFIG['data1_name'], CONFIG['data2_name']]:
+            if ';' in out_dict[key]:
+                out_dict[key] = out_dict[key].split(';')
         ###finally, do the json check
         if out_dict['variable_filter_info']!=-1:
             out_dict['variable_filter_info'] = json.loads(out_dict['variable_filter_info'])
@@ -161,6 +187,8 @@ for line in lines[1:]:
                 if number_finder(out_dict['variable_filter_info'][mykey]) == True:
                     out_dict['variable_filter_info'][mykey] = float(out_dict['variable_filter_info'][mykey])
         blocks.append(out_dict)
+
+
 
 
 ###create the address_component_tag_mapping

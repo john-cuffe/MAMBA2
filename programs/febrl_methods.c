@@ -20317,7 +20317,7 @@ static PyObject *__pyx_pf_8programs_13febrl_methods_50ontolcs(CYTHON_UNUSED PyOb
  *   assert (w_lcs >= 0.0) and (w_lcs <= 1.0), 'Basic LCS similarity weight outside 0-1: %f' % (w_lcs)
  *   assert (h_diff >= 0.0) and (h_diff <= 1.0), 'Hamacher product difference outside 0-1: %f' % (h_diff)             # <<<<<<<<<<<<<<
  * 
- *   w_lcs_wink = winklermod((str1, str2), w_lcs)
+ *   w_lcs_wink = winklermod(str1, str2, w_lcs)
  */
   #ifndef CYTHON_WITHOUT_ASSERTIONS
   if (unlikely(!Py_OptimizeFlag)) {
@@ -20347,29 +20347,21 @@ static PyObject *__pyx_pf_8programs_13febrl_methods_50ontolcs(CYTHON_UNUSED PyOb
   /* "programs/febrl_methods.py":1443
  *   assert (h_diff >= 0.0) and (h_diff <= 1.0), 'Hamacher product difference outside 0-1: %f' % (h_diff)
  * 
- *   w_lcs_wink = winklermod((str1, str2), w_lcs)             # <<<<<<<<<<<<<<
+ *   w_lcs_wink = winklermod(str1, str2, w_lcs)             # <<<<<<<<<<<<<<
  * 
  *   w = w_lcs_wink - h_diff  # A weight in interval [-1,1]
  */
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_winklermod); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1443, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_10 = PyTuple_New(2); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1443, __pyx_L1_error)
+  __pyx_t_10 = PyFloat_FromDouble(__pyx_v_w_lcs); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 1443, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_10);
-  __Pyx_INCREF(__pyx_v_str1);
-  __Pyx_GIVEREF(__pyx_v_str1);
-  PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_v_str1);
-  __Pyx_INCREF(__pyx_v_str2);
-  __Pyx_GIVEREF(__pyx_v_str2);
-  PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_v_str2);
-  __pyx_t_7 = PyFloat_FromDouble(__pyx_v_w_lcs); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1443, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_6 = NULL;
+  __pyx_t_7 = NULL;
   __pyx_t_8 = 0;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_1))) {
-    __pyx_t_6 = PyMethod_GET_SELF(__pyx_t_1);
-    if (likely(__pyx_t_6)) {
+    __pyx_t_7 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_7)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
-      __Pyx_INCREF(__pyx_t_6);
+      __Pyx_INCREF(__pyx_t_7);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_1, function);
       __pyx_t_8 = 1;
@@ -20377,46 +20369,47 @@ static PyObject *__pyx_pf_8programs_13febrl_methods_50ontolcs(CYTHON_UNUSED PyOb
   }
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_1)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_10, __pyx_t_7};
-    __pyx_t_11 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1443, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    PyObject *__pyx_temp[4] = {__pyx_t_7, __pyx_v_str1, __pyx_v_str2, __pyx_t_10};
+    __pyx_t_11 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1443, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   } else
   #endif
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_6, __pyx_t_10, __pyx_t_7};
-    __pyx_t_11 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 2+__pyx_t_8); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1443, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
+    PyObject *__pyx_temp[4] = {__pyx_t_7, __pyx_v_str1, __pyx_v_str2, __pyx_t_10};
+    __pyx_t_11 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1443, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_GOTREF(__pyx_t_11);
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
-    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_8); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 1443, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_5);
-    if (__pyx_t_6) {
-      __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_6); __pyx_t_6 = NULL;
+    __pyx_t_6 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 1443, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    if (__pyx_t_7) {
+      __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7); __pyx_t_7 = NULL;
     }
+    __Pyx_INCREF(__pyx_v_str1);
+    __Pyx_GIVEREF(__pyx_v_str1);
+    PyTuple_SET_ITEM(__pyx_t_6, 0+__pyx_t_8, __pyx_v_str1);
+    __Pyx_INCREF(__pyx_v_str2);
+    __Pyx_GIVEREF(__pyx_v_str2);
+    PyTuple_SET_ITEM(__pyx_t_6, 1+__pyx_t_8, __pyx_v_str2);
     __Pyx_GIVEREF(__pyx_t_10);
-    PyTuple_SET_ITEM(__pyx_t_5, 0+__pyx_t_8, __pyx_t_10);
-    __Pyx_GIVEREF(__pyx_t_7);
-    PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_8, __pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_6, 2+__pyx_t_8, __pyx_t_10);
     __pyx_t_10 = 0;
-    __pyx_t_7 = 0;
-    __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_5, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1443, __pyx_L1_error)
+    __pyx_t_11 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_6, NULL); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 1443, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_11);
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_w_lcs_wink = __pyx_t_11;
   __pyx_t_11 = 0;
 
   /* "programs/febrl_methods.py":1445
- *   w_lcs_wink = winklermod((str1, str2), w_lcs)
+ *   w_lcs_wink = winklermod(str1, str2, w_lcs)
  * 
  *   w = w_lcs_wink - h_diff  # A weight in interval [-1,1]             # <<<<<<<<<<<<<<
  * 

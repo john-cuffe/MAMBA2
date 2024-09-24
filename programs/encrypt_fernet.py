@@ -27,11 +27,11 @@ if __name__=='__main__':
     print('Your Key is : {}'.format(key))
     print('This will be saved for your records')
     ###Now save the key
-    keyfile = open('../conf/key.txt', 'wb')
+    keyfile = open('key.txt', 'wb')
     keyfile.write(key)
     keyfile.close()
     ###now encrypt the password
-    token = f.encrypt(bytes(sys.argv[1], 'utf-8'))
+    token = f.encrypt(bytes(sys.argv[1].replace("'",''), 'utf-8'))
     tokenfile = open("pw.txt", 'wb')
     tokenfile.write(token)
     tokenfile.close()
